@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Compass-2-1-数仓梳理 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、梳理1.1 表梳理事务型事实表(增量分区)：订单明细事实表，退单表周期型快照事实表(全量分区)：累积型事实表(增量变化分区)：订单事实表 维度表：时间表，地区表，产品表，渠道表 全量表：产品维度表，渠道维度表增量表：订单明细事实表增量变化表：订单维度表特殊表：时间维度表，地区维度表拉链表：用户维度表  ## 1.2 业务总线矩阵      时间 用户 门店 渠道 地址 度量值    电商订单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compass-2-1-数仓梳理">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/Compass-2-1-%E6%95%B0%E4%BB%93%E6%A2%B3%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、梳理1.1 表梳理事务型事实表(增量分区)：订单明细事实表，退单表周期型快照事实表(全量分区)：累积型事实表(增量变化分区)：订单事实表 维度表：时间表，地区表，产品表，渠道表 全量表：产品维度表，渠道维度表增量表：订单明细事实表增量变化表：订单维度表特殊表：时间维度表，地区维度表拉链表：用户维度表  ## 1.2 业务总线矩阵      时间 用户 门店 渠道 地址 度量值    电商订单">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.055Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.055Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/Compass-2-1-%E6%95%B0%E4%BB%93%E6%A2%B3%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Compass-2-1-数仓梳理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Compass-2-1-数仓梳理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.055Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.055Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/">大数据火星人业务</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Compass-2-1-数仓梳理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、梳理"><a href="#一、梳理" class="headerlink" title="一、梳理"></a>一、梳理</h1><h2 id="1-1-表梳理"><a href="#1-1-表梳理" class="headerlink" title="1.1 表梳理"></a>1.1 表梳理</h2><p>事务型事实表(增量分区)：订单明细事实表，退单表<br>周期型快照事实表(全量分区)：<br>累积型事实表(增量变化分区)：订单事实表</p>
+<p>维度表：时间表，地区表，产品表，渠道表</p>
+<p>全量表：产品维度表，渠道维度表<br>增量表：订单明细事实表<br>增量变化表：订单维度表<br>特殊表：时间维度表，地区维度表<br>拉链表：用户维度表</p>
+<br>
+## 1.2 业务总线矩阵
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>时间</th>
+<th>用户</th>
+<th>门店</th>
+<th>渠道</th>
+<th>地址</th>
+<th>度量值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>电商订单</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>运费&#x2F;优惠金额&#x2F;原始金额&#x2F;最终金额</td>
+</tr>
+<tr>
+<td>电商订单详情</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>件数&#x2F;优惠金额&#x2F;原始金额&#x2F;最终金额</td>
+</tr>
+<tr>
+<td>支付</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>支付金额</td>
+</tr>
+<tr>
+<td>发货</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>件数</td>
+</tr>
+<tr>
+<td>退单</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>退单件数&#x2F;金额</td>
+</tr>
+<tr>
+<td>非电商订单</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>运费&#x2F;优惠金额&#x2F;原始金额&#x2F;最终金额</td>
+</tr>
+<tr>
+<td>非电商订单详情</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>件数&#x2F;优惠金额&#x2F;原始金额&#x2F;最终金额</td>
+</tr>
+</tbody></table>
+<br>
+
+<h2 id="2-2-分层表"><a href="#2-2-分层表" class="headerlink" title="2.2 分层表"></a>2.2 分层表</h2><p>ODS（operation data store）：存放原始数据。保持数据原貌不变；创建分区表，防止后续的全表扫描；时间分区，采用LZO压缩，需要建索引，指定输入输出格式；创建外部表；<br>DWD（data warehouse detail）：结构粒度与ODS层保持一致，对ODS层数据进行清洗（去除无效数据、脏数据，数据脱敏，维度退化，数据转换等）。ETL数据清洗，用hive sql、MR、Python、Kettle、SparkSQL；时间分区，采用LZO压缩(parquet支持切片)，不需要建索引，采用parquet格式存储；创建外部表；<br>DWS（data warehouse service）：在DWD基础上，按天进行轻度汇总。时间分区，采用parquet格式存储；创建外部表；<br>DWT（data warehouse topic）：在DWS基础上，按主题进行汇总。采用parquet格式存储；创建外部表，时间分区；<br>ADS（Application Data Store）：为统计报表提供数据。明确字段分割符，与sqoop对应；创建外部表，时间分区。</p>
+<h3 id="2-2-1-ods层"><a href="#2-2-1-ods层" class="headerlink" title="2.2.1 ods层"></a>2.2.1 ods层</h3><p>edb，adh，wms和u8的原始表。</p>
+<ul>
+<li>ods_edb<br>问题：<br>①不管根据订单时间、获取时间或者更新时间去取edb的数据，都有丢数据的风险。比如昨日支付的订单在今天凌晨00:01时更新了，导致拉取不到这条订单。这样就会导致如根据更新时间计算销量的数据有误差。<br>②存在edb去平台取数据和我们取edb取数据的双重延迟，如23:59支付的订单，edb获取的时间为第二天，导致没有获取到该数据。但是电商在早上十点获取了该数据。<br>解决：<br>①该条订单在以后最终会被获取到，但是正常我们认为该订单已经计算过销量了。所以可以比对该订单是否已经存在支付明细表中，如果存在表示该订单已经计算；不存在则需要插入到支付时间对应的分区中并重新计算该分区的销量数据，包括周月年统计数据。<br>②第三方平台的问题，无法解决，造成丢数据。</li>
+</ul>
+<h3 id="2-2-2-dim层"><a href="#2-2-2-dim层" class="headerlink" title="2.2.2 dim层"></a>2.2.2 dim层</h3><p>产品维度表，门店维度表，时间维度表，地区维度表</p>
+<h3 id="2-2-3-dwd层"><a href="#2-2-3-dwd层" class="headerlink" title="2.2.3 dwd层"></a>2.2.3 dwd层</h3><p>该层需要对脏数据进行过滤，如<code>订单数据进行去重，edb_order订单的渠道需要能匹配上dim_channel表，订单的产品需要能匹配上dim_product表</code>，<code>发货数据能匹配上对应的订单，发货产品能匹配上产品表</code>。避免在dws层时统计的多张宽表数据矛盾，这时进行多表关联去除匹配不上的数据就会产生每张宽表都需要这个操作从而造成代码冗余的情况发生。</p>
+<p><strong>edb</strong></p>
+<ul>
+<li>订单信息表(累积型事实表)<br>问题：<br>①作为累积型事实表，edb的数据没有明确的订单关闭字段(finish_time或platform_status不是很准确)。<br>②正常ods层订单表中一个分区保存的是增量或修改的数据，但是数据源只支持一个分区存储最近n个月的数据<br>③执行历史某一天的数据，因为该天数据中finish_time为null的数据插入到9999-99-99分区总，但是该数据可能在之后的某天已经结束并插入到finish_time日期的分区中。导致9999-99-99分区和finish_time分区中同时存在该数据。<br>解决思路：<br>①只能将没有结束字段的记录一直放到9999-99-99分区；或规定4个月后默认关闭，插入到month_add(tid_time, 4)分区(如果后续有该订单的记录，可能会导致数据重复)；<br>②既然一个分区存储n个月的数据，那么只能拿这n个月的数据去和9999-99-99分区数据full out join。需要注意过滤条件为 finish_time is null 或 finish_time &#x3D; $do_date，因为finish_time 不为当日的数据必然已经导入到了之前的分区，finish_time is null 的数据可以更新9999-99-99数据的状态。(注意：因为只拿了tid_time内n个月的数据，所以可能有部分订单的结束数据的tid_time在n个月之前就读取不到了，导致这部分订单一直结束不了)<br>③历史某一天的数据重新运行后，后面的日期都要按日期顺序重新运行一遍。</li>
+</ul>
+<blockquote>
+<p>目前取数逻辑是根据最近30天的get_time进行取值(get_time目前的理解就是edb去各平台取数的时间，如果数据不存在或变化，将数据插入或更新，get_time为取数时间，如果数据没变化，则不变)。所以取get_time为当天的数据就是当天新增或修改的数据。</p>
+</blockquote>
+<ul>
+<li><p>订单详情表(事务型事实表)：直接根据下单时间将子订单插入到对应分区中即可。<br>问题：<br>①因为是从第三方拿的数据，数据存在延迟。如27日的订单28日才到，但是28日只处理28日创建的订单，导致迟到数据丢失。<br>②与正常的从业务的订单详情表中获取增量子订单的情况不同，因为这里子订单是从订单中拆出来的，所以存在重复，需要去重。<br>解决思路：<br>①和②解决：取当日tmp表的distinct tid_time，从订单详情表中取出这些分区的数据 full outer join 当日tmp的数据然后动态插入到订单详情表中。</p>
+</li>
+<li><p>订单支付表(事务型事实表)：正常是要创建累积型事实表(有创建时间&#x2F;确认回调时间等)，因为订单表中有全部时间，所以这里直接使用事务型事实表。<br>问题：<br>①京东自营订单没有pay_time，只有pay_status；<br>②部分订单只有在付尾款时才有记录，可能是10天前的订单，进行付了尾款才拿到这条记录；<br>解决思路：<br>①判断当日的所有已支付订单是否是历史支付订单，如果不是历史已支付订单(需要看电商判断逻辑)，则插入到当日的支付表分区；<br>②看电商的统计逻辑，如果是付尾款时才统计金额，那么就按常规的来做即可。</p>
+</li>
+<li><p>订单退单表(事务型事实表)：正常是要创建累积型事实表(有创建时间&#x2F;同意退单时间等)，因为订单表中有全部时间，且结构类似订单数据，所以这里直接使用事务型事实表。</p>
+</li>
+<li><p>订单修正表：因为订单延迟拆分和套餐拆分等问题，订单的返利金额和订单实际金额会发生变化(多次变化)，所以需要存一张表用于记录这些变化数据，然后进行统计，最后在ads层进行汇总，对历史数据进行修正。</p>
+</li>
+</ul>
+<h3 id="2-2-4-dws层"><a href="#2-2-4-dws层" class="headerlink" title="2.2.4 dws层"></a>2.2.4 dws层</h3><p><strong>dws层从 原子指标 统计出 派生指标：</strong><br><strong>原子指标</strong>基于某一业务过程的度量值，是业务定义中不可再拆解的指标，原子指标的核心功能就是对指标的聚合逻辑进行了定义。我们可以得出结论，原子指标包含三要素，分别是<strong>业务过程、度量值和聚合逻辑</strong>。<br>公式为：原子指标&#x3D;业务过程+度量值+聚合逻辑<br>例：订单总数&#x3D;下单+”1”+count()</p>
+<p><strong>派生指标</strong>基于原子指标，可以通过原子指标直接计算得到。<br>公式为：派生指标&#x3D;原子指标+统计周期+业务限定+统计粒度<br>例：最近一天各渠道各产品订单总额&#x3D;订单总额+最近一天(where限定统计时间范围)+指定的品类(where限定统计范围)+渠道(group by 定义统计粒度)</p>
+<p><code>dws层轻度聚合宽表构建思路：将星座模型聚合成一张宽表，然后对所有的维度进行grouping sets聚合，统计出各个维度下的度量值的日统计值。</code></p>
+<ul>
+<li><p>edb支付订单数据[商品][渠道]维度按日聚合统计宽表：主要就是对集群进行调优，合理增大内存和cpu值。使用Grouping Sets进行多维度聚合，需要带GROUPING__ID字段(注意初始化脚本中会多聚合一个ddate字段，会造成GROUPING__ID不同)。需要注意的是，对没有匹配上维度表的脏数据进行过滤，如匹配渠道表时没匹配上或有字段为null，那么group by多个渠道层级的结果是一样的，所以出现了数据重复。</p>
+</li>
+<li><p>u8发货数据[地域][快递公司]维度按日聚合统计宽表：</p>
+</li>
+</ul>
+<h3 id="2-2-5-dwt层"><a href="#2-2-5-dwt层" class="headerlink" title="2.2.5 dwt层"></a>2.2.5 dwt层</h3><p><strong>dwt层从派生指标 统计出 衍生指标：</strong><br>衍生指标是在一个或多个派生指标的基础上，通过各种逻辑运算复合而成的。例如比率、比例等类型的指标。衍生指标也会对应实际的统计需求。<br>公式为：衍生指标&#x3D;原子指标+统计周期+业务限定+统计粒度<br>例：最近30日各渠道退单率 &#x3D; (最近30日各渠道退单次数&#x3D;退单总次数+最近30日+ +渠道) &#x2F; (最近30日各渠道下单次数&#x3D;下单总次数+最近30日+ +渠道)</p>
+<p><code>dwt层主题聚合宽表构建思路：在dws层轻度聚合宽表的基础上，对派生指标进行计算并维护到主题宽表中，包括周月年统计、同比环比统计等。</code></p>
+<ul>
+<li>edb支付订单数据渠道维度主题宽表：将日、周、月、年等度量值都维护到这张宽表中，同时计算衍生数据，如同比环比。<br>问题：<br>①需要求日月年的同比环比，如何简化逻辑。<br>②历史数据初始化脚本如何求日月年的同比环比。<br>③表中的日周月年数据是每条分开的，如何将这些数据汇总为一条记录。<br>解决思路：<br>①取到今天的数据，然后将日月年同比的分区数据 group by 产品,渠道 后拼接为与今天的数据结构一样的数据，然后通过开窗函数 partitioned by 产品,渠道 后取上一条数据与本条数据计算同比。环比计算方式相同。<br>②先计算历史数据的日月年统计，为每条记录添加日、周、月、年的字段，然后通过grouping sets聚合字段 产品,渠道,日,周,月,年 得到日周月年的统计值。然后添加一个字段用于存储该条记录的同比日期，然后通过 [表left join自己 on 分区&#x3D;同比日期] 获取同比日期的度量值，然后计算同比。环比计算方式同理。<br>③通过 group by 维度字段，通过collect_list将所有记录汇总，然后通过str_to_map将每条记录转换为map(key为数据的时间类型,value为当日相同维度和时间下的不同度量值的汇总)，然后通过key将value拆到对应的字段中。示例如下:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">select split(data[&#x27;year_month_day&#x27;], &#x27;,&#x27;)[0] as sale_num_mom_day,</span><br><span class="line">       split(data[&#x27;year_month_day&#x27;], &#x27;,&#x27;)[1] as sale_amount_mom_day,</span><br><span class="line">       split(data[&#x27;year_month_day&#x27;], &#x27;,&#x27;)[2] as send_num_mom_day,</span><br><span class="line">       split(data[&#x27;year_week&#x27;], &#x27;,&#x27;)[0]      as sale_num_mom_week,</span><br><span class="line">       split(data[&#x27;year_week&#x27;], &#x27;,&#x27;)[1]      as sale_amount_mom_week,</span><br><span class="line">       split(data[&#x27;year_week&#x27;], &#x27;,&#x27;)[2]      as send_num_mom_week,</span><br><span class="line">       split(data[&#x27;year_month&#x27;], &#x27;,&#x27;)[0]     as sale_num_mom_month,</span><br><span class="line">       split(data[&#x27;year_month&#x27;], &#x27;,&#x27;)[1]     as sale_amount_mom_month,</span><br><span class="line">       split(data[&#x27;year_month&#x27;], &#x27;,&#x27;)[2]     as send_num_mom_month,</span><br><span class="line">       split(data[&#x27;year&#x27;], &#x27;,&#x27;)[0]           as sale_num_mom_year,</span><br><span class="line">       split(data[&#x27;year&#x27;], &#x27;,&#x27;)[1]           as sale_amount_mom_year,</span><br><span class="line">       split(data[&#x27;year&#x27;], &#x27;,&#x27;)[2]           as send_num_mom_year</span><br><span class="line">from (</span><br><span class="line">         select str_to_map(concat_ws(&#x27;-&#x27;, collect_list(</span><br><span class="line">                 concat(case</span><br><span class="line">                            when year_month_day is not null</span><br><span class="line">                                then &#x27;year_month_day&#x27;</span><br><span class="line">                            when year_week is not null</span><br><span class="line">                                then &#x27;year_week&#x27;</span><br><span class="line">                            when year_month is not null</span><br><span class="line">                                then &#x27;year_month&#x27;</span><br><span class="line">                            when year is not null then &#x27;year&#x27;</span><br><span class="line">                            end, &#x27;=&#x27;, sale_num_mom, &#x27;,&#x27;, sale_amount_mom, &#x27;,&#x27;, send_num_mom</span><br><span class="line">                     )</span><br><span class="line">             )</span><br><span class="line">                               ), &#x27;-&#x27;, &#x27;=&#x27;) as data</span><br><span class="line">         from (select null      as year_month_day,</span><br><span class="line">                      &#x27;2021-12&#x27; as year_week,</span><br><span class="line">                      null      as year_month,</span><br><span class="line">                      null      as year,</span><br><span class="line">                      1.1          sale_num_mom,</span><br><span class="line">                      2.2          sale_amount_mom,</span><br><span class="line">                      3.3          send_num_mom</span><br><span class="line">               UNION ALL</span><br><span class="line">               select null      as year_month_day,</span><br><span class="line">                      null      as year_week,</span><br><span class="line">                      &#x27;2021-12&#x27; as year_month,</span><br><span class="line">                      null      as year,</span><br><span class="line">                      0.11         sale_num_mom,</span><br><span class="line">                      0.22         sale_amount_mom,</span><br><span class="line">                      0.33         send_num_mom</span><br><span class="line">              ) tmp</span><br><span class="line">     ) tmp;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是，concat中有一个为null，则结果为null，所以可以通过nvl将null值替换为空串，当空串插入到decimal(20,4)格式的字段中时又会转换为null。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2-2-6-ads层"><a href="#2-2-6-ads层" class="headerlink" title="2.2.6 ads层"></a>2.2.6 ads层</h3><ul>
+<li>edb的BI展示表<br>问题：<br>①因为日周月年在一条记录上，而ads层BI表日周月年分别为一条记录，如何只读一次dwt层记录获取4条ads层需要的日周月年记录。<br>②ads层不分区，如何保证重跑某一天的数据不会与历史数据产生重复。<br>解决思路：<br>①将日周月年相关字段分别放入4个map中，然后创建array(map(),map(),map(),map())，通过lateral view explode(array) 炸裂为4行，最后提取每个map中的数据到对应的字段中即可。<br>②原来使用 原始数据full outer join新数据 来覆盖掉过期数据，但是还是有脏数据存在的可能性(如匹配不上的过期数据就会一直存在)；现在的方法是，从ads表中读取数据时过滤掉该天的数据，然后UNION ALL新计算的该天的数据，最后OVERWRITE 到 ads表中。</li>
+</ul>
+<h3 id="2-2-7-datax到mysql（业务数据通过datax导入hdfs同理）"><a href="#2-2-7-datax到mysql（业务数据通过datax导入hdfs同理）" class="headerlink" title="2.2.7 datax到mysql（业务数据通过datax导入hdfs同理）"></a>2.2.7 datax到mysql（业务数据通过datax导入hdfs同理）</h3><p><strong>问题一：因为azkaban无法对每个flow指定执行的节点，解决方案如下：</strong></p>
+<ul>
+<li>方法一就将datax的任务单独拆出来，缺点是不好关联两个项目的任务，增加了复杂性。</li>
+<li>方法二在脚本中远程执行datax任务，可以选择一个datax节点发送，复杂点可以设置多个datax节点随机选择并设置故障转移。</li>
+</ul>
+<p><strong>问题二：合并test分支到prod分支时，需要注意如下：</strong></p>
+<ol>
+<li>同步的mysql地址不能被test分支的环境修改；</li>
+<li>Azkaban的脚本拉取分支需要区分test和prod分支。<br>为了解决第一个痛点，可以在shell脚本中将mysql相关参数设置为占位符，在Azkaban任务脚本中进行传参。</li>
+</ol>
+<br>
+#### 需求1：sku层级交易统计
+| 统计周期 | 统计粒度 | 指标 | 说明 |
+| --- | --- | --- | --- |
+| 本周/本月/本年 | sku/渠道 | 订单数 | 略 |
+| 本周/本月/本年 | sku/渠道 | 订单金额 | 略 |
+| 本周/本月/本年 | sku/渠道 | 退单数 | 略 |
+| 本周/本月/本年 | sku/渠道 | 退单金额 | 略 |
+
+<h4 id="需求2：型号层级交易统计"><a href="#需求2：型号层级交易统计" class="headerlink" title="需求2：型号层级交易统计"></a>需求2：型号层级交易统计</h4><table>
+<thead>
+<tr>
+<th>统计周期</th>
+<th>统计粒度</th>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>型号&#x2F;渠道</td>
+<td>订单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>型号&#x2F;渠道</td>
+<td>订单金额</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>型号&#x2F;渠道</td>
+<td>退单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>型号&#x2F;渠道</td>
+<td>退单金额</td>
+<td>略</td>
+</tr>
+</tbody></table>
+<h4 id="需求3：系列层级交易统计"><a href="#需求3：系列层级交易统计" class="headerlink" title="需求3：系列层级交易统计"></a>需求3：系列层级交易统计</h4><table>
+<thead>
+<tr>
+<th>统计周期</th>
+<th>统计粒度</th>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>系列&#x2F;渠道</td>
+<td>订单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>系列&#x2F;渠道</td>
+<td>订单金额</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>系列&#x2F;渠道</td>
+<td>退单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>系列&#x2F;渠道</td>
+<td>退单金额</td>
+<td>略</td>
+</tr>
+</tbody></table>
+<h4 id="需求4：大类层级交易统计"><a href="#需求4：大类层级交易统计" class="headerlink" title="需求4：大类层级交易统计"></a>需求4：大类层级交易统计</h4><table>
+<thead>
+<tr>
+<th>统计周期</th>
+<th>统计粒度</th>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>大类&#x2F;渠道</td>
+<td>订单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>大类&#x2F;渠道</td>
+<td>订单金额</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>大类&#x2F;渠道</td>
+<td>退单数</td>
+<td>略</td>
+</tr>
+<tr>
+<td>本周&#x2F;本月&#x2F;本年</td>
+<td>大类&#x2F;渠道</td>
+<td>退单金额</td>
+<td>略</td>
+</tr>
+</tbody></table>
+<br>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br></pre></td><td class="code"><pre><span class="line">INSERT OVERWRITE TABLE compass_dwd.dwd_edb_order_tmp PARTITION (ds=&#x27;$do_date&#x27;)</span><br><span class="line">SELECT get_json_object(line, &#x27;$.order_totalfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.exception&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.payment_received_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_except&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.Sorting_code&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.buyer_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.discount&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.flag_color&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.express_no&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.type&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.net_weight_freight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.file_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.out_tid&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.province&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cod_settlement_vouchernumber&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.good_receive_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.weigh_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.book_delivery_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.real_pay_freight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.three_codes&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.express_coding&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_print&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.sku&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cod_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.transaction_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cancel_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.buyer_message&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.destCode&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.printer&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.product_num&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.packager&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.pro_totalfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_pre_delivery_notice&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.sending_type&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.phone&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distributor_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.promotion_info&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.alipay_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distributer&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.file_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.point_pay&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distributor_mark&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.gross_weight_freight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.review_orders_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.city&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.delivery_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.related_orders_type&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.city_code&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.inspect_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.order_process_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distribut_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_cod&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.modity_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.discount_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.message_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_content&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.receiver_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.print_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.taobao_delivery_order_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.currency&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.system_remarks&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.order_channel&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.tid_net_weight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.superior_point&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.email&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_situation&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.pack_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cancel_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.address&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.deliver_centre&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.enable_inte_sto_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.taobao_delivery_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.abnormal_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.pay_mothed&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.receiver_mobile&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.item_num&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.service_remarks&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.express_col_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.single_num&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_flag&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.customer_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.platform_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.updatetime&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_inspection&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.delivery_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.plat_send_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.ts&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.provinc_code&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.other_remarks&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.enable_inte_delivery_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.adv_distributer&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.breaker&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cod_service_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.delivery_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.out_promotion_detail&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.express&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.delivery_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.buyer_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.tid&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.locker&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.last_refund_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.dt&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.express_code&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.post&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.finance_review_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.order_creater&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.total_num&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.cost_point&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.originCode&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.adv_distribut_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.gross_weight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.commission_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.big_marker&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.resultNum&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.taobao_delivery_method&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.area_code&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.alipay_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.receive_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.deliver_station&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.shop_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.import_mark&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.revoke_cancel_er&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_stock&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.advance_printer&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.finish_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.order_disfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.pay_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.review_orders_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.platform_preferential&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.business_man&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.promotion_plan&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.external_point&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.payment_received_operator&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.district&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.merchant_disfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.weigh_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.shopid&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.last_returned_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.break_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.inner_lable&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.break_explain&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.plat_type&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_title&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.get_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.channel_disfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.revoke_cancel_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.online_express&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.point&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.total_weight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.royalty_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.maxrowver&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.pay_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_break&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.real_income_freight&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.rate&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.storage_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distributor_level&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.freight_explain&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.invoice_type&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.finance_review_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.inspecter&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.reference_price_paid&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.other_fee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.related_orders&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.out_pay_tid&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.refund_totalfee&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_bill&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_new_customer&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.message&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.serial_num&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.jd_delivery_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.lock_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.tid_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.order_from&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_adv_sale&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.merge_status&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.is_promotion&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.voucher_id&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.book_file_time&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.distributing_centre_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.send_site_name&#x27;),</span><br><span class="line">       get_json_object(line, &#x27;$.verificaty_time&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.original_price&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.item_discountfee&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.sell_price&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.discount_amount&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.timeinventory&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.tid&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.send_num&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.ferght&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.second_barcode&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.out_tid&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.inspection_num&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.barcode&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.stock_situation&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.proexplain&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.book_inventory&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.credit_amount&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.weight&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.seller_remark&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.brand_name&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.plat_discount&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.sncode&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.out_proid&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.refund_num&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.promotion_info&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.shopid&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.product_specification&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.distributer&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.iscombination&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.pro_name&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.sys_price&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.pro_detail_code&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.distribut_time&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.refund_renum&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.isgifts&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.out_prosku&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.gift_num&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.brand_number&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.storage_id&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.combine_barcode&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.buyer_memo&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.store_location&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.cost_price&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.isbook_pro&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.inspection_time&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.MD5_encryption&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.iscancel&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.average_price&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.pro_type&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.specification&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.product_no&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.isscheduled&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.book_storage&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.pro_num&#x27;),</span><br><span class="line">       get_json_object(item, &#x27;$.sub_tid&#x27;)</span><br><span class="line">FROM (</span><br><span class="line">         SELECT row_number() over (partition by get_json_object(line, &#x27;$.tid&#x27;) ) row_num,</span><br><span class="line">                line</span><br><span class="line">         FROM hxr_edb.ods_edb_order</span><br><span class="line">         where ds = &#x27;$edb_ds&#x27;</span><br><span class="line">           and get_json_object(line, &#x27;$.tid_item&#x27;) is not null</span><br><span class="line">           and get_json_object(line, &#x27;$.tid&#x27;) is not null</span><br><span class="line">           and get_json_object(line, &#x27;$.tid&#x27;) &lt;&gt; &#x27;&#x27;</span><br><span class="line">           and get_json_object(line, &#x27;$.status&#x27;) &lt;&gt; &#x27;已作废&#x27;</span><br><span class="line">     ) tmp</span><br><span class="line">         lateral view compass_dwd.explode_json_array(get_json_object(tmp.line, &#x27;$.tid_item&#x27;)) table_tmp as item</span><br><span class="line">where row_num = 1;</span><br></pre></td></tr></table></figure>
+
+<br>
+## 问题记录
+### 问题一
+- 描述：正式环境和测试环境中的channel_code对应的channel_name不同。
+- 原因：因为使用`concat('20'+行号)`作为channel_code，但是取行号时没有进行排序，导致每次执行其行号是不同的，导致每次执行其channel_code和channel_name对应的是随机的
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line">from (</span><br><span class="line">         SELECT c1.shop_id      --门店id</span><br><span class="line">              , c1.shop_name    --门店名</span><br><span class="line">              , c1.channel_name --渠道名</span><br><span class="line">              , c2.code as channel_id</span><br><span class="line">              , c1.class_name   --大分类</span><br><span class="line">              , c1.class_id</span><br><span class="line">              , c1.original_code</span><br><span class="line">         FROM (</span><br><span class="line">                  SELECT *</span><br><span class="line">                  FROM compass_dim.dim_shop_channel</span><br><span class="line">              ) c1</span><br><span class="line">                  LEFT JOIN</span><br><span class="line">              (</span><br><span class="line">                  SELECT t1.channel_name, concat(&#x27;20&#x27;, row_number() over (partition by t1.code order by t1.channel_name)) code</span><br><span class="line">                  FROM (</span><br><span class="line">                           SELECT channel_name, &#x27;1&#x27; as code</span><br><span class="line">                           FROM compass_dim.dim_shop_channel</span><br><span class="line">                           group by channel_name</span><br><span class="line">                       ) t1</span><br><span class="line">              ) c2 on c1.channel_name = c2.channel_name</span><br><span class="line">     )tmp</span><br><span class="line">where class_id=2;</span><br></pre></td></tr></table></figure>
+- 解决：添加排序，修改行号如下  `SELECT t1.channel_name, concat('20', row_number() over (partition by t1.code order by t1.channel_name)) code`
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/Compass-2-1-%E6%95%B0%E4%BB%93%E6%A2%B3%E7%90%86/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/Compass-2-1-%E6%95%B0%E4%BB%93%E6%A2%B3%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1/Compass-2-1-Flume-HiveUDF/" title="Compass-2-1-Flume-HiveUDF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Compass-2-1-Flume-HiveUDF</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E9%A3%9E%E7%87%95%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" title="飞燕数据处理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">飞燕数据处理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A2%B3%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">一、梳理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E8%A1%A8%E6%A2%B3%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 表梳理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%88%86%E5%B1%82%E8%A1%A8"><span class="toc-number">1.2.</span> <span class="toc-text">2.2 分层表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-ods%E5%B1%82"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.2.1 ods层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-dim%E5%B1%82"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2.2 dim层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-dwd%E5%B1%82"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.2.3 dwd层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-dws%E5%B1%82"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.2.4 dws层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-5-dwt%E5%B1%82"><span class="toc-number">1.2.5.</span> <span class="toc-text">2.2.5 dwt层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-6-ads%E5%B1%82"><span class="toc-number">1.2.6.</span> <span class="toc-text">2.2.6 ads层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-7-datax%E5%88%B0mysql%EF%BC%88%E4%B8%9A%E5%8A%A1%E6%95%B0%E6%8D%AE%E9%80%9A%E8%BF%87datax%E5%AF%BC%E5%85%A5hdfs%E5%90%8C%E7%90%86%EF%BC%89"><span class="toc-number">1.2.7.</span> <span class="toc-text">2.2.7 datax到mysql（业务数据通过datax导入hdfs同理）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E6%B1%822%EF%BC%9A%E5%9E%8B%E5%8F%B7%E5%B1%82%E7%BA%A7%E4%BA%A4%E6%98%93%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.2.7.1.</span> <span class="toc-text">需求2：型号层级交易统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E6%B1%823%EF%BC%9A%E7%B3%BB%E5%88%97%E5%B1%82%E7%BA%A7%E4%BA%A4%E6%98%93%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.2.7.2.</span> <span class="toc-text">需求3：系列层级交易统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9C%80%E6%B1%824%EF%BC%9A%E5%A4%A7%E7%B1%BB%E5%B1%82%E7%BA%A7%E4%BA%A4%E6%98%93%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.2.7.3.</span> <span class="toc-text">需求4：大类层级交易统计</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>泛型擦除 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="泛型实现分类在目前主流的编程语言中，编译器主要有以下两种处理泛型的方法：  1) Code specialization使用这种方法，每当实例化一个泛型类的时候都会产生一份新的字节代码，例如，对于泛型 ArrayList，当使用 ArrayList、ArrayList&lt;Integer ) 初始化两个实例的时候，就会针对 String 与 Integer 生成两份单独的代码。C++ 中的模板（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="泛型擦除">
+<meta property="og:url" content="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="泛型实现分类在目前主流的编程语言中，编译器主要有以下两种处理泛型的方法：  1) Code specialization使用这种方法，每当实例化一个泛型类的时候都会产生一份新的字节代码，例如，对于泛型 ArrayList，当使用 ArrayList、ArrayList&lt;Integer ) 初始化两个实例的时候，就会针对 String 与 Integer 生成两份单独的代码。C++ 中的模板（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '泛型擦除',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">泛型擦除</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.079Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="泛型擦除"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="泛型实现分类"><a href="#泛型实现分类" class="headerlink" title="泛型实现分类"></a>泛型实现分类</h3><p>在目前主流的编程语言中，编译器主要有以下两种处理泛型的方法：</p>
+<ul>
+<li><p><strong>1) Code specialization</strong><br>使用这种方法，每当实例化一个泛型类的时候都会产生一份新的字节代码，例如，对于泛型 ArrayList，当使用 ArrayList<String>、ArrayList&lt;Integer ) 初始化两个实例的时候，就会针对 String 与 Integer 生成两份单独的代码。<br>C++ 中的模板（template）是典型的 Code specialization 实现。C++ 编译器会为每一个泛型类实例生成一份执行代码。执行代码中integer list和 string list是两种不同的类型。这样会导致代码膨胀，不过有经验的 C++ 程序员可以有技巧地避免代码膨胀。<br>Code specialization 另外一个弊端是在引用类型系统中，浪费空间，因为引用类型集合中元素本质上都是一个指针，没必要为每个类型都产生一份执行代码。而这也是 Java 编译器中采用 Code sharing 方式处理泛型的主要原因。这种方式显然比较省空间，而 Java 就是采用这种方式来实现的。</p>
+</li>
+<li><p><strong>2) Code sharing</strong><br>使用这种方式，会对每个泛型类只生成唯一的一份目标代码，所有泛型的实例会被映射到这份目标代码上，在需要的时候执行特定的类型检查或类型转换。需要首先明确一个概念：Java 的泛型不存在于运行时。这也是为什么有人说 Java 没有真正的泛型的原因了。</p>
+</li>
+</ul>
+<br>
+### 泛型擦除
+**Java 泛型擦除（类型擦除）**是指在编译器处理带泛型定义的类、接口或方法时，会在字节码指令集里抹去全部泛型类型信息，泛型被擦除后在字节码里只保留泛型的原始类型（raw type）。
+
+<p>为了便于理解，可以认为类型擦除就是 Java 的泛型代码转换为普通的 Java 代码，只不过编译器在编译的时候，会把泛型代码直接转换为普通的 Java 字节码。</p>
+<p>如何证明泛型会被擦除呢？下面通过一个例子来说明，Java 代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.Field;</span><br><span class="line">class TypeErasureSample&lt;T&gt; &#123;</span><br><span class="line">    public T v1;</span><br><span class="line">    public T v2;</span><br><span class="line">    public String v3;</span><br><span class="line">&#125;</span><br><span class="line">/*泛型擦除示例*/</span><br><span class="line">public class Generic3_2 &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        TypeErasureSample&lt;String&gt; type = new TypeErasureSample&lt;String&gt;();</span><br><span class="line">        type.v1 = &quot;String value&quot;;</span><br><span class="line"></span><br><span class="line">        for (Field f : TypeErasureSample.class.getDeclaredFields()) &#123;</span><br><span class="line">            System.out.println(f.getName() + &quot;:&quot; + f.getType());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        /*反射设置v2的值为整型数*/</span><br><span class="line">        Field v2 = TypeErasureSample.class.getDeclaredField(&quot;v2&quot;);</span><br><span class="line">        v2.set(type, 1);</span><br><span class="line">        /*此处会抛出类型转换异常*/</span><br><span class="line">        System.out.println(type.v2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 运行结果：</span><br><span class="line">v1:class java.lang.Object</span><br><span class="line">v2:class java.lang.Object</span><br><span class="line">v3:class java.lang.String</span><br><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: java.lang.Integer cannot be cast to java. lang. String at capter3.generic.Generic3_2.main(Generic3_2.java: 29)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>v1 和 v2 的类型被指定为泛型 T，但是通过反射发现，它们实质上还是 Object，而 v3 原本定义的就是 String，和前两项比对，可以证明反射本身并无错误。</p>
+</blockquote>
+<p>代码在输出 type.v2 的过程中抛出了类型转换异常，这说明了两件事情：<br>①为 v2 设置整型数已经成功（可以自行写一段反射来验证）。<br>②编译器在构建字节码的时候，一定做了类似于 (String)type.v2 的强制转换，关于这一点，可以通过反编译工具（工具为jd-gui）验证，结果如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Generic3_2&#123;</span><br><span class="line">    public static void main(String[] args) throws Exception</span><br><span class="line">    &#123;</span><br><span class="line">        TypeErasureSample type = new TypeErasureSample();</span><br><span class="line">        type.v1= &quot;String value&quot;;</span><br><span class="line">        Field v2 = TypeErasureSample.class.getDeclaredField(&quot;v2&quot;);</span><br><span class="line">        v2.set(type, Integer.valueOf(l));</span><br><span class="line">        for (Field f: TypeErasureSample.class.getDeclaredFields()) &#123; System.out.println(f.getName() + &quot;:&quot;+ f.getType());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println((String) type.v2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由此可见，如果编译器认为 type.v2 有被声明为 String 的必要，那么都会加上 (String) 强行转换。</p>
+</blockquote>
+<br>
+### 示例
+在Flink中，创建OutputTag对象时，如果直接创建OutputTag对象，会泛型擦除导致使用时报错。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OutputTag&lt;String&gt; outputTag = new OutputTag&lt;String&gt;(&quot;&quot;);</span><br></pre></td></tr></table></figure>
+可以通过创建OutputTag的匿名子类来避免该异常
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OutputTag&lt;String&gt; outputTag = new OutputTag&lt;String&gt;(&quot;&quot;)&#123;&#125;;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/">http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">正则表达式</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="集合底层原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">集合底层原理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%9B%E5%9E%8B%E5%AE%9E%E7%8E%B0%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">泛型实现分类</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

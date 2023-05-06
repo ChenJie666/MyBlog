@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/34/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/34/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 15:48:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python3%E5%AE%89%E8%A3%85/" title="Python3安装">Python3安装</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">1. 安装依赖环境输入命令：yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel
+2. 下载Python3下载Python3.7.1压缩包到本地：wget https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz解压到目录下 tar -zxvf Python-3.7.1.tgz -C &#x2F;opt&#x2F;module&#x2F;
+3. 编译安装安装gccyum install gcc
+3.7版本之后需要一个新的包libffi-develyum install libffi-devel -y
+进入python文件夹，生成编译脚本(指定安装目录).&#x2F;configure –prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;python3  
+编译make
+ ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E4%B8%8B%E8%BD%BD%E8%A7%86%E9%A2%91(you-get)/" title="Python下载视频(you-get)">Python下载视频(you-get)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">###安装you-getpython -m pip install –upgrade pippip3 install you-get
+注：Windows环境Anaconda遇“Can’t connect to HTTPS URL because the SSL module is not available”情况，需要把D:\Anaconda3\Libraryin下的libcrypto-1_1-x64.*和libssl-1_1-x64.*的所有文件复制到D:\Anaconda3\DLLs文件夹下。
+###找到视频所在地址you-get -i https://www.bilibili.com/video/BV1jT4y1772T?from=search&amp;seid=16713774746936702829
+123456789101112131415site:                Bilibilititle:               【2020夏季赛】《狮话狮说》第二期——蛇蛇的咆哮！Huanfeng你别跑！streams:             # Availab ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E4%BD%BF%E7%94%A8Requests%E5%BA%93%E8%BF%9B%E8%A1%8C%E7%AE%80%E5%8D%95%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" title="Python使用Requests库进行简单接口测试">Python使用Requests库进行简单接口测试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">#####1. 从本地读取图片并进行base64编码，作为参数进行图像识别请求。并记录总请求次数，失败次数和超时次数。
+123456789101112131415161718192021222324252627282930313233343536373839404142import requestsimport uuidimport base64import timewith open(&quot;C:\Users\Administrator\Desktop\yiguotupain\1.jpg&quot;, &#x27;rb&#x27;) as f:    base64_data = base64.b64encode(f.read())    s = base64_data.decode()uid = uuid.uuid4()suid = &#x27;&#x27;.join(str(uid).split(&#x27;-&#x27;))request_url = &quot;http://openapi.37cang.cn/vis/detectImage&quot;data = &#12 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BAExcel%E8%A1%A8%E6%A0%BC/" title="Python导入导出Excel表格">Python导入导出Excel表格</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">导入excel文件安装模块openpyxl
+1pip install xlrd openpyxl
+
+通过高德API获取地址经纬度
+1234567891011121314151617181920import requestsimport pandas as pdgetdata = pd.read_excel(r&#x27;C:\Users\CJ\Desktop�605.xlsx&#x27;, sheet_name=0)def geocode(address, key):    parameters = &#123;&#x27;address&#x27;: address, &#x27;key&#x27;: key&#125;    base = &#x27;http://restapi.amap.com/v3/geocode/geo&#x27;    response = requests.get(base, parameters)    answer = response.json()    print(answer)    if answer[&#x27;count&#x27;] = ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E6%93%8D%E4%BD%9CPDF/" title="Python操作PDF">Python操作PDF</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">安装模组pip install pdfplumber -i 
+###提取PDF中的几页
+1234567891011from PyPDF2 import PdfFileReader, PdfFileWriterreadPath = &quot;C:\Users\CJ\Desktop\2017.pdf&quot;savePath = &quot;C:\Users\CJ\Desktop\2017普通类.pdf&quot;pdf = PdfFileReader(readPath)writerStream = PdfFileWriter()for pageNum in range(10,323):    writerStream.addPage(pdf.getPage(pageNum))with open(savePath, &#x27;wb&#x27;) as newPdf:    writerStream.write(newPdf)
+
+###将PDF保存为Excel
+###解析无法识别表格的PDF文件
+123456789101112131415161718192021222324252627 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95/" title="Python相关问题记录">Python相关问题记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">问题一
+现象：pip安装模块时报错1234WARNING: pip is configured with locations that require TLS/SSL, however the ssl module in Python is not available.WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status =None)) after connection broken by &#x27;SSLError(&quot;Can&#x27;t connect to HTTPS URL because the SSL module is not available.&quot;)&#x27;: /simple/misaka/WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by SSLError(&q ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E8%AF%AD%E6%B3%95%E7%89%B9%E7%82%B9/" title="Python语法特点">Python语法特点</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">print(x)   会自动换行print(x,end&#x3D;””)   不换行输出
+为多对象指定多变量，一次性为多个变量赋值a,b,c &#x3D; 1,2,”runnob”变量交换a,b &#x3D; b,a
+##标准数据类型a:不可变数组（3个）：Number（数字）、String（字符串）、Tuple（元组）b:可变数组（3个）：List（列表）、Set（集合）、Dictionary（字典）###Numberint、float、bool、complex（复数）
+##除法python中除法得到的值都是浮点型的，如果需要得到整型，使用&#x2F;&#x2F;符号进行除法，即在除法的基础上在调用floor函数。
+##函数type(a)  判断数据类型isinstance(a,int)   判断数据是否属于某类型del var1,var2   手动GCbin(a) &#x2F; oct(a) &#x2F; hex(a)  转成其他进制
+abs(x)   绝对值ceil(x)   上整数floor(x)   下整数(x&gt;y) - (x&lt;y)   如果x&lt;y返回-1， ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Pandas%E6%95%B0%E6%8D%AE%E5%B1%95%E7%A4%BA/" title="Pandas数据展示">Pandas数据展示</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">inplace&#x3D;True 表示会对原式数据进行修改
+###一、创建表格
+
+#####创建普通数据集s &#x3D; pd.Series([1, 3, 6, np.nan, 44, 1])  # 创建一个包含指定元素的数据集结果：s：0     1.01     3.02     6.03     NaN4    44.05     1.0dtype: float64
+
+
+#####创建日期数据集dates &#x3D; pd.date_range(‘20200101’, periods&#x3D;6)  # 创建一个从20200101开始的连续六天日期的数据集结果：dates：DatetimeIndex([‘2020-01-01’, ‘2020-01-02’, ‘2020-01-03’, ‘2020-01-04’,               ‘2020-01-05’, ‘2020-01-06’],              dtype&#x3D;’datetime64[ns]’, freq&#x3D;’D’)
+
+
+#####不指定行列，创建表格df1 &#x3D; pd.D ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%A4%9A%E8%BF%9B%E7%A8%8B/" title="Python多线程和多进程">Python多线程和多进程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">一、简介什么是线程？      线程也叫轻量级进程，是操作系统能够进行运算调度的最小单位，它被包涵在进程之中，是进程中的实际运作单位。      线程自己不拥有系统资源，只拥有一点儿在运行中必不可少的资源，但它可与同属一个进程的其他线程共享进程所拥有的全部资源。一个线程可以创建和撤销另一个线程，同一个进程中的多个线程之间可以并发执行。
+为什么要使用多线程？    线程在程序中是独立的、并发的执行流。与分隔的进程相比，进程中线程之间的隔离程度要小，它们共享内存、文件句柄和其他进程应有的状态。    因为线程的划分尺度小于进程，使得多线程程序的并发性高。进程在执行过程之中拥有独立的内存单元，而多个线程共享内存，从而极大的提升了程序的运行效率。    线程比进程具有更高的性能，这是由于同一个进程中的线程都有共性，多个线程共享一个进程的虚拟空间。线程的共享环境包括进程代码段、进程的共有数据等，利用这些共享的数据，线程之间很容易实现通信。    操作系统在创建进程时，必须为改进程分配独立的内存空间，并分配大量的相关资源，但创建线程则简单得多。因此，使用多线程来实现并发比使用多进程的性能高得要多。 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Python/Python%E5%AF%BC%E5%87%BA%E7%AE%80%E4%B9%A6%E5%9B%BE%E7%89%87/" title="Python导出简书图片">Python导出简书图片</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Python/">Python</a></span></div><div class="content">一、说明简书前几天莫名其妙的宕机让我有些后怕，数据备份提上日程。
+简书虽然有导出文章的功能，但是文章中的图片还是放在简书自己的图床中，需要自己下载图片并替换掉文章中的图片地址。如果文章和图片数量少，人肉操作还可以接受；一旦数量巨大，那么费时费力还容易出错。
+所以网上找了些文章，写了一个小程序并打包成了exe工具，实现这个功能。需要先从简书下载打包的文章，解压后在目录中启动程序，就会自动下载图片并替换图片地址。
+
+# 二、程序
+**安装module**
+12pip install misaka==2.1.1pip install bs4
+>注意：misaka模块安装时需要依赖Microsoft Visual环境，如果下载失败提示需要，可以在官网下载[Visual C++ Build Tools for Visual Studio 2015 with Update 3](https://my.visualstudio.com/Downloads?q=visual%20studio%202015&wt.mc_id=o~msft~vscom~older-downloads)，默认安装即可。
+如 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/33/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/#content-inner">33</a><span class="page-number current">34</span><a class="page-number" href="/page/35/#content-inner">35</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/#content-inner">42</a><a class="extend next" rel="next" href="/page/35/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ELK/"><span class="card-category-list-name">ELK</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JVM/"><span class="card-category-list-name">JVM</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Jenkins/"><span class="card-category-list-name">Jenkins</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Matlab/"><span class="card-category-list-name">Matlab</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Nginx/"><span class="card-category-list-name">Nginx</span><span class="card-category-list-count">6</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">419</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">419</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-05-06T07:48:54.906Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

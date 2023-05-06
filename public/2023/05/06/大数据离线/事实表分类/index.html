@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>事实表分类 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="累计快照事实表的这种最简单的实现方法中没有给出保留中间点的历史信息的方法，如订单本身的变化。 至少有三种方法可以用来捕获这种中间的状态的变化： 1．在诸如月末等的固定时间间隔对累计快照再进行快照处理，即联合使用周期快照和累计快照技术。这种累计快照的周期快照事实表应该被建立为单独的事实表，可以降低应用的复杂性。在这样建立的快照表中，好处是在订单存活期间，每个月可以得到这个订单变化的一条记录，坏处是只">
+<meta property="og:type" content="article">
+<meta property="og:title" content="事实表分类">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%88%86%E7%B1%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="累计快照事实表的这种最简单的实现方法中没有给出保留中间点的历史信息的方法，如订单本身的变化。 至少有三种方法可以用来捕获这种中间的状态的变化： 1．在诸如月末等的固定时间间隔对累计快照再进行快照处理，即联合使用周期快照和累计快照技术。这种累计快照的周期快照事实表应该被建立为单独的事实表，可以降低应用的复杂性。在这样建立的快照表中，好处是在订单存活期间，每个月可以得到这个订单变化的一条记录，坏处是只">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.063Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.063Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%88%86%E7%B1%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '事实表分类',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">事实表分类</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.063Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.063Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/">大数据离线</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="事实表分类"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>累计快照事实表的这种最简单的实现方法中没有给出保留中间点的历史信息的方法，如订单本身的变化。</p>
+<p>至少有三种方法可以用来捕获这种中间的状态的变化：</p>
+<p>1．在诸如月末等的固定时间间隔对累计快照再进行快照处理，即联合使用周期快照和累计快照技术。这种累计快照的周期快照事实表应该被建立为单独的事实表，可以降低应用的复杂性。在这样建立的快照表中，好处是在订单存活期间，每个月可以得到这个订单变化的一条记录，坏处是只能在月末才能看到这条快照记录。</p>
+<p>2．建立另外一张事实表，当订单变化发生时，将累计快照信息保存在这个事实表中。这种方法给出了订单完整的历史信息。它产生的记录数和下面的第三种方法相同。</p>
+<p>3．在交易粒度事实表上维护完整的订单信息，然后添加一个交易维度到累计快照事实表中，来记录订单的变化信息。使用这种方法时需要小心，有些交易数据是非可加性的。例如，如果订单上的一个条目被取消，又添加了两个新的条目，在这些交易后需要重新计算累计快照表中的相关数据。这个计算相对来说比较麻烦，所以一般来说，第2条中的方法是最好的方法。</p>
+<p>维度建模数仓领域中的事实表大致分以下三种：事务事实表，周期快照事实表，累计事实表。</p>
+<p>事务事实表与周期快照事实表、累积快照事实表虽然使用相同的一致性维度，但是它们在内容构成以及业务描述上还是有很大的区别。</p>
+<p>1.事务事实表<br>事务事实表记录的事务层面的事实，保存的是最原子的数据，也称“原子事实表”。事务事实表中的数据在事务事件发生后产生，数据的粒度通常是每个事务记录一条记录。一旦事务被提交，事实表数据被插入，<code>数据就不再进行更改</code>，其更新方式为<code>增量更新</code>。由于事实表具有稀疏性质 ，因此只有当天数据才会进入 当天的事实表中，相当于每个分区里面都是每天的数据，不包含之前的数据。 </p>
+<p>事务事实表的日期维度记录的是事务发生的日期，它记录的事实是事务活动的内容。用户可以通过事务事实表对事务行为进行特别详细的分析。</p>
+<p>为什么事务事实表具有稀疏性质？<br>事实表一般围绕着度量来建立，当度量产生的时候，事实记录就生成了。度量可以是销售数量、交易流水值、月末节余等数值。如果同时生成多个度量值的话，我们可以在一个事实表中建立多个事实。当我们的事实表中的事实比较多时，有可能多个事实不同时发生，如果同时生成的几率很小，我们称之为稀疏事实表（Sparse Facts）。</p>
+<p> </p>
+<p>2.周期快照事实表<br>每天做一次快照，导入的数据是<code>全量</code>，区别于事务型事实表是每天导入新增。</p>
+<p>例如：加购表和收藏表，历史数据没有意义，只需要每天记录当天的数据即可。</p>
+<p>周期快照事实表以具有规律性的、可预见的时间间隔来记录事实，时间间隔如每天、每月、每年等等。典型的例子如销售日快照表、库存日快照表等。它统计的是间隔周期内的度量统计，如历史至今、自然年至今、季度至今等等</p>
+<p>周期快照表没有粒度的概念，取而代之的是周期+状态度量的组合，如历史至今的订单总数，其中历史至今是一个周期，订单总数是度量。</p>
+<p>周期快照事实表的粒度是每个时间段一条记录，通常比事务事实表的粒度要粗，是在事务事实表之上建立的聚集表，比如说时间周期是1周，那么这个周期快照事实表的一条记录就是这一周的对于某个度量的统计值（我理解的）。</p>
+<p>周期快照事实表的维度个数比事务事实表要少，但是记录的事实要比事务事实表多(为什么记录的事会比事务事实表表多呢？)。事务事实表是稀疏表，周期快照表是稠密表。</p>
+<p>什么是稀疏表，什么是稠密表？</p>
+<p>稀疏表：当天只有发生了操作才会有记录</p>
+<p>稠密表：当天没有操作也会有记录，便于下游使用</p>
+<p>周期快照事实表的日期维度通常是记录时间段的终止日，记录的事实是这个时间段内一些聚集事实值。事实表的数据一旦插入即不能更改，其更新方式为增量更新。</p>
+<p> </p>
+<p>为什么周期快照事实表纪录的纪录会比事务事实表多呢？</p>
+<p>根据阿里大数据之路第11章212页所说：</p>
+<p>事务事实表是 稀疏的，只有当天发生的业务过程，事实表才会记录该业务过程的事 实， 如下单、支付等;而快照事实表是稠密的，无论当天是否有业务过程发 生，都会记录一行，比如针对卖家的历史至今的下单和支付金额，无论 当天卖家是否有下单支付事实，都会给该卖家记录一行。</p>
+<p>假如卖家之前下单6笔，昨天没有下单，但是还是会给他在昨天的分区里面纪录它截止目前为止下单6笔的纪录。</p>
+<p> <br>3.累计快照事实表<br>累积快照事实表和周期快照事实表有些相似之处，它们存储的都是事务数据的快照信息。但是它们之间也有着很大的不同，周期快照事实表记录的确定的周期的数据，而累积快照事实表记录的不确定的周期的数据。累积快照事实表代表的是完全覆盖一个事务或产品的生命周期的时间跨度，它通常具有多个日期字段，用来记录整个生命周期中的关键时间点。例如订单累计快照事实表会有付款日期，发货日期，收货日期等时间点。</p>
+<p>例如：优惠券领用事实表，需要记录优惠券的领取时间、使用时间和支付时间，即需要对同一条数据进行更新。</p>
+<p>事务事实表中一条交易记录会每天有一条数据来记录整个交易过程；而累积快照事实表只会有一条记录，数据会一致更新直到过程结束。</p>
+<p>累积快照事实表代表的是完全覆盖一个事务或产品的生命周期的时间跨度，它通常具有多个日期字段，用来记录整个生命周期中的关键时间点。另外，它还会有一个用于指示最后更新日期的附加日期字段。由于事实表中许多日期在首次加载时是不知道的，所以必须使用代理关键字来处理未定义的日期，而且这类事实表在数据加载完后，是可以对它进行更新的，来补充随后知道的日期信息。</p>
+<p>周期快照事实表记录的是重复的可预测到的时间间隔的事实，例如帐户月结余事实表，用来记录每个月末的帐户结余信息。一般周期快照的数据会按报表需要的周期进行记录，比较适合周期长一些的情况。</p>
+<p>而累计快照适用于较短周期，有着明确的开始和结束状态的过程，如一个订单执行的过程，并记录过程中每个步骤的执行时间，使分析人员对执行的过程有整体的把握。周期快照事实表记录上每个步骤的执行时间是逐步建立的，随着执行的过程逐步更新的事实表中。</p>
+<p>![image.png](事实表分类.assets89bdc4595974c8ba8d4b3eaf36736cc.png)</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%88%86%E7%B1%BB/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%88%86%E7%B1%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E4%B8%9A%E5%8A%A1%E9%97%AE%E9%A2%98/" title="业务问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">业务问题</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%88%86%E5%B1%82%E5%BB%BA%E6%A8%A1/" title="分层建模"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">分层建模</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

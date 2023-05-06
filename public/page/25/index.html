@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/25/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/25/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 15:48:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink-CDC/" title="Flink-CDC">Flink-CDC</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.047Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/">大数据实时</a></span></div><div class="content">一、Flink CDC简介1.1 什么是CDCCDC是Change Data Capture(变更数据获取)的简称。核心思想是，监测并捕获数据库的变动（包括数据或数据表的插入、更新以及删除等），将这些变更按发生的顺序完整记录下来，写入到消息中间件中以供其他服务进行订阅及消费。
+1.2 CDC的种类CDC主要分为基于查询和基于Binlog两种方式，我们主要了解一下这两种之间的区别：
+
+
+
+
+基于查询的CDC
+基于Binlog的CDC
+
+
+
+开源产品
+Sqoop、Kafka JDBC Source
+Canal、Maxwell、Debezium
+
+
+执行模式
+Batch
+Streaming
+
+
+是否可以捕获所有数据变化
+否
+是
+
+
+延迟性
+高延迟
+低延迟
+
+
+是否增加数据库压力
+是
+否
+
+
+1.3 Flink-CDCFlink社区开发了 flink-cdc-connectors 组件，这是一个可以直接从 MySQL、PostgreSQL 等数据库直接读取全量数据和增量变更数据的 source 组件，基于Debezium框架实现binlog监控。目前也已开源，开源地址：https://gith ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink-1-13-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E9%83%A8%E7%BD%B2/" title="Flink-1-13-基本概念和部署">Flink-1-13-基本概念和部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.047Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/">大数据实时</a></span></div><div class="content">#一、简介Flink是一个框架和分布式处理引擎，用于对无界和有界数据流进行状态计算。实现处理的低延迟、高吞吐、准确性和容错性。
+需要解决的问题：1.如何保证处理结果准确性2.如何保证数据的时序性3.如何保证容灾
+那些行业需要处理流数据：1.电商和市场营销：数据报表、广告投放、业务流程需要2.物联网：传感器实时数据采集和显示、实时报警，交通运输业3.电信业：基站流量调配4.实时结算和通知推送，实时检测异常行为
+#二、处理架构对比##2.1 离线处理架构存储与处理是分离的。
+
+##2.2 流式处理框架
+- ![image.png](Flink-1-13-基本概念和部署.assets b42a36ffeb14da6a61ff2510926cb68.png)
+
+发展思路：oltp会对每个事件进行即时处理，保证了时效性，但是无法处理大规模数据；olap会将数据进行累积，到一定程度后进行统计分析，可以处理大规模数据，但是无法保证时效性；结合oltp和olap的特点，我们需要保证时效性，又要保证大数据量的处理，那么可以将数据保存在内存中，对每个到达的数据都进行计算，通过扩展集群保证高吞吐。
+###2 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/Netty04-%E4%BC%98%E5%8C%96%EF%BC%88%E8%BD%AC%EF%BC%89/" title="Netty04-优化（转）">Netty04-优化（转）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.047Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/">后端框架</a></span></div><div class="content">四. 优化与源码1. 优化1.1 扩展序列化算法序列化，反序列化主要用在消息正文的转换上
+
+序列化时，需要将 Java 对象变为要传输的数据（可以是 byte[]，或 json 等，最终都需要变成 byte[]）
+反序列化时，需要将传入的正文数据还原成 Java 对象，便于处理
+
+目前的代码仅支持 Java 自带的序列化，反序列化机制，核心代码如下
+1234567891011// 反序列化byte[] body = new byte[bodyLength];byteByf.readBytes(body);ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(body));Message message = (Message) in.readObject();message.setSequenceId(sequenceId);// 序列化ByteArrayOutputStream out = new ByteArrayOutputStream();new ObjectOutputStream(out). ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/Spring5%E6%A1%86%E6%9E%B6/" title="Spring5框架">Spring5框架</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.047Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/">后端框架</a></span></div><div class="content">
+
+
+摘要
+
+Spring框架概述
+
+
+轻量级开源JavaEE框架，为了减少企业中项目复杂性，两个核心组成：IOC和AOP
+
+
+IOC容器
+
+
+IOC底层原理（工厂，反射等）
+IOC接口（BeanFactory）
+IOC操作Bean管理（基于xml）
+IOC操作Bean管理（基于注解）
+
+
+AOP
+
+
+AOP底层原理：动态代理(有接口使用JDK动态代理、无接口使用CGLIB动态代理)
+术语：连接点、切入点、增强(通知)、切面
+基于AspectJ实现AOP相关操作
+
+
+JdbcTemplate
+
+
+使用JdbcTemplate实现CRUD和批量操作
+
+
+事务管理
+
+
+事务概念（传播行为和隔离级别）
+基于注解&#x2F;配置文件方式实现事务管理
+
+
+Spring5新功能
+
+
+整合日志框架
+@Nullable注解
+函数式注册对象
+整合JUnit5单元测试框架
+SpringWebflux使用
+
+#一、Spring
+1.1 简介Spring是一个轻量级控制反转(IOC)和面向切面(AOP)的容器框架。Spring理念：使现有的技术更加容易使用。本身是一个大杂烩。
+![image.png](Spr ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3%E7%AC%94%E8%AE%B0/" title="推荐系统算法相关笔记">推荐系统算法相关笔记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></span></div><div class="content">离线推荐使用LFM隐语义模型（ALS进行求解），实时推荐使用Item-CF模型（需要将物品相似度和评分进行加权）。
+#一、简介##1.1 推荐系统原理
+分类：1.基于人口统计学的推荐：基于用户的基本数据2.基于内容的推荐：基于物品的基本数据3.基于协同过滤的推荐
+###1.1.1 基于人口统计学的推荐推荐相似用户喜欢的物品
+###1.1.2 基于内容（Content based，BC）的推荐推荐用户喜欢的物品的相似物品![image.png](推荐系统算法相关笔记.assets67d36c505054792afb0334c155726c5.png)
+###1.1.3 基于协同过滤（Collaborative Filtering，CF）的推荐算法CB主要利用用户评价过的物品的内容特征，而CF方法还可以利用其它用户评分过的物品内容。CF可以解决CB的一些局限性：
+
+物品内容不完全或难以获取，依然可以提供通过其他用户的反馈给出推荐。
+CF基于用户之间对物品的评价质量，避免了CB仅依赖内容可能造成的对物品质量判断的干扰。
+CF推荐不受内容限制，只要其他类似用户给出对不同物品的兴趣，CF就可以 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0%E5%92%8C%E9%9D%9E%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/" title="监督学习和非监督学习">监督学习和非监督学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></span></div><div class="content">首先，必须理解两个基本概念：特征值和目标值
+
+1、特征值：
+特征值是指数据的特征，对于每个样本，通常具有一些 “属性”（Attribute）或者说 ”特征“（Feature），特征所具体取的值就被称作 ”特征值“。
+比如，苹果的皮是”光滑“的，橘子的皮是”褶皱“的，”光滑“和”褶皱“就是 ”苹果“ 和 ”橘子“ 这两个样本的特征 值
+2、目标值(标签)
+目标值又叫标签，是数据的标签，它描述了该条样本数据所属的目标或类型。
+比如，样本1， ”光滑” 、“球形” 及后面的一系列特征所描述的目标是 “苹果”
+监督学习和非监督学习的差别
+
+有没有目标值的差别
+学习过程有没有人工干预
+
+监督学习当一个孩子逐渐认识事物的时候，父母给他一些苹果和橘子(目标值)，并且告诉他苹果是什么样的，有哪儿些特征(特征值)，橘子是什么样的，有哪儿些特征(特征值)。经过父母的不断介绍，这个孩子已经知道苹果和橘子的区别，如果孩子在看到苹果和橘子的时候给出错误的判断，父母就会指出错误的原因（人工干预），经过不断地学习，再见到苹果和橘子的时候，孩子立即就可以做出正确的判断。
+上面这个例子就是监督学习的过程，也就是说，在学 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%89%8D%E7%AB%AF/Umeng%E5%9F%8B%E7%82%B9/" title="Umeng埋点">Umeng埋点</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="content">友盟数据上报策略：1.启动时上报 2.关闭时上报 3.周期性上报
+#App埋点数据收集流程图：
+友盟统计指标：①用户app激活数据信息明细②付费订单数据③拍下订单数据④注册事件分析数据⑤获得监测单元列表⑥获得用户计划列表⑦获取用户自定义事件⑧获得点击激活数据⑨获得计划注册登录数据⑩获取留存数据
+1.用户：设备id，唯一性2.新增用户：首次打开应用的用户3.活跃用户：指定时间段内打开过app的用户4.月活率：活跃用户&#x2F;总用户数5.沉默用户：两天时间没有启动过app的用户6.版本分布：计算各版本的新增用户、活跃用户、启动次数7.本周回流用户：上周没有启动，本周启动的用户8.连续n周活跃用户：连续n周，每周至少启动一次9.忠诚用户：连续5周以上活跃用户10.连续活跃用户：连续两周以上11.近期流失用户：连续n（2 &lt;&#x3D; n &lt;&#x3D; 4）周没有启动应用的用户12.留存用户13.用户新鲜度：每天启动应用的新老用户比例14.单次使用时长：每次启动使用时间长度15.日使用时长：每天使用累加值
+python取数据：
+12345678910111213141516 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%89%8D%E7%AB%AF/VSCode%E3%80%81JS%E3%80%81Vue%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95/" title="VSCode、JS、Vue简单语法">VSCode、JS、Vue简单语法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="content">Vue框架编写基本的操作流程：在src&#x2F;api中定义接口的方法 —》在src&#x2F;router中写路由—》在src&#x2F;views中调用方法渲染页面。Vue框架中ES6的语法支持js间的方法调用，axios进行了封装
+###VSCode操作安装插件chinese（中文简体）、live server（类似tomcat服务器）、vetur（vue工具）、vue-helper（vue脚手架）
+1.本地创建空文件夹2.通过vscode在文件夹中创建工作区3.可以通过live server启动服务器，访问127.0.0.1:5500访问所有的命名空间。
+VSCode的debug模式，在需要加断点的地方插入debugger，就会在该行停止。![image.png](VSCode、JS、Vue简单语法.assetsdc06e112fef4c8a80a8f38ddbfa05d8.png)
+###JS的基本语法ES6是一套标准，JS是这套标准的实现。1.定义变量
+123456789101112131415&lt;script type=&quot;text/javascript& ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%89%8D%E7%AB%AF/VUE3-0%E9%83%A8%E7%BD%B2/" title="VUE3-0部署">VUE3-0部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="content">根目录新建vue.config.js文件
+123456789101112131415161718192021222324252627module.exports = &#123;    devServer: &#123;        disableHostCheck: false,        port: 8080,        https: false,        open: false,        proxy: &#123;            &quot;/api&quot;: &#123;                target: &quot;http://api.wecook.iotmars.com:10010&quot;,// 要访问的接口域名                // target: &quot;http://localhost:10010&quot;,// 要访问的接口域名                changeOrigin: true, //开启代理：在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E5%89%8D%E7%AB%AF/Vue%E6%A1%86%E6%9E%B6%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/" title="Vue框架基本结构">Vue框架基本结构</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="content">Node.js：nodejs是js运行时，运行环境，类比java中jvm。Npm：node.js一起安装的包管理工具。Yarn:Yet Another Resource Negotiator，是一个快速、可靠、安全的依赖管理工具，一款新的JavaScript包管理工具。
+1.在commons中定义每个组件2.appVue中设置routerview容器3.router.js 导入vue和vue-router并且Vue.use(VueRouter)4.router.js 导入要渲染的组件 bar.vue list.vue foo.vue5.router.js 配置路由 routes6.router.js 实例化路由 newVueRouter()7.router.js 导出router对象8.main.js 导入router.js9.main.js newVue对象中挂载router路由
+</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/24/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/#content-inner">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/#content-inner">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/#content-inner">42</a><a class="extend next" rel="next" href="/page/26/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ELK/"><span class="card-category-list-name">ELK</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JVM/"><span class="card-category-list-name">JVM</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Jenkins/"><span class="card-category-list-name">Jenkins</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Matlab/"><span class="card-category-list-name">Matlab</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Nginx/"><span class="card-category-list-name">Nginx</span><span class="card-category-list-count">6</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">419</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">419</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-05-06T07:48:54.906Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

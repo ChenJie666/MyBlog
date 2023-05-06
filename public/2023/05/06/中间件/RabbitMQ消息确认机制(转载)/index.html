@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RabbitMQ消息确认机制(转载) | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. 配置RabbitMQ123456# 发送确认spring.rabbitmq.publisher-confirms&#x3D;true# 发送回调spring.rabbitmq.publisher-returns&#x3D;true# 消费手动确认spring.rabbitmq.listener.simple.acknowledge-mode&#x3D;manual  2. 生产者发送消息确认机制 其实这个也不能叫确认机制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ消息确认机制(转载)">
+<meta property="og:url" content="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6(%E8%BD%AC%E8%BD%BD)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 配置RabbitMQ123456# 发送确认spring.rabbitmq.publisher-confirms&#x3D;true# 发送回调spring.rabbitmq.publisher-returns&#x3D;true# 消费手动确认spring.rabbitmq.listener.simple.acknowledge-mode&#x3D;manual  2. 生产者发送消息确认机制 其实这个也不能叫确认机制">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6(%E8%BD%AC%E8%BD%BD)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'RabbitMQ消息确认机制(转载)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">RabbitMQ消息确认机制(转载)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.035Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.035Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="RabbitMQ消息确认机制(转载)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="1-配置RabbitMQ"><a href="#1-配置RabbitMQ" class="headerlink" title="1. 配置RabbitMQ"></a>1. 配置RabbitMQ</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 发送确认</span><br><span class="line">spring.rabbitmq.publisher-confirms=true</span><br><span class="line"># 发送回调</span><br><span class="line">spring.rabbitmq.publisher-returns=true</span><br><span class="line"># 消费手动确认</span><br><span class="line">spring.rabbitmq.listener.simple.acknowledge-mode=manual</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-生产者发送消息确认机制"><a href="#2-生产者发送消息确认机制" class="headerlink" title="2. 生产者发送消息确认机制"></a>2. 生产者发送消息确认机制</h4><ul>
+<li>其实这个也不能叫确认机制，只是起到一个监听的作用，监听生产者是否发送消息到exchange和queue。</li>
+<li>生产者和消费者代码不改变。</li>
+<li>新建配置类 MQProducerAckConfig.java 实现ConfirmCallback和ReturnCallback接口，@Component注册成组件。</li>
+<li>ConfirmCallback只确认消息是否到达exchange，已实现方法confirm中ack属性为标准，true到达，反之进入黑洞。</li>
+<li>ReturnCallback消息没有正确到达队列时触发回调，如果正确到达队列不执行。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">package com.fzb.rabbitmq.config;</span><br><span class="line"></span><br><span class="line">import org.apache.commons.lang3.SerializationUtils;</span><br><span class="line">import org.springframework.amqp.core.Message;</span><br><span class="line">import org.springframework.amqp.rabbit.connection.CorrelationData;</span><br><span class="line">import org.springframework.amqp.rabbit.core.RabbitTemplate;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line">import javax.annotation.PostConstruct;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Description 消息发送确认</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * ConfirmCallback  只确认消息是否正确到达 Exchange 中</span><br><span class="line"> * ReturnCallback   消息没有正确到达队列时触发回调，如果正确到达队列不执行</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * 1\. 如果消息没有到exchange,则confirm回调,ack=false</span><br><span class="line"> * 2\. 如果消息到达exchange,则confirm回调,ack=true</span><br><span class="line"> * 3\. exchange到queue成功,则不回调return</span><br><span class="line"> * 4\. exchange到queue失败,则回调return</span><br><span class="line"> * @Author jxb</span><br><span class="line"> * @Date 2019-04-04 16:57:04</span><br><span class="line"> */</span><br><span class="line">@Component</span><br><span class="line">public class MQProducerAckConfig implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnCallback &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private RabbitTemplate rabbitTemplate;</span><br><span class="line"></span><br><span class="line">    @PostConstruct</span><br><span class="line">    public void init() &#123;</span><br><span class="line">        rabbitTemplate.setConfirmCallback(this);            //指定 ConfirmCallback</span><br><span class="line">        rabbitTemplate.setReturnCallback(this);             //指定 ReturnCallback</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void confirm(CorrelationData correlationData, boolean ack, String cause) &#123;</span><br><span class="line">        if (ack) &#123;</span><br><span class="line">            System.out.println(&quot;消息发送成功&quot; + correlationData);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            System.out.println(&quot;消息发送失败:&quot; + cause);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) &#123;</span><br><span class="line">        // 反序列化对象输出</span><br><span class="line">        System.out.println(&quot;消息主体: &quot; + SerializationUtils.deserialize(message.getBody()));</span><br><span class="line">        System.out.println(&quot;应答码: &quot; + replyCode);</span><br><span class="line">        System.out.println(&quot;描述：&quot; + replyText);</span><br><span class="line">        System.out.println(&quot;消息使用的交换器 exchange : &quot; + exchange);</span><br><span class="line">        System.out.println(&quot;消息使用的路由键 routing : &quot; + routingKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-消费者消息手动确认"><a href="#3-消费者消息手动确认" class="headerlink" title="3. 消费者消息手动确认"></a>3. 消费者消息手动确认</h4><ul>
+<li>SpringBoot集成RabbitMQ确认机制分为三种：none、auto(默认)、manual</li>
+</ul>
+<p><strong>Auto：</strong><br>1. 如果消息成功被消费（成功的意思是在消费的过程中没有抛出异常），则自动确认<br>2. 当抛出 AmqpRejectAndDontRequeueException 异常的时候，则消息会被拒绝，且 requeue &#x3D; false（不重新入队列）<br>3. 当抛出 ImmediateAcknowledgeAmqpException 异常，则消费者会被确认<br>4. 其他的异常，则消息会被拒绝，且 requeue &#x3D; true，此时会发生死循环，可以通过 setDefaultRequeueRejected（默认是true）去设置抛弃消息</p>
+<ul>
+<li><p>如设置成manual手动确认，一定要对消息做出应答，否则rabbit认为当前队列没有消费完成，将不再继续向该队列发送消息。</p>
+</li>
+<li><p>channel.basicAck(long,boolean); 确认收到消息，消息将被队列移除，false只确认当前consumer一个消息收到，true确认所有consumer获得的消息。</p>
+</li>
+<li><p>channel.basicNack(long,boolean,boolean); 确认否定消息，第一个boolean表示一个consumer还是所有，第二个boolean表示requeue是否重新回到队列，true重新入队。</p>
+</li>
+<li><p>channel.basicReject(long,boolean); 拒绝消息，requeue&#x3D;false 表示不再重新入队，如果配置了死信队列则进入死信队列。</p>
+</li>
+<li><p>当消息回滚到消息队列时，这条消息不会回到队列尾部，而是仍是在队列头部，这时消费者会又接收到这条消息，如果想消息进入队尾，须确认消息后再次发送消息。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">channel.basicPublish(message.getMessageProperties().getReceivedExchange(),</span><br><span class="line">                    message.getMessageProperties().getReceivedRoutingKey(), </span><br><span class="line">                    MessageProperties.PERSISTENT_TEXT_PLAIN,</span><br><span class="line">                    message.getBody());</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>延续上一章direct类型队列为例，当消息出现异常，判断是否回滚过消息，如否则消息从新入队，反之抛弃消息。其中一个消费者模拟一个异常。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">    @RabbitListener(bindings = &#123;@QueueBinding(value = @Queue(value = &quot;direct.queue&quot;), exchange = @Exchange(value = &quot;direct.exchange&quot;), key = &quot;HelloWorld&quot;)&#125;)</span><br><span class="line">    public void getDirectMessage(User user, Channel channel, Message message) throws IOException &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 模拟执行任务</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">            // 模拟异常</span><br><span class="line">            String is = null;</span><br><span class="line">            is.toString();</span><br><span class="line">            // 确认收到消息，false只确认当前consumer一个消息收到，true确认所有consumer获得的消息</span><br><span class="line">            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (message.getMessageProperties().getRedelivered()) &#123;</span><br><span class="line">                System.out.println(&quot;消息已重复处理失败,拒绝再次接收&quot; + user.getName());</span><br><span class="line">                // 拒绝消息，requeue=false 表示不再重新入队，如果配置了死信队列则进入死信队列</span><br><span class="line">                channel.basicReject(message.getMessageProperties().getDeliveryTag(), false);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                System.out.println(&quot;消息即将再次返回队列处理&quot; + user.getName());</span><br><span class="line">                // requeue为是否重新回到队列，true重新入队</span><br><span class="line">                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);</span><br><span class="line">            &#125;</span><br><span class="line">            //e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">@RabbitListener(queues = &quot;direct.queue&quot;)</span><br><span class="line">    public void getDirectMessageCopy(User user, Channel channel, Message message) throws IOException &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 模拟执行任务</span><br><span class="line">            Thread.sleep(1000);</span><br><span class="line">            System.out.println(&quot;--jxb--MQConsumer--getDirectMessageCopy：&quot; + user.toString());</span><br><span class="line">            // 确认收到消息，false只确认当前consumer一个消息收到，true确认所有consumer获得的消息</span><br><span class="line">            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            if (message.getMessageProperties().getRedelivered()) &#123;</span><br><span class="line">                System.out.println(&quot;消息已重复处理失败,拒绝再次接收！&quot;);</span><br><span class="line">                // 拒绝消息，requeue=false 表示不再重新入队，如果配置了死信队列则进入死信队列</span><br><span class="line">                channel.basicReject(message.getMessageProperties().getDeliveryTag(), false);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                System.out.println(&quot;消息即将再次返回队列处理！&quot;);</span><br><span class="line">                // requeue为是否重新回到队列，true重新入队</span><br><span class="line">                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);</span><br><span class="line">            &#125;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>从执行结果来看，三条消息都调用了confirm方法，说明消息发送到了exchange，且没有调用return方法，说明消息成功到达相应队列。</p>
+<p>getDirectMessageCopy方法成功消费掉“张三”这条消息，由于getDirectMessage方法模拟异常，所以第一次把“李四”从新入队，此时getDirectMessageCopy继续消费“王五”成功，getDirectMessage方法因李四已经从新入队过，再次发生异常则抛弃消息。</p>
+<p><img src="//upload-images.jianshu.io/upload_images/7185724-ac97d04a08b05b78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700/format/webp" alt="image"></p>
+<p>进一步挖掘你会发现，开始一共3条消息，有一条回滚消息总数变成了4条，每个消费者消费2条，所以两个消费者是轮询分配的。</p>
+<ul>
+<li>工作队列有两种工作方式：轮询分发(默认)、公平分发即当某个消费者没有消费完成之前不用再分发消息。</li>
+<li>修改配置文件</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 消费者每次从队列获取的消息数量。此属性当不设置时为：轮询分发，设置为1为：公平分发</span><br><span class="line">spring.rabbitmq.listener.simple.prefetch=1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>将第一个消费者模拟执行5秒，然后向数据库增加一条数据，执行结果为：</p>
+<p><img src="//upload-images.jianshu.io/upload_images/7185724-0d6db7659b7f00df.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700/format/webp" alt="image"></p>
+<p>可以看到，getDirectMessageCopy执行了4次，getDirectMessage执行了1次，根据他们的消费能力来公平分发消息。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6(%E8%BD%AC%E8%BD%BD)/">http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6(%E8%BD%AC%E8%BD%BD)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/MySQL%E4%B8%8ERedis%E5%92%8CES%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/" title="MySQL与Redis和ES进行数据同步"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MySQL与Redis和ES进行数据同步</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis-Modules-%E6%A8%A1%E5%9D%97%EF%BC%88%E5%BE%85%E7%BB%AD%EF%BC%89/" title="Redis-Modules-模块（待续）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Redis-Modules-模块（待续）</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AERabbitMQ"><span class="toc-number">1.</span> <span class="toc-text">1. 配置RabbitMQ</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%94%9F%E4%BA%A7%E8%80%85%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E7%A1%AE%E8%AE%A4%E6%9C%BA%E5%88%B6"><span class="toc-number">2.</span> <span class="toc-text">2. 生产者发送消息确认机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%B6%88%E8%B4%B9%E8%80%85%E6%B6%88%E6%81%AF%E6%89%8B%E5%8A%A8%E7%A1%AE%E8%AE%A4"><span class="toc-number">3.</span> <span class="toc-text">3. 消费者消息手动确认</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>软考笔记 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、计算机组成与体系结构①算术逻辑运算单元（ALU）基本功能为加、减、乘、除四则运算，与、或、非、异或等逻辑操作，以及移位、求补等操作。计算机运行时，运算器的操作和操作种类由控制器决定。②累加器（Accumulator）专门存放算术或逻辑运算的一个操作数和运算结果的寄存器。能进行加、减、读出、移位、循环移位和求补等操作。是运算器的主要部分。③状态寄存器（PSW）用来存放两类信息：一类是体现当前指令">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软考笔记">
+<meta property="og:url" content="http://example.com/2023/05/06/%E8%BD%AF%E8%80%83/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、计算机组成与体系结构①算术逻辑运算单元（ALU）基本功能为加、减、乘、除四则运算，与、或、非、异或等逻辑操作，以及移位、求补等操作。计算机运行时，运算器的操作和操作种类由控制器决定。②累加器（Accumulator）专门存放算术或逻辑运算的一个操作数和运算结果的寄存器。能进行加、减、读出、移位、循环移位和求补等操作。是运算器的主要部分。③状态寄存器（PSW）用来存放两类信息：一类是体现当前指令">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.099Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.099Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E8%BD%AF%E8%80%83/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '软考笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">软考笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.099Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.099Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BD%AF%E8%80%83/">软考</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="软考笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、计算机组成与体系结构"><a href="#一、计算机组成与体系结构" class="headerlink" title="一、计算机组成与体系结构"></a>一、计算机组成与体系结构</h1><p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C8daa50a5d38a41f392c03a4948fe9e92.png" alt="image.png"><br>①算术逻辑运算单元（ALU）<br>基本功能为加、减、乘、除四则运算，与、或、非、异或等逻辑操作，以及移位、求补等操作。计算机运行时，运算器的操作和操作种类由控制器决定。<br>②累加器（Accumulator）<br>专门存放算术或逻辑运算的一个操作数和运算结果的寄存器。能进行加、减、读出、移位、循环移位和求补等操作。是运算器的主要部分。<br>③状态寄存器（PSW）<br>用来存放两类信息：一类是体现当前指令执行结果的各种状态信息（条件码），如有无进位（CF位）、有无溢出（OV位）、结果正负（SF位）、结果是否为零（ZF位）、奇偶标志位（P位）等；另一类是存放控制信息（PSW:程序状态字寄存器），如允许中断(IF位)、跟踪标志（TF位）等。有些机器中将PSW称为标志寄存器FR（Flag Register）。<br>④通用寄存器（General Register ）<br>可用于传送和暂存数据，也可参与算术逻辑运算，并保存运算结果。除此之外，它们还各自具有一些特殊功能。通用寄存器的长度取决于机器字长，汇编语言程序员必须熟悉每个寄存器的一般用途和特殊用途，只有这样，才能在程序中做到正确、合理地使用它们。</p>
+<p>![image.png](软考笔记.assetsbbb6feecf1b4c5383d55fdb41de6fbc.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5Cded4115dcfde457b9d1f9632bcce7a75.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C2f55707cb95144a6ac732fccafa030b5.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assetsac20a47300640db8f1071bcdac9c53d.png)</p>
+<p>![image.png](软考笔记.assets9720ad888224b6bb64139a2921fd942.png)</p>
+<p>![image.png](软考笔记.assetscd27a9fb8c4a31bd480c57afe9e3ae.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C5b240cfe45c542ff80a203ce7c3cf666.png" alt="image.png"></p>
+<p>在CPU访问寄存器时，无论是存取数据抑或存取指令，都趋于聚集在一片连续的区域中，这就被称为局部性原理。 <br><strong>时间局部性（temporal locality）：</strong>被引用过一次的存储器位置在未来会被多次引用（通常在循环中）。 <br><strong>空间局部性（spatial locality）：</strong>如果一个存储器的位置被引用，那么将来他附近的位置也会被引用。<br><strong>工作集理论：</strong>工作集是进程运行时被频繁访问的页面的集合。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C22f92ba75011408cb584d609626338b2.png" alt="image.png"><br>RAM（random access memory）即随机存取存储器，这种存储器在断电时将丢失其存储内容。<br>ROM（Read-Only Memory）即只读存储器，是一种只能读出事先所存数据的固态半导体存储器。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C6cf12323a1a64ab8b900ee2cd6cb7350.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assetsad73e3653974284a35f453fbee84670.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5Cdae778b2195840b0980f2f0d7a3a39bb.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assetsac4bd0e1b244e21982d4a2caa0d6002.png)</p>
+<p>![image.png](软考笔记.assets 8833011a6ee4e60a58861209369180b.png)</p>
+<p>![image.png](软考笔记.assets659437d6a9e4a6e9a60ccaddf7d7acc.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C34bebf2040924e019715b1543ee65ed7.png" alt="image.png"></p>
+<p><strong>数量计算：</strong>信息位个数用x表示，校验位个数用r表示，在1,2,4,8…上放校验位，其他位上放信息位。那么所需信息位和校验位的个数关系是2^r - 1 &gt;&#x3D; x + r；公式左边就是位数，r+1就是所占的校验位个数，剩下就是信息位个数。<br><strong>排布关系：</strong>通过2^r - 1 &gt;&#x3D; 4 + r 计算得到r &#x3D; 3，即有三位校验码。信息位分别在3,5,6,7位上，校验码分别在1,2,4位上。<br><strong>校验关系：</strong>7 &#x3D; 2^0 + 2^1 + 2^2 ，即7位置上的信息码被1,2,4位置上的校验码校验；同理6 &#x3D; 2^1 + 2^2 ，即6位置上的信息码被2,4位置上的校验码校验。同理5位置上的信息码被1,4位置上的校验码校验，3位置上的信息码被1,2位置上的校验码校验。<br><strong>通过信息位计算校验位：</strong>4位置上的校验位相关的信息位为7,6,5。将这三个位置上的信息位 取异或，得到的值就是4位置上的校验位的值。同理计算其他校验位上的值。<br><strong>通过校验位计算信息位：</strong>同理。</p>
+<br>
+# 二、操作系统基本原理
+![image.png](软考笔记.assets\5f3064b5b06c41c4b1a7306a703f0afe.png)
+
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C663a8e4b140249fca40bba8f809eb67d.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C2aa177f81dc0494e9abb04a6a6c8cea6.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assets4fe4e11ab35405ba1ba4d28454bda37.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C45a72df3645e4bde8050b59046293ade.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C8be6b1143cd54e55b6eec48b9b20a947.png" alt="image.png"></p>
+<p>如图，单缓冲区只能存储一个产品，如何保证生产者和消费者能正常运行且缓冲区不溢出？S1初值为1，S2初值为0.</p>
+<ul>
+<li>如果是生产者先运行：①生产一个产品后S1&#x3D;S1-1&#x3D;0，S1&gt;&#x3D;0继续执行，将产品送到缓冲区S2&#x3D;S2+1&#x3D;1，继续执行，再生产一个产品后S1&#x3D;-1&lt;0，进程放入进程队列后阻塞；②然后消费者开始运行，S2&#x3D;S2-1&#x3D;0&gt;&#x3D;0，继续执行取出缓存区的产品，然后S1&#x3D;S1+1&#x3D;0&lt;&#x3D;0，所以从进程队列中唤醒一个进程(即生产者进程)，然后继续消费产品，再次消费S2&#x3D;S2-1&#x3D;-1&lt;0，进程阻塞；③被唤醒的生产者将产品送到缓存区，S2&#x3D;S2+1&#x3D;0，唤醒消费者进程，消费者取出产品…… 如此循环保证不断生产消费且缓冲区不溢出。</li>
+<li>如果是消费者先运行：①消费者先进入P(S2)，业务S2&#x3D;S2-1&#x3D;-1&lt;0阻塞；②生产者开始运行，生产产品，S1&#x3D;S1-1&gt;&#x3D;0，继续运行将产品送到缓存区，S2&#x3D;S2+1&#x3D;0&lt;&#x3D;0，唤醒消费者进程…… 如此循环保证不断生产消费且缓冲区不溢出。</li>
+</ul>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C9b88b70c437144dca7e42971bd8bb904.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assets9cd4f24d5241eca7c6d2132518ee25.png)</p>
+<p>![image.png](软考笔记.assetsa9d536eb0c84d81908ca80ffae10c47.png)</p>
+<p>最少需要13个资源，就不会发生死锁。</p>
+<p>![image.png](软考笔记.assets29f4451c2564379b1b4c031de63e4bc.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C78485b570f9c452ebe01532a9348d7fe.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C433dfa5998e9492d9a69c2901debc75a.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assets0eddea88445eb1ad1f7b4c871426.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C3e2616a342434588ad7a3b467d17e886.png" alt="image.png"></p>
+<p>如上图是<strong>页面置换FIFO算法</strong>，内存分为了三页，向其中添加进程页：<br>①进程4号页进入内存放到内存1号页，因为内存中没有4号页，产生了缺页。<br>②进程3号页进入内存放到内存2号页，产生缺页。<br>……依次类推，12次读取产生了9次缺页。<br>现在将内存页扩大为4页，原理同上，但是12次读取进程页却产生了10次缺页。<br><strong>分配资源变大了但是缺页变多了，就产生了内存缺页。</strong></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5Cdd46e96bb53e4c1082e17b89e2f5013b.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C2862e632cb144416ba9a857ab76fb5b9.png" alt="image.png"></p>
+<p>如上是FIFO和LRU(最近最少使用算法)的比较：</p>
+<ul>
+<li>FIFO会将页码归入队列，先进先出；</li>
+<li>LRU会同样会将页码归入队列，但是会将使用过的页码再次放到队首。</li>
+</ul>
+<p>![image.png](软考笔记.assetsca24738f5aa461ab0bd41533e68d472.png)</p>
+<p>括号一解答：因为有六个页面需要读取，且读取之前需要先读取内存查虚拟地址和物理地址的对应表。<br>括号二解答：约定俗成的指令写入页面时会全部写入，所以虽然指令在0和1号页中，但是读取0时会一次性加载0和1，产生一次缺页中断；而操作数A和B占了2,3,4,5四个页，会产生4次缺页中断。所以一共5此缺页中断。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C8af85f453f4d43fea894d88dfc8075f5.png" alt="image.png"></p>
+<p>如果未做说明，索引节点有13个。0-9十个索引节点，每个对应4k的物理盘块。10号索引节点是一级间接索引，指向的物理盘块也是一个索引节点，如果一个指针大小是4字节，那么可以存储1024个指针，指向1024个物理盘块。11号是二级间接索引，12号是三级间接索引。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C55f5c462044d4462a78635d4a3e324e0.png" alt="image.png"></p>
+<p>一个指针是4byte，一个物理盘块是1kB，那么一个物理盘块可以存储256个指针。逻辑块号从0开始计数，那么5号逻辑块对应物理块号是58，261号逻辑块对应物理块号是187。<br>101号物理块存放的是二级地址索引表。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C4c79acab2a6243d6b96cf298f1956268.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assets01cece2690c4f83b3e73f53db167e91.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C2732db783c624a7d8bed04d501ae7073.png" alt="image.png"></p>
+<p>如果是”第n位置”，就要从0开始；如果是”第n个字”，就要从1开始。<br>上题中，一个字有32位，那么4195号物理块在第132个字中，因为4196&#x2F;32&#x3D;131.125；131个最后一位是131*32-1&#x3D;4191，那么4192在132个字中的第0个位置，4195在第三位置。</p>
+<p>![image.png](软考笔记.assetse72d677a2f8460f9d9fd70353a4d41a.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C6f66e31fcd3a4ffab0aa58afb87e7480.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assetsedd881ceae2482bb7ba05d7334f3a21.png)</p>
+<h1 id="三、数据库"><a href="#三、数据库" class="headerlink" title="三、数据库"></a>三、数据库</h1><p>![image.png](软考笔记.assets a8f09cf68dd4462903992034be72155.png)</p>
+<p>![image.png](软考笔记.assets00f5c042b4243e697891f82f534b54b.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C70dbe4d0dcdb4d7cb83e610951f287d2.png" alt="image.png"><br>超键可以唯一标识原则，可以有冗余属性。超键消除冗余属性后就称为候选键，候选键也可以唯一标识元组。从候选键中选择一个属性作为主键。</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C63cda21af8e6422294ac438013cedd0b.png" alt="image.png"></p>
+<blockquote>
+<p>入度为0就是没有其他属性指向该属性，出度为0就是该属性没有指向其他属性。我们只需要找入度为0的属性，通过该属性可以到达全部属性，该入度为0的属性就是候选键。<br>入度为0的属性集不能遍历图中所有节点，则需要将中间节点（既有入度，也有出度的节点）并入入度为0的属性集中，直至能遍历所有节点，集合为候选键。</p>
+</blockquote>
+<p>如上第一题答案为A1，第二题答案为ABCD，第三题答案为A和B</p>
+<p>![image.png](软考笔记.assets7daf892e0354cc59cd03b97024a4a74.png)</p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C37ade92f293c487d9bfc0dec977db481.png" alt="image.png"></p>
+<p><img src="/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0.assets%5C46ffb41b71ae40519b203922ec5dc0c3.png" alt="image.png"></p>
+<p>![image.png](软考笔记.assets</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E8%BD%AF%E8%80%83/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0/">http://example.com/2023/05/06/%E8%BD%AF%E8%80%83/%E8%BD%AF%E8%80%83%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/JUC%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" title="JUC并发编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JUC并发编程</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E9%9D%A2%E8%AF%95/%E5%BB%BA%E6%A8%A1%E8%A7%84%E8%8C%83/" title="建模规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">建模规范</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E4%B8%8E%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">一、计算机组成与体系结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">三、数据库</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

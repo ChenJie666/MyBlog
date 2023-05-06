@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/40/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/40/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 15:48:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E5%90%84%E8%BF%9B%E7%A8%8B%E5%90%8D%E5%AF%B9%E5%BA%94%E7%9A%84%E7%BB%84%E4%BB%B6/" title="各进程名对应的组件">各进程名对应的组件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">UI界面192.168.32.242:50070192.168.32.243:8088
+192.168.32.242:8443  azkaban(admin:admin)
+192.168.32.242:16010  hbase192.168.32.242:8983  solr192.168.32.242:21000  atlas(admin:admin)
+http://192.168.32.243/ganglia  ganglia(监控flume)
+http://192.168.32.242/zabbix   Zabbbix(Admin:zabbix，报警邮箱&#x37;&#57;&#50;&#x39;&#54;&#53;&#55;&#x37;&#50;&#64;&#113;&#x71;&#46;&#99;&#x6f;&#x6d;)
+192.168.32.244:38682  flink(yarn session，&#x2F;opt&#x2F;module&#x2F;flink-1.12.0&#x2F;yarn-session.log)
+Hadoop
+
+NameNode
+Resourc ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E5%B8%B8%E7%94%A8%E7%AB%AF%E5%8F%A3%E5%8F%B7/" title="常用端口号">常用端口号</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">?dfs.namenode.http-address:50070?dfs.datanode.http-address:50075?SecondaryNameNode辅助名称节点端口号：50090?dfs.datanode.address:50010?fs.defaultFS:8020 或者9000?yarn.resourcemanager.webapp.address:8088?历史服务器web访问端口：19888
+web端口：50070、50075、8088、19888；3306；2181；9092（kafka）；6379（Redis）；16010（hbase）、16030（regionserver）；11000（oozie）；8443（azkaban）；7180（cmd），8888（hue未优化）8889（hue优化）；8080（HDP）；5601（kibana的web端口），9200（elastic的请求端口）7077（spark的standalone的master端口），4040（local模式spark的driver的web），8080（standalone模式spark的m ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE/" title="常用配置文件位置">常用配置文件位置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">##配置文件位置
+配置文件位置&#x2F;etc&#x2F;hosts			hosts ：&#x2F;etc&#x2F;profile 		profile :&#x2F;etc&#x2F;selinux&#x2F;config		setenforce(临时更改指令：sudo setenforce 0)&#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-eth0	网络配置&#x2F;etc&#x2F;udev&#x2F;rules.d&#x2F;7-persistent-net.rules 网卡配置&#x2F;etc&#x2F;sysconfig&#x2F;network	修改主机名&#x2F;etc&#x2F;sudoers		用户权限
+&#x2F;etc&#x2F;ntp.conf		ntp时间同步的配置文件&#x2F;etc&#x2F;sysconfig&#x2F;ntpd		设置系统时间与硬件时间同步
+&#x2F;etc&#x2F;selinux&#x2F;config	或  &#x2F;etc&#x2F;syscon ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E8%BF%9B%E7%A8%8B%E5%86%85%E5%AD%98%E5%88%86%E6%9E%90/" title="进程内存分析">进程内存分析</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">cat &#x2F;proc&#x2F;[processNum]&#x2F;status
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748Name:	javaUmask:	0002State:	S (sleeping)Tgid:	16630Ngid:	0Pid:	16630PPid:	1TracerPid:	0Uid:	1000	1000	1000	1000Gid:	1000	1000	1000	1000FDSize:	2048Groups:	1000 VmPeak:	 2470520 kBVmSize:	 2420144 kBVmLck:	       0 kBVmPin:	       0 kBVmHWM:	  803204 kBVmRSS:	  796292 kBRssAnon:	  757272 kBRssFile:	   39020 kBRssShmem:	       0 kBVmData:	 2205804 kBVmStk:	     164 kB ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/" title="遇到的问题">遇到的问题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">问题一
+现象：通过rpm删除了krb-libs后，ssh、yum等命令会报libgssapi_krb5.so.2模块缺失的错误。
+原因：删除krb-libs时使用了–nodeps参数，导致其他命令的依赖也被删除了
+解决：需要重新下载krb-libs模块。但是yum不能正常使用了，所以需要外部导入或直接网上下载安装包进行安装。下载：http://mirror.centos.org/centos/7/os/x86_64/Packages/krb5-libs-1.15.1-50.el7.x86_64.rpm然后安装 rpm -ivh krb5-libs-1.15.1-50.el7.x86_64.rpm 即可。
+
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/hxr%E4%B8%9A%E5%8A%A1/%E7%81%AB%E6%98%9F%E4%BA%BA%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F/" title="火星人权限系统">火星人权限系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/hxr%E4%B8%9A%E5%8A%A1/">hxr业务</a></span></div><div class="content">一、授权模式OAuth 2.0是目前最流行的授权框架，允许用户授权第三方移动应用访问他们存储在另外的服务提供者上的信息（比如照片、视频、用户信息等），而不需要将用户名和密码提供给第三方移动应用或分享他们数据的所有内容。
+Oauth2有四种授权方式：
+
+授权码模式：第三方应用通过客户端进行登录，如果通过github账号进行登录，那么第三方应用会跳转到github的资源服务器地址，携带了client_id、redirect_uri、授权类型(code模式)和state(防止csrf攻击的token,可以不填)。随后资源服务器会重定向到第三方应用url并携带code和state参数，随后第三方应用携带code、client_id和client_secret再去请求授权服务器，先验证code是否有效，有效则发放认证token，携带该token可以取资源服务器上的资源。
+
+简化模式：第三方应用通过客户端进行登录，通过github账号访问资源服务器，认证完成后重定向到redirect_uri并携带token，省略了通过授权码再去获取token的过程。
+
+密码模式：直接向第三方应用提供资源服务器的账 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Jenkins/Jenkins%E9%83%A8%E7%BD%B2Shell%E8%84%9A%E6%9C%AC%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="Jenkins部署Shell脚本到服务器">Jenkins部署Shell脚本到服务器</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Jenkins/">Jenkins</a></span></div><div class="content">部署流程
+从GitLab上拉取代码;
+将脚本复制到目标服务器上的临时目录下;
+远程执行脚本进行测试;
+执行成功，则将临时目录下的文件覆盖到正式目录下，并删除临时文件。
+
+插件需要安装如下jenkins插件
+
+Publish Over SSH
+Generic Webhook Trigger
+
+pipeline脚本：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011021031041051061071081091101111121131141151161171181191201211221231241251261271281291301311321331341351361371381391401411421431441451461471481491501 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/Linux%E5%91%BD%E4%BB%A4/" title="Linux命令">Linux命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">一、目录结构
+
+
+目录
+说明
+
+
+
+&#x2F;bin
+Binary的缩写，这个目录存放最经常使用的命令；
+
+
+&#x2F;sbin
+s就是Super User的意思，这里存放的时系统管理员使用的系统管理程序；
+
+
+&#x2F;home
+存放普通用户的主目录，在Linux中每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的；
+
+
+&#x2F;root
+该目录为系统管理员，也称作超级权限者的用户主目录；
+
+
+&#x2F;lib
+系统开机所需要最基本的动态连接共享库，起作用类似与Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库；
+
+
+&#x2F;lost+found
+这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件；
+
+
+&#x2F;etc
+所有的系统管理所需要的配置文件和子目录；
+
+
+&#x2F;usr
+这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，累细雨windows下的program files目录；
+
+
+&#x2F;boot
+这里存放的是启动Linux是使用的一些核心文件，包括一些连接文件以及镜像文件，自己安装的别放 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/SSH%E7%99%BB%E5%BD%95/" title="SSH登录">SSH登录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">一、密钥登陆原理如果主机A需要免密登陆主机B，那么需要有凭证能证明主机A是主机B信任的节点。此时就需要主机A生成一个密钥对(私钥与公钥)，私钥是主机A保留的，公钥则需要给到主机B，保存在文件authorized_keys中(如果保存了该外部节点的公钥，则表示信任该节点)。
+简单流程如下：
+
+主机A向主机B发送登录请求；
+主机B检查自己的.&#x2F;ssh&#x2F;authorized_keys中是否有主机A的公钥，如果有，进入步骤3；
+主机B使用主机A的公钥加密一段随机字符串，并发送给A；
+主机A使用自己的私钥进行解密；
+主机A将步骤4解密的字符串发送给主机B；
+主机B对比字符串是否一致，一致则允许登录。
+
+![image.png](SSH登录.assets5b208da5a6a49809d3b00e26b56cb03.png)
+
+# 二、ssh服务器配置文件
+OpenSSH（即常说的ssh）的常用配置文件有两个/etc/ssh/ssh_config和sshd_config。，其中ssh_config为客户端配置文件，设置与客户端相关的应用可通过此文件实现；sshd_config ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/Linux/%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE/" title="虚拟机配置">虚拟机配置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.019Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">##虚拟机设置
+设置虚拟机的ip为静态ip地址将虚拟机的地址改为固定值。需要对三处地址进行修改
+①将vmware的协议地址改为ip192.168.1.0、子关掩码255.255.255.0、网关192.168.1.2
+②将vmnet8的协议地址改为ip192.168.1.10、子关掩码255.255.255.0、网关192.168.1.2
+③将cent os虚拟机的地址改为静态地址，添加ip192.168.1.100、子关掩码	255.255.255.0、网关192.168.1.2。需要开机自动连接网络，则将ONBOOT改为yes。(打	开文件命令为vim  &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-eth0 )
+在同一网段的虚拟机都可以上网。
+④在主机系统上找到C:\Windows\System32\driverstc的hosts文件添加虚拟机主机名和ip地址的映射地址。
+虚拟机中需要修改：修改主机名称 ：vim    &#x2F;etc&#x2F;sysconfig&#x2F;networkHOSTNAME& ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/39/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/#content-inner">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/#content-inner">41</a><a class="page-number" href="/page/42/#content-inner">42</a><a class="extend next" rel="next" href="/page/41/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ELK/"><span class="card-category-list-name">ELK</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JVM/"><span class="card-category-list-name">JVM</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Jenkins/"><span class="card-category-list-name">Jenkins</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Matlab/"><span class="card-category-list-name">Matlab</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Nginx/"><span class="card-category-list-name">Nginx</span><span class="card-category-list-count">6</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">419</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">419</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-05-06T07:48:54.906Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

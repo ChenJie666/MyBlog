@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用Maxwell监控MySQL的binlog文件 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、原理1.1 Maxwell介绍Maxwell是一个能实时读取MySQL二进制日志binlog，并生成 JSON 格式的消息，作为生产者发送给 Kafka，Kinesis、RabbitMQ、Redis、Google Cloud Pub&#x2F;Sub、文件或其它平台的应用程序。它的常见应用场景有ETL、维护缓存、收集表级别的dml指标、增量到搜索引擎、数据分区迁移、切库binlog回滚方案等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Maxwell监控MySQL的binlog文件">
+<meta property="og:url" content="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E4%BD%BF%E7%94%A8Maxwell%E7%9B%91%E6%8E%A7MySQL%E7%9A%84binlog%E6%96%87%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、原理1.1 Maxwell介绍Maxwell是一个能实时读取MySQL二进制日志binlog，并生成 JSON 格式的消息，作为生产者发送给 Kafka，Kinesis、RabbitMQ、Redis、Google Cloud Pub&#x2F;Sub、文件或其它平台的应用程序。它的常见应用场景有ETL、维护缓存、收集表级别的dml指标、增量到搜索引擎、数据分区迁移、切库binlog回滚方案等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E4%BD%BF%E7%94%A8Maxwell%E7%9B%91%E6%8E%A7MySQL%E7%9A%84binlog%E6%96%87%E4%BB%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用Maxwell监控MySQL的binlog文件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用Maxwell监控MySQL的binlog文件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.035Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.035Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用Maxwell监控MySQL的binlog文件"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、原理"><a href="#一、原理" class="headerlink" title="一、原理"></a>一、原理</h1><h2 id="1-1-Maxwell介绍"><a href="#1-1-Maxwell介绍" class="headerlink" title="1.1 Maxwell介绍"></a>1.1 Maxwell介绍</h2><p>Maxwell是一个能实时读取MySQL二进制日志binlog，并生成 JSON 格式的消息，作为生产者发送给 Kafka，Kinesis、RabbitMQ、Redis、Google Cloud Pub&#x2F;Sub、文件或其它平台的应用程序。它的常见应用场景有ETL、维护缓存、收集表级别的dml指标、增量到搜索引擎、数据分区迁移、切库binlog回滚方案等。</p>
+<ul>
+<li>支持 SELECT * FROM table 的方式进行全量数据初始化；</li>
+<li>支持在主库发生failover后，自动恢复binlog位置(GTID)；</li>
+<li>可以对数据进行分区，解决数据倾斜问题，发送到kafka的数据支持database、table、column等级别的数据分区；</li>
+<li>工作方式是伪装为Slave，接收binlog events，然后根据schemas信息拼装，可以接受ddl、xid、row等各种event。</li>
+</ul>
+<h2 id="1-2-对比Canal"><a href="#1-2-对比Canal" class="headerlink" title="1.2 对比Canal"></a>1.2 对比Canal</h2><ul>
+<li>Maxwell没有canal那种server+client模式，只有一个server把数据发送到消息队列或redis。如果需要多个实例，通过指定不同配置文件启动多个进程。</li>
+<li>Maxwell有一个亮点功能，就是canal只能抓取最新数据，对已存在的历史数据没有办法处理。而Maxwell有一个bootstrap功能，可以直接引导出完整的历史数据用于初始化，非常好用。</li>
+<li>Maxwell不能直接支持HA，但是它支持断点还原，即错误解决后重启继续上次点儿读取数据。</li>
+<li>Maxwell只支持json格式，而Canal如果用Server+client模式的话，可以自定义格式。</li>
+<li>Maxwell比Canal更加轻量级。</li>
+</ul>
+<h2 id="1-3-流程图"><a href="#1-3-流程图" class="headerlink" title="1.3 流程图"></a>1.3 流程图</h2><p>可以通过Maxwell实现MySQL与Elasticsearch的数据同步。<br><img src="/%E4%BD%BF%E7%94%A8Maxwell%E7%9B%91%E6%8E%A7MySQL%E7%9A%84binlog%E6%96%87%E4%BB%B6.assets%5C554f96acc8e54cd58d61ff32eedadfc3.png" alt="image.png"></p>
+<br>
+# 二、实现
+####① **vi my.cnf**    修改mysql的配置文件
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server_id=1</span><br><span class="line">log-bin=master</span><br><span class="line">binlog_format=row</span><br><span class="line"></span><br><span class="line">gtid-mode=on</span><br><span class="line">enforce-gtid-consistency=1 # 设置为主从强一致性</span><br><span class="line">log-slave-updates=1 # 记录日志</span><br></pre></td></tr></table></figure>
+####② **设置权限**
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE USER &#x27;maxwell&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;XXXXXX&#x27;;</span><br><span class="line">mysql&gt; GRANT ALL ON maxwell.* TO &#x27;maxwell&#x27;@&#x27;%&#x27;;</span><br><span class="line">mysql&gt; GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE ON *.* TO &#x27;maxwell&#x27;@&#x27;%&#x27;;</span><br></pre></td></tr></table></figure>
+####③ **启动Maxwell并与RabbitMQ关联**
+**方式一：通过在docker命令中指定属性的值关联RabbitMQ**
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm zendesk/maxwell bin/maxwell --user=&#x27;maxwell&#x27; --password=&#x27;hxr&#x27; --host=&#x27;mysql.hostname&#x27;   --producer=rabbitmq --rabbitmq_host=&#x27;rabbitmq.hostname&#x27;</span><br></pre></td></tr></table></figure>
+备注：测试时，可以通过在控制台打印的方式查看配置是否正确。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm zendesk/maxwell bin/maxwell --user=&#x27;maxwell&#x27; --password=&#x27;hxr&#x27; --host=&#x27;mysql.hostname&#x27; --producer=stdout</span><br></pre></td></tr></table></figure>
+**方式二：通过配置文件启动,配置文件名称为config.properties**
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker  run  -it  -d  -p  6111:6111 -v  /root/maxwell/config.properties:/app/config.properties -n  maxwell zendesk/maxwell  bin/maxwell</span><br></pre></td></tr></table></figure>
+**config.properties配置文件如下**
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"># tl;dr config 生产环境配置为info级别</span><br><span class="line">log_level=DEBUG</span><br><span class="line">producer=rabbitmq</span><br><span class="line"># mysql login info, mysql用户必须拥有读取binlog权限和新建库表的权限</span><br><span class="line">host=192.168.32.225</span><br><span class="line">user=maxwell</span><br><span class="line">password=hxr</span><br><span class="line">output_nulls=true</span><br><span class="line"># options to pass into the jdbc connection, given as opt=val&amp;opt2=val2</span><br><span class="line">#jdbc_options=opt1=100&amp;opt2=hello</span><br><span class="line">jdbc_options=autoReconnet=true</span><br><span class="line">#需要同步的数据库，表，及不包含的字段</span><br><span class="line">#filter=exclude: *.*, include: foo.*, include: bar.baz</span><br><span class="line">filter=exclude: *.*, include: dev_smartcook.menu.publish_status=2</span><br><span class="line">#replica_server_id 和 client_id 唯一标示，用于集群部署</span><br><span class="line">replica_server_id=64</span><br><span class="line">client_id=maxwell_dev</span><br><span class="line">metrics_type=http</span><br><span class="line">metrics_slf4j_interval=60</span><br><span class="line">http_port=8111</span><br><span class="line">http_diagnostic=true # default false</span><br><span class="line">#rabbitmq</span><br><span class="line">rabbitmq_host=116.62.148.11</span><br><span class="line">rabbitmq_port=5672</span><br><span class="line">rabbitmq_user=guest</span><br><span class="line">rabbitmq_pass=guest</span><br><span class="line">rabbitmq_virtual_host=/vhost_mmr</span><br><span class="line">rabbitmq_exchange=maxwell</span><br><span class="line">rabbitmq_exchange_type=topic</span><br><span class="line">rabbitmq_exchange_durable=false</span><br><span class="line">rabbitmq_exchange_autodelete=false</span><br><span class="line">rabbitmq_routing_key_template=dev_smartcook.menu</span><br><span class="line">rabbitmq_message_persistent=false</span><br><span class="line">rabbitmq_declare_exchange=true</span><br><span class="line"></span><br><span class="line"># 仅匹配foodb数据库的tbl表和所有table_数字的表</span><br><span class="line">--filter=&#x27;exclude: foodb.*, include: foodb.tbl, include: foodb./table_\d+/&#x27;</span><br><span class="line"># 排除所有库所有表，仅匹配db1数据库</span><br><span class="line">--filter = &#x27;exclude: *.*, include: db1.*&#x27;</span><br><span class="line"># 排除含db.tbl.col列值为reject的所有更新</span><br><span class="line">--filter = &#x27;exclude: db.tbl.col = reject&#x27;</span><br><span class="line"># 排除任何包含col_a列的更新</span><br><span class="line">--filter = &#x27;exclude: *.*.col_a = *&#x27;</span><br><span class="line"># blacklist 黑名单，完全排除bad_db数据库，若要恢复，必须删除maxwell库</span><br><span class="line">--filter = &#x27;blacklist: bad_db.*&#x27;</span><br></pre></td></tr></table></figure>
+
+<br>
+#### 也可以通过Kafka来接收Maxwell的消息：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8080:8080 -it --rm zendesk/maxwell bin/maxwell --user=&#x27;maxwell&#x27;  --password=&#x27;123456&#x27; --host=&#x27;10.100.97.246&#x27; --producer=kafka  --kafka.bootstrap.servers=&#x27;10.100.97.246:9092&#x27; --kafka_topic=maxwell --log_level=debug  --metrics_type=http --metrics_jvm=true --http_port=8080</span><br></pre></td></tr></table></figure>
+配置了通过http方式发布指标，启用收集JVM信息，端口为8080，之后可以通过 http://10.100.97.246:8080/metrics 便可获取所有的指标，http 方式有四种后缀，分别对应四种不同的格式：
+
+<blockquote>
+<p><strong>endpoint 说明：</strong><br>&#x2F;metrics 所有指标以JSON格式返回<br>&#x2F;prometheus 所有指标以Prometheus格式返回（Prometheus是一套开源的监控&amp;报警&amp;时间序列数据库的组合）<br>&#x2F;healthcheck 返回Maxwell过去15分钟是否健康<br>&#x2F;ping 简单的测试，返回 pong</p>
+</blockquote>
+<br>
+# 三、参考
+[maxwell官网地址 http://maxwells-daemon.io/](http://maxwells-daemon.io/)
+[Github官方地址  https://github.com/zendesk/maxwell](https://github.com/zendesk/maxwell)
+
+<!--
+<br>
+# docker部署的mysql
+
+分为5步：安装MySQL，配置binlog，创建maxwell用户，安装运行maxwell，测试maxwell工作是否正常。
+
+##安装MySQL
+
+使用如下命令，即可拉取MySQL 5.7的镜像，并指定密码123456，且运行：
+
+>docker run --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d    mysql:5.7
+
+##配置binlog
+
+编辑一个my.cnf文件，开启binlog，指定的server-id不能为0，必须是唯一的
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;[mysqld]</span><br><span class="line">server_id=1</span><br><span class="line">log-bin=master</span><br><span class="line">binlog_format=row</span><br><span class="line"></span><br><span class="line">gtid-mode=on</span><br><span class="line">enforce-gtid-consistency=1 # 设置为主从强一致性</span><br><span class="line">log-slave-updates=1 # 记录日志</span><br></pre></td></tr></table></figure>
+
+<p>使用docker cp my.cnf mysql:&#x2F;etc&#x2F;复制到容器内，然后运行docker restart mysql。</p>
+<p>##使用如下命令检查binlog配置：</p>
+<p>show variables like ‘log_bin’;</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/21580557-db3554adc099d037.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>show variables like ‘binlog_format’;</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/21580557-4a0637421d691369.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>##创建maxwell角色</p>
+<p>执行如下命令，不能省掉任何一步。</p>
+<blockquote>
+<p>CREATE USER ‘maxwell‘@’%’ IDENTIFIED BY ‘123456’;<br>GRANT ALL ON maxwell.* TO ‘maxwell‘@’%’;<br>GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on <em>.</em> to ‘maxwell‘@’%’;<br>flush privileges;</p>
+</blockquote>
+<p>##安装运行maxwell</p>
+<p>使用如下命令拉取maxwell镜像并且安装（ip地址替换成自己MySQL的地址）：</p>
+<blockquote>
+<p>docker run -ti –rm zendesk&#x2F;maxwell bin&#x2F;maxwell –user&#x3D;’maxwell’ –password&#x3D;’123456’ –host&#x3D;’10.250.115.210’ –producer&#x3D;stdout</p>
+</blockquote>
+<p>##测试maxwell</p>
+<p>选择一个非maxwell的数据库，比如test。创建如下表：</p>
+<blockquote>
+<p>create table <code>user</code>(<br>  id int(11) not null auto_increment primary key,<br>  age int(11)<br>);</p>
+</blockquote>
+<p>执行如下sql，并且观察maxwell在控制台是否有输出：</p>
+<blockquote>
+<p>insert into user values (null, 11);<br>update user set age &#x3D; 12 where id&#x3D;1;<br>delete from user where id &#x3D; 1;</p>
+</blockquote>
+<p>控制台能观察到3行json，分别对应增、改、删。<br>–&gt;</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E4%BD%BF%E7%94%A8Maxwell%E7%9B%91%E6%8E%A7MySQL%E7%9A%84binlog%E6%96%87%E4%BB%B6/">http://example.com/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E4%BD%BF%E7%94%A8Maxwell%E7%9B%91%E6%8E%A7MySQL%E7%9A%84binlog%E6%96%87%E4%BB%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/Seata1-2-%E5%AE%9E%E7%8E%B0TCC/" title="Seata1-2-实现TCC"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Seata1-2-实现TCC</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E6%A1%86%E6%9E%B6Seata1-2-%E5%AE%9E%E7%8E%B0AT/" title="分布式事务框架Seata1-2-实现AT"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">分布式事务框架Seata1-2-实现AT</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8E%9F%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">一、原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-Maxwell%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 Maxwell介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E5%AF%B9%E6%AF%94Canal"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 对比Canal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 流程图</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

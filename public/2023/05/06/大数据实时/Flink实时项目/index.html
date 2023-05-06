@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Flink实时项目 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Flink实时项目 flink实现精准一次消费，env.enableCheckpointing(1000)  &#x2F;&#x2F;开启checkpoint检查点，默认exactly once 用户行为数据：由用户ID、商品ID、商品类目ID、行为类型和时间戳组成  服务器的日志数据：由访问者的IP、userId、访问时间、访问方法以及访问的url组成 数据源： 需求一：每隔5分钟输出最近一小时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flink实时项目">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink%E5%AE%9E%E6%97%B6%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Flink实时项目 flink实现精准一次消费，env.enableCheckpointing(1000)  &#x2F;&#x2F;开启checkpoint检查点，默认exactly once 用户行为数据：由用户ID、商品ID、商品类目ID、行为类型和时间戳组成  服务器的日志数据：由访问者的IP、userId、访问时间、访问方法以及访问的url组成 数据源： 需求一：每隔5分钟输出最近一小时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink%E5%AE%9E%E6%97%B6%E9%A1%B9%E7%9B%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Flink实时项目',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Flink实时项目</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.051Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.051Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/">大数据实时</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Flink实时项目"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Flink实时项目</p>
+<p><strong>flink实现精准一次消费，env.enableCheckpointing(1000)</strong>  <strong>&#x2F;&#x2F;开启checkpoint检查点，默认exactly once</strong></p>
+<p>用户行为数据：由用户ID、商品ID、商品类目ID、行为类型和时间戳组成  服务器的日志数据：由访问者的IP、userId、访问时间、访问方法以及访问的url组成</p>
+<p>数据源：</p>
+<h2 id="需求一：每隔5分钟输出最近一小时内点击量最多的前N个商品"><a href="#需求一：每隔5分钟输出最近一小时内点击量最多的前N个商品" class="headerlink" title="需求一：每隔5分钟输出最近一小时内点击量最多的前N个商品"></a>需求一：每隔5分钟输出最近一小时内点击量最多的前N个商品</h2><p>要点：  ①热点即为对pv行为进行统计  ②时间窗口区间为左闭右开  ③用ProcessFunction定义KeyedStream的处理逻辑  onTimer定时器定时调用  ④FlinkKafkaConsumer可以直接读取kafka中的数据  val dataStream: DataStream[String] &#x3D; env.addSource(new FlinkKafkaConsumer<a href="%22kafka1%22,new%20SimpleStringSchema(),prop">String</a>)</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="" contenteditable="true" cid="n9" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">需求实现：
+1.设定Time类型为EventTime   env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+
+2.从kafka中读取数据（Flink有）
+val dataStream: DataStream[String] = env.addSource(new FlinkKafkaConsumer[String]("kafka1",new SimpleStringSchema(),prop))
+包装成样例类。
+
+3.设置eventTime和延迟时间。
+
+4.将pv事件过滤出来，然后keyBy(_.item)进行分区(即进入对应的executor中)，然后进行开窗timeWindow(Time.hours(1), Time.minutes(5))
+
+5.对开窗后的流进行聚合，因为需要将输出类型转为样例类
+windowStream.aggregate(new CountAgg(), new MyWindow())
+要点：
+1）需要自定义预聚合类，根据需求对窗口内的进行计数
+2）需要自定义窗口函数，重写apply方法，将计数结果和窗口结束时间WindowEnd封装为样例类然后输出。
+
+6.按WindowEnd进行聚合，在聚合后调用process方法
+要点：
+在open方法中设置状态变量
+listState = getRuntimeContext.getListState[ItemViewCount](
+ new ListStateDescriptor[ItemViewCount]("itemViewCount",classOf[ItemViewCount])
+在processElement方法中将数据存入状态变量中，并注册定时器
+listState.add(value)
+ctx.timerService().registerEventTimeTimer(value.windowEnd + 100L)
+在onTimer方法中设置定时器被水位没过后调用的执行方法。
+将状态变量中的元素按count进行排序，然后取前n个，out.collect(strBuffer.toString)输出</pre>
+
+<h2 id="需求二-实时流量统计"><a href="#需求二-实时流量统计" class="headerlink" title="需求二 实时流量统计"></a>需求二 实时流量统计</h2><p>过程与需求一相似。</p>
+<p>每隔5秒，输出最近10分钟内访问量最多的前N个URL</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="scala" contenteditable="true" cid="n14" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">需求实现
+1.指定为事件时间    env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+2.从kafka中读取数据，包装成样例类
+3.设置事件时间和延迟时间   assignTimestampsAndWatermarks
+4.按url进行分组，然后开窗，窗口大小为10分钟，步长为5秒
+assignDS.keyBy(_.url).timeWindow(Time.minutes(10), Time.seconds(5))
+5.对不同key和不同窗口的数据进行count聚合
+aggregate(new CountAgg(), new MyWindow())
+6.以窗口结束时间进行分组，然后通过process方法进程状态编程
+aggDS.keyBy(_.windowEnd).process(new MyProcess(5))</pre>
+
+<h2 id="需求三-恶意登陆监控"><a href="#需求三-恶意登陆监控" class="headerlink" title="需求三 恶意登陆监控"></a>需求三 恶意登陆监控</h2><p>同一用户（可以是不同IP）在2秒之内连续两次登录失败</p>
+<p><strong>方式一</strong>：通过对userid进行分组，然后调用process方法，在processElement方法中，判断eventType是否为fail，如果为fail则创建计时器并将数据加入到listState中，如果为success，则清空listState。在onTimer中，判断状态变量中的数据数是否大于2，大于2输出报警信息。  缺点：必须要2s后才会进行报警</p>
+<p><strong>方式二</strong>：用到cep 复杂函数编程</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="scala" contenteditable="true" cid="n21" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">方式二 实现需求
+1.env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+2.从kafka读取数据，并设置事件时间和延迟时间，按userid进行keyBy
+3.用CEP（complex event processing）进行改进
+要点：
+//匹配规则为以eventType为fail的事件开始，在2s内匹配到严格紧邻的另一个fail事件。
+val pattern: Pattern[LoginEvent, LoginEvent] = Pattern.begin[LoginEvent]("begin")
+ .where(_.eventType == "fail").next("next").where(_.eventType == "fail")
+ .within(Time.seconds(2))
+//每次匹配到后都会放入流中，从流中获取匹配到的数据
+val patternStream: PatternStream[LoginEvent] = CEP.pattern(keyedStream, pattern)
+val warningStream: DataStream[Warning1] = patternStream.select(new PatternSelect())
+
+//自定义select类，提取匹配到的数据
+class PatternSelect() extends PatternSelectFunction[LoginEvent, Warning1] {
+ override def select(map: util.Map[String, util.List[LoginEvent]]): Warning1 = {
+ val begins: util.List[LoginEvent] = map.get("begin")//list中只有一个，因为没有time多次匹配
+ val begin: LoginEvent = begins.iterator().next()
+ val nexts: util.List[LoginEvent] = map.get("next")
+ val next: LoginEvent = nexts.iterator().next()
+ Warning1(begin.userId.toString, begin.eventTime, next.eventTime, "连续两次登陆失败")
+ }
+}</pre>
+
+<h2 id="需求四-订单支付实时监控"><a href="#需求四-订单支付实时监控" class="headerlink" title="需求四 订单支付实时监控"></a>需求四 订单支付实时监控</h2><p>设置一个失效时间（比如15分钟），如果下单后一段时间仍未支付，订单就会被取消。</p>
+<p>方式一：通过CEP进行匹配，将为匹配上的数据输出到侧输出流，匹配到的数据输出到主流。</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="scala" contenteditable="true" cid="n26" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">方式一 需求实现：
+1.env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+2.转为样例类并设置事件时间和延迟时间
+3.按orderId进行分组
+4.通过cep，匹配到从下单开始到10分钟内完成支付的订单，输出到主流
+//匹配模式
+val pattern: Pattern[OrderEvent, OrderEvent] = Pattern.begin[OrderEvent]("begin")
+ .where(_.eventType == "create").followedBy("followedBy").where(_.eventType == "pay")
+ .within(Time.minutes(10))
+//对流中的数据进行匹配
+val patternStream: PatternStream[OrderEvent] = CEP.pattern(keyByStream, pattern)
+//得到匹配完成的主流的数据，并将匹配超时的数据输出到测输出流
+val resultStream: DataStream[OrderResult] = patternStream.select(new OutputTag[OrderResult]("orderTimeOut")) {
+ (pattern: collection.Map[String, Iterable[OrderEvent]], timestamp: Long) => {
+ val begin: OrderEvent = pattern("begin").iterator.next()
+ OrderResult(begin.orderId, "order timeout")
+ }
+ } {
+ (pattern: collection.Map[String, Iterable[OrderEvent]]) => {
+ val begin: OrderEvent = pattern("begin").iterator.next()
+ OrderResult(begin.orderId, "pay success")
+ }
+ }
+//从主流中得到侧输出流的数据
+val timeOutStream: DataStream[OrderResult] = resultStream.getSideOutput(new              OutputTag[OrderResult]("orderTimeOut"))
+
+resultStream.print()  //主流只打印匹配上的数据，不打印侧输出流的数据
+timeOutStream.print()  //侧输出流可以从主流中获得</pre>
+
+<p>方式二：通过process函数实现</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="scala" contenteditable="true" cid="n28" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">方式二 需求实现
+1.env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+2.转为样例类并设置事件时间和延迟时间
+3.按orderId进行分组
+4.通过process方法
+process(new MyProcess())
+
+//对无序数据的四种不同情况的分析
+class MyKeyedProcess(interval: Long) extends KeyedProcessFunction[Long, OrderEvent, OrderResult] {
+ //定义两个状态
+ lazy private val isPayed: ValueState[Boolean] = getRuntimeContext.getState(new ValueStateDescriptor[Boolean]("isPayed", classOf[Boolean]))
+ lazy private val currTime: ValueState[Long] = getRuntimeContext.getState(new ValueStateDescriptor[Long]("currTime", classOf[Long]))
+
+ override def processElement(value: OrderEvent, ctx: KeyedProcessFunction[Long, OrderEvent, OrderResult]#Context, out: Collector[OrderResult]): Unit = {
+
+ if (value.eventType == "create") {
+ if (isPayed.value()) {
+ //已支付；输出结果并删除计时器
+ if (currTime.value < value.eventTime * 1000 + interval * 60 * 1000) {
+ println(currTime.value + "b")
+ println(value.eventTime * 1000 + interval * 60 * 1000)
+ out.collect(OrderResult(ctx.getCurrentKey, "pay-create success"))
+ ctx.timerService().deleteEventTimeTimer(currTime.value())
+ currTime.clear()
+ isPayed.clear()
+ }
+ } else {
+ //未支付;创建计时器等待pay到来
+ val timestamp: Long = value.eventTime * 1000 + interval * 60 * 1000
+ currTime.update(timestamp)
+ ctx.timerService().registerEventTimeTimer(timestamp)
+ }
+ } else if (value.eventType == "pay") {
+ if (currTime.value() == 0) {
+ //计时器未创建，create未到达;创建计时器，等待create到达
+ val timestamp: Long = value.eventTime * 1000 //create先创建，未到达可以等待几秒
+ isPayed.update(true)
+ currTime.update(timestamp)
+ ctx.timerService().registerEventTimeTimer(timestamp)
+ } else {
+ //计时器已创建，create已到达;输出结果并删除计时器
+ if (value.eventTime * 1000 < currTime.value()) {
+ out.collect(OrderResult(ctx.getCurrentKey, "create-pay success"))
+ ctx.timerService().deleteEventTimeTimer(currTime.value())
+ currTime.clear()
+ isPayed.clear()
+ }
+ }
+ }
+ }
+
+ override def onTimer(timestamp: Long, ctx: KeyedProcessFunction[Long, OrderEvent, OrderResult]#OnTimerContext, out: Collector[OrderResult]): Unit = {
+//写入到侧输出流
+ if (!isPayed.value) {
+ ctx.output(new OutputTag[OrderResult]("orderresult"), OrderResult(ctx.getCurrentKey, "order timeout"))
+ } else {
+ ctx.output(new OutputTag[OrderResult]("orderresult"), OrderResult(ctx.getCurrentKey, "创建订单表丢失"))
+ }
+
+ currTime.clear()
+ isPayed.clear()
+ }
+
+}</pre>
+
+<p>对于订单支付事件，用户支付完成其实并不算完，我们还得确认平台账户上是否到账了。而往往这会来自不同的日志信息，所以我们要同时读入两条流的数据来做合并处理。这里我们利用connect将两条流进行连接，然后用自定义的CoProcessFunction进行处理。</p>
+<p>实时对账：</p>
+<pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="scala" contenteditable="true" cid="n32" mdtype="fences" style="box-sizing: border-box; overflow: visible; font-family: var(--monospace); font-size: 0.9em; display: block; break-inside: avoid; text-align: left; white-space: normal; background-image: inherit; background-position: inherit; background-size: inherit; background-repeat: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: rgb(248, 248, 248); position: relative !important; border: 1px solid rgb(231, 234, 237); border-radius: 3px; padding: 8px 4px 6px; margin-bottom: 15px; margin-top: 15px; width: inherit; color: rgb(51, 51, 51); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;">object TxMatch {
+
+ val unmatchedPays = new OutputTag[OrderEvent1]("unmatchedPays")
+ val unmatchedReceipts = new OutputTag[ReceiptEvent1]("unmatchedReceipts")
+
+ def main(args: Array[String]): Unit = {
+ val env: StreamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment
+ env.setParallelism(1)
+ env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+
+ val orderEventStream = env.fromCollection(
+ List(
+ OrderEvent1(1, "create", "", 1558430842),
+ OrderEvent1(2, "create", "", 1558430843),
+ OrderEvent1(1, "pay", "111", 1558430844),
+ OrderEvent1(2, "pay", "222", 1558430848),
+ OrderEvent1(3, "create", "", 1558430849),
+ OrderEvent1(3, "pay", "333", 1558430849)
+ )
+ ).assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor[OrderEvent1](Time.seconds(5)) {
+ override def extractTimestamp(element: OrderEvent1): Long = element.eventTime * 1000
+ }).filter(_.txId != "").keyBy(_.txId)
+
+ val ReceiptEventStream = env.fromCollection(
+ List(
+ ReceiptEvent1("111", "wechat", 1558430847),
+ ReceiptEvent1("222", "alipay", 1558430845),
+ ReceiptEvent1("444", "alipay", 1558430850)
+ )
+ ).assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor[ReceiptEvent1](Time.seconds(5)) {
+ override def extractTimestamp(element: ReceiptEvent1): Long = element.eventTime * 1000
+ }).keyBy(_.txId)
+
+ val connectedStream: ConnectedStreams[OrderEvent1, ReceiptEvent1] = orderEventStream.connect(ReceiptEventStream)
+
+ val processStream: DataStream[orderDetail] = connectedStream.process(new MyProcessFun())
+
+ processStream.print("match")
+ processStream.getSideOutput(unmatchedPays).print("unmatchorder")
+ processStream.getSideOutput(unmatchedReceipts).print("unmatchreceipt")
+
+ env.execute()
+ }
+
+ //相同txId会进入同一个处理
+ class MyProcessFun() extends CoProcessFunction[OrderEvent1, ReceiptEvent1, orderDetail] {
+
+ lazy val orderEvent: ValueState[OrderEvent1] = getRuntimeContext.getState(new ValueStateDescriptor[OrderEvent1]("orderevent", classOf[OrderEvent1]))
+ lazy val receiptEvent: ValueState[ReceiptEvent1] = getRuntimeContext.getState(new ValueStateDescriptor[ReceiptEvent1]("receiptevent", classOf[ReceiptEvent1]))
+
+ override def processElement1(value: OrderEvent1, ctx: CoProcessFunction[OrderEvent1, ReceiptEvent1, orderDetail]#Context, out: Collector[orderDetail]): Unit = {
+ val receipt: ReceiptEvent1 = receiptEvent.value()
+ if (receipt != null) {
+ //如果receipt存在，说明这两个能相互匹配上
+ out.collect(orderDetail(value.userId, value.eventType, receipt.payChannel, receipt.eventTime))
+ receiptEvent.clear()
+ } else {
+ //如果receipt不存在，则等待receipt到达，如果在延迟时间内未到达，则未匹配上
+ orderEvent.update(value)
+ ctx.timerService().registerEventTimeTimer(value.eventTime * 1000)
+ }
+
+ }
+
+ override def processElement2(value: ReceiptEvent1, ctx: CoProcessFunction[OrderEvent1, ReceiptEvent1, orderDetail]#Context, out: Collector[orderDetail]): Unit = {
+ val order: OrderEvent1 = orderEvent.value()
+ if (order != null) {
+ //如果order存在，说明这两个能相互匹配上
+ out.collect(orderDetail(order.userId, order.eventType, value.payChannel, value.eventTime))
+ orderEvent.clear()
+ } else {
+ //如果order不存在，则等待order到达，如果在延迟时间内未到达，则未匹配上
+ receiptEvent.update(value)
+ ctx.timerService().registerEventTimeTimer(value.eventTime * 1000)
+ }
+ }
+
+ override def onTimer(timestamp: Long, ctx: CoProcessFunction[OrderEvent1, ReceiptEvent1, orderDetail]#OnTimerContext, out: Collector[orderDetail]): Unit = {
+ val order = orderEvent.value()
+ val receipt = receiptEvent.value()
+
+
+ if (order != null) {
+ ctx.output(unmatchedPays, order)
+ }
+ if (receipt != null) {
+ ctx.output(unmatchedReceipts, receipt)
+ }
+
+ orderEvent.clear()
+ receiptEvent.clear()
+ }
+ }
+
+}
+
+case class OrderEvent1(userId: Long, eventType: String, txId: String, eventTime: Long)
+
+case class ReceiptEvent1(txId: String, payChannel: String, eventTime: Long)
+
+case class orderDetail(userId: Long, eventType: String, payChannel: String, eventTime: Long)</pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink%E5%AE%9E%E6%97%B6%E9%A1%B9%E7%9B%AE/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Flink%E5%AE%9E%E6%97%B6%E9%A1%B9%E7%9B%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E7%81%AB%E6%98%9F%E4%BA%BA%E4%B8%9A%E5%8A%A1%E5%BB%BA%E6%A8%A1/" title="火星人业务建模"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">火星人业务建模</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E5%9C%A8%E7%BA%BF%E6%95%99%E8%82%B2%E9%A1%B9%E7%9B%AE/" title="在线教育项目"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">在线教育项目</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E4%B8%80%EF%BC%9A%E6%AF%8F%E9%9A%945%E5%88%86%E9%92%9F%E8%BE%93%E5%87%BA%E6%9C%80%E8%BF%91%E4%B8%80%E5%B0%8F%E6%97%B6%E5%86%85%E7%82%B9%E5%87%BB%E9%87%8F%E6%9C%80%E5%A4%9A%E7%9A%84%E5%89%8DN%E4%B8%AA%E5%95%86%E5%93%81"><span class="toc-number">1.</span> <span class="toc-text">需求一：每隔5分钟输出最近一小时内点击量最多的前N个商品</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E4%BA%8C-%E5%AE%9E%E6%97%B6%E6%B5%81%E9%87%8F%E7%BB%9F%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">需求二 实时流量统计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E4%B8%89-%E6%81%B6%E6%84%8F%E7%99%BB%E9%99%86%E7%9B%91%E6%8E%A7"><span class="toc-number">3.</span> <span class="toc-text">需求三 恶意登陆监控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E5%9B%9B-%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="toc-number">4.</span> <span class="toc-text">需求四 订单支付实时监控</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

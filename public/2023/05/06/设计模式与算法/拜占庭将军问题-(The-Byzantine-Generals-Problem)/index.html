@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>拜占庭将军问题-(The-Byzantine-Generals-Problem) | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、拜占庭将军问题拜占庭将军问题(The Byzantine Generals Problem)提供了对分布式共识问题的一种情景化描述, 由Leslie Lamport等人在1982年首次发表. 论文同时提供了两种解决拜占庭将军问题的算法：  口信消息型解决方案(A solution with oral message); 签名消息型解决方案(A solution with signed mess">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拜占庭将军问题-(The-Byzantine-Generals-Problem)">
+<meta property="og:url" content="http://example.com/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、拜占庭将军问题拜占庭将军问题(The Byzantine Generals Problem)提供了对分布式共识问题的一种情景化描述, 由Leslie Lamport等人在1982年首次发表. 论文同时提供了两种解决拜占庭将军问题的算法：  口信消息型解决方案(A solution with oral message); 签名消息型解决方案(A solution with signed mess">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.083Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.083Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '拜占庭将军问题-(The-Byzantine-Generals-Problem)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">拜占庭将军问题-(The-Byzantine-Generals-Problem)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.083Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.083Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/">设计模式与算法</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="拜占庭将军问题-(The-Byzantine-Generals-Problem)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、拜占庭将军问题"><a href="#一、拜占庭将军问题" class="headerlink" title="一、拜占庭将军问题"></a>一、拜占庭将军问题</h1><p>拜占庭将军问题(The Byzantine Generals Problem)提供了对<strong>分布式共识问题</strong>的一种情景化描述, 由Leslie Lamport等人在1982年首次发表. <a href="https://link.zhihu.com/?target=https://www-inst.eecs.berkeley.edu/~cs162/sp16/static/readings/Original_Byzantine.pdf">论文</a>同时提供了两种解决拜占庭将军问题的算法：</p>
+<ul>
+<li>口信消息型解决方案(A solution with oral message);</li>
+<li>签名消息型解决方案(A solution with signed message).</li>
+</ul>
+<p>本文之后将详细讲述这两种算法. 事实上, 拜占庭将军问题是分布式系统领域最复杂的<strong>容错模型</strong>, 它描述了如何在存在恶意行为(如消息篡改或伪造)的情况下使分布式系统达成一致. 是我们理解分布式一致性协议和算法的重要基础.</p>
+<br>
+# 二、拜占庭将军问题描述
+拜占庭将军问题描述了这样一个场景:
+
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem" alt="图1. 拜占庭将军问题">.assetsd8e89bab8a4492da8a81af984f8daa4.png)</p>
+<p><a href="https://link.zhihu.com/?target=https://en.wikipedia.org/wiki/Byzantine_Empire">拜占庭帝国(Byzantine Empire)</a>军队的几个师驻扎在敌城外, 每个师都由各自的将军指挥. 将军们只能通过信使相互沟通. 在观察敌情之后, 他们必须制定一个共同的行动计划, 如<strong>进攻(Attack)<strong>或者</strong>撤退(Retreat)</strong>, 且只有当半数以上的将军共同发起进攻时才能取得胜利. 然而, 其中一些将军可能是叛徒, 试图阻止忠诚的将军达成一致的行动计划. 更糟糕的是, 负责消息传递的信使也可能是叛徒, 他们可能篡改或伪造消息, 也可能使得消息丢失.</p>
+<p>为了更加深入的理解拜占庭将军问题, 我们以<strong>三将军问题</strong>为例进行说明. 当三个将军都忠诚时, 可以通过投票确定一致的行动方案, 图2展示了一种场景, 即General A, B通过观察敌军军情并结合自身情况判断可以发起攻击, 而General C通过观察敌军军情并结合自身情况判断应当撤退. 最终三个将军经过投票表决得到结果为进攻:撤退&#x3D;2:1, 所以将一同发起进攻取得胜利. 对于三个将军, 每个将军都能执行两种决策(进攻或撤退)的情况下, 共存在6中不同的场景, 图2是其中一种, 对于其他5中场景可简单地推得, 通过投票三个将军都将达成一致的行动计划.</p>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem).assets%5C26c80d59a9524b6dbeedbcd3b868917f.png" alt="图2. 三个将军均为忠诚的场景"></p>
+<p>当三个将军中存在一个叛徒时, 将可能扰乱正常的作战计划. 图3展示了General C为叛徒的一种场景, 他给General A和General B发送了不同的消息, 在这种场景下General A通过投票得到进攻:撤退&#x3D;1:2, 最终将作出撤退的行动计划; General B通过投票得到进攻:撤退&#x3D;2:1, 最终将作出进攻的行动计划. 结果只有General B发起了进攻并战败.</p>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem).assets%5C643e7b8c65294a9393f0f6e9772be858.png" alt="图3. 二忠一叛的场景"></p>
+<p>事实上, 对于三个将军中存在一个叛徒的场景, 想要总能达到一致的行动方案是不可能的. 详细的证明可参看Leslie Lamport的论文. 此外, 论文中给出了一个更加普适的结论: 如果存在m个叛将, 那么至少需要3m+1个将军, 才能最终达到一致的行动方案.</p>
+<br>
+# 三、解决方案
+Leslie Lamport在论文中给出了两种拜占庭将军问题的解决方案, 即口信消息型解决方案(A solution with oral message)和签名消息型解决方案(A solution with signed message).
+
+<br>
+### ①口信消息型解决方案
+首先, 对于口信消息(Oral message)的定义如下:
+
+<ul>
+<li>A1. 任何已经发送的消息都将被正确传达;</li>
+<li>A2. 消息的接收者知道是谁发送了消息;</li>
+<li>A3. 消息的缺席可以被检测.</li>
+</ul>
+<p>基于口信消息的定义, 我们可以知道, 口信消息不能被篡改但是可以被伪造. 基于对图3场景的推导, 我们知道存在一个叛将时, 必须再增加3个忠将才能达到最终的行动一致. 为加深理解, 我们将利用3个忠将1个叛将的场景对口信消息型解决方案进行推导. 在口信消息型解决方案中, 首先发送消息的将军称为指挥官, 其余将军称为副官. 对于3忠1叛的场景需要进行两轮作战信息协商, 如果没有收到作战信息那么默认撤退. 图4是指挥官为忠将的场景, 在第一轮作战信息协商中, 指挥官向3位副官发送了进攻的消息; 在第二轮中, 三位副官再次进行作战信息协商, 由于General A, B为忠将, 因此他们根据指挥官的消息向另外两位副官发送了进攻的消息, 而General C为叛将, 为了扰乱作战计划, 他向另外两位副官发送了撤退的消息. 最终Commanding General, General A和B达成了一致的进攻计划, 可以取得胜利.</p>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem).assets%5C1746fd9d911f4c488e43b84b4569ef82.png" alt="图4  指挥官为忠将的场景"></p>
+<p>图5是指挥官为叛将的场景, 在第一轮作战信息协商中, 指挥官向General A, B发送了撤退的消息, 但是为了扰乱General C的决定向其发送了进攻的消息. 在第二轮中, 由于所有副官均为忠将, 因此都将来自指挥官的消息正确地发送给其余两位副官. 最终所有忠将都能达成一致撤退的计划.</p>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem" alt="图5. 指挥官为叛将的场景">.assets1e18f5633e349cda0b81d7013117c38.png)</p>
+<p>如上所述, 对于口信消息型拜占庭将军问题, 如果叛将人数为m, 将军人数不少于3m+1, 那么最终能达成一致的行动计划. 值的注意的是, 在这个算法中, 叛将人数m是已知的, 且叛将人数m决定了递归的次数, 即叛将数m决定了进行作战信息协商的轮数, 如果存在m个叛将, 则需要进行m+1轮作战信息协商. 这也是上述存在1个叛将时需要进行两轮作战信息协商的原因.</p>
+<br>
+### ②签名消息型解决方案
+同样, 对签名消息的定义是在口信消息定义的基础上增加了如下两条:
+
+<ul>
+<li>A4. 忠诚将军的签名无法伪造，而且对他签名消息的内容进行任何更改都会被发现;</li>
+<li>A5. 任何人都能验证将军签名的真伪.<br>基于签名消息的定义, 我们可以知道, 签名消息无法被伪造或者篡改. 为了深入理解签名消息型解决方案, 我们同样以3三将军问题为例进行推导. 图6是忠将率先发起作战协商的场景, General A率先向General B, C发送了进攻消息, 一旦叛将General C篡改了来自General A的消息, 那么General B将将发现作战信息被General C篡改, General B将执行General A发送的消息.</li>
+</ul>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem" alt="图6. 忠将率先发起作战协商">.assets63b74d7334a420b8ec7663caa5ba1db.png)</p>
+<p>图7是叛将率先发起作战协商的场景, 叛将General C率先发送了误导的作战信息, 那么General A, B将发现General C发送的作战信息不一致, 因此判定其为叛将. 可对其进行处理后再进行作战信息协商.</p>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem).assets%5C2bb0db8eaefa4247b90860be3ea2bbe0.png" alt="图7. 叛将率先发起作战协商"></p>
+<p>签名消息型解决方案可以处理任何数量叛将的场景.</p>
+<br>
+# 四、论文简介
+Leslie Lamport等人的论文'The Byzantine Generals Problem' 的提纲如下:
+
+<ul>
+<li>Introduction: 介绍了拜占庭将军问题;</li>
+<li>Impossibility Results: 通过反正法证明了, 三将军问题对于口信消息是无解的;</li>
+<li>A solution with oral message: 介绍了口信消息型拜占庭将军问题的解决方案;</li>
+<li>A solution with signed message: 介绍了签名消息型拜占庭将军问题的解决方案;</li>
+<li>Missing communication paths: 讲述了在通信小时情况下的拜占庭将军问题;</li>
+<li>Reliable systems: 讲述了如何通过拜占庭将军问题构建可靠的系统;</li>
+<li>Conclution: 总结.</li>
+</ul>
+<br>
+# 五、总 结
+在分布式系统领域, 拜占庭将军问题中的角色与计算机世界的对应关系如下:
+
+<ul>
+<li>将军, 对应计算机节点;</li>
+<li>忠诚的将军, 对应运行良好的计算机节点;</li>
+<li>叛变的将军, 被非法控制的计算机节点;</li>
+<li>信使被杀, 通信故障使得消息丢失;</li>
+<li>信使被间谍替换, 通信被攻击, 攻击者篡改或伪造信息.</li>
+</ul>
+<p>如上文所述, 拜占庭将军问题提供了对分布式共识问题的一种情景化描述, 是分布式系统领域最复杂的模型. 此外, 它也为我们理解和分类现有的众多分布式一致性协议和算法提供了框架. 现有的分布式一致性协议和算法主要可分为两类:</p>
+<ul>
+<li>一类是故障容错算法(Crash Fault Tolerance, CFT), 即非拜占庭容错算法, 解决的是分布式系统中存在故障, 但不存在恶意攻击的场景下的共识问题. 也就是说, 在该场景下可能存在消息丢失, 消息重复, 但不存在消息被篡改或伪造的场景. 一般用于局域网场景下的分布式系统, 如分布式数据库. 属于此类的常见算法有Paxos算法, Raft算法, ZAB协议等.</li>
+<li>一类是拜占庭容错算法, 可以解决分布式系统中既存在故障, 又存在恶意攻击场景下的共识问题. 一般用于互联网场景下的分布式系统, 如在数字货币的区块链技术中. 属于此类的常见算法有PBFT算法, PoW算法.</li>
+</ul>
+<p><img src="/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem" alt="image.png">.assets d4903cba92a457289a057211c0655ab.png)</p>
+<br>
+# 附
+转载自 https://zhuanlan.zhihu.com/p/107439021
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem)/">http://example.com/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98-(The-Byzantine-Generals-Problem)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%BF%AB%E6%8E%92%E3%80%81%E5%BD%92%E5%B9%B6%E3%80%81%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E3%80%81%E5%B0%8F%E5%AD%A9%E5%87%BA%E5%9C%88%E3%80%81%E9%93%BE%E8%A1%A8%E3%80%81%E6%B1%89%E8%AF%BA%E5%A1%94%E3%80%81%E8%BF%B7%E5%AE%AB/" title="快排、归并、二分查找、小孩出圈、链表、汉诺塔、迷宫"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">快排、归并、二分查找、小孩出圈、链表、汉诺塔、迷宫</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%B3%A8%E8%A7%A3%E5%92%8C%E5%8F%8D%E5%B0%84/" title="注解和反射"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">注解和反射</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">一、拜占庭将军问题</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

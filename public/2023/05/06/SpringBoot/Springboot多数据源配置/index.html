@@ -1,0 +1,208 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Springboot多数据源配置 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="参考：SpringBoot 的多数据源配置 - 知乎 (zhihu.com) 1. 引入数据源依赖SpringBoot 的多数据源开发十分简单，如果多个数据源的数据库相同，比如都是 MySQL，那么依赖是不需要任何改动的，只需要进行多数据源配置即可。 如果你新增的数据库数据源和目前的数据库不同，记得引入新数据库的驱动依赖，比如 MySQL 和 PGSQL。  1234567891011&lt;de">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Springboot多数据源配置">
+<meta property="og:url" content="http://example.com/2023/05/06/SpringBoot/Springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="参考：SpringBoot 的多数据源配置 - 知乎 (zhihu.com) 1. 引入数据源依赖SpringBoot 的多数据源开发十分简单，如果多个数据源的数据库相同，比如都是 MySQL，那么依赖是不需要任何改动的，只需要进行多数据源配置即可。 如果你新增的数据库数据源和目前的数据库不同，记得引入新数据库的驱动依赖，比如 MySQL 和 PGSQL。  1234567891011&lt;de">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/SpringBoot/Springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Springboot多数据源配置',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Springboot多数据源配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.031Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.031Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Springboot多数据源配置"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/340528068">SpringBoot 的多数据源配置 - 知乎 (zhihu.com)</a></p>
+<h3 id="1-引入数据源依赖"><a href="#1-引入数据源依赖" class="headerlink" title="1. 引入数据源依赖"></a>1. 引入数据源依赖</h3><p>SpringBoot 的多数据源开发十分简单，如果多个数据源的数据库相同，比如都是 MySQL，那么依赖是不需要任何改动的，只需要进行多数据源配置即可。</p>
+<p>如果你新增的数据库数据源和目前的数据库不同，记得引入新数据库的驱动依赖，比如 MySQL 和 PGSQL。</p>
+<hr>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line"> &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line"> &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line"> &lt;scope&gt;runtime&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.postgresql&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;postgresql&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;42.2.7&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-连接配置"><a href="#2-连接配置" class="headerlink" title="2. 连接配置"></a>2. 连接配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">########################## 主数据源 ##################################</span><br><span class="line">spring.datasource.primary.jdbc-url=jdbc:mysql://127.0.0.1:3306/demo1?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8</span><br><span class="line">spring.datasource.primary.driver-class-name=com.mysql.jdbc.Driver</span><br><span class="line">spring.datasource.primary.username=root</span><br><span class="line">spring.datasource.primary.password=</span><br><span class="line"></span><br><span class="line">########################## 第二个数据源 ###############################</span><br><span class="line">spring.datasource.datasource2.jdbc-url=jdbc:mysql://127.0.0.1:3306/demo2?characterEncoding=utf-8&amp;serverTimezone=GMT%2B8</span><br><span class="line">spring.datasource.datasource2.driver-class-name=com.mysql.jdbc.Driver</span><br><span class="line">spring.datasource.datasource2.username=root</span><br><span class="line">spring.datasource.datasource2.password=</span><br><span class="line"></span><br><span class="line"># mybatis</span><br><span class="line">mybatis.mapper-locations=classpath:mapper/*.xml</span><br><span class="line">mybatis.type-aliases-package=com.wdbyte.domain</span><br></pre></td></tr></table></figure>
+<p>注意，配置中的数据源连接 url 末尾使用的是 jdbc-url.</p>
+<p>因为使用了 Mybatis 框架，所以 Mybatis 框架的配置信息也是少不了的，指定扫描目录 mapper 下的mapper xml 配置文件。</p>
+<h3 id="3-创建mapper接口"><a href="#3-创建mapper接口" class="headerlink" title="3. 创建mapper接口"></a>3. 创建mapper接口</h3><p>下面我已经按照上面的两个库中的两个表，Book 和 User 表分别编写相应的 Mybatis 配置。</p>
+<p>创建 BookMapper.xml 和 UserMapper.xml 放到配置文件配置的路径 mapper 目录下。创建 UserMapper 和 BookMapper 接口操作类放在不同的目录。这里注意 Mapper 接口要按数据源分开放在不同的目录中。后续好使用不同的数据源配置扫描不同的目录，这样就可以实现不同的 Mapper 使用不同的数据源配置。</p>
+<p><img src="/Springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.assets%5C1d310cf26c8240d3ac161a2cc13fe5f5.png" alt="image.png"><br>Service 层没有变化，这里 BookMapper 和 UserMapper 都有一个 selectAll() 方法用于查询测试。</p>
+<h3 id="3-多数据源配置"><a href="#3-多数据源配置" class="headerlink" title="3. 多数据源配置"></a>3. 多数据源配置</h3><p><strong>上面你应该看到了，到目前为止和 Mybatis 单数据源写法唯一的区别就是 Mapper 接口使用不同的目录分开了，那么这个不同点一定会在数据源配置中体现。</strong></p>
+<h4 id="3-1-主数据源"><a href="#3-1-主数据源" class="headerlink" title="3.1 主数据源"></a>3.1 主数据源</h4><p>开始配置两个数据源信息，先配置主数据源，配置扫描的 MapperScan 目录为 com.wdbyte.mapper.primary</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@MapperScan(basePackages = &#123;&quot;com.wdbyte.mapper.primary&quot;&#125;, sqlSessionFactoryRef = &quot;sqlSessionFactory&quot;)</span><br><span class="line">public class PrimaryDataSourceConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;dataSource&quot;)</span><br><span class="line">    @ConfigurationProperties(prefix = &quot;spring.datasource.primary&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public DataSource dataSource() &#123;</span><br><span class="line">        return DataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;sqlSessionFactory&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public SqlSessionFactory sqlSessionFactory(@Qualifier(&quot;dataSource&quot;) DataSource dataSource) throws Exception &#123;</span><br><span class="line">        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();</span><br><span class="line">        bean.setDataSource(dataSource);</span><br><span class="line">        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(&quot;classpath:mapper/*.xml&quot;));</span><br><span class="line">        return bean.getObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;transactionManager&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public DataSourceTransactionManager transactionManager(@Qualifier(&quot;dataSource&quot;) DataSource dataSource) &#123;</span><br><span class="line">        return new DataSourceTransactionManager(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;sqlSessionTemplate&quot;)</span><br><span class="line">    @Primary</span><br><span class="line">    public SqlSessionTemplate sqlSessionTemplate(@Qualifier(&quot;sqlSessionFactory&quot;) SqlSessionFactory sqlSessionFactory) &#123;</span><br><span class="line">        return new SqlSessionTemplate(sqlSessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和单数据源不同的是这里把</p>
+<ul>
+<li>dataSource</li>
+<li>sqlSessionFactory</li>
+<li>transactionManager</li>
+<li>sqlSessionTemplate</li>
+</ul>
+<p>都单独进行了配置，简单的 bean 创建，下面是用到的一些注解说明。</p>
+<ul>
+<li>@ConfigurationProperties(prefix &#x3D; “spring.datasource.primary”)：使用配置文件中配置的spring.datasource.primary 开头的数据源。</li>
+<li>@Primary ：声明这是一个主数据源（默认数据源），多数据源配置时必不可少。</li>
+<li>@Qualifier：显式选择传入的 Bean。</li>
+</ul>
+<p>此处绑定了com.wdbyte.mapper.primary下的mapper接口、mapper的xml配置文件和yml配置文件中的数据源配置spring.datasource.primary，所以com.wdbyte.mapper.primary下的接口请求都会访问配置中spring.datasource.primary数据源。</p>
+<h4 id="3-2-第二个数据源"><a href="#3-2-第二个数据源" class="headerlink" title="3.2 第二个数据源"></a>3.2 第二个数据源</h4><p>第二个数据源和主数据源唯一不同的只是 MapperScan 扫描路径和创建的 Bean 名称，同时没有 @Primary 主数据源的注解。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@MapperScan(basePackages = &#123;&quot;com.wdbyte.mapper.datasource2&quot;&#125;, sqlSessionFactoryRef = &quot;sqlSessionFactory2&quot;)</span><br><span class="line">public class SecondDataSourceConfig &#123;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;dataSource2&quot;)</span><br><span class="line">    @ConfigurationProperties(prefix = &quot;spring.datasource.datasource2&quot;)</span><br><span class="line">    public DataSource dataSource() &#123;</span><br><span class="line">        return DataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;sqlSessionFactory2&quot;)</span><br><span class="line">    public SqlSessionFactory sqlSessionFactory(@Qualifier(&quot;dataSource2&quot;) DataSource dataSource) throws Exception &#123;</span><br><span class="line">        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();</span><br><span class="line">        bean.setDataSource(dataSource);</span><br><span class="line">        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(&quot;classpath:mapper/*.xml&quot;));</span><br><span class="line">        return bean.getObject();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;transactionManager2&quot;)</span><br><span class="line">    public DataSourceTransactionManager transactionManager(@Qualifier(&quot;dataSource2&quot;) DataSource dataSource) &#123;</span><br><span class="line">        return new DataSourceTransactionManager(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Bean(name = &quot;sqlSessionTemplate2&quot;)</span><br><span class="line">    public SqlSessionTemplate sqlSessionTemplate(@Qualifier(&quot;sqlSessionFactory2&quot;) SqlSessionFactory sqlSessionFactory) &#123;</span><br><span class="line">        return new SqlSessionTemplate(sqlSessionFactory);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：因为已经在两个数据源中分别配置了扫描的 Mapper 路径，如果你之前在 SpringBoot 启动类中也使用了 Mapper 扫描注解，需要删掉。</p>
+<h3 id="4-访问测试"><a href="#4-访问测试" class="headerlink" title="4. 访问测试"></a>4. 访问测试</h3><p>编写两个简单的查询 Controller 然后进行访问测试。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// BookController</span><br><span class="line">@RestController</span><br><span class="line">public class BookController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private BookService bookService;</span><br><span class="line"></span><br><span class="line">    @GetMapping(value = &quot;/books&quot;)</span><br><span class="line">    public Response selectAll() throws Exception &#123;</span><br><span class="line">        List&lt;Book&gt; books = bookService.selectAll();</span><br><span class="line">        return ResponseUtill.success(books);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// UserController</span><br><span class="line">@RestController</span><br><span class="line">public class UserController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    private UserService userService;</span><br><span class="line"></span><br><span class="line">    @ResponseBody</span><br><span class="line">    @GetMapping(value = &quot;/users&quot;)</span><br><span class="line">    public Response selectAll() &#123;</span><br><span class="line">        List&lt;User&gt; userList = userService.selectAll();</span><br><span class="line">        return ResponseUtill.success(userList);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问测试，我这里直接 CURL 请求。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># ~ curl localhost:8080/books </span><br><span class="line">&#123;</span><br><span class="line">  &quot;code&quot;: &quot;0000&quot;,</span><br><span class="line">  &quot;message&quot;: &quot;success&quot;,</span><br><span class="line">  &quot;data&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 1,</span><br><span class="line">      &quot;author&quot;: &quot;金庸&quot;,</span><br><span class="line">      &quot;name&quot;: &quot;笑傲江湖&quot;,</span><br><span class="line">      &quot;price&quot;: 13,</span><br><span class="line">      &quot;createtime&quot;: &quot;2020-12-19T07:26:51.000+00:00&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;武侠小说&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 2,</span><br><span class="line">      &quot;author&quot;: &quot;罗贯中&quot;,</span><br><span class="line">      &quot;name&quot;: &quot;三国演义&quot;,</span><br><span class="line">      &quot;price&quot;: 14,</span><br><span class="line">      &quot;createtime&quot;: &quot;2020-12-19T07:28:36.000+00:00&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;历史小说&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># ~ curl localhost:8080/users </span><br><span class="line">&#123;</span><br><span class="line">  &quot;code&quot;: &quot;0000&quot;,</span><br><span class="line">  &quot;message&quot;: &quot;success&quot;,</span><br><span class="line">  &quot;data&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 1,</span><br><span class="line">      &quot;name&quot;: &quot;金庸&quot;,</span><br><span class="line">      &quot;birthday&quot;: &quot;1924-03-09T16:00:00.000+00:00&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;id&quot;: 2,</span><br><span class="line">      &quot;name&quot;: &quot;罗贯中&quot;,</span><br><span class="line">      &quot;birthday&quot;: &quot;1330-01-09T16:00:00.000+00:00&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，多数据源配置完成，测试成功。</p>
+<h3 id="5-连接池"><a href="#5-连接池" class="headerlink" title="5. 连接池"></a>5. 连接池</h3><p>其实在多数据源改造中，我们一般情况下都不会使用默认的 JDBC 连接方式，往往都需要引入连接池进行连接优化，不然你可能会经常遇到数据源连接被断开等报错日志。其实数据源切换连接池数据源也是十分简单的，直接引入连接池依赖，然后把创建 dataSource 的部分换成连接池数据源创建即可。</p>
+<p>下面以阿里的 Druid 为例，先引入连接池数据源依赖。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">   &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">   &lt;artifactId&gt;druid&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>添加 Druid 的一些配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">spring.datasource.datasource2.initialSize=3 # 根据自己情况设置</span><br><span class="line">spring.datasource.datasource2.minIdle=3</span><br><span class="line">spring.datasource.datasource2.maxActive=20</span><br></pre></td></tr></table></figure>
+<p>改写 dataSource Bean 的创建代码部分。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.jdbc-url&#125;&quot;)</span><br><span class="line">private String url;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.driver-class-name&#125;&quot;)</span><br><span class="line">private String driverClassName;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.username&#125;&quot;)</span><br><span class="line">private String username;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.password&#125;&quot;)</span><br><span class="line">private String password;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.initialSize&#125;&quot;)</span><br><span class="line">private int initialSize;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.minIdle&#125;&quot;)</span><br><span class="line">private int minIdle;</span><br><span class="line">@Value(&quot;$&#123;spring.datasource.datasource2.maxActive&#125;&quot;)</span><br><span class="line">private int maxActive;</span><br><span class="line"></span><br><span class="line">@Bean(name = &quot;dataSource2&quot;)</span><br><span class="line">public DataSource dataSource() &#123;</span><br><span class="line">    DruidDataSource dataSource = new DruidDataSource();</span><br><span class="line">    dataSource.setUrl(url);</span><br><span class="line">    dataSource.setDriverClassName(driverClassName);</span><br><span class="line">    dataSource.setUsername(username);</span><br><span class="line">    dataSource.setPassword(password);</span><br><span class="line">    dataSource.setInitialSize(initialSize);</span><br><span class="line">    dataSource.setMinIdle(minIdle);</span><br><span class="line">    dataSource.setMaxActive(maxActive);</span><br><span class="line">    return dataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只是简单的提一下使用连接池的重要性，Druid 的详细用法还请参考官方文档。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/SpringBoot/Springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE/">http://example.com/2023/05/06/SpringBoot/Springboot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/SpringBoot/SpringBoot%E9%85%8D%E7%BD%AE%E7%B1%BB/" title="SpringBoot配置类"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SpringBoot配置类</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/SpringBoot/SprintBoot%E5%90%8C%E6%97%B6%E9%85%8D%E7%BD%AEhttp%E5%92%8Chttps%E7%99%BB%E5%BD%95/" title="SprintBoot同时配置http和https登录"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SprintBoot同时配置http和https登录</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E6%95%B0%E6%8D%AE%E6%BA%90%E4%BE%9D%E8%B5%96"><span class="toc-number">1.</span> <span class="toc-text">1. 引入数据源依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%BF%9E%E6%8E%A5%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">2. 连接配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BAmapper%E6%8E%A5%E5%8F%A3"><span class="toc-number">3.</span> <span class="toc-text">3. 创建mapper接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">3. 多数据源配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E4%B8%BB%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 主数据源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 第二个数据源</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-number">5.</span> <span class="toc-text">4. 访问测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="toc-number">6.</span> <span class="toc-text">5. 连接池</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

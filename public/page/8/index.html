@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/page/8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/page/8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hexo',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 15:48:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Hexo</h1></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/" title="泛型擦除">泛型擦除</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">泛型实现分类在目前主流的编程语言中，编译器主要有以下两种处理泛型的方法：
+
+1) Code specialization使用这种方法，每当实例化一个泛型类的时候都会产生一份新的字节代码，例如，对于泛型 ArrayList，当使用 ArrayList、ArrayList&lt;Integer ) 初始化两个实例的时候，就会针对 String 与 Integer 生成两份单独的代码。C++ 中的模板（template）是典型的 Code specialization 实现。C++ 编译器会为每一个泛型类实例生成一份执行代码。执行代码中integer list和 string list是两种不同的类型。这样会导致代码膨胀，不过有经验的 C++ 程序员可以有技巧地避免代码膨胀。Code specialization 另外一个弊端是在引用类型系统中，浪费空间，因为引用类型集合中元素本质上都是一个指针，没必要为每个类型都产生一份执行代码。而这也是 Java 编译器中采用 Code sharing 方式处理泛型的主要原因。这种方式显然比较省空间，而 Java 就是采用这种方式来实现的。
+
+2) Co ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/" title="集合底层原理">集合底层原理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">#集合（ArrayList线程不安全Vector安全）要求：向Collection添加对象时必须重写equals方法。Collection（）的方法:1.add（Object obj）将元素加入到当前集合中，返回boolean值2.add（Collection coll）将集合中的元素加入到当前集合中，返回boolean值3.size（Collection coll）获取集合中元素个数4.isEmpty（Collection coll）判断集合是否为空，返回boolean数5.clear(Collection coll):清空当前集合6.remove（Object obj）移除并返回boolean数。找到并删除第一个就停止。remove是按照equals方法是否返回true来判断是否相等并删除。7.removeAll（Collection coll）coll中的每个元素都会调用equals方法判断是否删除。返回boolean值
+8.contains（Object obj）判断当前集合中是否包含obj元素，返回boolean值9.containsAll（Collection coll）： ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="JVM虚拟机">JVM虚拟机</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/">设计模式与算法</a></span></div><div class="content">一、面试题
+谈谈你对JVM的理解？
+
+java8虚拟机和之前的变化？
+
+什么是OOM，什么是StackOverFlowError？怎么分析
+
+JVM常用调优参数有哪些？
+
+内存快照如何抓取，怎么分析Dump文件？
+
+谈谈你对JVM中的类加载器的认识？
+
+JVM的位置
+
+JVM的体系结构
+
+类加载器
+
+双亲委派机制
+
+沙箱安全机制
+
+Native
+
+PC寄存器
+
+方法区9.栈
+
+三种JVM
+
+堆
+
+新生区、老年区
+
+永久区
+
+堆内存调优
+
+GC （常用算法）
+
+JMM
+
+总结
+
+
+二、JVM虚拟机
+2.1 JVM的位置
+
+![类的加载过程](JVM虚拟机.assets
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/LSM%E5%92%8CB%E6%A0%91%E5%AF%B9%E6%AF%94/" title="LSM和B树对比">LSM和B树对比</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/">设计模式与算法</a></span></div><div class="content">动态查找树主要有：二叉查找树、平衡二叉树、红黑树、B树、B+树。前面三种是典型的二叉查找树，查找的时间复杂度是O(log2N)。涉及到磁盘的读写（比如每个节点都需要从磁盘获取），读写的速度就与树的深度有关系，那么降低树的深度也就可以提升查找效率。这时就提出了平衡多路查找树，也就是B树以及B+树。
+B树和B+树非常典型的场景就是用于关系型数据库的索引(MySQL)
+
+# 参考
+[https://www.jianshu.com/p/3fb899684392](https://www.jianshu.com/p/3fb899684392)
+</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/%E5%AF%86%E9%92%A5%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" title="密钥相关命令">密钥相关命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/">系统安全</a></span></div><div class="content">环境准备：下载安装Win64OpenSSL-1_1_0i.exe和jdk_1.8
+一、生成.ssh文件(用于远程登陆)生成 id_rsa 和 id_rsa.pub 文件
+1ssh-keygen [-q] [-b bits] [-C comment] [-f output_keyfile] [-m format]  [-t dsa | ecdsa | ecdsa-sk | ed25519 | ed25519-sk | rsa] [-N new_passphrase] [-O option] [-w provider]
+可以简单生成一个2048位的密钥对
+1ssh-keygen -t rsa -b 2048 -m PEM -C &quot;message&quot;
+将公钥发送到目标主机
+1ssh-copy-id [ip]
+执行成功之后，我们在目标机器上查看&#x2F;root&#x2F;.ssh目录已经生成，并且多了一个名为authorized_keys的文件，里面保存的正是原机器上ssh-keygen生成的id_rsa.pub的内容。
+
+id_rsa：私钥
+id_rsa.pub：公钥
+ ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/SpEL%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="SpEL表达式">SpEL表达式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">SpEL(Spring Expression Language)支持标准数学运算符,关系运算符,逻辑运算符,条件运算符,集合和正则表达式等。它可用于将bean或bean属性注入另一个bean,还支持bean的方法调用。
+###一. 用法SpEL有三种用法，一种是在注解@Value中；一种是XML配置；最后一种是在代码块中使用Expression。
+
+@Value1234//@Value能修饰成员变量和方法形参//#&#123;&#125;内就是表达式的内容@Value(&quot;#&#123;表达式&#125;&quot;)public String arg;
+配置1234&lt;bean id=&quot;xxx&quot; class=&quot;com.java.XXXXX.xx&quot;&gt;    &lt;!-- 同@Value,#&#123;&#125;内是表达式的值，可放在property或constructor-arg内 --&gt;    &lt;property name=&quot;arg&quot; value=&quot;#&#123;表达式&#125; ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/shell%E7%BC%96%E7%A8%8B/" title="shell编程">shell编程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">系统变量：&#x2F;etc&#x2F;profile用户变量：&#x2F;.bash_profile | ~&#x2F;.bash_login | ~&#x2F;.profile &#x2F;etc&#x2F;profile.d&#x2F;*login 和 non-login shelllogin方式加载顺序：etc&#x2F;profile -&gt; ~&#x2F;.bash_profile | ~&#x2F;.bash_login | ~&#x2F;.profile(加载时，按照上述顺序进行加载，只要加载到一个文件就停止加载)non-login方式加载顺序：不会加载 etc&#x2F;profile，会加载&#x2F;.bashrc和profile.d文件夹下的脚本。
+常用的正则表达式语法\   转义^   一行的开头      例：^R——表示以R开头的行$   匹配一行的结束        例：R$表示以R结尾的行*  表示上一个子式匹配0次或多次，贪心匹配.   匹配一个任意的字符（除了换行符）.匹配任意字符串[]  表示匹配某个范围内的字符    例：[a-z]——匹配 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/java%E7%BC%96%E7%A8%8B2/" title="java编程2">java编程2</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">java中被模数为负数，则余数为负；模数为负数，则余数为正；都为负数，余数为负pmod（-9，4）＝3
+取随机值:new Random（）.nextInt（10）；Math.random（）hive中:rand（） 返回0～1随机浮点数
+exp（double a）e的a次方log（a，b）loga bpow（a，b）a的b次方sqrt（a）a的平方根abs（a）绝对值bin（a）hex（a）unhex（a）转换进制conv(17,10,16)将17从十进制转到十六进制11pmod(-9,4)  -9模4为3，与java运算规则不同
+时间函数：
+1.★from_unixtime（timestamp，‘ 时间格式 ’）将从1970-01-01开始的秒数转化为规定格式的时间
+如果时间格式不规范，用regexp_replace()函数。例：select date_format(regexp_replace(‘2019&#x2F;07&#x2F;06’,’&#x2F;‘,’-‘),’yyyy-MM’);
+2.★date_format（’2019-07-06’,’yyyy-MM’）返回规定的时间格 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/scala%E7%BC%96%E7%A8%8B/" title="scala编程">scala编程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">
+
+伴生对象中可以写静态方法，但是底层并不是通过静态方法实现的。而是通过饿汉模式创建单例，通过这个单例对象进行方法的调用，实现了静态方法的功能。
+只有伴生类，那么编译之后只会生成一个编译文件。只有伴生对象，那么编译之后会同时生成两个编译文件。
+
+
+![伴生类编译文件](scala编程.assets86c7bb7623402baa75f9e5412f7d3c.png)
+![伴生对象编译文件](scala编程.assets68afa77ce4f457d900b44fb54235a63.png)
+
+
+统计相同单词的数量：
+
+方式一：将字符串 * 5，然后再切割
+方式二：将每个单词的数量以元组形式存放，再统计
+123456789101112131415161718192021222324252627282930313233343536373839404142object Exam22&#123;  def main(args: Array[String]): Unit = &#123;    val lineList = List((&quot;Hadoop Hbase Hive&quot ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/JavaScript/" title="JavaScript">JavaScript</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="content">一、JavaScriptJavaScript负责页面中的的行为。  
+它是一门运行在浏览器端的脚本语言。  
+1.1 JS的编写的位置1.可以编写到标签的指定属性中  
+12&lt;button onclick=&quot;alert(&#x27;hello&#x27;);&quot;&gt;我是按钮&lt;/button&gt;  &lt;a href=&quot;javascript:alert(&#x27;aaa&#x27;);&quot;&gt;超链接&lt;/a&gt;  
+
+2.可以编写到script标签中  
+123&lt;script type=&quot;text/javascript&quot;&gt;  //编写js代码  &lt;/script&gt;  
+
+3.可以将代码编写到外部的js文件中，然后通过标签将其引入  
+script标签一旦用于引入外部文件了，就不能在编写代码了，即使编写了浏览器也会忽略  ,如果需要则可以在创建一个新的script标签用于编写内部代码  
+1&lt;script type=&quot;text/javascript&quot; ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#content-inner">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/#content-inner">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/#content-inner">42</a><a class="extend next" rel="next" href="/page/9/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/ELK/"><span class="card-category-list-name">ELK</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JVM/"><span class="card-category-list-name">JVM</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Jenkins/"><span class="card-category-list-name">Jenkins</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">14</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Matlab/"><span class="card-category-list-name">Matlab</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/MySQL/"><span class="card-category-list-name">MySQL</span><span class="card-category-list-count">23</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Nginx/"><span class="card-category-list-name">Nginx</span><span class="card-category-list-count">6</span></a></li>
+            </ul></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">419</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">419</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-05-06T07:48:54.906Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

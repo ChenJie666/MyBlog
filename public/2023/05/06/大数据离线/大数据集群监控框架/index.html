@@ -1,0 +1,788 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大数据集群监控框架 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、监控框架    Bigdata1 Bigdata2 Bigdata3    Zabbix zabbix-serverzabbix-agent zabbix-agent zabbix-agent   Ganglia  ganglia     # 二、Zabbix 4.2.8 ## 2.1 概念 Zabbix是一款能够监控各种网络参数以及服务器健康性和完整性的软件。Zabbix使用灵活的通知机制，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据集群监控框架">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、监控框架    Bigdata1 Bigdata2 Bigdata3    Zabbix zabbix-serverzabbix-agent zabbix-agent zabbix-agent   Ganglia  ganglia     # 二、Zabbix 4.2.8 ## 2.1 概念 Zabbix是一款能够监控各种网络参数以及服务器健康性和完整性的软件。Zabbix使用灵活的通知机制，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:42:56.298Z">
+<meta property="article:modified_time" content="2023-05-06T05:42:56.298Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大数据集群监控框架',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:42:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">大数据集群监控框架</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:42:56.298Z" title="更新于 2023-05-06 13:42:56">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/">大数据离线</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="大数据集群监控框架"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、监控框架"><a href="#一、监控框架" class="headerlink" title="一、监控框架"></a>一、监控框架</h1><table>
+<thead>
+<tr>
+<th></th>
+<th>Bigdata1</th>
+<th>Bigdata2</th>
+<th>Bigdata3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zabbix</td>
+<td>zabbix-server<br />zabbix-agent</td>
+<td>zabbix-agent</td>
+<td>zabbix-agent</td>
+</tr>
+<tr>
+<td>Ganglia</td>
+<td></td>
+<td>ganglia</td>
+<td></td>
+</tr>
+</tbody></table>
+<br>
+# 二、Zabbix 4.2.8
+## 2.1 概念
+Zabbix是一款能够监控各种网络参数以及服务器健康性和完整性的软件。Zabbix使用灵活的通知机制，允许用户为几乎任何事件配置基于邮件的告警。这样可以快速反馈服务器的问题。基于已存储的数据，Zabbix提供了出色的报告和数据可视化功能。
+
+<p>![image.png](大数据集群监控框架.assets7c06525d4d9496ebf7e49ce625200e8.png)</p>
+<h2 id="2-2-组件"><a href="#2-2-组件" class="headerlink" title="2.2 组件"></a>2.2 组件</h2><ul>
+<li>主机（Host）<br>一台你想监控的网络设备，用IP或域名表示。</li>
+<li>监控项（Item）<br>你想要接收的主机的特定数据，一个度量数据。</li>
+<li>触发器（Trigger）<br>一个被用于定义问题阈值和“评估”监控项接收到的数据的逻辑表达式。</li>
+<li>动作（Action）<br>一个对事件做出反应的预定义的操作，比如邮件通知。</li>
+</ul>
+<h2 id="2-3-部署"><a href="#2-3-部署" class="headerlink" title="2.3 部署"></a>2.3 部署</h2><ol>
+<li><p>每台安装yum的repo文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh https://mirrors.aliyun.com/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将文件中的镜像域名替换为阿里云</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sed -i &#x27;s/http:\/\/repo.zabbix.com/https:\/\/mirrors.aliyun.com\/zabbix/g&#x27; /etc/yum.repos.d/zabbix.repo</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装</p>
+<ul>
+<li><p>bigdata1：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install -y zabbix-server-mysql zabbix-web-mysql zabbix-agent</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bigdata2和bigdata3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bigdata2： sudo yum install -y zabbix-agent</span><br><span class="line">bigdata3： sudo yum install -y zabbix-agent</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>MySQL创建数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -h 192.168.32.244 -uroot -phxr -e&quot;create database zabbix charset utf8 collate utf8_bin&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>使用zabbix的建表脚本建表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zcat /usr/share/doc/zabbix-server-mysql-4.0.29/create.sql.gz | mysql -h 192.168.32.244 -uroot -phxr zabbix</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Zabbix_Server<br>在bigdata1中的&#x2F;etc&#x2F;zabbix&#x2F;zabbix_server.conf配置文件中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DBHost=bigdata3</span><br><span class="line">DBName=zabbix</span><br><span class="line">DBUser=root</span><br><span class="line">DBPassword=hxr</span><br></pre></td></tr></table></figure>
+
+<p>在所有节点的&#x2F;etc&#x2F;zabbix&#x2F;zabbix_server.conf配置文件中修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 修改</span><br><span class="line">Server=bigdata1</span><br><span class="line"># 注销</span><br><span class="line"># ServerActive=127.0.0.1</span><br><span class="line"># Hostname=Zabbix server</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Zabbix Web时区<br>在&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;zabbix.conf文件中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php_value date.timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>启动Zabbix</p>
+<ul>
+<li><p>bigdata1启动：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start/stop zabbix-server zabbix-agent httpd     (httpd是访问html等页面的入口)</span><br></pre></td></tr></table></figure>
+
+<p>bigdata1设置开机自启：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable/disable zabbix-server zabbix-agent httpd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bigdata2&#x2F;3启动：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start/stop zabbix-agent </span><br></pre></td></tr></table></figure>
+
+<p>设置开机自启：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable/disable zabbix-agent</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>访问页面<br><a target="_blank" rel="noopener" href="http://192.168.32.242/zabbix">http://192.168.32.242/zabbix</a>  (默认账号密码为 Admin&#x2F;zabbix)<br>在页面中完成对Zabbix_Web的数据库等配置<br>如果配置出现错误，可以在配置文件&#x2F;etc&#x2F;zabbix&#x2F;web&#x2F;zabbix.conf.php中进行修改<br>异常日志可以查看  cat &#x2F;var&#x2F;log&#x2F;zabbix&#x2F;zabbix_server.log</p>
+</li>
+</ol>
+<h2 id="2-4-实现进程监控"><a href="#2-4-实现进程监控" class="headerlink" title="2.4 实现进程监控"></a>2.4 实现进程监控</h2><ol>
+<li><p>配置主机<br>在配置-&gt; 主机-&gt; 创建主机 中添加需要监控的主机</p>
+</li>
+<li><p>配置监控项<br>创建完主机后，点击监控项进行监控项的创建<br>如监控datanode进行是否正常运行<br>![image.png](大数据集群监控框架.assets4997bd394d44648a19f54cb267480ad.png)</p>
+</li>
+<li><p>配置触发器<br>点击触发器进行创建<br><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C2716f32c51a8488183bb8ee060bc1ed3.png" alt="image.png"></p>
+</li>
+<li><p>通知方式设置<br>在管理-&gt; 报警媒介类型 中进行通知报警的配置<br><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C75566c9bca394548b57ed91a3d809e1a.png" alt="image.png"></p>
+</li>
+<li><p>创建动作<br>在配置-&gt; 动作中创建动作，为触发器设置动作(发邮件)。<br><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C546294ceaf654820a89cd2edee92e50a.png" alt="image.png"></p>
+</li>
+</ol>
+<p><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C42c9c612705d4926a076eb14324ab042.png" alt="image.png"></p>
+<ol start="6">
+<li><p>为用户配置邮箱<br>在用户的基本资料中配置<br><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C591a0490a1104318bbfff9f580e7d0fa.png" alt="image.png"></p>
+</li>
+<li><p>使用模版为每个节点进行配置<br>默认有很多框架的模板可以选择，如MySQL、redis等。但是没有hadoop的模板，需要自己配置。<br>在配置-&gt; 模板 中进行模板配置，创建监控项、触发器，然后应用到主机上。<br><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C46d94a38d669456dbf8b9eeb65ba3079.png" alt="image.png"><br>注意需要修改动作来为模板的触发器绑定动作。</p>
+</li>
+</ol>
+<br>
+# 三、Prometheus
+## 3.1 特点
+&ensp;&ensp; Prometheus是一个开源的完整监控解决方案，其对传统监控系统的测试和告警模型进行了彻底的颠覆，形成了基于中央化的规则计算、统一分析和告警的新模型。 相比于传统监控系统，Prometheus具有以下优点：
+
+<h3 id="3-1-1-易于管理"><a href="#3-1-1-易于管理" class="headerlink" title="3.1.1 易于管理"></a>3.1.1 易于管理</h3><ul>
+<li>Prometheus核心部分只有一个单独的二进制文件，不存在任何的第三方依赖(数据库，缓存等等)。唯一需要的就是本地磁盘，因此不会有潜在级联故障的风险。</li>
+<li>Prometheus基于Pull模型的架构方式，可以在任何地方（本地电脑，开发环境，测试环境）搭建我们的监控系统。</li>
+<li>对于一些复杂的情况，还可以使用Prometheus服务发现(Service Discovery)的能力动态管理监控目标。</li>
+</ul>
+<h3 id="3-1-2-监控服务的内部运行状态"><a href="#3-1-2-监控服务的内部运行状态" class="headerlink" title="3.1.2 监控服务的内部运行状态"></a>3.1.2 监控服务的内部运行状态</h3><p>&amp;ensp;&amp;ensp; Pometheus鼓励用户监控服务的内部状态，基于Prometheus丰富的Client库，用户可以轻松的在应用程序中添加对Prometheus的支持，从而让用户可以获取服务和应用内部真正的运行状态。</p>
+<p><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C154808c363ad41d1b4c85dc0dca2a3da.png" alt="image.png"></p>
+<h3 id="3-1-3-强大的数据模型"><a href="#3-1-3-强大的数据模型" class="headerlink" title="3.1.3 强大的数据模型"></a>3.1.3 强大的数据模型</h3><p>&amp;ensp;&amp;ensp; 所有采集的监控数据均以指标(metric)的形式保存在内置的时间序列数据库当中(TSDB)。所有的样本除了基本的指标名称以外，还包含一组用于描述该样本特征的标签。如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http_request_status&#123;code=&#x27;200&#x27;,content_path=&#x27;/api/path&#x27;,environment=&#x27;produment&#x27;&#125; =&gt; [value1@timestamp1,value2@timestamp2...] </span><br><span class="line">http_request_status&#123;code=&#x27;200&#x27;,content_path=&#x27;/api/path2&#x27;,environment=&#x27;produment&#x27;&#125; =&gt; [value1@timestamp1,value2@timestamp2...]</span><br></pre></td></tr></table></figure>
+<p>每一条时间序列由指标名称(Metrics Name)以及一组标签(Labels)唯一标识。每条时间序列按照时间的先后顺序存储一系列的样本值。</p>
+<ul>
+<li>http_request_status：指标名称(Metrics Name)</li>
+<li>{code&#x3D;’200’,content_path&#x3D;’&#x2F;api&#x2F;path’,environment&#x3D;’produment’}：表示维度的标签，基于这些Labels我们可以方便地对监控数据进行聚合，过滤，裁剪。</li>
+<li>[value1@timestamp1,value2@timestamp2…]：按照时间的先后顺序 存储的样本值。</li>
+</ul>
+<h3 id="3-1-4-强大的查询语言PromQL"><a href="#3-1-4-强大的查询语言PromQL" class="headerlink" title="3.1.4 强大的查询语言PromQL"></a>3.1.4 强大的查询语言PromQL</h3><p>&amp;ensp;&amp;ensp; Prometheus内置了一个强大的数据查询语言PromQL。 通过PromQL可以实现对监控数据的查询、聚合。同时PromQL也被应用于数据可视化(如Grafana)以及告警当中。<br>通过PromQL可以轻松回答类似于以下问题：</p>
+<ul>
+<li>在过去一段时间中95%应用延迟时间的分布范围？</li>
+<li>预测在4小时后，磁盘空间占用大致会是什么情况？</li>
+<li>CPU占用率前5位的服务有哪些？(过滤)</li>
+</ul>
+<h3 id="3-1-5-高效"><a href="#3-1-5-高效" class="headerlink" title="3.1.5 高效"></a>3.1.5 高效</h3><p>&amp;ensp;&amp;ensp; 对于监控系统而言，大量的监控任务必然导致有大量的数据产生。而Prometheus可以高效地处理这些数据，对于单一Prometheus Server实例而言它可以处理：</p>
+<ul>
+<li>数以百万的监控指标 </li>
+<li>每秒处理数十万的数据点</li>
+</ul>
+<h3 id="3-1-6-可扩展"><a href="#3-1-6-可扩展" class="headerlink" title="3.1.6 可扩展"></a>3.1.6 可扩展</h3><p>可以在每个数据中心、每个团队运行独立的Prometheus Sevrer。Prometheus对于联邦集群的支持，可以让多个Prometheus实例产生一个逻辑集群，当单实例Prometheus Server处理的任务量过大时，通过使用功能分区(sharding)+联邦集群(federation)可以对其进行扩展。</p>
+<h3 id="3-1-7-易于集成"><a href="#3-1-7-易于集成" class="headerlink" title="3.1.7 易于集成"></a>3.1.7 易于集成</h3><p>&amp;ensp;&amp;ensp; 使用Prometheus可以快速搭建监控服务，并且可以非常方便地在应用程序中进行集成。目前支持：Java，JMX，Python，Go，Ruby，.Net，Node.js等等语言的客户端SDK，基于这些SDK可以快速让应用程序纳入到 Prometheus的监控当中，或者开发自己的监控数据收集程序。<br>&amp;ensp;&amp;ensp; 同时这些客户端收集的监控数据，不仅仅支持 Prometheus，还能支持Graphite这些其他的监控工具。<br>&amp;ensp;&amp;ensp; 同时Prometheus还支持与其他的监控系统进行集成：Graphite， Statsd， Collected， Scollector， muini， Nagios等。 Prometheus社区还提供了大量第三方实现的监控数据采集支持：JMX，CloudWatch，EC2，MySQL，PostgresSQL，Haskell，Bash，SNMP，Consul，Haproxy，Mesos，Bind，CouchDB，Django，Memcached，RabbitMQ，Redis，RethinkDB，Rsyslog等等。</p>
+<h3 id="3-1-8-可视化"><a href="#3-1-8-可视化" class="headerlink" title="3.1.8 可视化"></a>3.1.8 可视化</h3><ul>
+<li>Prometheus Server中自带的Prometheus UI，可以方便地直接对数据进行查询，并且支持直接以图形化的形式展示数据。同时Prometheus还提供了一个独立的基于Ruby On Rails的Dashboard解决方案 Promdash。</li>
+<li>最新的Grafana可视化工具也已经提供了完整的Prometheus支持，基于Grafana可以创建更加精美的监控图标。</li>
+<li>基于Prometheus提供的API还可以实现自己的监控可视化UI。</li>
+</ul>
+<h3 id="3-1-9-开放性"><a href="#3-1-9-开放性" class="headerlink" title="3.1.9 开放性"></a>3.1.9 开放性</h3><p>&amp;ensp;&amp;ensp; 通常来说当我们需要监控一个应用程序时，一般需要该应用程序提供对相应监控系统协议的支持，因此应用程序会与所选择的监控系统进行绑定。为了减少这种绑定所带来的限制，对于决策者而言要么你就直接在应用中集成该监控系统的支持，要么就在外部创建单独的服务来适配不同的监控系统。<br>&amp;ensp;&amp;ensp; 而对于Prometheus来说，使用Prometheus的client library的输出格式不止支持Prometheus的格式化数据，也可以输出支持其它监控系统的格式化数据，比如Graphite。 因此你甚至可以在不使用Prometheus的情况下，采用Prometheus的client library来让你的应用程序支持监控数据采集。</p>
+<br>
+## 3.2 Prometheus的架构
+![image.png](大数据集群监控框架.assets\480ae2195f9a411babb82d21e168a4eb.png)
+
+<h3 id="3-2-1-Prometheus生态圈组件"><a href="#3-2-1-Prometheus生态圈组件" class="headerlink" title="3.2.1 Prometheus生态圈组件"></a>3.2.1 Prometheus生态圈组件</h3><ul>
+<li>Prometheus Server：主服务器，负责收集和存储时间序列数据</li>
+<li>client libraies：应用程序代码插桩，将监控指标嵌入到被监控应用程序中</li>
+<li>Pushgateway：推送网关，为支持short-lived作业提供一个推送网关</li>
+<li>exporter：专门为一些应用开发的数据摄取组件—exporter，例如：HAProxy、StatsD、Graphite等等。</li>
+<li>Alertmanager：专门用于处理alert的组件</li>
+</ul>
+<h3 id="3-2-2-架构理解"><a href="#3-2-2-架构理解" class="headerlink" title="3.2.2 架构理解"></a>3.2.2 架构理解</h3><h4 id="1-存储计算层"><a href="#1-存储计算层" class="headerlink" title="1. 存储计算层"></a>1. 存储计算层</h4><ul>
+<li>Prometheus Server，里面包含了存储引擎和计算引擎。</li>
+<li>Retrieval组件为取数组件，它会主动从Pushgateway或者Exporter拉取指标数据。</li>
+<li>Service discovery，可以动态发现要监控的目标。</li>
+<li>TSDB，数据核心存储与查询。</li>
+<li>HTTP server，对外提供HTTP服务。</li>
+</ul>
+<h4 id="2-采集层"><a href="#2-采集层" class="headerlink" title="2. 采集层"></a>2. 采集层</h4><p>采集层分为两类，一类是生命周期较短的作业，还有一类是生命周期较长的作业。</p>
+<ul>
+<li>短作业：直接通过API，在退出时间指标推送给Pushgateway。如Flink任务每次在不同节点上启动一个executor执行短作业，结束时推送给Pushgateway，Prometheus从Pushgateway获取数据。</li>
+<li>长作业：Retrieval组件直接从Job或者Exporter拉取数据。</li>
+</ul>
+<h4 id="3-应用层"><a href="#3-应用层" class="headerlink" title="3. 应用层"></a>3. 应用层</h4><p>应用层主要分为两种，一种是AlertManager，另一种是数据可视化。</p>
+<ul>
+<li>AlertManager<br>对接Pagerduty，是一套付费的监控报警系统。可实现短信报警、5分钟无人ack打电话通知、仍然无人ack，通知值班人员Manager…<br>Emial，发送邮件<br>… …</li>
+<li>数据可视化<br>Prometheus build-in WebUI<br>Grafana</li>
+</ul>
+<p>其他基于API开发的客户端</p>
+<br>
+## 3.3 安装
+### 3.3.1 安装Prometheus Server
+Prometheus基于Golang编写，编译后的软件包，不依赖于任何的第三方依赖。只需要[下载对应平台的二进制包](https://prometheus.io/download/)，解压并且添加基本的配置即可正常启动Prometheus Server。
+
+<ol>
+<li><p>解压压缩包 prometheus-2.30.3.linux-amd64.tar.gz</p>
+</li>
+<li><p>修改配置文件 prometheus.yml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"># my global config</span><br><span class="line">global:</span><br><span class="line">  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.</span><br><span class="line">  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.</span><br><span class="line">  # scrape_timeout is set to the global default (10s).</span><br><span class="line"></span><br><span class="line"># Alertmanager configuration</span><br><span class="line">alerting:</span><br><span class="line">  alertmanagers:</span><br><span class="line">    - static_configs:</span><br><span class="line">        - targets:</span><br><span class="line">          # - alertmanager:9093</span><br><span class="line"></span><br><span class="line"># Load rules once and periodically evaluate them according to the global &#x27;evaluation_interval&#x27;.</span><br><span class="line">rule_files:</span><br><span class="line">  # - &quot;first_rules.yml&quot;</span><br><span class="line">  # - &quot;second_rules.yml&quot;</span><br><span class="line"></span><br><span class="line"># A scrape configuration containing exactly one endpoint to scrape:</span><br><span class="line"># Here it&#x27;s Prometheus itself.</span><br><span class="line">scrape_configs:</span><br><span class="line">  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span><br><span class="line">  - job_name: &quot;prometheus&quot;</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to &#x27;/metrics&#x27;</span><br><span class="line">    # scheme defaults to &#x27;http&#x27;.</span><br><span class="line"></span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&quot;192.168.101.174:9090&quot;]</span><br><span class="line"></span><br><span class="line">  - job_name: &quot;pushgateway&quot;</span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&#x27;192.168.101.174:9091&#x27;]</span><br><span class="line">        labels: </span><br><span class="line">          instance: pushgateway</span><br><span class="line"></span><br><span class="line">  - job_name: &quot;node exporter&quot;</span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&#x27;192.168.101.179:9100&#x27;,&#x27;192.168.101.180:9100&#x27;,&#x27;192.168.101.181:9100&#x27;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  - job_name: &quot;process exporter&quot;</span><br><span class="line">    static_configs:</span><br><span class="line">      - targets: [&#x27;192.168.101.179:9256&#x27;,&#x27;192.168.101.180:9256&#x27;,&#x27;192.168.101.181:9256&#x27;,&#x27;192.168.101.176:9256&#x27;]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动服务<br><code>nohup ./prometheus --config.file=./prometheus.yml 1&gt;./prometheus.log 2&gt;&amp;1 &amp;</code></p>
+</li>
+</ol>
+<blockquote>
+<p><strong>prometheus启动命令添加参数</strong> <code>--web.enable-lifecycle</code> <strong>然后热重启：</strong><code>curl -XPOST http://localhost:9090/-/reload</code><br><strong>alertmanager热重启:</strong> <code>curl -XPOST http://localhost:9093/-/reload</code></p>
+</blockquote>
+<h3 id="3-3-2-安装Pushgateway"><a href="#3-3-2-安装Pushgateway" class="headerlink" title="3.3.2 安装Pushgateway"></a>3.3.2 安装Pushgateway</h3><ol>
+<li>解压压缩包 pushgateway-1.4.2.linux-amd64.tar.gz</li>
+<li>启动服务 <code>nohup ./pushgateway 1&gt;/opt/module/pushgateway-1.4.2/pushgateway.log 2&gt;&amp;1 &amp;</code><blockquote>
+<p>可以添加 –web.enable-admin-api 参数，可以通过api删除pushgateway的数据</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="3-3-3-安装Node-Exporter（选择性安装）"><a href="#3-3-3-安装Node-Exporter（选择性安装）" class="headerlink" title="3.3.3 安装Node Exporter（选择性安装）"></a>3.3.3 安装Node Exporter（选择性安装）</h3><ol>
+<li>解压压缩包node_exporter-1.2.2.linux-amd64.tar.gz</li>
+<li>启动服务 <code>./node_exporter</code></li>
+</ol>
+<h3 id="3-3-4-安装process-exporter"><a href="#3-3-4-安装process-exporter" class="headerlink" title="3.3.4 安装process-exporter"></a>3.3.4 安装process-exporter</h3><p><a target="_blank" rel="noopener" href="https://github.com/ncabatoff/process-exporter/releases/tag/v0.5.0">process-exporter</a> 可以监控应用的运行状态（譬如监控redis、mysql的进程资源等）。</p>
+<ol>
+<li><p>解压压缩包 process-exporter-0.7.8.linux-amd64</p>
+</li>
+<li><p>配置需要监控的进程的名称，他会去搜索该进程从而得到其需要的监控信息，其实也就是我们常做的“ps -efl | grep xxx”命令来查看对应的进程。在各自节点创建配置文件process_config.yml，并配置如下，用于监测大数据框架中主要进程的状况：<br><strong>bigdata1节点</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">process_names:</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;NameNode&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;DataNode&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;NodeManager&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;QuorumPeerMain&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;Kafka&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;flume&#x27;</span><br><span class="line">    - &#x27;edb_order_kafka2hdfs.job&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;AzkabanExecutorServer&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;HiveServer2&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;node_exporter&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;rangerusersync&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;rangeradmin&#x27;</span><br></pre></td></tr></table></figure>
+<p><strong>bigdata2节点</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">process_names:</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;ResourceManager&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;DataNode&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;NodeManager&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;QuorumPeerMain&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;Kafka&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;flume-1.7.0/job/youmeng_order_kafka2hdfs.job&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;flume-1.7.0/job/youmeng_active_kafka2hdfs.job&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;AzkabanExecutorServer&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;AzkabanWebServer&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;node_exporter&#x27;</span><br></pre></td></tr></table></figure>
+<p><strong>bigdata3节点</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">process_names:</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;SecondaryNameNode&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;DataNode&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;NodeManager&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;JobHistoryServer&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;QuorumPeerMain&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;Kafka&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;AzkabanExecutorServer&#x27;</span><br><span class="line">  - name: &quot;&#123;&#123;.Matches&#125;&#125;&quot;</span><br><span class="line">    cmdline:</span><br><span class="line">    - &#x27;node_exporter&#x27;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>name参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#123;&#123;.Comm&#125;&#125;</code></td>
+<td>包含原始可执行文件的基本名称，即第二个字段 &#x2F;proc&#x2F;<pid>&#x2F;stat</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.ExeBase&#125;&#125;</code></td>
+<td>包含可执行文件的基名</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.ExeFull&#125;&#125;</code></td>
+<td>包含可执行文件的完全限定路径</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.Username&#125;&#125;</code></td>
+<td>包含有效用户的用户名</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.Matches&#125;&#125;</code></td>
+<td>map包含应用cmdline regexps产生的所有匹配项</td>
+</tr>
+</tbody></table>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@izx7dvghztbiorz process-exporter]# ps -ef | grep redis</span><br><span class="line">redis 771 1 0 Jun05 ? 00:45:49 /usr/bin/redis-server *:6379</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>name参数</th>
+<th>匹配关键词</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&#123;&#123;.Comm&#125;&#125;</code></td>
+<td>groupname&#x3D;”redis-server”</td>
+<td>exe或者sh文件名称</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.ExeBase&#125;&#125;</code></td>
+<td>groupname&#x3D;”redis-server *:6379”</td>
+<td>&#x2F;</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.ExeFull&#125;&#125;</code></td>
+<td>groupname&#x3D;”&#x2F;usr&#x2F;bin&#x2F;redis-server *:6379”</td>
+<td>ps中的进程完成信息</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.Username&#125;&#125;</code></td>
+<td>groupname&#x3D;”redis”</td>
+<td>使用进程所属的用户进行分组</td>
+</tr>
+<tr>
+<td><code>&#123;&#123;.Matches&#125;&#125;</code></td>
+<td>groupname&#x3D;”map[:redis]”</td>
+<td>表示配置到关键字“redis”</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li><p>启动进程 <code>process-exporter  -config.path process_config.yml</code><br>启动后可以通过执行命令 <code>curl 192.168.101.79:9256/metrics</code> 来获取监控数据。</p>
+</li>
+<li><p>将process-exporter添加到prometheus中。在prometheus.yml中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- job_name: &quot;process exporter&quot;</span><br><span class="line">  static_configs:</span><br><span class="line">    - targets: [&#x27;192.168.101.179:9256&#x27;,&#x27;192.168.101.180:9256&#x27;,&#x27;192.168.101.181:9256&#x27;]</span><br></pre></td></tr></table></figure>
+<p>重启prometheus。</p>
+</li>
+</ol>
+<h3 id="3-3-5-安装alertmanager"><a href="#3-3-5-安装alertmanager" class="headerlink" title="3.3.5 安装alertmanager"></a>3.3.5 安装alertmanager</h3><h3 id="3-3-6-设置开机自启动"><a href="#3-3-6-设置开机自启动" class="headerlink" title="3.3.6 设置开机自启动"></a>3.3.6 设置开机自启动</h3><p><strong>以node_exporter和process_exporter为例：</strong></p>
+<ol>
+<li>编辑脚本<br>①node_exporter脚本<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=node_export</span><br><span class="line">Documentation=https://github.com/prometheus/node_exporter</span><br><span class="line">After=network.target</span><br><span class="line"> </span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=hxr</span><br><span class="line">ExecStart=/opt/module/node_exporter-1.2.2/node_exporter</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+根据实际情况修改Service中的User和ExecStart的属性，然后将将本放到 <code>/usr/lib/systemd/system/node_exporter.service</code> 路径下。</li>
+</ol>
+<p>②process_exporter脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=process_exporter</span><br><span class="line">Documentation=https://github.com/ncabatoff/process-exporter</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">EnvironmentFile=&quot;CONFIG=-config.path /opt/module/process-exporter-0.5.0/process_config.yml&quot;</span><br><span class="line">ExecStart=/opt/module/process-exporter-0.5.0/process-exporter $&#123;CONFIG&#125;</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>设为开机自启动<br><code>systemctl enable node_exporter.service</code></p>
+</li>
+<li><p>启动服务<br><code>systemctl start node_exporter.service</code></p>
+</li>
+</ol>
+<br>
+### 3.3.7 安装Flume-exporter(监控Flume)
+
+<p><a target="_blank" rel="noopener" href="https://github.com/woozhijun/flume_exporter/releases/tag/v0.0.2">下载Flume_exporter</a>，解压后进行安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 首先安装Golang</span><br><span class="line">yum -y install epel-release</span><br><span class="line">yum -y install golang</span><br><span class="line"># 解压flume_exporter</span><br><span class="line">tar -zxvf flume_exporter-0.0.2.tar.gz  -C /opt/module</span><br><span class="line">cd /opt/module/flume_exporter-0.0.2/</span><br><span class="line"># 编译</span><br><span class="line">make build</span><br></pre></td></tr></table></figure>
+<p><strong>配置config.yml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Example usage:</span><br><span class="line"># Flume JSON Reporting metrics</span><br><span class="line">agents:</span><br><span class="line">- name: &quot;flume-agents&quot;</span><br><span class="line">  enabled: true</span><br><span class="line"># multiple urls can be separated by ,</span><br><span class="line">  urls: [&quot;http://localhost:36001/metrics&quot;,&quot;http://localhost:36002/metrics&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要保证flume启动了<strong>JSON Reporting</strong>，如<code>sudo -i -u hxr bash -c &#39;nohup /opt/module/flume-1.7.0/bin/flume-ng agent -n a2 -c /opt/module/flume-1.7.0/conf -f /opt/module/flume-1.7.0/job/feiyan_model_kafka2hdfs.job  -Dflume.root.logger=INFO,LOGFILE  -Dflume.log.file=feiyan_model_kafka2hdfs.log  -Xms512m -Xmx512m -Dflume.monitoring.type=http -Dflume.monitoring.port=36001 1&gt;/dev/null 2&gt;&amp;1 &amp;&#39;</code>； </p>
+</blockquote>
+<p><strong>启动flume_exporter</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /opt/module/flume_exporter-master/flume_exporter-master --metric-file /opt/module/flume_exporter-master/metrics.yml --config-file=/opt/module/flume_exporter-master/config.yml 1&gt;/opt/module/flume_exporter-master/flume_exporter-master.log 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>启动后可以查看Flume的<a target="_blank" rel="noopener" href="http://192.168.101.181:9360/metrics">JSON Reporting</a>，也可以查看<a target="_blank" rel="noopener" href="http://192.168.101.181:9360/metrics">Flume_exporter的日志</a></p>
+</blockquote>
+<p><strong>配置Prometheus拉取Flume_exporter日志信息</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- job_name: &quot;flume exporter&quot;</span><br><span class="line">  static_configs:</span><br><span class="line">    - targets: [&#x27;192.168.101.181:9360&#x27;]</span><br><span class="line">    - labels:</span><br><span class="line">        job: flume</span><br><span class="line">        alias: flume_feiyan_model</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>热重启Prometheus <code>curl -X POST http://localhost:9090/-/reload</code>，然后访问<a target="_blank" rel="noopener" href="http://192.168.101.174:9090/graph?g0.expr=&g0.tab=1&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h">Prometheus UI</a>，输入Flume某一参数查询条件<strong>FLUME_CHANNEL_ChannelSize</strong>可以得到监控到的值。</p>
+</blockquote>
+<p><strong>配置Grafana</strong></p>
+<br>
+## 3.4 PromQL
+Prometheus通过指标名称（metrics name）以及对应的一组标签（labelset）唯一定义一条时间序列。指标名称反映了监控样本的基本标识，而label则在这个基本特征上为采集到的数据提供了多种特征维度。用户可以基于这些特征维度过滤，聚合，统计从而产生新的计算后的一条时间序列。PromQL是Prometheus内置的数据查询语言，其提供对时间序列数据丰富的查询，聚合以及逻辑运算能力的支持。并且被广泛应用在Prometheus的日常应用当中，包括对数据查询、可视化、告警处理当中。
+
+<h3 id="3-4-1基本用法"><a href="#3-4-1基本用法" class="headerlink" title="3.4.1基本用法"></a>3.4.1基本用法</h3><h4 id="3-4-1-1查询时间序列"><a href="#3-4-1-1查询时间序列" class="headerlink" title="3.4.1.1查询时间序列"></a>3.4.1.1查询时间序列</h4><p>当Prometheus通过Exporter采集到相应的监控指标样本数据后，我们就可以通过PromQL对监控样本数据进行查询。</p>
+<p>当我们直接使用监控指标名称查询时，可以查询该指标下的所有时间序列。如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total</span><br></pre></td></tr></table></figure>
+<p>等同于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>该表达式会返回指标名称为prometheus_http_requests_total的所有时间序列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;alerts&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125;= (20889@1518096812.326)</span><br><span class="line"></span><br><span class="line">prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;graph&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125;= ([21287@1518096812.326](mailto:21287@1518096812.326))</span><br></pre></td></tr></table></figure>
+<p>PromQL还支持用户根据时间序列的标签匹配模式来对时间序列进行过滤，目前主要支持两种匹配模式：完全匹配和正则匹配。</p>
+<br>
+**PromQL支持使用 = 和 != 两种完全匹配模式：**
+
+<ul>
+<li>通过使用 label&#x3D;value 可以选择那些 标签满足表达式定义的时间序列；</li>
+<li>反之使用 label!&#x3D;value 则可以根据标签匹配排除时间序列；</li>
+</ul>
+<p>例如，如果我们只需要查询所有prometheus_http_requests_total时间序列中满足标签instance为localhost:9090的时间 序列，则可以使用如下表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;instance=&quot;localhost:9090&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>反之使用 instance!&#x3D;”localhost:9090” 则可以排除这些时间序列：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;instance!=&quot;localhost:9090&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+**PromQL还可以支持使用正则表达式作为匹配条件，多个表达式之间使用 | 进行分离：**
+
+<ul>
+<li>使用 label&#x3D;~regx 表示选择那些标签符合正则表达式定义的时间序列；</li>
+<li>反之使用 label!~regx 进行排除；</li>
+</ul>
+<p>例如，如果想查询多个环节下的时间序列序列可以使用如下表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;environment=~&quot;staging|testing|development&quot;,method!=&quot;GET&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>排除用法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;environment!~&quot;staging|testing|development&quot;,method!=&quot;GET&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-1-2-范围查询"><a href="#3-4-1-2-范围查询" class="headerlink" title="3.4.1.2 范围查询"></a>3.4.1.2 范围查询</h4><p>直接通过类似于PromQL表达式httprequeststotal查询时间序列时，返回值中只会包含该时间序列中的最新的一个样本值，这样的返回结果我们称之为瞬时向量。而相应的这样的表达式称之为__<strong>瞬时向量表达式</strong>。</p>
+<p>而如果我们想过去一段时间范围内的样本数据时，我们则需要使用<strong>区间向量表达式</strong>。区间向量表达式和瞬时向量表达式之间的差异在于在区间向量表达式中我们需要定义时间选择的范围，时间范围通过<strong>时间范围选择器 []</strong> 进行定义。 例如，通过以下表达式可以选择最近5分钟内的所有样本数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_request_total&#123;&#125;[5m]</span><br></pre></td></tr></table></figure>
+<p>该表达式将会返回查询到的时间序列中最近5分钟的所有样本数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;alerts&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125;=[ </span><br><span class="line">	1@1518096812.326</span><br><span class="line">	1@1518096817.326</span><br><span class="line">	1@1518096822.326</span><br><span class="line">	1@1518096827.326</span><br><span class="line">	1@1518096832.326</span><br><span class="line">	1@1518096837.325</span><br><span class="line">] 9. prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;graph&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125;=[ </span><br><span class="line">	4@1518096812.326</span><br><span class="line">	4@1518096817.326</span><br><span class="line">	4@1518096822.326</span><br><span class="line">	4@1518096827.326 </span><br><span class="line">	4@1518096832.326</span><br><span class="line">	4@1518096837.325</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>通过区间向量表达式查询到的结果我们称为区间向量。 除了使用m表示分钟以外，PromQL的时间范围选择器支持其它时间单位：</p>
+<ul>
+<li>s - 秒 </li>
+<li>m - 分钟</li>
+<li>h - 小时 </li>
+<li>d - 天 </li>
+<li>w - 周 </li>
+<li>y - 年</li>
+</ul>
+<h4 id="3-4-1-3-时间位移操作"><a href="#3-4-1-3-时间位移操作" class="headerlink" title="3.4.1.3 时间位移操作"></a>3.4.1.3 时间位移操作</h4><p>在瞬时向量表达式或者区间向量表达式中，都是以当前时间为基准：<br>http_request_total{} # 瞬时向量表达式，选择当前最新的数据<br>http_request_total{}[5m] # 区间向量表达式，选择以当前时间为基准，5分钟内的数据。<br>而如果我们想查询，5分钟前的瞬时样本数据，或昨天一天的区间内的样本数据呢? 这个时候我们就可以使用位移操作，位移操作的关键字为offset。 可以使用offset时间位移操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_request_total&#123;&#125; offset 5m</span><br><span class="line">prometheus_http_request_total&#123;&#125;[1d] offset 1d</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-1-4-使用聚合操作"><a href="#3-4-1-4-使用聚合操作" class="headerlink" title="3.4.1.4 使用聚合操作"></a>3.4.1.4 使用聚合操作</h4><p>一般来说，如果描述样本特征的标签(label)在并非唯一的情况下，通过PromQL查询数据，会返回多条满足这些特征维度的时间序列。而PromQL提供的聚合操作可以用来对这些时间序列进行处理，形成一条新的时间序列： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 查询系统所有http请求的总量</span><br><span class="line">sum(prometheus_http_request_total)</span><br><span class="line"></span><br><span class="line"># 按照mode计算主机CPU的平均使用时间</span><br><span class="line">avg(node_cpu_seconds_total) by (mode)</span><br><span class="line"></span><br><span class="line"># 按照主机查询各个主机的CPU使用率</span><br><span class="line">sum(sum(irate(node_cpu_seconds_total&#123;mode!=&#x27;idle&#x27;&#125;[5m])) / sum(irate(node_cpu _ seconds_total [5m]))) by (instance) </span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-1-5-标量和字符串"><a href="#3-4-1-5-标量和字符串" class="headerlink" title="3.4.1.5 标量和字符串"></a>3.4.1.5 标量和字符串</h4><p>除了使用瞬时向量表达式和区间向量表达式以外，PromQL还直接支持用户使用标量(Scalar)和字符串(String)。 </p>
+<ul>
+<li>标量（Scalar）：一个浮点型的数字值<br>标量只有一个数字，没有时序。 例如：<br>10<br>需要注意的是，当使用表达式count(prometheus_http_requests_total)，返回的数据类型，依然是瞬时向量。用户可以通过内置函数scalar()将单个瞬时向量转换为标量。</li>
+<li>字符串（String）：一个简单的字符串值<br>直接使用字符串，作为PromQL表达式，则会直接返回字符串。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  &quot;this is a string&quot; </span><br><span class="line">  &#x27;these are unescaped: </span><br><span class="line">\ 	&#x27; </span><br><span class="line">  `these are not unescaped: </span><br><span class="line">&#x27; &quot; 	` </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-4-1-6-合法的PromQL表达式"><a href="#3-4-1-6-合法的PromQL表达式" class="headerlink" title="3.4.1.6 合法的PromQL表达式"></a>3.4.1.6 合法的PromQL表达式</h4><p>所有的PromQL表达式都必须至少包含一个指标名称(例如http_request_total)，或者一个不会匹配到空字符串的标签过滤器(例如{code&#x3D;”200”})。<br>因此以下两种方式，均为合法的表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_request_total # 合法</span><br><span class="line">prometheus_http_request_total&#123;&#125; # 合法</span><br><span class="line">&#123;method=&quot;get&quot;&#125; # 合法 </span><br></pre></td></tr></table></figure>
+<p>而如下表达式，则不合法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;job=~&quot;.*&quot;&#125; # 不合法 </span><br></pre></td></tr></table></figure>
+<p>同时，除了使用 {label&#x3D;value} 的形式以外，我们还可以使用内置的 <strong>name</strong> 标签来指定监控指标名称：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;__name__=~&quot;prometheus_http_request_total&quot;&#125; # 合法</span><br><span class="line">&#123;__name__=~&quot;node_disk_bytes_read|node_disk_bytes_written&quot;&#125; # 合法</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-2-PromQL操作符"><a href="#3-4-2-PromQL操作符" class="headerlink" title="3.4.2 PromQL操作符"></a>3.4.2 PromQL操作符</h3><p>使用PromQL除了能够方便的按照查询和过滤时间序列以外，PromQL还支持丰富的操作符，用户可以使用这些操作符对进一步的对事件序列进行二次加工。这些操作符包括：数学运算符，逻辑运算符，布尔运算符等等。</p>
+<h4 id="3-4-2-1-数学运算"><a href="#3-4-2-1-数学运算" class="headerlink" title="3.4.2.1 数学运算"></a>3.4.2.1 数学运算</h4><p>PromQL支持的所有数学运算符如下所示：</p>
+<ul>
+<li><strong>+ (加法)</strong></li>
+<li><strong>- (减法)</strong></li>
+<li><strong>* (乘法)</strong></li>
+<li><strong>&#x2F; (除法)</strong></li>
+<li><strong>% (求余)</strong></li>
+<li><strong>^ (幂运算)</strong></li>
+</ul>
+<h4 id="3-4-2-2"><a href="#3-4-2-2" class="headerlink" title="3.4.2.2"></a>3.4.2.2</h4><p><strong>Prometheus支持以下布尔运算符如下：</strong></p>
+<ul>
+<li><strong>&#x3D;&#x3D; (相等)</strong></li>
+<li><strong>!&#x3D; (不相等)</strong></li>
+<li><strong>&gt;(大于)</strong></li>
+<li><strong>&lt; (小于)</strong></li>
+<li><strong>&gt;&#x3D; (大于等于)</strong></li>
+<li><strong>&lt;&#x3D; (小于等于)</strong></li>
+</ul>
+<p><strong>使用bool修饰符改变布尔运算符的行为</strong><br>布尔运算符的默认行为是对时序数据进行过滤。而在其它的情况下我们可能需要的是真正的布尔结果。例如，只需要 知道当前模块的HTTP请求量是否&gt;&#x3D;1000，如果大于等于1000则返回1（true）否则返回0（false）。这时可以使 用bool修饰符改变布尔运算的默认行为。 例如： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total &gt; bool 1000 </span><br></pre></td></tr></table></figure>
+<p>使用bool修改符后，布尔运算不会对时间序列进行过滤，而是直接依次瞬时向量中的各个样本数据与标量的比较结果 0或者1。从而形成一条新的时间序列。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;query&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125; 	1 </span><br><span class="line">prometheus_http_requests_total&#123;code=&quot;200&quot;,handler=&quot;query_range&quot;,instance=&quot;localhost:9090&quot;,job=&quot;prometheus&quot;,method=&quot;get&quot;&#125; 	0 </span><br></pre></td></tr></table></figure>
+<p>同时需要注意的是，如果是在两个标量之间使用布尔运算，则必须使用bool修饰符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 == bool 2 # 结果为1</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-2-3-使用集合运算符"><a href="#3-4-2-3-使用集合运算符" class="headerlink" title="3.4.2.3 使用集合运算符"></a>3.4.2.3 使用集合运算符</h4><p>使用瞬时向量表达式能够获取到一个包含多个时间序列的集合，我们称为瞬时向量。 通过集合运算，可以在两个瞬时向量与瞬时向量之间进行相应的集合操作。<br>目前，Prometheus支持以下集合运算符： </p>
+<ul>
+<li>and (并且) </li>
+<li>or (或者) </li>
+<li>unless (排除)</li>
+</ul>
+<p>vector1 and vector2 会产生一个由vector1的元素组成的新的向量。该向量包含vector1中完全匹配vector2 中的元素组成。<br>vector1 or vector2 会产生一个新的向量，该向量包含vector1中所有的样本数据，以及vector2中没有与 vector1匹配到的样本数据。<br>vector1 unless vector2 会产生一个新的向量，新向量中的元素由vector1中没有与vector2匹配的元素组成。</p>
+<h4 id="3-4-2-4-操作符优先级"><a href="#3-4-2-4-操作符优先级" class="headerlink" title="3.4.2.4 操作符优先级"></a>3.4.2.4 操作符优先级</h4><p>对于复杂类型的表达式，需要了解运算操作的运行优先级。例如，查询主机的CPU使用率，可以使用表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">100 * (1 - avg (irate(node_cpu_seconds_total&#123;mode=&#x27;idle&#x27;&#125;[5m])) by(job) ) </span><br></pre></td></tr></table></figure>
+<p>其中irate是PromQL中的内置函数，用于计算区间向量中时间序列每秒的即时增长率。在PromQL操作符中优先级由高到低依次为： </p>
+<ul>
+<li><strong>^</strong></li>
+<li><strong>*, &#x2F;, %</strong></li>
+<li><strong>+, -</strong></li>
+<li><strong>&#x3D;&#x3D;, !&#x3D;, &lt;&#x3D;, &#x3D;, &gt;</strong></li>
+<li><strong>and, unless</strong></li>
+<li><strong>or</strong></li>
+</ul>
+<h4 id="3-4-2-5-PromQL聚合操作"><a href="#3-4-2-5-PromQL聚合操作" class="headerlink" title="3.4.2.5 PromQL聚合操作"></a>3.4.2.5 PromQL聚合操作</h4><p>Prometheus还提供了下列内置的聚合操作符，这些操作符作用域瞬时向量。可以将瞬时表达式返回的样本数据进行 聚合，形成一个新的时间序列。 </p>
+<ul>
+<li>sum (求和) </li>
+<li>min (最小值) </li>
+<li>max (最大值) </li>
+<li>avg (平均值) </li>
+<li>stddev (标准差) </li>
+<li>stdvar (标准差异) </li>
+<li>count (计数) </li>
+<li>count_values (对value进行计数) </li>
+<li>bottomk (后n条时序) </li>
+<li>topk (前n条时序) </li>
+<li>quantile (分布统计)<br>使用聚合操作的语法如下： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;aggr-op&gt;([parameter,] &lt;vector expression&gt;) [without|by (&lt;label list&gt;)] </span><br></pre></td></tr></table></figure>
+其中只有 count_values , quantile , topk , bottomk 支持参数(parameter)。</li>
+</ul>
+<p> without用于从计算结果中移除列举的标签，而保留其它标签。by则正好相反，结果向量中只保留列出的标签，其余标签则移除。通过without和by可以按照样本的问题对数据进行聚合。<br>例如： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(prometheus_http_requests_total) without (instance) </span><br></pre></td></tr></table></figure>
+<p>等价于 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(prometheus_http_requests_total) by (code,handler,job,method) </span><br></pre></td></tr></table></figure>
+<p>如果只需要计算整个应用的HTTP请求总量，可以直接使用表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum(prometheus_http_requests_total) </span><br></pre></td></tr></table></figure>
+<p>count_values用于时间序列中每一个样本值出现的次数。count_values会<br>为每一个唯一的样本值输出一个时间序列，并且每一个时间序列包含一个额外的标签。 例如： </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count_values(&quot;count&quot;, prometheus_http_requests_total) </span><br></pre></td></tr></table></figure>
+<p>topk和bottomk则用于对样本值进行排序，返回当前样本值前n位，或者后n位的时间序列。<br>获取HTTP请求数前5位的时序样本数据，可以使用表达式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">topk(5, prometheus_http_requests_total)</span><br></pre></td></tr></table></figure>
+<p>quantile用于计算当前样本数据值的分布情况quantile(φ, express)其中0 ≤ φ ≤ 1。<br>例如，当φ为0.5时，即表示找到当前样本数据中的中位数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantile(0.5, prometheus_http_requests_total)</span><br></pre></td></tr></table></figure>
+
+<br>
+## 3.5 Flink的集成
+Flink 提供的 Metrics 可以在 Flink 内部收集一些指标，通过这些指标让开发人员更好地理解作业或集群的状态。由于集群运行后很难发现内部的实际状况，跑得慢或快，是否异常等，开发人员无法实时查看所有的 Task 日志。比如作业很大或者有很多作业的情况下，该如何处理？此时 Metrics 可以很好的帮助开发人员了解作业的当前状况。
+
+<p>Flink官方支持Prometheus，并且提供了对接Prometheus的jar包，很方便就可以集成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x. 2 hxr hxr 114 7月  23 11:53 external-resource-gpu</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  46 12月  2 2020 metrics-datadog</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  47 7月  23 11:53 metrics-graphite</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  47 7月  23 11:53 metrics-influx</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  42 7月  23 11:53 metrics-jmx</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  49 7月  23 11:53 metrics-prometheus</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  44 7月  23 11:53 metrics-slf4j</span><br><span class="line">drwxr-xr-x. 2 hxr hxr  45 7月  23 11:53 metrics-statsd</span><br><span class="line">-rwxr-xr-x. 1 hxr hxr 654 6月  18 2020 README.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-1-拷贝jar包"><a href="#3-5-1-拷贝jar包" class="headerlink" title="3.5.1 拷贝jar包"></a>3.5.1 拷贝jar包</h3><p>将flink-metrics-prometheus-1.12.0.jar拷贝到 <flink_home>&#x2F;lib目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 metrics-prometheus]$ cp /opt/module/flink-1.12.0/plugins/metrics-prometheus/flink-metrics-prometheus-1.12.0.jar /opt/module/flink-1.12.0/lib/</span><br></pre></td></tr></table></figure>
+<p>Flink 的 Classpath 位于lib目录下，所以插件的jar包需要放到该目录下.</p>
+<h3 id="3-5-2-修改Flink配置"><a href="#3-5-2-修改Flink配置" class="headerlink" title="3.5.2 修改Flink配置"></a>3.5.2 修改Flink配置</h3><p><strong>方式一</strong><br>进入到Flink的conf目录，修改flink-conf.yaml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 conf]$ vim flink-conf.yaml</span><br></pre></td></tr></table></figure>
+<p>添加如下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">##### 与Prometheus集成配置 #####</span><br><span class="line">metrics.reporter.promgateway.class: org.apache.flink.metrics.prometheus.PrometheusPushGatewayReporter</span><br><span class="line"># PushGateway的主机名与端口号</span><br><span class="line">metrics.reporter.promgateway.host: hadoop1</span><br><span class="line">metrics.reporter.promgateway.port: 9091</span><br><span class="line"># Flink metric在前端展示的标签（前缀）与随机后缀</span><br><span class="line">metrics.reporter.promgateway.instance: flink-metrics-</span><br><span class="line">metrics.reporter.promgateway.randomJobNameSuffix: true</span><br><span class="line">metrics.reporter.promgateway.deleteOnShutdown: false</span><br><span class="line">metrics.reporter.promgateway.interval: 30 SECONDS</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>方式二</strong><br>在启动Flink时指定</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">./flink run \</span><br><span class="line">-s hdfs://192.168.101.193:8020/flink/checkpoint/msas/msas_device_exceptions/b6621ef2ee9414d04c0ce2abbfda7490/chk-7356/_metadata --allowNonRestoredState \</span><br><span class="line">-m yarn-cluster -ynm ADS_DEVICE_MSAS_EXCEPTIONS_test -p 2 -ys 2 -yjm 1024 -ytm 2048m \</span><br><span class="line">-d -c com.iotmars.compass.MsasDeviceExceptionsApp -yqu default \</span><br><span class="line">-yD metrics.reporter.promgateway.class=org.apache.flink.metrics.prometheus.PrometheusPushGatewayReporter \</span><br><span class="line">-yD metrics.reporter.promgateway.host=192.168.101.174 -yD metrics.reporter.promgateway.port=9091 \</span><br><span class="line">-yD metrics.reporter.promgateway.instance=flink-metrics \</span><br><span class="line">-yD metrics.reporter.promgateway.randomJobNameSuffix=true \</span><br><span class="line">-yD metrics.reporter.promgateway.deleteOnShutdown=false \</span><br><span class="line">-yD metrics.reporter.promgateway.groupingKey=instance=ADS_DEVICE_MSAS_EXCEPTIONS_test \</span><br><span class="line">/opt/jar/ADS_DEVICE_MSAS_EXCEPTIONS-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>pushgateway上的数据会一直存在除非手动删除；这意味着如果flink程序宕机了，那么prometheus还是可以从pushgateway上pull到flink宕机前的数据，但是prometheus上该数据的时间却是最新的时间。flink可以通过设置metrics.reporter.promgateway.deleteOnShutdown&#x3D;true来主动删除pushgateway上的数据，但是并不保证一定能删除成功。<br>这里可以执行一个脚本在pushgateway中实现TTL功能，只需要修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&gt;trap &#x27;echo &quot;got sigterm&quot; ; exit 0&#x27; SIGTERM</span><br><span class="line"></span><br><span class="line">&gt;EXPIRATION_SECONDS=$&#123;EXPIRATION_SECONDS:-900&#125;</span><br><span class="line">&gt;PGW_URL=$&#123;PGW_URL:-http://192.168.1.1:9091&#125;</span><br><span class="line"></span><br><span class="line">&gt;#function convert_to_standardnotation()&#123;</span><br><span class="line">&gt;#    # convert number from scientific notation to standar d( ie  &#x27;1.5383780136826127e+09&#x27; )</span><br><span class="line">&gt;#    printf &#x27;%.0f&#x27; $1</span><br><span class="line">&gt;#&#125;</span><br><span class="line"></span><br><span class="line">&gt;function convert_to_standardnotation() &#123;</span><br><span class="line">   # convert number from scientific notation to standard( ie  &#x27;1.5383780136826127e+09&#x27; )</span><br><span class="line">   echo $1 | awk &#x27;&#123;printf(&quot;%.0f&quot;, $1)&#125;&#x27;</span><br><span class="line">&gt;&#125;</span><br><span class="line"></span><br><span class="line">&gt;function extract_pushgateway_variable()&#123;</span><br><span class="line">local -r _METRIC=$1</span><br><span class="line">local -r _VARNAME=$2</span><br><span class="line">#echo &#x27;push_time_seconds&#123;instance=&quot;10.32.32.7&quot;,job=&quot;bk_jenkins&quot;&#125; 1.5383802210997093e+09&#x27; | sed -r &#x27;s/.*instance=&quot;([^&quot;]*).*/\1/g&#x27;</span><br><span class="line">echo $_METRIC | sed -r &quot;s/.*$&#123;_VARNAME&#125;=\&quot;([^\&quot;]*).*/\1/g&quot;</span><br><span class="line"># sample usage :</span><br><span class="line"># extract_pushgateway_variable &#x27;push_time_seconds&#123;instance=&quot;10.32.32.7&quot;,job=&quot;bk_jenkins&quot;&#125; 1.5383802210997093e+09&#x27; &#x27;instance&#x27;</span><br><span class="line">&gt;&#125;</span><br><span class="line"></span><br><span class="line">&gt;function check_metric_line()&#123;</span><br><span class="line">   local -r _line=$1</span><br><span class="line">   METRIC_TIME=$(echo $_line | awk &#x27;&#123;print $2&#125;&#x27; )</span><br><span class="line">   #echo &quot;mtime = $_line -&gt; $METRIC_TIME &quot;</span><br><span class="line">   METRIC_TIME=$(convert_to_standardnotation $METRIC_TIME)</span><br><span class="line">   #echo &quot;$CURRENT_TIME - $METRIC_TIME &quot;</span><br><span class="line">   METRIC_AGE_SECONDS=$((CURRENT_TIME-METRIC_TIME))</span><br><span class="line"></span><br><span class="line">   if [ &quot;$METRIC_AGE_SECONDS&quot; -gt &quot;$EXPIRATION_SECONDS&quot; ]; then</span><br><span class="line"></span><br><span class="line">       metricInstance=$(extract_pushgateway_variable &quot;$_line&quot; &#x27;instance&#x27;)</span><br><span class="line">       metricJob=$(extract_pushgateway_variable &quot;$_line&quot; &#x27;job&#x27;)</span><br><span class="line">   </span><br><span class="line">       echo &quot;[INFO] job should be deleted $metricJob  - $metricInstance  age: $METRIC_AGE_SECONDS &quot;</span><br><span class="line">       curl -s -X DELETE &quot;$PGW_URL/metrics/job/$&#123;metricJob&#125;/instance/$&#123;metricInstance&#125;&quot;</span><br><span class="line">       curl -s -X DELETE &quot;$PGW_URL/metrics/job/$&#123;metricJob&#125;&quot;</span><br><span class="line">   fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;function check_expired_metric_loop()&#123;</span><br><span class="line"></span><br><span class="line">   export CURRENT_TIME=$(date +%s)</span><br><span class="line">   METRICS_LIST=$(curl -s  $PGW_URL/metrics | egrep &quot;^push_time_seconds&quot;)</span><br><span class="line">   echo &quot;$METRICS_LIST&quot; | while  read -r line || [[ -n &quot;$line&quot; ]]; do</span><br><span class="line">       check_metric_line &quot;$line&quot;</span><br><span class="line">   done</span><br><span class="line">   sleep $((EXPIRATION_SECONDS / 3 ))</span><br><span class="line"></span><br><span class="line">&gt;&#125;</span><br><span class="line">&gt;while : ; do</span><br><span class="line">&gt;check_expired_metric_loop</span><br><span class="line">&gt;done </span><br></pre></td></tr></table></figure>
+<p>只需要求改脚本中的pushgateway地址PGW_URL和ttl时间EXPIRATION_SECONDS即可。删除是通过<code>curl -s -X DELETE &quot;$PGW_URL/metrics/job/$&#123;metricJob&#125;&quot;</code>实现的。路径需要转缺匹配数据的标签，如存在instance，则请求<code>curl -s -X DELETE &quot;$PGW_URL/metrics/job/$&#123;metricJob&#125;/instance/$&#123;metricInstance&#125;&quot;</code>进行删除。</p>
+</blockquote>
+<blockquote>
+<p>除了通过org.apache.flink.metrics.prometheus.PrometheusPushGatewayReporter主动推送metrics到pushgateway中，还可以使用org.apache.flink.metrics.prometheus.PrometheusReporter开放一个端口供prometheus主动访问并拉取metrics，这种方式不好维护端口，推荐使用上述PrometheusPushGatewayReporter方式实现。</p>
+</blockquote>
+<br>
+# 四、Grafana
+Zabbix和Prometheus都可以集成Grafana。
+
+<h2 id="4-1-部署"><a href="#4-1-部署" class="headerlink" title="4.1 部署"></a>4.1 部署</h2><ol>
+<li><p>下载Grafana安装包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.grafana.com/enterprise/release/grafana-enterprise-8.5.24.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用rpm安装Grafana</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata3 software]$ tar -zxvf grafana-enterprise-8.5.24.linux-amd64.tar.gz -C /opt/module/</span><br></pre></td></tr></table></figure>
+<p>启动命令为<br><code>/opt/module/grafana-8.5.24/bin/grafana-server web 1&gt;/opt/module/grafana-8.5.24/grafana.log 2&gt;&amp;1</code></p>
+</li>
+<li><p>设置为服务并开机自启<br>编辑脚本 <strong>grafana.service</strong> 如下，并将其放到目录&#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=grafana</span><br><span class="line">Documentation=https://github.com/grafana/grafana</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">User=root</span><br><span class="line">WorkingDirectory=/opt/module/grafana-8.5.24</span><br><span class="line">ExecStart=/opt/module/grafana-8.5.24/bin/grafana-server web 1&gt;/opt/module/grafana-8.5.24/grafana.log 2&gt;&amp;1</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>启动服务<code>systemctl start grafana</code></p>
+<p>开机自启<code>systemctl enable grafana</code></p>
+<h2 id="4-2-集成"><a href="#4-2-集成" class="headerlink" title="4.2 集成"></a>4.2 集成</h2><h3 id="4-2-1-集成Prometheus"><a href="#4-2-1-集成Prometheus" class="headerlink" title="4.2.1 集成Prometheus"></a>4.2.1 集成Prometheus</h3><h4 id="4-2-1-1-配置数据源"><a href="#4-2-1-1-配置数据源" class="headerlink" title="4.2.1.1 配置数据源"></a>4.2.1.1 配置数据源</h4><p>点击 Configuration-&gt;Data Sources-&gt;Add data source，找到Prometheus并点击Select。</p>
+<p>添加Prometheus数据源属性如下<br>URL：<a target="_blank" rel="noopener" href="http://192.168.101.174:9090/">http://192.168.101.174:9090</a></p>
+<p>点击下方的Save&amp;Test，如果显示成功则添加数据源成功。</p>
+<h4 id="4-2-1-2-手动创建仪表盘"><a href="#4-2-1-2-手动创建仪表盘" class="headerlink" title="4.2.1.2 手动创建仪表盘"></a>4.2.1.2 手动创建仪表盘</h4><p>点击左边栏  Create -&gt; Dashboard -&gt; Add an empty panel 即可进入仪表盘编辑页面。<br>点击Metrics browser即可在其中选择或编辑 PromQL语句，将数据以图表的形式显示。可以配置多个监控项。</p>
+<h5 id="任务失败监控"><a href="#任务失败监控" class="headerlink" title="任务失败监控"></a>任务失败监控</h5><p>以Flink监控为例：<br>这一个指标监控主要是基于flink_jobmanager_job_uptime 这个指标进行了监控。原理是在job任务存活时，会按照配置metrics.reporter.promgateway.interval上报频率递增。基于这个特点，当任务失败后这个数值就不会改变，就能监控到任务失败。</p>
+<p><strong>添加监控项：</strong><br>![image.png](大数据集群监控框架.assetsc482e5396214851bf4cc95d95d24d43.png)</p>
+<p>30秒为数据上报到 promgateway 频率，除以100为了数据好看，当job任务失败后数 flink上报的promgateway 的 flink_jobmanager_job_uptime指标值不会变化。((flink_jobmanager_job_uptime)-(flink_jobmanager_job_uptime offset 30s))&#x2F;100 值就会是0，可以配置告警。</p>
+<p><strong>配置告警：</strong><br>在Panel页面中点击 Alert -&gt; Create Alert 即可进入告警配置页面</p>
+<p>![image.png](大数据集群监控框架.assets 971ebb27822457c9edcfd08b5735f00.png)</p>
+<p>在告警通知中可以邮件和webhook,webhook可以调用相关接口，执行一些动作。webhook需要提前配置，在这里配置告警时就可以直接引入。</p>
+<h5 id="网络延时或任务重启监控"><a href="#网络延时或任务重启监控" class="headerlink" title="网络延时或任务重启监控"></a>网络延时或任务重启监控</h5><p>这个告警也是基于flink_jobmanager_job_uptime 指标，在出现网络延时或者重启后进行监控通知，监控指标如下：<br>((flink_jobmanager_job_uptime offset 30s)-(flink_jobmanager_job_uptime))&#x2F;1000<br>1）延时会导致值突然小于-30（正常情况为-30）<br>2）重启会导致flink_jobmanager_job_uptime指标清零从新从0值上报，导致查询公式值突然大于0（正常情况为-30）</p>
+<p><strong>添加监控项：</strong><br>![image.png](大数据集群监控框架.assetsdd2e635551d4e5bb8d78bd2dd1e9e13.png)</p>
+<p><strong>配置告警规则：</strong><br>![image.png](大数据集群监控框架.assetse8f65cd0fb040c5985c433294ee39de.png)</p>
+<h5 id="重启次数"><a href="#重启次数" class="headerlink" title="重启次数"></a>重启次数</h5><p>基于flink_jobmanager_job_numRestarts 指标，表示flink job的重启次数。一般设置重启策略后，在任务异常重启后这个数值会递增+1。可以单纯的监控重启次数，也可以每次重启都进行告警（差值）。</p>
+<p>![image.png](大数据集群监控框架.assets625b06cedaf419fa653e335665ccd98.png)</p>
+<p>利用当前值减去30秒前的值，如果等于1证明重启了一次。</p>
+<p><strong>添加告警规则：</strong></p>
+<p><img src="/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6.assets%5C9df5873d8eed45a6a7d98490523d28c7.png" alt="image.png"></p>
+<h4 id="4-2-1-3-添加模板"><a href="#4-2-1-3-添加模板" class="headerlink" title="4.2.1.3 添加模板"></a>4.2.1.3 添加模板</h4><p>手动一个个添加Dashboard比较繁琐，Grafana社区鼓励用户分享Dashboard，通过<a target="_blank" rel="noopener" href="https://grafana.com/dashboards">https://grafana.com/dashboards</a>网站，可以找到大量可直接使用的Dashboard模板。</p>
+<p>Grafana中所有的Dashboard通过JSON进行共享，下载并且导入这些JSON文件，就可以直接使用这些已经定义好的Dashboard。</p>
+<h5 id="添加Node-export模板"><a href="#添加Node-export模板" class="headerlink" title="添加Node_export模板"></a>添加Node_export模板</h5><p>搜索一个高赞，更新时间比较新且适合项目需求的模板，点击Download JSON将json脚本下载到本地。</p>
+<p>然后进入Grafana UI ，点击 Create -&gt; Import -&gt; Upload JSON file ，选择下载的json脚本进行导入。</p>
+<p>![image.png](大数据集群监控框架.assetsccae8ec39ae41f69940f07ac7892e07.png)</p>
+<p>可以修改该Panel的名称和所属组，选择数据源为Prometheus，点击Import即可创建完成。</p>
+<h5 id="添加Flink模板"><a href="#添加Flink模板" class="headerlink" title="添加Flink模板"></a>添加Flink模板</h5><p>同理，搜索并选择合适的Flink模板，将JSON脚本下载到本地，导入到Grafana中。</p>
+<h5 id="添加Process-Exporter模版"><a href="#添加Process-Exporter模版" class="headerlink" title="添加Process Exporter模版"></a>添加Process Exporter模版</h5><p>官网推荐的模版为<a target="_blank" rel="noopener" href="https://grafana.net/dashboards/249">https://grafana.net/dashboards/249</a></p>
+<h5 id="添加Flume-Exporter模板"><a href="#添加Flume-Exporter模板" class="headerlink" title="添加Flume Exporter模板"></a>添加Flume Exporter模板</h5><p>Flume Exporter推荐使用 <strong>Grafana Dashboard ID: 10736</strong></p>
+<p>导入Grafana Dashboard ID为10736的模板<br>![image.png](大数据集群监控框架.assets60a941eda7b4e9d9f6c8c662cb83ed4.png)<br>然后配置数据源为Prometheus。</p>
+<h3 id="4-2-2-集成Zabbix"><a href="#4-2-2-集成Zabbix" class="headerlink" title="4.2.2 集成Zabbix"></a>4.2.2 集成Zabbix</h3><p>需要先在grafana的UI界面中安装zabbix：<br>在 Configuration -&gt; plugins 中搜索zabbix插件，随后install插件，安装完成后在config中点击enable激活插件。<br>随后就可以在Add Data Source中找到zabbix插件。</p>
+<p>添加Zabbix数据源属性如下<br>Url：<a target="_blank" rel="noopener" href="http://192.168.32.242/zabbix/api_jsonrpc.php">http://192.168.32.242/zabbix/api_jsonrpc.php</a><br>Username： Admin<br>Password：zabbix</p>
+<p>点击 Save&amp;test 即可添加数据源。</p>
+<h2 id="4-3-告警通知"><a href="#4-3-告警通知" class="headerlink" title="4.3 告警通知"></a>4.3 告警通知</h2><p>Granfana从Prometheus获取数据并按用户配置的告警规则向告警模块发送告警信息，然后由这些模块对告警信息进行管理，包括去重、分组、静音、抑制、聚合，最终通过电子邮件、webhook等方式将告警信息通知路由给对应的联系人。</p>
+<h3 id="4-3-1-直接使用Grafana发送告警信息"><a href="#4-3-1-直接使用Grafana发送告警信息" class="headerlink" title="4.3.1 直接使用Grafana发送告警信息"></a>4.3.1 直接使用Grafana发送告警信息</h3><p>Grafana支持多种告警模式。<br>如果希望通过邮箱发送告警信息，则配置如下：</p>
+<ol>
+<li><p>修改配置文件custom.ini，添加smtp信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[smtp]</span><br><span class="line">enabled = true</span><br><span class="line">host = smtp.163.com:25 #smtp服务器的地址和端口</span><br><span class="line">user = 188****3029@163.com  #你登录邮箱的账号</span><br><span class="line">password =  NUJPIDR*********  #你邮箱账号的密码</span><br><span class="line">from_address = 188****3029@163.com   #发邮件的账号</span><br><span class="line">from_name = Grafana #自定义的名字</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Notification channels<br>在 Alerting-&gt;Notification channels 中选择 add channel，type选择Email，<br>配置完成后点击保存Channel。</p>
+</li>
+<li><p>配置发送告警<br>我需要监控大数据框架的进程有没有掉，可以先创建查询(通过PromQL进行查询)</p>
+</li>
+</ol>
+<p>![image.png](大数据集群监控框架.assets1066a9679274d05be02831ce2cc471c.png)</p>
+<p>然后添加Alert</p>
+<p>![image.png](大数据集群监控框架.assets918becd7b2d4682ab73de5700f601d8.png)</p>
+<p>可以通过Test rule来测试当前条件下是否会发送报警信息。</p>
+<p>保存后就会将告警信息发送到配置的channel中，信息如下</p>
+<blockquote>
+<p>如果需要配置重复报警repeat_interval间隔，可以在channel中设置。<br>如果无法显示图片，需要安装插件Grafana Image Renderer。安装完成之后通过命令<code>ldd grafana-8.5.24/data/plugins/grafana-image-renderer/chrome-linux/chrome</code>查看缺失的环境依赖并安装。</p>
+</blockquote>
+<h3 id="4-3-2-集成AlterManager组件实现告警"><a href="#4-3-2-集成AlterManager组件实现告警" class="headerlink" title="4.3.2 集成AlterManager组件实现告警"></a>4.3.2 集成AlterManager组件实现告警</h3><ol>
+<li><p>解压组件的压缩包 alertmanager-0.23.0.linux-amd64.tar.gz</p>
+</li>
+<li><p>编辑配置文件 alertmanager.yml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">global: #全局配置，主要配置告警方式，如邮件等</span><br><span class="line">  resolve_timeout: 5m #解析的超时时间</span><br><span class="line">  smtp_smarthost: &#x27;smtp.163.com&#x27; #邮箱smtp地址</span><br><span class="line">  smtp_from: &#x27;188****3029@163.com&#x27; #来自哪个邮箱发出的</span><br><span class="line">  smtp_auth_username: &#x27;188****3029@163.com&#x27; #邮箱的用户名</span><br><span class="line">  smtp_auth_password: &#x27;NUJPID**********&#x27;  #这里是邮箱的授权密码，不是登录密码</span><br><span class="line">  smtp_require_tls: false #是否启用tls</span><br><span class="line">route: #设置报警的分发策略，通过route实现告警的分配，所有的报警都会发送到receiver参数配置的接收器中</span><br><span class="line">  group_by: [&#x27;alertname&#x27;] #采用哪个标签进行分组，对告警通知按标签（label进行分组），将具有相同标签或相同警告名称（alertname）的告警通知聚合在一个组，然后作为一个通知发送</span><br><span class="line">  group_wait: 30s #分组等待的时间，收到报警后并不是马上发送出去，看看还有没有alertname这个标签的报警发过来，如果有的话，一起发出报警</span><br><span class="line">  group_interval: 5m #上一组报警与下一组报警的间隔时间</span><br><span class="line">  repeat_interval: 1h #告警通知成功发送后，若问题一直未恢复，需要再次发送的间隔</span><br><span class="line">  receiver: &#x27;email&#x27; #报警接收人</span><br><span class="line">receivers:</span><br><span class="line">- name: &#x27;email&#x27; #谁来接收这个报警</span><br><span class="line">  email_configs: #email的配置</span><br><span class="line">  - to: &#x27;792965772@qq.com&#x27; #报警接收人的邮件地址</span><br><span class="line">  - to: &#x27;chenjie.sg@outlook.com&#x27; #可以写多个邮件地址</span><br><span class="line">    send_resolved: true  #发送恢复通知</span><br><span class="line">inhibit_rules: #抑制规则,报警抑制角色，用于报警收敛，发送关键报警</span><br><span class="line">  - source_match: #匹配到这个报警发生后，其它报警被抑制掉，</span><br><span class="line">      severity: &#x27;critical&#x27; #报警级别为critical</span><br><span class="line">    target_match: #其它报警</span><br><span class="line">      severity: &#x27;warning&#x27; #报警级别为warning</span><br><span class="line">    equal: [&#x27;alertname&#x27;, &#x27;dev&#x27;, &#x27;instance&#x27;] #对此处配置的标签进行报警抑制</span><br></pre></td></tr></table></figure>
+<p><strong>配置参数route说明：</strong>Prometheus的告警最先到达根路由（route），是所有告警的入口点，不能包含任何匹配项。另外，根路由需要配置一个接收器（receiver），用来处理哪些没有匹配到任何子路由的告警（如果没有子路由，则全部由根路由发送告警）</p>
+</li>
+</ol>
+<p><strong>Receiver支持的告警模式：</strong></p>
+<ul>
+<li>email_config：发送告警邮件</li>
+<li>slack_config：发送告警信息到slack</li>
+<li>webhook_config：访问配置的url</li>
+<li>pagerduty_config：发送告警信息到pagerduty</li>
+<li>wechat_configs：发送告警信息到钉钉。Alertmanger 从 v0.12 开始已经默认支持企业微信了. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">receivers:</span><br><span class="line">- name: &#x27;wechat&#x27;</span><br><span class="line">  wechat_configs:</span><br><span class="line">  - corp_id: &#x27;xxx&#x27; #企业微信账号唯一 ID， 可以在我的企业中查看</span><br><span class="line">    to_party: &#x27;1&#x27; #需要发送的组</span><br><span class="line">    agent_id: &#x27;1000002&#x27; #第三方企业应用的 ID，可以在自己创建的第三方企业应用详情页面查看</span><br><span class="line">    api_secret: &#x27;xxxx&#x27; #第三方企业应用的密钥，可以在自己创建的第三方企业应用详情页面查看</span><br><span class="line">    send_resolved: true  #发送恢复通知</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="3">
+<li><p>启动alertmanager</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alertmanager/alertmanager --config.file=/usr/local/alertmanager/grafana.yml --storage.path=/usr/local/alertmanager/data/  --log.level=debug</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置Grafana的Notification Channel<br>在 Alerting-&gt;Notification channels 中选择 add channel，type选择Prometheus Alertmanager，Url写alertmanager所在节点，如192.168.101.174:9093。<br>配置完成后点击保存Channel。</p>
+<p><strong>注意： prometheus 默认时区为UTC且无法改变时区，官方建议在用户的web ui 中重新设置时区，因此我们的报警时间应该+8:00</strong></p>
+</li>
+<li><p>配置Grafana的发送报警信息<br>同理，只需要将Alert中的Send to添加为配置的alertmanager channel即可。</p>
+</li>
+</ol>
+<h3 id="4-3-3-集成第三方平台睿象云实现告警"><a href="#4-3-3-集成第三方平台睿象云实现告警" class="headerlink" title="4.3.3 集成第三方平台睿象云实现告警"></a>4.3.3 集成第三方平台睿象云实现告警</h3><ol>
+<li><p>注册<a target="_blank" rel="noopener" href="https://newuser.aiops.com/#/overview">睿象云</a>账户并登录</p>
+</li>
+<li><p>点击  智能告警平台 -&gt; 集成，在其中创建Grafana应用，创建完成后得到一个AppKey，可以拼接得到一个Url：<a target="_blank" rel="noopener" href="http://api.aiops.com/alert/api/event/grafana/v1/$%7BAppKey%7D">http://api.aiops.com/alert/api/event/grafana/v1/${AppKey}</a></p>
+</li>
+<li><p>Grafana添加新的channel，channel类型为Webhook，Url处填写上一步得到的url。</p>
+</li>
+<li><p>在睿象云 [智能告警平台] 的 [配置] 中点击新建分派，和通知策略，保存完成后即可接收Grafana发送的告警信息，并通过配置的方式将信息转发到指定的用户。</p>
+</li>
+</ol>
+<br>
+# 五、附
+## 5.1 UI界面
+[http://192.168.32.242/zabbix](http://192.168.32.242/zabbix) Zabbix(Admin:zabbix，报警邮箱[792965772@qq.com](mailto:792965772@qq.com))
+
+<h2 id="5-2-端口"><a href="#5-2-端口" class="headerlink" title="5.2 端口"></a>5.2 端口</h2><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>端口号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zabbix</td>
+<td>10051：Zabbix_Server通讯端口</td>
+<td></td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>9090：prometheus  9100：node-productor  9104：mysqld-exporter  3000：Grafana</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="5-3-各jps进程名对应的组件"><a href="#5-3-各jps进程名对应的组件" class="headerlink" title="5.3 各jps进程名对应的组件"></a>5.3 各jps进程名对应的组件</h2><p>zabbix作为服务运行，不是java程序。<br>Prometheus和Grafana以docker容器形式启动。<br>Ganlia同样以docker容器形式启动。</p>
+<h2 id="5-4-命令相关"><a href="#5-4-命令相关" class="headerlink" title="5.4 命令相关"></a>5.4 命令相关</h2><h4 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a>Zabbix</h4><ul>
+<li><p>bigdata1启动：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start/stop zabbix-server zabbix-agent httpd     (httpd是访问html等页面的入口)</span><br></pre></td></tr></table></figure>
+<p> bigdata1设置开机自启：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable/disable zabbix-server zabbix-agent httpd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>bigdata2&#x2F;3启动：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start/stop zabbix-agent </span><br></pre></td></tr></table></figure>
+<p> 设置开机自启：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable/disable zabbix-agent</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="5-5-组件启停脚本"><a href="#5-5-组件启停脚本" class="headerlink" title="5.5 组件启停脚本"></a>5.5 组件启停脚本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">case $1 in</span><br><span class="line">&quot;start&quot;)&#123;</span><br><span class="line">  echo &#x27;----- 启动 prometheus -----&#x27;</span><br><span class="line">  nohup /opt/module/prometheus-2.30.3/prometheus --web.enable-admin-api --config.file=/opt/module/prometheus-2.30.3/prometheus.yml &gt; /opt/module/prometheus-2.30.3/prometheus.log 2&gt;&amp;1 &amp;</span><br><span class="line">  echo &#x27;----- 启动 pushgateway -----&#x27;</span><br><span class="line">  nohup /opt/module/pushgateway-1.4.2/pushgateway --web.listen-address :9091 &gt; /opt/module/pushgateway-1.4.2/pushgateway.log 2&gt;&amp;1 &amp;</span><br><span class="line">  echo &#x27;----- 启动 grafana -----&#x27;</span><br><span class="line">  nohup /opt/module/grafana-8.5.24/bin/grafana-server --homepath /opt/module/grafana-8.5.24 web &gt; /opt/module/grafana-8.5.24/grafana.log 2&gt;&amp;1 &amp;</span><br><span class="line">&#125;;;</span><br><span class="line">&quot;stop&quot;)&#123;</span><br><span class="line">  echo &#x27;----- 停止 grafana -----&#x27;</span><br><span class="line">  pgrep -f grafana | xargs kill</span><br><span class="line">  echo &#x27;----- 停止 pushgateway -----&#x27;</span><br><span class="line">  pgrep -f pushgateway | xargs kill</span><br><span class="line">  echo &#x27;----- 停止 prometheus -----&#x27;</span><br><span class="line">  pgrep -f prometheus | xargs kill</span><br><span class="line">&#125;;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">注解@EnableAutoConfiguration</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">HashMap并发问题及ConcurrentHashMap原理</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6"><span class="toc-number">1.</span> <span class="toc-text">一、监控框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%BB%84%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">2.2 组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.</span> <span class="toc-text">2.3 部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9B%E7%A8%8B%E7%9B%91%E6%8E%A7"><span class="toc-number">1.3.</span> <span class="toc-text">2.4 实现进程监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-1-%E6%98%93%E4%BA%8E%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1.1 易于管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-2-%E7%9B%91%E6%8E%A7%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%86%85%E9%83%A8%E8%BF%90%E8%A1%8C%E7%8A%B6%E6%80%81"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.1.2 监控服务的内部运行状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-3-%E5%BC%BA%E5%A4%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.1.3 强大的数据模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-4-%E5%BC%BA%E5%A4%A7%E7%9A%84%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80PromQL"><span class="toc-number">1.3.4.</span> <span class="toc-text">3.1.4 强大的查询语言PromQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-5-%E9%AB%98%E6%95%88"><span class="toc-number">1.3.5.</span> <span class="toc-text">3.1.5 高效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-6-%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="toc-number">1.3.6.</span> <span class="toc-text">3.1.6 可扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-7-%E6%98%93%E4%BA%8E%E9%9B%86%E6%88%90"><span class="toc-number">1.3.7.</span> <span class="toc-text">3.1.7 易于集成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-8-%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="toc-number">1.3.8.</span> <span class="toc-text">3.1.8 可视化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-9-%E5%BC%80%E6%94%BE%E6%80%A7"><span class="toc-number">1.3.9.</span> <span class="toc-text">3.1.9 开放性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-Prometheus%E7%94%9F%E6%80%81%E5%9C%88%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.10.</span> <span class="toc-text">3.2.1 Prometheus生态圈组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E6%9E%B6%E6%9E%84%E7%90%86%E8%A7%A3"><span class="toc-number">1.3.11.</span> <span class="toc-text">3.2.2 架构理解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AD%98%E5%82%A8%E8%AE%A1%E7%AE%97%E5%B1%82"><span class="toc-number">1.3.11.1.</span> <span class="toc-text">1. 存储计算层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%87%87%E9%9B%86%E5%B1%82"><span class="toc-number">1.3.11.2.</span> <span class="toc-text">2. 采集层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%BA%94%E7%94%A8%E5%B1%82"><span class="toc-number">1.3.11.3.</span> <span class="toc-text">3. 应用层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-%E5%AE%89%E8%A3%85Pushgateway"><span class="toc-number">1.3.12.</span> <span class="toc-text">3.3.2 安装Pushgateway</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-%E5%AE%89%E8%A3%85Node-Exporter%EF%BC%88%E9%80%89%E6%8B%A9%E6%80%A7%E5%AE%89%E8%A3%85%EF%BC%89"><span class="toc-number">1.3.13.</span> <span class="toc-text">3.3.3 安装Node Exporter（选择性安装）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4-%E5%AE%89%E8%A3%85process-exporter"><span class="toc-number">1.3.14.</span> <span class="toc-text">3.3.4 安装process-exporter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-5-%E5%AE%89%E8%A3%85alertmanager"><span class="toc-number">1.3.15.</span> <span class="toc-text">3.3.5 安装alertmanager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-6-%E8%AE%BE%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.16.</span> <span class="toc-text">3.3.6 设置开机自启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-number">1.3.17.</span> <span class="toc-text">3.4.1基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-1%E6%9F%A5%E8%AF%A2%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97"><span class="toc-number">1.3.17.1.</span> <span class="toc-text">3.4.1.1查询时间序列</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-2-%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.3.17.2.</span> <span class="toc-text">3.4.1.2 范围查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-3-%E6%97%B6%E9%97%B4%E4%BD%8D%E7%A7%BB%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.17.3.</span> <span class="toc-text">3.4.1.3 时间位移操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-4-%E4%BD%BF%E7%94%A8%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.17.4.</span> <span class="toc-text">3.4.1.4 使用聚合操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-5-%E6%A0%87%E9%87%8F%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.3.17.5.</span> <span class="toc-text">3.4.1.5 标量和字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-6-%E5%90%88%E6%B3%95%E7%9A%84PromQL%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">1.3.17.6.</span> <span class="toc-text">3.4.1.6 合法的PromQL表达式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-PromQL%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="toc-number">1.3.18.</span> <span class="toc-text">3.4.2 PromQL操作符</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-1-%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97"><span class="toc-number">1.3.18.1.</span> <span class="toc-text">3.4.2.1 数学运算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-2"><span class="toc-number">1.3.18.2.</span> <span class="toc-text">3.4.2.2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-3-%E4%BD%BF%E7%94%A8%E9%9B%86%E5%90%88%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.3.18.3.</span> <span class="toc-text">3.4.2.3 使用集合运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-4-%E6%93%8D%E4%BD%9C%E7%AC%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.3.18.4.</span> <span class="toc-text">3.4.2.4 操作符优先级</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-5-PromQL%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.18.5.</span> <span class="toc-text">3.4.2.5 PromQL聚合操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-1-%E6%8B%B7%E8%B4%9Djar%E5%8C%85"><span class="toc-number">1.3.19.</span> <span class="toc-text">3.5.1 拷贝jar包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-2-%E4%BF%AE%E6%94%B9Flink%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.20.</span> <span class="toc-text">3.5.2 修改Flink配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E9%83%A8%E7%BD%B2"><span class="toc-number">1.4.</span> <span class="toc-text">4.1 部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E9%9B%86%E6%88%90"><span class="toc-number">1.5.</span> <span class="toc-text">4.2 集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-%E9%9B%86%E6%88%90Prometheus"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.2.1 集成Prometheus</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-1-%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">4.2.1.1 配置数据源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-2-%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA%E4%BB%AA%E8%A1%A8%E7%9B%98"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">4.2.1.2 手动创建仪表盘</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E5%A4%B1%E8%B4%A5%E7%9B%91%E6%8E%A7"><span class="toc-number">1.5.1.2.1.</span> <span class="toc-text">任务失败监控</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%BB%B6%E6%97%B6%E6%88%96%E4%BB%BB%E5%8A%A1%E9%87%8D%E5%90%AF%E7%9B%91%E6%8E%A7"><span class="toc-number">1.5.1.2.2.</span> <span class="toc-text">网络延时或任务重启监控</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E6%AC%A1%E6%95%B0"><span class="toc-number">1.5.1.2.3.</span> <span class="toc-text">重启次数</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-3-%E6%B7%BB%E5%8A%A0%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">4.2.1.3 添加模板</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Node-export%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.3.1.</span> <span class="toc-text">添加Node_export模板</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Flink%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.3.2.</span> <span class="toc-text">添加Flink模板</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Process-Exporter%E6%A8%A1%E7%89%88"><span class="toc-number">1.5.1.3.3.</span> <span class="toc-text">添加Process Exporter模版</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0Flume-Exporter%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.5.1.3.4.</span> <span class="toc-text">添加Flume Exporter模板</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-%E9%9B%86%E6%88%90Zabbix"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2.2 集成Zabbix</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%91%8A%E8%AD%A6%E9%80%9A%E7%9F%A5"><span class="toc-number">1.6.</span> <span class="toc-text">4.3 告警通知</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-1-%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8Grafana%E5%8F%91%E9%80%81%E5%91%8A%E8%AD%A6%E4%BF%A1%E6%81%AF"><span class="toc-number">1.6.1.</span> <span class="toc-text">4.3.1 直接使用Grafana发送告警信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-2-%E9%9B%86%E6%88%90AlterManager%E7%BB%84%E4%BB%B6%E5%AE%9E%E7%8E%B0%E5%91%8A%E8%AD%A6"><span class="toc-number">1.6.2.</span> <span class="toc-text">4.3.2 集成AlterManager组件实现告警</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-3-%E9%9B%86%E6%88%90%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B9%B3%E5%8F%B0%E7%9D%BF%E8%B1%A1%E4%BA%91%E5%AE%9E%E7%8E%B0%E5%91%8A%E8%AD%A6"><span class="toc-number">1.6.3.</span> <span class="toc-text">4.3.3 集成第三方平台睿象云实现告警</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.7.</span> <span class="toc-text">5.2 端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E5%90%84jps%E8%BF%9B%E7%A8%8B%E5%90%8D%E5%AF%B9%E5%BA%94%E7%9A%84%E7%BB%84%E4%BB%B6"><span class="toc-number">1.8.</span> <span class="toc-text">5.3 各jps进程名对应的组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-4-%E5%91%BD%E4%BB%A4%E7%9B%B8%E5%85%B3"><span class="toc-number">1.9.</span> <span class="toc-text">5.4 命令相关</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Zabbix"><span class="toc-number">1.9.0.1.</span> <span class="toc-text">Zabbix</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E7%BB%84%E4%BB%B6%E5%90%AF%E5%81%9C%E8%84%9A%E6%9C%AC"><span class="toc-number">1.10.</span> <span class="toc-text">5.5 组件启停脚本</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

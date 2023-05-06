@@ -1,0 +1,375 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>JAVA开发手册节选 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#一、 编程规约 (一) 命名风格 【强制】POJO 类中的任何布尔类型的变量，都不要加 is 前缀，否则部分框架解析会引起序列化错误。说明：在本文 MySQL 规约中的建表约定第一条，表达是与否的值采用 is_xxx 的命名方式，所以，需要在设置从 is_xxx 到 xxx 的映射关系。反例：定义为基本数据类型 Boolean isDeleted 的属性，它的方法也是 isDeleted()，框">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA开发手册节选">
+<meta property="og:url" content="http://example.com/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/JAVA%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E8%8A%82%E9%80%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#一、 编程规约 (一) 命名风格 【强制】POJO 类中的任何布尔类型的变量，都不要加 is 前缀，否则部分框架解析会引起序列化错误。说明：在本文 MySQL 规约中的建表约定第一条，表达是与否的值采用 is_xxx 的命名方式，所以，需要在设置从 is_xxx 到 xxx 的映射关系。反例：定义为基本数据类型 Boolean isDeleted 的属性，它的方法也是 isDeleted()，框">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.075Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.075Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/JAVA%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E8%8A%82%E9%80%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JAVA开发手册节选',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JAVA开发手册节选</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.075Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.075Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/">系统安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JAVA开发手册节选"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>#一、 编程规约</p>
+<h2 id="一-命名风格"><a href="#一-命名风格" class="headerlink" title="(一) 命名风格"></a>(一) 命名风格</h2><ol start="8">
+<li>【强制】POJO 类中的任何布尔类型的变量，都不要加 is 前缀，否则部分框架解析会引起序列<br>化错误。<br>说明：在本文 MySQL 规约中的建表约定第一条，表达是与否的值采用 is_xxx 的命名方式，所以，需要在<br><resultMap>设置从 is_xxx 到 xxx 的映射关系。<br>反例：定义为基本数据类型 Boolean isDeleted 的属性，它的方法也是 isDeleted()，框架在反向解析的时候，“误以为”对应的属性名称是 deleted，导致属性获取不到，进而抛出异常。</li>
+</ol>
+<p>13.【推荐】在常量与变量的命名时，表示类型的名词放在词尾，以提升辨识度。<br>正例：startTime &#x2F; workQueue &#x2F; nameList &#x2F; TERMINATED_THREAD_COUNT<br>反例：startedAt &#x2F; QueueOfWork &#x2F; listName &#x2F; COUNT_TERMINATED_THREAD</p>
+<p>14.【推荐】如果模块、接口、类、方法使用了设计模式，在命名时需体现出具体模式。<br>说明：将设计模式体现在名字中，有利于阅读者快速理解架构设计理念。<br>正例： public class OrderFactory;<br> public class LoginProxy;<br> public class ResourceObserver;</p>
+<p>18.【参考】各层命名规约：<br>A) Service&#x2F;DAO 层方法命名规约<br>1） 获取单个对象的方法用 get 做前缀。<br>2） 获取多个对象的方法用 list 做前缀，复数结尾，如：listObjects。 3） 获取统计值的方法用 count 做前缀。 4） 插入的方法用 save&#x2F;insert 做前缀。<br>5） 删除的方法用 remove&#x2F;delete 做前缀。<br>6） 修改的方法用 update 做前缀。<br>B) 领域模型命名规约<br>1） 数据对象：xxxDO，xxx 即为数据表名。<br>2） 数据传输对象：xxxDTO，xxx 为业务领域相关的名称。<br> 3&#x2F;57<br>Java 开发手册<br> 4&#x2F;57<br>3） 展示对象：xxxVO，xxx 一般为网页名称。<br>4） POJO 是 DO&#x2F;DTO&#x2F;BO&#x2F;VO 的统称，禁止命名成 xxxPOJO。</p>
+<h2 id="二-常量定义"><a href="#二-常量定义" class="headerlink" title="(二) 常量定义"></a>(二) 常量定义</h2><ol start="4">
+<li>【推荐】常量的复用层次有五层：跨应用共享常量、应用内共享常量、子工程内共享常量、包<br>内共享常量、类内共享常量。<br>1） 跨应用共享常量：放置在二方库中，通常是 client.jar 中的 constant 目录下。<br>2） 应用内共享常量：放置在一方库中，通常是子模块中的 constant 目录下。<br>反例：易懂变量也要统一定义成应用内共享常量，两位工程师在两个类中分别定义了“YES”的变量：<br>类 A 中：public static final String YES &#x3D; “yes”;<br>类 B 中：public static final String YES &#x3D; “y”;<br>A.YES.equals(B.YES)，预期是 true，但实际返回为 false，导致线上问题。<br>3） 子工程内部共享常量：即在当前子工程的 constant 目录下。<br>4） 包内共享常量：即在当前包下单独的 constant 目录下。<br>5） 类内共享常量：直接在类内部 private static final 定义。</li>
+</ol>
+<h2 id="四-OOP-规约"><a href="#四-OOP-规约" class="headerlink" title="(四) OOP 规约"></a>(四) OOP 规约</h2><ol start="6">
+<li><p>【强制】Object 的 equals 方法容易抛空指针异常，应使用常量或确定有值的对象来调用 equals。<br>正例：”test”.equals(object);<br>反例：object.equals(“test”);<br>说明：推荐使用 java.util.Objects#equals（JDK7 引入的工具类）。</p>
+</li>
+<li><p>【强制】所有整型包装类对象之间值的比较，全部使用 equals 方法比较。<br>说明：对于 Integer var &#x3D; ? 在-128 至 127 之间的赋值，Integer 对象是在 IntegerCache.cache 产生，<br>会复用已有对象，这个区间内的 Integer 值可以直接使用&#x3D;&#x3D;进行判断，但是这个区间之外的所有数据，都<br>会在堆上产生，并不会复用已有对象，这是一个大坑，推荐使用 equals 方法进行判断。<br>Java 开发手册<br> 8&#x2F;57</p>
+</li>
+<li><p>【强制】任何货币金额，均以最小货币单位且整型类型来进行存储。</p>
+</li>
+<li><p>【强制】浮点数之间的等值判断，基本数据类型不能用&#x3D;&#x3D;来比较，包装数据类型不能用 equals<br>来判断。<br>说明：浮点数采用“尾数+阶码”的编码方式，类似于科学计数法的“有效数字+指数”的表示方式。二进<br>制无法精确表示大部分的十进制小数，具体原理参考《码出高效》。<br>反例：<br>float a &#x3D; 1.0f - 0.9f;<br>float b &#x3D; 0.9f - 0.8f;<br>if (a &#x3D;&#x3D; b) {<br> &#x2F;&#x2F; 预期进入此代码快，执行其它业务逻辑<br> &#x2F;&#x2F; 但事实上 a&#x3D;&#x3D;b 的结果为 false<br>}<br>Float x &#x3D; Float.valueOf(a);<br>Float y &#x3D; Float.valueOf(b);<br>if (x.equals(y)) {<br> &#x2F;&#x2F; 预期进入此代码快，执行其它业务逻辑<br> &#x2F;&#x2F; 但事实上 equals 的结果为 false<br>}<br>正例：<br>(1) 指定一个误差范围，两个浮点数的差值在此范围之内，则认为是相等的。<br>float a &#x3D; 1.0f - 0.9f;<br>float b &#x3D; 0.9f - 0.8f;<br>float diff &#x3D; 1e-6f;<br>if (Math.abs(a - b) &lt; diff) {<br> System.out.println(“true”);<br>}<br>(2) 使用 BigDecimal 来定义值，再进行浮点数的运算操作。<br>BigDecimal a &#x3D; new BigDecimal(“1.0”);<br>BigDecimal b &#x3D; new BigDecimal(“0.9”);<br>BigDecimal c &#x3D; new BigDecimal(“0.8”);<br>BigDecimal x &#x3D; a.subtract(b);<br>BigDecimal y &#x3D; b.subtract(c);<br>if (x.equals(y)) {<br> System.out.println(“true”);<br>}</p>
+</li>
+</ol>
+<p>10.【强制】定义数据对象 DO 类时，属性类型要与数据库字段类型相匹配。<br>正例：数据库字段的 bigint 必须与类属性的 Long 类型相对应。<br>反例：某个案例的数据库表 id 字段定义类型 bigint unsigned，实际类对象属性为 Integer，随着 id 越来<br>越大，超过 Integer 的表示范围而溢出成为负数。</p>
+<p>11.【强制】禁止使用构造方法 BigDecimal(double)的方式把 double 值转化为 BigDecimal 对象。<br>说明：BigDecimal(double)存在精度损失风险，在精确计算或值比较的场景中可能会导致业务逻辑异常。<br>Java 开发手册<br>如：BigDecimal g &#x3D; new BigDecimal(0.1f); 实际的存储值为：0.10000000149<br>正例：优先推荐入参为 String 的构造方法，或使用 BigDecimal 的 valueOf 方法，此方法内部其实执行了<br>Double 的 toString，而 Double 的 toString 按 double 的实际能表达的精度对尾数进行了截断。<br> BigDecimal recommend1 &#x3D; new BigDecimal(“0.1”);<br> BigDecimal recommend2 &#x3D; BigDecimal.valueOf(0.1);</p>
+<p>17.【强制】禁止在 POJO 类中，同时存在对应属性 xxx 的 isXxx()和 getXxx()方法。<br>说明：框架在调用属性 xxx 的提取方法时，并不能确定哪个方法一定是被优先调用到，神坑之一。</p>
+<p>18.【推荐】使用索引访问用 String 的 split 方法得到的数组时，需做最后一个分隔符后有无内容<br>的检查，否则会有抛 IndexOutOfBoundsException 的风险。<br>说明：<br>String str &#x3D; “a,b,c,,”;<br>String[] ary &#x3D; str.split(“,”);<br>&#x2F;&#x2F; 预期大于 3，结果是 3<br>System.out.println(ary.length);</p>
+<p>22.【推荐】循环体内，字符串的连接方式，使用 StringBuilder 的 append 方法进行扩展。<br>说明：下例中，反编译出的字节码文件显示每次循环都会 new 出一个 StringBuilder 对象，然后进行 append<br>操作，最后通过 toString 方法返回 String 对象，造成内存资源浪费。<br>反例：<br>String str &#x3D; “start”;<br>for (int i &#x3D; 0; i &lt; 100; i++) {<br> str &#x3D; str + “hello”; }</p>
+<p>23.【推荐】final 可以声明类、成员变量、方法、以及本地变量，下列情况使用 final 关键字：<br>1） 不允许被继承的类，如：String 类。<br>2） 不允许修改引用的域对象，如：POJO 类的域变量。 3） 不允许被覆写的方法，如：POJO 类的 setter 方法。<br>4） 不允许运行过程中重新赋值的局部变量。<br>5） 避免上下文重复使用一个变量，使用 final 可以强制重新定义一个变量，方便更好地进行重构。</p>
+<p>24.【推荐】慎用 Object 的 clone 方法来拷贝对象。<br>说明：对象 clone 方法默认是浅拷贝，若想实现深拷贝需覆写 clone 方法实现域对象的深度遍历式拷贝。</p>
+<p>25.【推荐】类成员与方法访问控制从严：<br>1） 如果不允许外部直接通过 new 来创建对象，那么构造方法必须是 private。 2） 工具类不允许有 public 或 default 构造方法。<br>3） 类非 static 成员变量并且与子类共享，必须是 protected。 4） 类非 static 成员变量并且仅在本类使用，必须是 private。 5） 类 static 成员变量如果仅在本类使用，必须是 private。 6） 若是 static 成员变量，考虑是否为 final。7） 类成员方法只供类内部调用，必须是 private。 8） 类成员方法只对继承类公开，那么限制为 protected。<br>说明：任何类、方法、参数、变量，严控访问范围。过于宽泛的访问范围，不利于模块解耦。思考：如果<br>是一个 private 的方法，想删除就删除，可是一个 public 的 service 成员方法或成员变量，删除一下，不<br>得手心冒点汗吗？变量像自己的小孩，尽量在自己的视线内，变量作用域太大，无限制的到处跑，那么你<br>会担心的。</p>
+<h2 id="五-日期时间"><a href="#五-日期时间" class="headerlink" title="(五) 日期时间"></a>(五) 日期时间</h2><ol>
+<li><p>【强制】日期格式化时，传入 pattern 中表示年份统一使用小写的 y。<br>说明：日期格式化时，yyyy 表示当天所在的年，而大写的 YYYY 代表是 week in which year（JDK7 之后<br>引入的概念），意思是当天所在的周属于的年份，一周从周日开始，周六结束，只要本周跨年，返回的 YYYY<br>就是下一年。<br>正例：表示日期和时间的格式如下所示：<br>new SimpleDateFormat(“yyyy-MM-dd HH:mm:ss”)</p>
+</li>
+<li><p>【强制】在日期格式中分清楚大写的 M 和小写的 m，大写的 H 和小写的 h 分别指代的意义。<br>说明：日期格式中的这两对字母表意如下：<br>1） 表示月份是大写的 M； 2） 表示分钟则是小写的 m； 3） 24 小时制的是大写的 H； 4） 12 小时制的则是小写的 h。</p>
+</li>
+<li><p>【强制】获取当前毫秒数：System.currentTimeMillis(); 而不是 new Date().getTime()。<br>说明：如果想获取更加精确的纳秒级时间值，使用 System.nanoTime 的方式。在 JDK8 中，针对统计时间<br>等场景，推荐使用 Instant 类。</p>
+</li>
+<li><p>【强制】不允许在程序任何地方中使用：1）java.sql.Date 2）java.sql.Time 3）<br>java.sql.Timestamp。<br>说明：第 1 个不记录时间，getHours()抛出异常；第 2 个不记录日期，getYear()抛出异常；第 3 个在构造<br>方法 super((time&#x2F;1000)*1000)，fastTime 和 nanos 分开存储秒和纳秒信息。<br>反例： java.util.Date.after(Date)进行时间比较时，当入参是 java.sql.Timestamp 时，会触发 JDK<br>BUG(JDK9 已修复)，可能导致比较时的意外结果。</p>
+</li>
+<li><p>【强制】不要在程序中写死一年为 365 天，避免在公历闰年时出现日期转换错误或程序逻辑<br>错误。<br>正例：<br>&#x2F;&#x2F; 获取今年的天数<br>int daysOfThisYear &#x3D; LocalDate.now().lengthOfYear();<br>&#x2F;&#x2F; 获取指定某年的天数<br>LocalDate.of(2011, 1, 1).lengthOfYear();<br>反例：<br>&#x2F;&#x2F; 第一种情况：在闰年 366 天时，出现数组越界异常<br>int[] dayArray &#x3D; new int[365];<br>&#x2F;&#x2F; 第二种情况：一年有效期的会员制，今年 1 月 26 日注册，硬编码 365 返回的却是 1 月 25 日<br>Calendar calendar &#x3D; Calendar.getInstance();<br>calendar.set(2020, 1, 26);<br>calendar.add(Calendar.DATE, 365)</p>
+</li>
+<li><p>【推荐】避免公历闰年 2 月问题。闰年的 2 月份有 29 天，一年后的那一天不可能是 2 月 29<br>日。</p>
+</li>
+<li><p>【推荐】使用枚举值来指代月份。如果使用数字，注意 Date，Calendar 等日期相关类的月份<br>month 取值在 0-11 之间。<br>说明：参考 JDK 原生注释，Month value is 0-based. e.g., 0 for January.<br>正例： Calendar.JANUARY，Calendar.FEBRUARY，Calendar.MARCH 等来指代相应月份来进行传参或比较。</p>
+</li>
+</ol>
+<h2 id="六-集合处理"><a href="#六-集合处理" class="headerlink" title="(六) 集合处理"></a>(六) 集合处理</h2><ol>
+<li><p>【强制】关于 hashCode 和 equals 的处理，遵循如下规则：<br>1） 只要重写 equals，就必须重写 hashCode。 2） 因为 Set 存储的是不重复的对象，依据 hashCode 和 equals 进行判断，所以 Set 存储的对象必须重写<br>这两个方法。<br>3） 如果自定义对象作为 Map 的键，那么必须覆写 hashCode 和 equals。<br>说明：String 因为重写了 hashCode 和 equals 方法，所以我们可以愉快地使用 String 对象作为 key 来使<br>用。</p>
+</li>
+<li><p>【强制】判断所有集合内部的元素是否为空，使用 isEmpty()方法，而不是 size()&#x3D;&#x3D;0 的方式。<br>说明：前者的时间复杂度为 O(1)，而且可读性更好。<br>正例：<br>Map&lt;String, Object&gt; map &#x3D; new HashMap&lt;&gt;();<br>if(map.isEmpty()) {<br> System.out.println(“no element in this map.”);<br>}</p>
+</li>
+<li><p>【强制】在使用 java.util.stream.Collectors 类的 toMap()方法转为 Map 集合时，一定要使<br>用含有参数类型为 BinaryOperator，参数名为 mergeFunction 的方法，否则当出现相同 key<br>值时会抛出 IllegalStateException 异常。<br>说明：参数 mergeFunction 的作用是当出现 key 重复时，自定义对 value 的处理策略。<br>正例：<br>List&lt;Pair&lt;String, Double&gt;&gt; pairArrayList &#x3D; new ArrayList&lt;&gt;(3);<br>pairArrayList.add(new Pair&lt;&gt;(“version”, 6.19));<br>pairArrayList.add(new Pair&lt;&gt;(“version”, 10.24));<br>pairArrayList.add(new Pair&lt;&gt;(“version”, 13.14));<br>Map&lt;String, Double&gt; map &#x3D; pairArrayList.stream().collect(<br>&#x2F;&#x2F; 生成的 map 集合中只有一个键值对：{version&#x3D;13.14}<br>Collectors.toMap(Pair::getKey, Pair::getValue, (v1, v2) -&gt; v2));<br>反例：<br>String[] departments &#x3D; new String[] {“iERP”, “iERP”, “EIBU”};<br>&#x2F;&#x2F; 抛出 IllegalStateException 异常<br>Map&lt;Integer, String&gt; map &#x3D; Arrays.stream(departments)<br> .collect(Collectors.toMap(String::hashCode, str -&gt; str));</p>
+</li>
+<li><p>【强制】在使用 java.util.stream.Collectors 类的 toMap()方法转为 Map 集合时，一定要注<br>意当 value 为 null 时会抛 NPE 异常。<br>说明：在 java.util.HashMap 的 merge 方法里会进行如下的判断：<br>if (value &#x3D;&#x3D; null || remappingFunction &#x3D;&#x3D; null)<br>throw new NullPointerException();<br>反例：<br>List&lt;Pair&lt;String, Double&gt;&gt; pairArrayList &#x3D; new ArrayList&lt;&gt;(2);<br>pairArrayList.add(new Pair&lt;&gt;(“version1”, 4.22));<br>pairArrayList.add(new Pair&lt;&gt;(“version2”, null));<br>Map&lt;String, Double&gt; map &#x3D; pairArrayList.stream().collect(<br>&#x2F;&#x2F; 抛出 NullPointerException 异常<br>Collectors.toMap(Pair::getKey, Pair::getValue, (v1, v2) -&gt; v2));</p>
+</li>
+<li><p>【强制】ArrayList 的 subList 结果不可强转成 ArrayList，否则会抛出 ClassCastException 异 常：java.util.RandomAccessSubList cannot be cast to java.util.ArrayList。<br>说明：subList 返回的是 ArrayList 的内部类 SubList，并不是 ArrayList 而是 ArrayList 的一个视图，对<br>于 SubList 子列表的所有操作最终会反映到原列表上。</p>
+</li>
+<li><p>【强制】使用 Map 的方法 keySet()&#x2F;values()&#x2F;entrySet()返回集合对象时，不可以对其进行添<br>加元素操作，否则会抛出 UnsupportedOperationException 异常。</p>
+</li>
+<li><p>【强制】Collections 类返回的对象，如：emptyList()&#x2F;singletonList()等都是 immutable list，<br>不可对其进行添加或者删除元素的操作。<br>反例：如果查询无结果，返回 Collections.emptyList()空集合对象，调用方一旦进行了添加元素的操作，就<br>会触发 UnsupportedOperationException 异常。</p>
+</li>
+<li><p>【强制】在 subList 场景中，高度注意对父集合元素的增加或删除，均会导致子列表的遍历、<br>增加、删除产生 ConcurrentModificationException 异常。</p>
+</li>
+<li><p>【强制】使用集合转数组的方法，必须使用集合的 toArray(T[] array)，传入的是类型完全一<br>致、长度为 0 的空数组。<br>反例：直接使用 toArray 无参方法存在问题，此方法返回值只能是 Object[]类，若强转其它类型数组将出现<br>ClassCastException 错误。<br>正例：<br>List<String> list &#x3D; new ArrayList&lt;&gt;(2);<br>list.add(“guan”);<br>list.add(“bao”);<br>String[] array &#x3D; list.toArray(new String[0]);<br> 说明：使用 toArray 带参方法，数组空间大小的 length， 1） 等于 0，动态创建与 size 相同的数组，性能最好。<br>2） 大于 0 但小于 size，重新创建大小等于 size 的数组，增加 GC 负担。<br>3） 等于 size，在高并发情况下，数组创建完成之后，size 正在变大的情况下，负面影响与 2 相同。<br>4） 大于 size，空间浪费，且在 size 处插入 null 值，存在 NPE 隐患。</p>
+</li>
+</ol>
+<p>10.【强制】在使用 Collection 接口任何实现类的 addAll()方法时，都要对输入的集合参数进行<br>NPE 判断。<br>说明：在 ArrayList#addAll 方法的第一行代码即 Object[] a &#x3D; c.toArray(); 其中 c 为输入集合参数，如果<br>为 null，则直接抛出异常。</p>
+<p>11.【强制】使用工具类 Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，<br>它的 add&#x2F;remove&#x2F;clear 方法会抛出 UnsupportedOperationException 异常。<br>说明：asList 的返回对象是一个 Arrays 内部类，并没有实现集合的修改方法。Arrays.asList 体现的是适配<br>器模式，只是转换接口，后台的数据仍是数组。<br> String[] str &#x3D; new String[] { “yang”, “hao” };<br> List list &#x3D; Arrays.asList(str);<br>第一种情况：list.add(“yangguanbao”); 运行时异常。<br>第二种情况：str[0] &#x3D; “changed”; 也会随之修改，反之亦然。</p>
+<p>12.【强制】泛型通配符&lt;? extends T&gt;来接收返回的数据，此写法的泛型集合不能使用 add 方法， 而&lt;? super T&gt;不能使用 get 方法，两者在接口调用赋值的场景中容易出错。<br>说明：扩展说一下 PECS(Producer Extends Consumer Super)原则：第一、频繁往外读取内容的，适合用<br>&lt;? extends T&gt;。第二、经常往里插入的，适合用&lt;? super T&gt;</p>
+<p>13.【强制】在无泛型限制定义的集合赋值给泛型限制的集合时，在使用集合元素时，需要进行<br>instanceof 判断，避免抛出 ClassCastException 异常。<br>说明：毕竟泛型是在 JDK5 后才出现，考虑到向前兼容，编译器是允许非泛型集合与泛型集合互相赋值。<br>反例：<br>List<String> generics &#x3D; null;<br>List notGenerics &#x3D; new ArrayList(10);<br>notGenerics.add(new Object());<br>notGenerics.add(new Integer(1));<br>generics &#x3D; notGenerics;<br>&#x2F;&#x2F; 此处抛出 ClassCastException 异常<br>String string &#x3D; generics.get(0)</p>
+<p>14.【强制】不要在 foreach 循环里进行元素的 remove&#x2F;add 操作。remove 元素请使用 Iterator<br>方式，如果并发操作，需要对 Iterator 对象加锁。<br>正例：<br>List<String> list &#x3D; new ArrayList&lt;&gt;();<br>list.add(“1”);<br>list.add(“2”);<br>Iterator<String> iterator &#x3D; list.iterator();<br>while (iterator.hasNext()) {<br> String item &#x3D; iterator.next();<br> if (删除元素的条件) {<br> iterator.remove();<br> } }<br>反例：<br>for (String item : list) {<br> if (“1”.equals(item)) {<br> list.remove(item);<br> } }<br>说明：以上代码的执行结果肯定会出乎大家的意料，那么试一下把“1”换成“2”，会是同样的结果吗？</p>
+<p>15.【强制】在 JDK7 版本及以上，Comparator 实现类要满足如下三个条件，不然 Arrays.sort，<br>Collections.sort 会抛 IllegalArgumentException 异常。<br>说明：三个条件如下 1） x，y 的比较结果和 y，x 的比较结果相反。<br>2） x&gt;y，y&gt;z，则 x&gt;z。 3） x&#x3D;y，则 x，z 比较结果和 y，z 比较结果相同。<br>反例：下例中没有处理相等的情况，交换两个对象判断结果并不互反，不符合第一个条件，在实际使用中<br>可能会出现异常。<br>new Comparator<Student>() {<br> @Override<br> public int compare(Student o1, Student o2) {<br> return o1.getId() &gt; o2.getId() ? 1 : -1;<br> }<br>};</p>
+<p>17.【推荐】集合初始化时，指定集合初始值大小。<br>说明：HashMap 使用 HashMap(int initialCapacity) 初始化，如果暂时无法确定集合大小，那么指定默<br>认值（16）即可。<br>正例：<code>initialCapacity = (需要存储的元素个数 / 负载因子) + 1</code>。注意负载因子（即 loader factor）默认<br>为 0.75，如果暂时无法确定初始值大小，请设置为 16（即默认值）。<br>反例：HashMap 需要放置 1024 个元素，由于没有设置容量初始大小，随着元素不断增加，容量 7 次被迫<br>扩大，resize 需要重建 hash 表。当放置的集合元素个数达千万级别时，不断扩容会严重影响性能。</p>
+<p>19.【推荐】高度注意 Map 类集合 K&#x2F;V 能不能存储 null 值的情况，如下表格：<br>集合类 Key Value Super 说明<br>Hashtable 不允许为 null 不允许为 null Dictionary 线程安全<br>ConcurrentHashMap 不允许为 null 不允许为 null AbstractMap 锁分段技术（JDK8:CAS）<br>TreeMap 不允许为 null 允许为 null AbstractMap 线程不安全<br>HashMap 允许为 null 允许为 null AbstractMap 线程不安全<br>反例：由于 HashMap 的干扰，很多人认为 ConcurrentHashMap 是可以置入 null 值，而事实上，存储<br>null 值时会抛出 NPE 异常。</p>
+<p>20.【参考】合理利用好集合的有序性(sort)和稳定性(order)，避免集合的无序性(unsort)和不稳<br>定性(unorder)带来的负面影响。<br>说明：有序性是指遍历的结果是按某种比较规则依次排列的。稳定性指集合每次遍历的元素次序是一定的。<br>如：ArrayList 是 order&#x2F;unsort；HashMap 是 unorder&#x2F;unsort；TreeSet 是 order&#x2F;sort。</p>
+<p>21.【参考】利用 Set 元素唯一的特性，可以快速对一个集合进行去重操作，避免使用 List 的<br>contains()进行遍历去重或者判断包含操作。</p>
+<h2 id="七-并发处理"><a href="#七-并发处理" class="headerlink" title="(七) 并发处理"></a>(七) 并发处理</h2><ol>
+<li><p>【强制】获取单例对象需要保证线程安全，其中的方法也要保证线程安全。<br>说明：资源驱动类、工具类、单例工厂类都需要注意。</p>
+</li>
+<li><p>【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。<br>正例：自定义线程工厂，并且根据外部特征进行分组，比如，来自同一机房的调用，把机房编号赋值给whatFeaturOfGroup</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class UserThreadFactory implements ThreadFactory &#123;</span><br><span class="line"> private final String namePrefix;</span><br><span class="line"> private final AtomicInteger nextId = new AtomicInteger(1);</span><br><span class="line"></span><br><span class="line"> // 定义线程组名称，在 jstack 问题排查时，非常有帮助</span><br><span class="line"> UserThreadFactory(String whatFeaturOfGroup) &#123;</span><br><span class="line">  namePrefix = &quot;From UserThreadFactory&#x27;s &quot; + whatFeaturOfGroup + &quot;-Worker-&quot;;</span><br><span class="line"> &#125;</span><br><span class="line"> @Override</span><br><span class="line"> public Thread newThread(Runnable task) &#123;</span><br><span class="line">  String name = namePrefix + nextId.getAndIncrement();</span><br><span class="line">  Thread thread = new Thread(null, task, name, 0, false);</span><br><span class="line">  System.out.println(thread.getName());</span><br><span class="line">  return thread;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>【强制】线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。<br>说明：线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源的开销，解决资源不足的问题。<br>如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题。</p>
+</li>
+<li><p>【强制】线程池不允许使用 Executors 去创建，而是通过 ThreadPoolExecutor 的方式，这<br>样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。<br>说明：Executors 返回的线程池对象的弊端如下： 1） FixedThreadPool 和 SingleThreadPool：<br>允许的请求队列长度为 Integer.MAX_VALUE，可能会堆积大量的请求，从而导致 OOM。 2） CachedThreadPool：<br>允许的创建线程数量为 Integer.MAX_VALUE，可能会创建大量的线程，从而导致 OOM。</p>
+</li>
+<li><p>【强制】SimpleDateFormat 是线程不安全的类，一般不要定义为 static 变量，如果定义为 static，<br>必须加锁，或者使用 DateUtils 工具类。<br>正例：注意线程安全，使用 DateUtils。亦推荐如下处理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">private static final ThreadLocal&lt;DateFormat&gt; df = new ThreadLocal&lt;DateFormat&gt;() &#123;</span><br><span class="line"> @Override</span><br><span class="line"> protected DateFormat initialValue() &#123;</span><br><span class="line">  return new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>说明：如果是 JDK8 的应用，可以使用 Instant 代替 Date，LocalDateTime 代替 Calendar，<code>DateTimeFormatter</code> 代替 SimpleDateFormat，官方给出的解释：simple beautiful strong immutable<br>thread-safe。</p>
+</blockquote>
+</li>
+<li><p>【强制】必须回收自定义的 ThreadLocal 变量，尤其在线程池场景下，线程经常会被复用，<br>如果不清理自定义的 ThreadLocal 变量，可能会影响后续业务逻辑和造成内存泄露等问题。<br>尽量在代理中使用 try-finally 块进行回收。<br>正例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">objectThreadLocal.set(userInfo);</span><br><span class="line">try &#123;</span><br><span class="line"> // ...</span><br><span class="line">&#125; finally &#123;</span><br><span class="line"> objectThreadLocal.remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>【强制】高并发时，同步调用应该去考量锁的性能损耗。能用无锁数据结构，就不要用锁；能锁区块，就不要锁整个方法体；能用对象锁，就不要用类锁。<br>说明：尽可能使加锁的代码块工作量尽可能的小，避免在锁代码块中调用 RPC 方法。</p>
+</li>
+<li><p>【强制】对多个资源、数据库表、对象同时加锁时，需要保持一致的加锁顺序，否则可能会造<br>成死锁。<br>说明：线程一需要对表 A、B、C 依次全部加锁后才可以进行更新操作，那么线程二的加锁顺序也必须是 A、 B、C，否则可能出现死锁。</p>
+</li>
+<li><p>【强制】在使用阻塞等待获取锁的方式中，必须在 try 代码块之外，并且在加锁方法与 try 代<br>码块之间没有任何可能抛出异常的方法调用，避免加锁成功后，在 finally 中无法解锁。<br>说明一：如果在 lock 方法与 try 代码块之间的方法调用抛出异常，那么无法解锁，造成其它线程无法成功<br>获取锁。<br>说明二：如果 lock 方法在 try 代码块之内，可能由于其它方法抛出异常，导致在 finally 代码块中，unlock<br>对未加锁的对象解锁，它会调用 AQS 的 tryRelease 方法（取决于具体实现类），抛出<br>IllegalMonitorStateException 异常。<br>说明三：在 Lock 对象的 lock 方法实现中可能抛出 unchecked 异常，产生的后果与说明二相同。</p>
+</li>
+</ol>
+<ul>
+<li>正例：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = new XxxLock();</span><br><span class="line">// ...</span><br><span class="line">lock.lock();</span><br><span class="line">try &#123;</span><br><span class="line"> doSomething();</span><br><span class="line"> doOthers();</span><br><span class="line">&#125; finally &#123;</span><br><span class="line"> lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>反例：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = new XxxLock();</span><br><span class="line">// ...</span><br><span class="line">try &#123;</span><br><span class="line"> // 如果此处抛出异常，则直接执行 finally 代码块</span><br><span class="line"> doSomething();</span><br><span class="line"> // 无论加锁是否成功，finally 代码块都会执行</span><br><span class="line"> lock.lock();</span><br><span class="line"> doOthers();</span><br><span class="line">&#125; finally &#123;</span><br><span class="line"> lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ol start="10">
+<li>【强制】在使用尝试机制来获取锁的方式中，进入业务代码块之前，必须先判断当前线程是否<br>持有锁。锁的释放规则与锁的阻塞等待方式相同。<br>说明：Lock 对象的 unlock 方法在执行时，它会调用 AQS 的 tryRelease 方法（取决于具体实现类），如果<br>当前线程不持有锁，则抛出 IllegalMonitorStateException 异常。<br>正例：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Lock lock = new XxxLock();</span><br><span class="line">// ...</span><br><span class="line">boolean isLocked = lock.tryLock();</span><br><span class="line">if (isLocked) &#123;</span><br><span class="line"> try &#123;</span><br><span class="line"> doSomething();</span><br><span class="line"> doOthers();</span><br><span class="line"> &#125; finally &#123;</span><br><span class="line"> lock.unlock();</span><br><span class="line"> &#125; &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>11.【强制】并发修改同一记录时，避免更新丢失，需要加锁。要么在应用层加锁，要么在缓存加锁，要么在数据库层使用乐观锁，使用 version 作为更新依据。<br>说明：如果每次访问冲突概率小于 20%，推荐使用乐观锁，否则使用悲观锁。乐观锁的重试次数不得小于3 次。</p>
+<p><code>12.【强制】多线程并行处理定时任务时，Timer 运行多个 TimeTask 时，只要其中之一没有捕获抛 出的异常，其它任务便会自动终止运行，使用 ScheduledExecutorService 则没有这个问题。</code></p>
+<p>13.【推荐】资金相关的金融敏感信息，使用悲观锁策略。<br>说明：乐观锁在获得锁的同时已经完成了更新操作，校验逻辑容易出现漏洞，另外，乐观锁对冲突的解决策<br>略有较复杂的要求，处理不当容易造成系统压力或数据异常，所以资金相关的金融敏感信息不建议使用乐观<br>锁更新。<br>正例：悲观锁遵循一锁二判三更新四释放的原则</p>
+<p>14.【推荐】使用 CountDownLatch 进行异步转同步操作，每个线程退出前必须调用 countDown 方法，线程执行代码注意 catch 异常，确保 countDown 方法被执行到，避免主线程无法执行至await 方法，直到超时才返回结果。<br>说明：注意，子线程抛出异常堆栈，不能在主线程 try-catch 到。</p>
+<p>15.【推荐】避免 Random 实例被多线程使用，虽然共享该实例是线程安全的，但会因竞争同一 seed 导致的性能下降。<br>说明：Random 实例包括 java.util.Random 的实例或者 Math.random()的方式。<br>正例：在 JDK7 之后，可以直接使用 API ThreadLocalRandom，而在 JDK7 之前，需要编码保证每个线程持有一个单独的 Random 实例。</p>
+<p>16.【推荐】通过双重检查锁（double-checked locking）（在并发场景下）实现延迟初始化的优化<br>问题隐患(可参考 The “Double-Checked Locking is Broken” Declaration)，推荐解决方案中较为<br>简单一种（适用于 JDK5 及以上版本），将目标属性声明为 volatile 型（比如修改 helper 的属<br>性声明为<code>private volatile Helper helper = null;</code>）。<br>反例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class LazyInitDemo &#123;</span><br><span class="line"> private Helper helper = null;</span><br><span class="line"> public Helper getHelper() &#123;</span><br><span class="line"> if (helper == null) &#123;</span><br><span class="line"> synchronized (this) &#123;</span><br><span class="line"> if (helper == null) &#123; helper = new Helper(); &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> return helper;</span><br><span class="line"> &#125;</span><br><span class="line"> // other methods and fields... </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>17.【参考】volatile 解决多线程内存不可见问题。对于一写多读，是可以解决变量同步问题，但 是如果多写，同样无法解决线程安全问题。 说明：如果是 count++操作，使用如下类实现：AtomicInteger count = new AtomicInteger();  count.addAndGet(1); 如果是 JDK8，推荐使用 LongAdder 对象，比 AtomicLong 性能更好（减少乐观锁的重试次数）。</code></p>
+<p>18.【参考】HashMap 在容量不够进行 resize 时由于高并发可能出现死链，导致 CPU 飙升，在<br>开发过程中注意规避此风险。</p>
+<p>19.【参考】ThreadLocal 对象使用 static 修饰，ThreadLocal 无法解决共享对象的更新问题。<br>说明：这个变量是针对一个线程内所有操作共享的，所以设置为静态变量，所有此类实例共享此静态变量，<br>也就是说在类第一次被使用时装载，只分配一块存储空间，所有此类的对象(只要是这个线程内定义的)都可以操控这个变量。</p>
+<h2 id="八-控制语句"><a href="#八-控制语句" class="headerlink" title="(八) 控制语句"></a>(八) 控制语句</h2><ol start="2">
+<li>【强制】当 switch 括号内的变量类型为 String 并且此变量为外部参数时，必须先进行 null<br>判断。<br>反例：如下的代码输出是什么？<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class SwitchString &#123;</span><br><span class="line"> public static void main(String[] args) &#123;</span><br><span class="line"> method(null);</span><br><span class="line"> &#125;</span><br><span class="line"> public static void method(String param) &#123;</span><br><span class="line"> switch (param) &#123;</span><br><span class="line"> // 肯定不是进入这里</span><br><span class="line"> case &quot;sth&quot;:</span><br><span class="line"> System.out.println(&quot;it&#x27;s sth&quot;);</span><br><span class="line"> break;</span><br><span class="line"> // 也不是进入这里</span><br><span class="line"> case &quot;null&quot;:</span><br><span class="line"> System.out.println(&quot;it&#x27;s null&quot;);</span><br><span class="line"> break;</span><br><span class="line"> // 也不是进入这里</span><br><span class="line"> default:</span><br><span class="line"> System.out.println(&quot;default&quot;);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125; &#125;</span><br></pre></td></tr></table></figure></li>
+<li>【强制】三目运算符 condition? 表达式 1 : 表达式 2 中，高度注意表达式 1 和 2 在类型对齐时，可能抛出因自动拆箱导致的 NPE 异常。<br>说明：以下两种场景会触发类型对齐的拆箱操作：<br>1） 表达式 1 或表达式 2 的值只要有一个是原始类型。<br>2） 表达式 1 或表达式 2 的值的类型不一致，会强制拆箱升级成表示范围更大的那个类型。<br>反例：<br>Integer a &#x3D; 1;<br>Integer b &#x3D; 2;<br>Integer c &#x3D; null;<br>Boolean flag &#x3D; false;<br>&#x2F;&#x2F; a<em>b 的结果是 int 类型，那么 c 会强制拆箱成 int 类型，抛出 NPE 异常<br>Integer result&#x3D;(flag? a</em>b : c);</li>
+<li>【强制】在高并发场景中，避免使用”等于”判断作为中断或退出的条件。<br>说明：如果并发控制没有处理好，容易产生等值判断被“击穿”的情况，使用大于或小于的区间判断条件来代替。<br>反例：判断剩余奖品数量等于 0 时，终止发放奖品，但因为并发处理错误导致奖品数量瞬间变成了负数，<br>这样的话，活动无法终止。</li>
+<li>【推荐】当某个方法的代码行数超过 10 行时，return &#x2F; throw 等中断逻辑的右大括号后加一个空行。<br>说明：这样做逻辑清晰，有利于代码阅读时重点关注。</li>
+<li>【推荐】表达异常的分支时，少用 if-else 方式，这种方式可以改写成：<br>if (condition) {<br> …<br> return obj; }<br>&#x2F;&#x2F; 接着写 else 的业务逻辑代码;<br>说明：如果非使用 if()…else if()…else…方式表达逻辑，避免后续代码维护困难，请勿超过 3 层。<br>正例：超过 3 层的 if-else 的逻辑判断代码可以使用卫语句、策略模式、状态模式等来实现，其中卫语句<br>示例如下：<br>public void findBoyfriend (Man man){<br> if (man.isUgly()) {<br> System.out.println(“本姑娘是外貌协会的资深会员”);<br> return;<br> }<br> if (man.isPoor()) {<br> System.out.println(“贫贱夫妻百事哀”);<br> return;<br> }<br> if (man.isBadTemper()) {<br> System.out.println(“银河有多远，你就给我滚多远”);<br> return; }<br> System.out.println(“可以先交往一段时间看看”);<br>}</li>
+</ol>
+<p>12.【推荐】接口入参保护，这种场景常见的是用作批量操作的接口。<br>反例：某业务系统，提供一个用户批量查询的接口，API 文档上有说最多查多少个，但接口实现上没做任何<br>保护，导致调用方传了一个 1000 的用户 id 数组过来后，查询信息后，内存爆了。</p>
+<p>13.【参考】下列情形，需要进行参数校验： 1） 调用频次低的方法。<br>2） 执行时间开销很大的方法。此情形中，参数校验时间几乎可以忽略不计，但如果因为参数错误导致<br>中间执行回退，或者错误，那得不偿失。<br>3） 需要极高稳定性和可用性的方法。<br>4） 对外提供的开放接口，不管是 RPC&#x2F;API&#x2F;HTTP 接口。<br>5） 敏感权限入口。</p>
+<p>14.【参考】下列情形，不需要进行参数校验： 1） 极有可能被循环调用的方法。但在方法说明里必须注明外部参数检查。<br>2） 底层调用频度比较高的方法。毕竟是像纯净水过滤的最后一道，参数错误不太可能到底层才会暴露<br>问题。一般 DAO 层与 Service 层都在同一个应用中，部署在同一台服务器中，所以 DAO 的参数校验，可<br>以省略。<br>3） 被声明成 private 只会被自己代码所调用的方法，如果能够确定调用方法的代码传入参数已经做过检<br>查或者肯定不会有问题，此时可以不校验参数。</p>
+<p>##(九) 注释规约</p>
+<ol>
+<li><p>【强制】类、类属性、类方法的注释必须使用 Javadoc 规范，使用&#x2F;*<em>内容</em>&#x2F;格式，不得使用<br>&#x2F;&#x2F; xxx 方式。<br>说明：在 IDE 编辑窗口中，Javadoc 方式会提示相关注释，生成 Javadoc 可以正确输出相应注释；在 IDE<br>中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。</p>
+</li>
+<li><p>【强制】所有的枚举类型字段必须要有注释，说明每个数据项的用途。</p>
+</li>
+<li><p>【参考】谨慎注释掉代码。在上方详细说明，而不是简单地注释掉。如果无用，则删除。<br>说明：代码被注释掉有两种可能性：1）后续会恢复此段代码逻辑。2）永久不用。前者如果没有备注信息，<br>难以知晓注释动机。后者建议直接删掉即可，假如需要查阅历史代码，登录代码仓库即可。<br>12.【参考】特殊注释标记，请注明标记人与标记时间。注意及时处理这些标记，通过标记扫描，<br>经常清理此类标记。线上故障有时候就是来源于这些标记处的代码。<br>1） 待办事宜（TODO）:（标记人，标记时间，[预计处理时间]）<br>表示需要实现，但目前还未实现的功能。这实际上是一个 Javadoc 的标签，目前的 Javadoc 还没有实现，但已经被广泛使用。只能应用于类，接口和方法（因为它是一个 Javadoc 标签）。<br>2） 错误，不能工作（FIXME）:（标记人，标记时间，[预计处理时间]）<br>在注释中用 FIXME 标记某代码是错误的，而且不能工作，需要及时纠正的情况。</p>
+</li>
+</ol>
+<p>##(十) 其它</p>
+<ol>
+<li>【强制】在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。<br>说明：不要在方法体内定义：Pattern pattern &#x3D; Pattern.compile(“规则”);<br>正确：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private static final Pattern pattern = Pattern.compile(regexRule);</span><br><span class="line"> </span><br><span class="line">private void func(...) &#123;</span><br><span class="line">    Matcher m = pattern.matcher(content);</span><br><span class="line">    if (m.matches()) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>【强制】避免用 Apache Beanutils 进行属性的 copy。<br>说明：Apache BeanUtils 性能较差，可以使用其他方案比如 Spring BeanUtils, Cglib BeanCopier，注意<br>均是浅拷贝。</li>
+<li>【强制】velocity 调用 POJO 类的属性时，直接使用属性名取值即可，模板引擎会自动按规范<br>调用 POJO 的 getXxx()，如果是 boolean 基本数据类型变量（boolean 命名不需要加 is 前缀），<br>会自动调用 isXxx()方法。<br>说明：注意如果是 Boolean 包装类对象，优先调用 getXxx()的方法。</li>
+</ol>
+<p><code>4. 【强制】后台输送给页面的变量必须加$!&#123;var&#125;——中间的感叹号。 说明：如果 var 等于 null 或者不存在，那么$&#123;var&#125;会直接显示在页面上。</code></p>
+<ol start="5">
+<li>【强制】注意 Math.random() 这个方法返回是 double 类型，注意取值的范围 0≤x&lt;1（能够<br>取到零值，注意除零异常），如果想获取整数类型的随机数，不要将 x 放大 10 的若干倍然后<br>取整，直接使用 Random 对象的 nextInt 或者 nextLong 方法。</li>
+</ol>
+<p><code>6. 【推荐】不要在视图模板中加入任何复杂的逻辑。 说明：根据 MVC 理论，视图的职责是展示，不要抢模型和控制器的活。</code></p>
+<ol start="7">
+<li><p>【推荐】任何数据结构的构造或初始化，都应指定大小，避免数据结构无限增长吃光内存。</p>
+</li>
+<li><p>【推荐】及时清理不再使用的代码段或配置信息。<br>说明：对于垃圾代码或过时配置，坚决清理干净，避免程序过度臃肿，代码冗余。<br>正例：对于暂时被注释掉，后续可能恢复使用的代码片断，在注释代码上方，统一规定使用三个斜杠(&#x2F;&#x2F;&#x2F;)<br>来说明注释掉代码的理由。如：<br> public static void hello() {<br> &#x2F;&#x2F;&#x2F; 业务方通知活动暂停<br> &#x2F;&#x2F; Business business &#x3D; new Business();<br> &#x2F;&#x2F; business.active();<br> System.out.println(“it’s finished”);<br>}</p>
+</li>
+</ol>
+<p>#二、异常日志<br>##(一) 错误码<br>3. 【强制】全部正常，但不得不填充错误码时返回五个零：00000。</p>
+<ol start="4">
+<li><p>【强制】错误码为字符串类型，共 5 位，分成两个部分：错误产生来源+四位数字编号。<br>说明：错误产生来源分为 A&#x2F;B&#x2F;C，A 表示错误来源于用户，比如参数错误，用户安装版本过低，用户支付<br>超时等问题；B 表示错误来源于当前系统，往往是业务逻辑出错，或程序健壮性差等问题；C 表示错误来源<br>于第三方服务，比如 CDN 服务出错，消息投递超时等问题；四位数字编号从 0001 到 9999，大类之间的<br>步长间距预留 100，参考文末附表 3。</p>
+</li>
+<li><p>【强制】编号不与公司业务架构，更不与组织架构挂钩，一切与平台先到先申请的原则进行，<br>审批生效，编号即被永久固定。</p>
+</li>
+<li><p>【强制】错误码不能直接输出给用户作为提示信息使用。<br>说明：堆栈（stack_trace）、错误信息(error_message)、错误码（error_code）、提示信息（user_tip）<br>是一个有效关联并互相转义的和谐整体，但是请勿互相越俎代庖。</p>
+</li>
+<li><p>【推荐】在获取第三方服务错误码时，向上抛出允许本系统转义，由 C 转为 B，并且在错误信<br>息上带上原有的第三方错误码。</p>
+</li>
+</ol>
+<p>10.【参考】错误码分为一级宏观错误码、二级宏观错误码、三级宏观错误码。<br>说明：在无法更加具体确定的错误场景中，可以直接使用一级宏观错误码，分别是：A0001（用户端错误）、B0001（系统执行出错）、C0001（调用第三方服务出错）。<br>正例：调用第三方服务出错是一级，中间件错误是二级，消息服务出错是三级。</p>
+<p>13.【参考】错误码即人性，感性认知+口口相传，使用纯数字来进行错误码编排不利于感性记忆<br>和分类。<br>说明：数字是一个整体，每位数字的地位和含义是相同的。 反例：一个五位数字 12345，第 1 位是错误等级，第 2 位是错误来源，345 是编号，人的大脑不会主动地<br>分辨每位数字的不同含义。</p>
+<p>##(二) 异常处理</p>
+<ol>
+<li><p>【强制】Java 类库中定义的可以通过预检查方式规避的 RuntimeException 异常不应该通过<br>catch 的方式来处理，比如：NullPointerException，IndexOutOfBoundsException 等等。<br>说明：无法通过预检查的异常除外，比如，在解析字符串形式的数字时，可能存在数字格式错误，不得不<br>通过 catch NumberFormatException 来实现。<br>正例：if (obj !&#x3D; null) {…}<br>反例：try { obj.method(); } catch (NullPointerException e) {…}</p>
+</li>
+<li><p>【强制】异常不要用来做流程控制，条件控制。<br>说明：异常设计的初衷是解决程序运行中的各种意外情况，且异常的处理效率比条件判断方式要低很多。</p>
+</li>
+<li><p>【强制】catch 时请分清稳定代码和非稳定代码，稳定代码指的是无论如何不会出错的代码。<br>对于非稳定代码的 catch 尽可能进行区分异常类型，再做对应的异常处理。<br>说明：对大段代码进行 try-catch，使程序无法根据不同的异常做出正确的应激反应，也不利于定位问题，<br>这是一种不负责任的表现。<br>正例：用户注册的场景中，如果用户输入非法字符，或用户名称已存在，或用户输入密码过于简单，在程<br>序上作出分门别类的判断，并提示给用户。</p>
+</li>
+<li><p>【强制】事务场景中，抛出异常被 catch 后，如果需要回滚，一定要注意手动回滚事务。</p>
+</li>
+</ol>
+<p><code>6. 【强制】finally 块必须对资源对象、流对象进行关闭，有异常也要做 try-catch。 说明：如果 JDK7 及以上，可以使用 try-with-resources 方式。</code></p>
+<ol start="7">
+<li><p>【强制】不要在 finally 块中使用 return。<br>说明：try 块中的 return 语句执行成功后，并不马上返回，而是继续执行 finally 块中的语句，如果此处存<br>在 return 语句，则在此直接返回，无情丢弃掉 try 块中的返回点。<br>反例：<br>private int x &#x3D; 0;<br>public int checkReturn() {<br> try {<br> &#x2F;&#x2F; x 等于 1，此处不返回<br> return ++x;<br> } finally {<br> &#x2F;&#x2F; 返回的结果是 2<br> return ++x;<br> } }</p>
+</li>
+<li><p>【强制】在调用 RPC、二方包、或动态生成类的相关方法时，捕捉异常必须使用 Throwable<br>类来进行拦截。<br>说明：通过反射机制来调用方法，如果找不到方法，抛出 NoSuchMethodException。什么情况会抛出<br>NoSuchMethodError 呢？二方包在类冲突时，仲裁机制可能导致引入非预期的版本使类的方法签名不匹配，<br>或者在字节码修改框架（比如：ASM）动态创建或修改类时，修改了相应的方法签名。这些情况，即使代<br>码编译期是正确的，但在代码运行期时，会抛出 NoSuchMethodError。<br>10.【推荐】方法的返回值可以为 null，不强制返回空集合，或者空对象等，必须添加注释充分说<br>明什么情况下会返回 null 值。<br>说明：本手册明确防止 NPE 是调用者的责任。即使被调用方法返回空集合或者空对象，对调用者来说，也<br>并非高枕无忧，必须考虑到远程调用失败、序列化失败、运行时异常等场景返回 null 的情况。<br>11.【推荐】防止 NPE，是程序员的基本修养，注意 NPE 产生的场景：<br>1） 返回类型为基本数据类型，return 包装数据类型的对象时，自动拆箱有可能产生 NPE。<br> 反例：public int f() { return Integer 对象}， 如果为 null，自动解箱抛 NPE。 2） 数据库的查询结果可能为 null。 3） 集合里的元素即使 isNotEmpty，取出的数据元素也可能为 null。 4） 远程调用返回对象时，一律要求进行空指针判断，防止 NPE。 5） 对于 Session 中获取的数据，建议进行 NPE 检查，避免空指针。6） 级联调用 obj.getA().getB().getC()；一连串调用，易产生 NPE。<br>正例：使用 JDK8 的 Optional 类来防止 NPE 问题。</p>
+</li>
+</ol>
+<p>12.【推荐】定义时区分 unchecked &#x2F; checked 异常，避免直接抛出 new RuntimeException()，<br>更不允许抛出 Exception 或者 Throwable，应使用有业务含义的自定义异常。推荐业界已定<br>义过的自定义异常，如：DAOException &#x2F; ServiceException 等。</p>
+<p>13.【参考】对于公司外的 http&#x2F;api 开放接口必须使用“错误码”；而应用内部推荐异常抛出；<br>跨应用间 RPC 调用优先考虑使用 Result 方式，封装 isSuccess()方法、“错误码”、“错误<br>简短信息”；而应用内部推荐异常抛出。<br>说明：关于 RPC 方法返回方式使用 Result 方式的理由：<br>1）使用抛异常返回方式，调用方如果没有捕获到就会产生运行时错误。<br>2）如果不加栈信息，只是 new 自定义异常，加入自己的理解的 error message，对于调用端解决问题<br>的帮助不会太多。如果加了栈信息，在频繁调用出错的情况下，数据序列化和传输的性能损耗也是问题。<br>14.【参考】避免出现重复的代码（Don’t Repeat Yourself），即 DRY 原则。<br>说明：随意复制和粘贴代码，必然会导致代码的重复，在以后需要修改时，需要修改所有的副本，容易遗漏。<br>必要时抽取共性方法，或者抽象公共类，甚至是组件化。<br>正例：一个类中有多个 public 方法，都需要进行数行相同的参数校验操作，这个时候请抽取：<br>private boolean checkParam(DTO dto) {…}</p>
+<p>##(三) 日志规约</p>
+<ol>
+<li><p>【强制】应用中不可直接使用日志系统（Log4j、Logback）中的 API，而应依赖使用日志框架<br>（SLF4J、JCL–Jakarta Commons Logging）中的 API，使用门面模式的日志框架，有利于维护和<br>各个类的日志处理方式统一。<br>说明：日志框架（SLF4J、JCL–Jakarta Commons Logging）的使用方式（推荐使用 SLF4J）<br> 使用 SLF4J：<br>import org.slf4j.Logger;<br>import org.slf4j.LoggerFactory;<br>private static final Logger logger &#x3D; LoggerFactory.getLogger(Test.class);<br>使用 JCL：<br>import org.apache.commons.logging.Log;<br>import org.apache.commons.logging.LogFactory;<br>private static final Log log &#x3D; LogFactory.getLog(Test.class);</p>
+</li>
+<li><p>【强制】所有日志文件至少保存 15 天，因为有些异常具备以“周”为频次发生的特点。对于<br>当天日志，以“应用名.log”来保存，保存在&#x2F;home&#x2F;admin&#x2F;应用名&#x2F;logs&#x2F;</font>目录下，<br>过往日志格式为: {logname}.log.{保存日期}，日期格式：yyyy-MM-dd<br>说明：以 mppserver 应用为例，日志保存在&#x2F;home&#x2F;admin&#x2F;mppserver&#x2F;logs&#x2F;mppserver.log，历史日志<br>名称为 mppserver.log.2016-08-01</p>
+</li>
+<li><p>【强制】应用中的扩展日志（如打点、临时监控、访问日志等）命名方式：<br>appName_logType_logName.log。logType:日志类型，如 stats&#x2F;monitor&#x2F;access 等；logName:日志描<br>Java 开发手册<br> 31&#x2F;57<br>述。这种命名的好处：通过文件名就可知道日志文件属于什么应用，什么类型，什么目的，也有利于归类查<br>找。<br>说明：推荐对日志进行分类，如将错误日志和业务日志分开存放，便于开发人员查看，也便于通过日志对系<br>统进行及时监控。<br>正例：mppserver 应用中单独监控时区转换异常，如：mppserver_monitor_timeZoneConvert.log</p>
+</li>
+<li><p>【强制】在日志输出时，字符串变量之间的拼接使用占位符的方式。<br>说明：因为 String 字符串的拼接会使用 StringBuilder 的 append()方式，有一定的性能损耗。使用占位符仅<br>是替换动作，可以有效提升性能。<br>正例：logger.debug(“Processing trade with id: {} and symbol: {}”, id, symbol);</p>
+</li>
+</ol>
+<p><code>5. 【强制】对于 trace/debug/info 级别的日志输出，必须进行日志级别的开关判断。 说明：虽然在 debug(参数)的方法体内第一行代码 isDisabled(Level.DEBUG_INT)为真时（Slf4j 的常见实现 Log4j 和 Logback），就直接 return，但是参数可能会进行字符串拼接运算。此外，如果 debug(getName()) 这种参数内有 getName()方法调用，无谓浪费方法调用的开销。 正例： // 如果判断为真，那么可以输出 trace 和 debug 级别的日志 if (logger.isDebugEnabled()) &#123;  logger.debug(&quot;Current ID is: &#123;&#125; and name is: &#123;&#125;&quot;, id, getName()); &#125;</code></p>
+<ol start="6">
+<li><p>【强制】避免重复打印日志，浪费磁盘空间，务必在 log4j.xml 中设置 additivity&#x3D;false。<br>正例：<logger name="com.taobao.dubbo.config" additivity="false"></p>
+</li>
+<li><p>【强制】生产环境禁止直接使用 System.out 或 System.err 输出日志或使用e.printStackTrace()打印异常堆栈。<br>说明：标准日志输出与标准错误输出文件每次 Jboss 重启时才滚动，如果大量输出送往这两个文件，容易<br>造成文件大小超过操作系统大小限制。</p>
+</li>
+<li><p>【强制】异常信息应该包括两类信息：案发现场信息和异常堆栈信息。如果不处理，那么通过<br>关键字 throws 往上抛出。<br>正例：logger.error(各类参数或者对象 toString() + “_” + e.getMessage(), e);</p>
+</li>
+<li><p>【强制】日志打印时禁止直接用 JSON 工具将对象转换成 String。<br>说明：如果对象里某些 get 方法被重写，存在抛出异常的情况，则可能会因为打印日志而影响正常业务流<br>程的执行。<br>正例：打印日志时仅打印出业务相关属性值或者调用其对象的 toString()方法。</p>
+</li>
+</ol>
+<p>10.【推荐】谨慎地记录日志。生产环境禁止输出 debug 日志；有选择地输出 info 日志；如果使用<br>warn 来记录刚上线时的业务行为信息，一定要注意日志输出量的问题，避免把服务器磁盘撑<br>爆，并记得及时删除这些观察日志。<br>说明：大量地输出无效日志，不利于系统性能提升，也不利于快速定位错误点。记录日志时请思考：这些<br>日志真的有人看吗？看到这条日志你能做什么？能不能给问题排查带来好处？</p>
+<p>11.【推荐】可以使用 warn 日志级别来记录用户输入参数错误的情况，避免用户投诉时，无所适<br>从。如非必要，请不要在此场景打出 error 级别，避免频繁报警。<br>说明：注意日志输出的级别，error 级别只记录系统逻辑出错、异常或者重要的错误信息。<br>12.【推荐】尽量用英文来描述日志错误信息，如果日志中的错误信息用英文描述不清楚的话使用<br>中文描述即可，否则容易产生歧义。<br>说明：国际化团队或海外部署的服务器由于字符集问题，使用全英文来注释和描述日志错误信息。</p>
+<p>#三、单元测试</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/JAVA%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E8%8A%82%E9%80%89/">http://example.com/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/JAVA%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E8%8A%82%E9%80%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/" title="Ranger权限管理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Ranger权限管理</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/JWT%E4%BC%98%E7%BC%BA%E7%82%B9/" title="JWT优缺点"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JWT优缺点</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80-%E5%91%BD%E5%90%8D%E9%A3%8E%E6%A0%BC"><span class="toc-number">1.</span> <span class="toc-text">(一) 命名风格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C-%E5%B8%B8%E9%87%8F%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">(二) 常量定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B-OOP-%E8%A7%84%E7%BA%A6"><span class="toc-number">3.</span> <span class="toc-text">(四) OOP 规约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94-%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4"><span class="toc-number">4.</span> <span class="toc-text">(五) 日期时间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD-%E9%9B%86%E5%90%88%E5%A4%84%E7%90%86"><span class="toc-number">5.</span> <span class="toc-text">(六) 集合处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83-%E5%B9%B6%E5%8F%91%E5%A4%84%E7%90%86"><span class="toc-number">6.</span> <span class="toc-text">(七) 并发处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB-%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5"><span class="toc-number">7.</span> <span class="toc-text">(八) 控制语句</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

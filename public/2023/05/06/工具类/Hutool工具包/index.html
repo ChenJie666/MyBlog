@@ -1,0 +1,205 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hutool工具包 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="12345&lt;dependency&gt;    &lt;groupId&gt;cn.hutool&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;hutool-all&lt;&#x2F;artifactId&gt;    &lt;version&gt;5.3.3&lt;&#x2F;version&gt;&lt;&#x2F;dependency&gt; 对象属性复制：BeanUtil.copyPr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hutool工具包">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/Hutool%E5%B7%A5%E5%85%B7%E5%8C%85/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="12345&lt;dependency&gt;    &lt;groupId&gt;cn.hutool&lt;&#x2F;groupId&gt;    &lt;artifactId&gt;hutool-all&lt;&#x2F;artifactId&gt;    &lt;version&gt;5.3.3&lt;&#x2F;version&gt;&lt;&#x2F;dependency&gt; 对象属性复制：BeanUtil.copyPr">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.067Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.067Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/Hutool%E5%B7%A5%E5%85%B7%E5%8C%85/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hutool工具包',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hutool工具包</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.067Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.067Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%B7%A5%E5%85%B7%E7%B1%BB/">工具类</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hutool工具包"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;cn.hutool&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;hutool-all&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.3.3&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>对象属性复制：<br>BeanUtil.copyProperties(dragonflyFms,dragonflyFmVO);</p>
+<p>HttpUtil</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HttpResponse response = HttpUtil.createPost(tokenUrl).execute();</span><br><span class="line">Assert.isTrue(response.isOk(), response.body());</span><br><span class="line">JSONObject resBody = new JSONObject(response.body());</span><br></pre></td></tr></table></figure>
+<p>发送x-www-form-urlencoded格式的内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">HttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> HttpUtil.createPost(overflowHost).form(param).execute();</span><br></pre></td></tr></table></figure>
+
+<p>Convert<br>类型转换工具类，用于各种类型数据的转换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//转换为字符串</span><br><span class="line">int a = 1;</span><br><span class="line">String aStr = Convert.toStr(a);</span><br><span class="line">//转换为指定类型数组</span><br><span class="line">String[] b = &#123;&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;&#125;;</span><br><span class="line">Integer[] bArr = Convert.toIntArray(b);</span><br><span class="line">//转换为日期对象</span><br><span class="line">String dateStr = &quot;2017-05-06&quot;;</span><br><span class="line">Date date = Convert.toDate(dateStr);</span><br><span class="line">//转换为列表</span><br><span class="line">String[] strArr = &#123;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;&#125;;</span><br><span class="line">List&lt;String&gt; strList = Convert.toList(String.class, strArr);</span><br></pre></td></tr></table></figure>
+
+<p>DateUtil<br>日期时间工具类，定义了一些常用的日期时间操作方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//Date、long、Calendar之间的相互转换</span><br><span class="line">//当前时间</span><br><span class="line">Date date = DateUtil.date();</span><br><span class="line">//Calendar转Date</span><br><span class="line">date = DateUtil.date(Calendar.getInstance());</span><br><span class="line">//时间戳转Date</span><br><span class="line">date = DateUtil.date(System.currentTimeMillis());</span><br><span class="line">//自动识别格式转换</span><br><span class="line">String dateStr = &quot;2017-03-01&quot;;</span><br><span class="line">date = DateUtil.parse(dateStr);</span><br><span class="line">//自定义格式化转换</span><br><span class="line">date = DateUtil.parse(dateStr, &quot;yyyy-MM-dd&quot;);</span><br><span class="line">//格式化输出日期</span><br><span class="line">String format = DateUtil.format(date, &quot;yyyy-MM-dd&quot;);</span><br><span class="line">//获得年的部分</span><br><span class="line">int year = DateUtil.year(date);</span><br><span class="line">//获得月份，从0开始计数</span><br><span class="line">int month = DateUtil.month(date);</span><br><span class="line">//获取某天的开始、结束时间</span><br><span class="line">Date beginOfDay = DateUtil.beginOfDay(date);</span><br><span class="line">Date endOfDay = DateUtil.endOfDay(date);</span><br><span class="line">//计算偏移后的日期时间</span><br><span class="line">Date newDate = DateUtil.offset(date, DateField.DAY_OF_MONTH, 2);</span><br><span class="line">//计算日期时间之间的偏移量</span><br><span class="line">long betweenDay = DateUtil.between(date, newDate, DateUnit.DAY);</span><br></pre></td></tr></table></figure>
+
+<p>StrUtil<br>字符串工具类，定义了一些常用的字符串操作方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//判断是否为空字符串</span><br><span class="line">String str = &quot;test&quot;;</span><br><span class="line">StrUtil.isEmpty(str);</span><br><span class="line">StrUtil.isNotEmpty(str);</span><br><span class="line">//去除字符串的前后缀</span><br><span class="line">StrUtil.removeSuffix(&quot;a.jpg&quot;, &quot;.jpg&quot;);</span><br><span class="line">StrUtil.removePrefix(&quot;a.jpg&quot;, &quot;a.&quot;);</span><br><span class="line">//格式化字符串</span><br><span class="line">String template = &quot;这只是个占位符:&#123;&#125;&quot;;</span><br><span class="line">String str2 = StrUtil.format(template, &quot;我是占位符&quot;);</span><br><span class="line">LOGGER.info(&quot;/strUtil format:&#123;&#125;&quot;, str2);</span><br></pre></td></tr></table></figure>
+
+<p>ClassPathResource<br>获取classPath下的文件，在Tomcat等容器下，classPath一般是WEB-INF&#x2F;classes。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//获取定义在src/main/resources文件夹中的配置文件</span><br><span class="line">ClassPathResource resource = new ClassPathResource(&quot;generator.properties&quot;);</span><br><span class="line">Properties properties = new Properties();</span><br><span class="line">properties.load(resource.getStream());</span><br><span class="line">LOGGER.info(&quot;/classPath:&#123;&#125;&quot;, properties);</span><br></pre></td></tr></table></figure>
+
+<p>ReflectUtil<br>Java反射工具类，可用于反射获取类的方法及创建对象。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//获取某个类的所有方法</span><br><span class="line">Method[] methods = ReflectUtil.getMethods(PmsBrand.class);</span><br><span class="line">//获取某个类的指定方法</span><br><span class="line">Method method = ReflectUtil.getMethod(PmsBrand.class, &quot;getId&quot;);</span><br><span class="line">//使用反射来创建对象</span><br><span class="line">PmsBrand pmsBrand = ReflectUtil.newInstance(PmsBrand.class);</span><br><span class="line">//反射执行对象的方法</span><br><span class="line">ReflectUtil.invoke(pmsBrand, &quot;setId&quot;, 1);</span><br></pre></td></tr></table></figure>
+
+<p>NumberUtil<br>数字处理工具类，可用于各种类型数字的加减乘除操作及判断类型。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">double n1 = 1.234;</span><br><span class="line">double n2 = 1.234;</span><br><span class="line">double result;</span><br><span class="line">//对float、double、BigDecimal做加减乘除操作</span><br><span class="line">result = NumberUtil.add(n1, n2);</span><br><span class="line">result = NumberUtil.sub(n1, n2);</span><br><span class="line">result = NumberUtil.mul(n1, n2);</span><br><span class="line">result = NumberUtil.div(n1, n2);</span><br><span class="line">//保留两位小数</span><br><span class="line">BigDecimal roundNum = NumberUtil.round(n1, 2);</span><br><span class="line">String n3 = &quot;1.234&quot;;</span><br><span class="line">//判断是否为数字、整数、浮点数</span><br><span class="line">NumberUtil.isNumber(n3);</span><br><span class="line">NumberUtil.isInteger(n3);</span><br><span class="line">NumberUtil.isDouble(n3);</span><br></pre></td></tr></table></figure>
+
+<p>BeanUtil<br>JavaBean的工具类，可用于Map与JavaBean对象的互相转换以及对象属性的拷贝。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PmsBrand brand = new PmsBrand();</span><br><span class="line">brand.setId(1L);</span><br><span class="line">brand.setName(&quot;小米&quot;);</span><br><span class="line">brand.setShowStatus(0);</span><br><span class="line">//Bean转Map</span><br><span class="line">Map&lt;String, Object&gt; map = BeanUtil.beanToMap(brand);</span><br><span class="line">LOGGER.info(&quot;beanUtil bean to map:&#123;&#125;&quot;, map);</span><br><span class="line">//Map转Bean</span><br><span class="line">PmsBrand mapBrand = BeanUtil.mapToBean(map, PmsBrand.class, false);</span><br><span class="line">LOGGER.info(&quot;beanUtil map to bean:&#123;&#125;&quot;, mapBrand);</span><br><span class="line">//Bean属性拷贝</span><br><span class="line">PmsBrand copyBrand = new PmsBrand();</span><br><span class="line">BeanUtil.copyProperties(brand, copyBrand);</span><br><span class="line">LOGGER.info(&quot;beanUtil copy properties:&#123;&#125;&quot;, copyBrand);</span><br></pre></td></tr></table></figure>
+
+<p>CollUtil<br>集合操作的工具类，定义了一些常用的集合操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//数组转换为列表</span><br><span class="line">String[] array = new String[]&#123;&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;&#125;;</span><br><span class="line">List&lt;String&gt; list = CollUtil.newArrayList(array);</span><br><span class="line">//join：数组转字符串时添加连接符号</span><br><span class="line">String joinStr = CollUtil.join(list, &quot;,&quot;);</span><br><span class="line">LOGGER.info(&quot;collUtil join:&#123;&#125;&quot;, joinStr);</span><br><span class="line">//将以连接符号分隔的字符串再转换为列表</span><br><span class="line">List&lt;String&gt; splitList = StrUtil.split(joinStr, &#x27;,&#x27;);</span><br><span class="line">LOGGER.info(&quot;collUtil split:&#123;&#125;&quot;, splitList);</span><br><span class="line">//创建新的Map、Set、List</span><br><span class="line">HashMap&lt;Object, Object&gt; newMap = CollUtil.newHashMap();</span><br><span class="line">HashSet&lt;Object&gt; newHashSet = CollUtil.newHashSet();</span><br><span class="line">ArrayList&lt;Object&gt; newList = CollUtil.newArrayList();</span><br><span class="line">//判断列表是否为空</span><br><span class="line">CollUtil.isEmpty(list);</span><br></pre></td></tr></table></figure>
+
+<p>MapUtil<br>Map操作工具类，可用于创建Map对象及判断Map是否为空。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//将多个键值对加入到Map中</span><br><span class="line">Map&lt;Object, Object&gt; map = MapUtil.of(new String[][]&#123;</span><br><span class="line">    &#123;&quot;key1&quot;, &quot;value1&quot;&#125;,</span><br><span class="line">    &#123;&quot;key2&quot;, &quot;value2&quot;&#125;,</span><br><span class="line">    &#123;&quot;key3&quot;, &quot;value3&quot;&#125;</span><br><span class="line">&#125;);</span><br><span class="line">//判断Map是否为空</span><br><span class="line">MapUtil.isEmpty(map);</span><br><span class="line">MapUtil.isNotEmpty(map);</span><br></pre></td></tr></table></figure>
+
+<p>AnnotationUtil<br>注解工具类，可用于获取注解与注解中指定的值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//获取指定类、方法、字段、构造器上的注解列表</span><br><span class="line">Annotation[] annotationList = AnnotationUtil.getAnnotations(HutoolController.class, false);</span><br><span class="line">LOGGER.info(&quot;annotationUtil annotations:&#123;&#125;&quot;, annotationList);</span><br><span class="line">//获取指定类型注解</span><br><span class="line">Api api = AnnotationUtil.getAnnotation(HutoolController.class, Api.class);</span><br><span class="line">LOGGER.info(&quot;annotationUtil api value:&#123;&#125;&quot;, api.description());</span><br><span class="line">//获取指定类型注解的值</span><br><span class="line">Object annotationValue = AnnotationUtil.getAnnotationValue(HutoolController.class, RequestMapping.class);</span><br></pre></td></tr></table></figure>
+
+<p>SecureUtil<br>加密解密工具类，可用于MD5加密。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//MD5加密</span><br><span class="line">String str = &quot;123456&quot;;</span><br><span class="line">String md5Str = SecureUtil.md5(str);</span><br><span class="line">LOGGER.info(&quot;secureUtil md5:&#123;&#125;&quot;, md5Str);</span><br></pre></td></tr></table></figure>
+
+<p>CaptchaUtil<br>验证码工具类，可用于生成图形验证码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//生成验证码图片</span><br><span class="line">LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);</span><br><span class="line">try &#123;</span><br><span class="line">    request.getSession().setAttribute(&quot;CAPTCHA_KEY&quot;, lineCaptcha.getCode());</span><br><span class="line">    response.setContentType(&quot;image/png&quot;);//告诉浏览器输出内容为图片</span><br><span class="line">    response.setHeader(&quot;Pragma&quot;, &quot;No-cache&quot;);//禁止浏览器缓存</span><br><span class="line">    response.setHeader(&quot;Cache-Control&quot;, &quot;no-cache&quot;);</span><br><span class="line">    response.setDateHeader(&quot;Expire&quot;, 0);</span><br><span class="line">    lineCaptcha.write(response.getOutputStream());</span><br><span class="line">&#125; catch (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/Hutool%E5%B7%A5%E5%85%B7%E5%8C%85/">http://example.com/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/Hutool%E5%B7%A5%E5%85%B7%E5%8C%85/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/Excel%E6%96%87%E4%BB%B6%E7%9A%84%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA/" title="Excel文件的导入导出"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Excel文件的导入导出</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%B7%A5%E5%85%B7%E7%B1%BB/IT300%E8%AE%B2/" title="IT300讲"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">IT300讲</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

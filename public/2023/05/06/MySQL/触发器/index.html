@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>触发器 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859CREATE TABLE &#96;msas_device_exceptions&#96; (  &#96;id&#96; bigint(20) NOT NULL AUTO_INCREMENT COMMENT &amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="触发器">
+<meta property="og:url" content="http://example.com/2023/05/06/MySQL/%E8%A7%A6%E5%8F%91%E5%99%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859CREATE TABLE &#96;msas_device_exceptions&#96; (  &#96;id&#96; bigint(20) NOT NULL AUTO_INCREMENT COMMENT &amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.023Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.023Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/MySQL/%E8%A7%A6%E5%8F%91%E5%99%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '触发器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">触发器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.023Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.023Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MySQL/">MySQL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="触发器"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `msas_device_exceptions` (</span><br><span class="line">  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT &#x27;主键&#x27;,</span><br><span class="line">  `request_id` varchar(124) DEFAULT NULL COMMENT &#x27;异常单号，时间戳+reqid&#x27;,</span><br><span class="line">  `error_code` varchar(96) DEFAULT NULL COMMENT &#x27;错误码&#x27;,</span><br><span class="line">  `start_time` datetime DEFAULT NULL COMMENT &#x27;首次上报时间&#x27;,</span><br><span class="line">  `end_time` datetime DEFAULT NULL COMMENT &#x27;结束时间&#x27;,</span><br><span class="line">  `exception_status` tinyint(4) DEFAULT &#x27;0&#x27; COMMENT &#x27;0正常 1异常&#x27;,</span><br><span class="line">  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT &#x27;创建时间&#x27;,</span><br><span class="line">  `update_time` datetime DEFAULT NULL COMMENT &#x27;更新时间&#x27;,</span><br><span class="line">  `delete_time` datetime DEFAULT NULL COMMENT &#x27;删除时间&#x27;,</span><br><span class="line">  `create_by` varchar(64) DEFAULT NULL COMMENT &#x27;创建人&#x27;,</span><br><span class="line">  `update_by` varchar(64) DEFAULT NULL COMMENT &#x27;更新人&#x27;,</span><br><span class="line">  `status` int(11) DEFAULT &#x27;0&#x27; COMMENT &#x27;逻辑删除标识位&#x27;,</span><br><span class="line">  `version` int(11) DEFAULT &#x27;0&#x27; COMMENT &#x27;版本&#x27;,</span><br><span class="line">  `model` varchar(255) DEFAULT NULL COMMENT &#x27;产品型号(简写)&#x27;,</span><br><span class="line">  `sn_code` varchar(128) DEFAULT NULL COMMENT &#x27;整机编码&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`) USING BTREE,</span><br><span class="line">  UNIQUE KEY `uniq_request_id_error_code` (`request_id`,`error_code`) USING BTREE COMMENT &#x27;用于upsert&#x27;,</span><br><span class="line">  KEY `idx_request_id` (`request_id`) USING BTREE,</span><br><span class="line">  KEY `idx_status` (`status`) USING BTREE,</span><br><span class="line">  KEY `idx_sn_code` (`sn_code`) USING BTREE</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=2734 DEFAULT CHARSET=utf8mb4 COMMENT=&#x27;异常上报明细表&#x27;;</span><br><span class="line"></span><br><span class="line">CREATE DEFINER=`mcook_quadruple`@`%` TRIGGER tri_insert_exception_detail_clean</span><br><span class="line">AFTER INSERT ON msas_device_exceptions</span><br><span class="line">FOR EACH ROW</span><br><span class="line"></span><br><span class="line">BEGIN</span><br><span class="line">    DECLARE amount int;</span><br><span class="line">    DECLARE new_exception_status int;</span><br><span class="line">    -- 获取当前设备符合条件的异常个数</span><br><span class="line">    SELECT COUNT(1) INTO amount FROM msas_device_exceptions_detail_clean WHERE sn_code = new.sn_code AND error_code = new.error_code AND exception_status &lt; 2;</span><br><span class="line">    SELECT IFNULL((CASE WHEN new.error_code = &#x27;E2&#x27; THEN -1 WHEN new.error_code = &#x27;E3&#x27; THEN -1 END), 1) INTO new_exception_status;</span><br><span class="line"></span><br><span class="line">    IF(new.error_code != &#x27;E0&#x27;) THEN</span><br><span class="line">        -- 等于0，插入新数据</span><br><span class="line">        IF (amount = 0) THEN</span><br><span class="line">            INSERT INTO msas_device_exceptions_detail_clean(request_id, error_code, start_time, exception_status, model, sn_code, create_time)</span><br><span class="line">            VALUES(CONCAT(new.request_id, &#x27;-&#x27;, new.error_code), new.error_code, new.start_time, new_exception_status, new.model, new.sn_code, new.create_time);</span><br><span class="line">        ELSE</span><br><span class="line">            -- 等于1，更新上一条的结束时间为NULL</span><br><span class="line">            UPDATE msas_device_exceptions_detail_clean SET end_time = NULL WHERE sn_code = new.sn_code AND error_code = new.error_code AND error_code != &#x27;E0&#x27; AND ABS(new_exception_status) = 1;</span><br><span class="line">        END IF;</span><br><span class="line">    END IF;</span><br><span class="line">END;</span><br><span class="line"></span><br><span class="line">CREATE DEFINER=`mcook_quadruple`@`%` TRIGGER tri_update_exception_detail_clean</span><br><span class="line">AFTER UPDATE ON msas_device_exceptions</span><br><span class="line">FOR EACH ROW</span><br><span class="line"></span><br><span class="line">BEGIN</span><br><span class="line">    DECLARE amount int;</span><br><span class="line">    -- 获取当前设备符合条件的异常个数</span><br><span class="line">    SELECT COUNT(1) INTO amount FROM msas_device_exceptions_detail_clean WHERE sn_code = old.sn_code AND error_code = old.error_code AND ABS(exception_status) = 1 AND end_time IS NULL;</span><br><span class="line">    -- 等于1，更新数据</span><br><span class="line">    IF (amount = 1) THEN</span><br><span class="line">        UPDATE msas_device_exceptions_detail_clean SET end_time = new.end_time WHERE sn_code = old.sn_code AND error_code = old.error_code AND ABS(exception_status) = 1 AND new.end_time IS NOT NULL;</span><br><span class="line">    END IF;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `msas_device_exceptions_all` (</span><br><span class="line">  `id` bigint NOT NULL AUTO_INCREMENT COMMENT &#x27;主键&#x27;,</span><br><span class="line">  `request_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;异常单号，时间戳+reqid&#x27;,</span><br><span class="line">  `sn_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;整机编码&#x27;,</span><br><span class="line">  `device_type` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;产品类型&#x27;,</span><br><span class="line">  `device_model` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;产品型号&#x27;,</span><br><span class="line">  `product_key` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;四元组PK&#x27;,</span><br><span class="line">  `iot_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;iotId&#x27;,</span><br><span class="line">  `device_name` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;四元组DN&#x27;,</span><br><span class="line">  `error_code` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;错误码&#x27;,</span><br><span class="line">  `error_code_multiple` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;错误码，逗号分隔，如,E3,E5,&#x27;,</span><br><span class="line">  `deal_status` tinyint DEFAULT &#x27;0&#x27; COMMENT &#x27;派单情况 0初始化上报 1已领取待派单 2已领取已派单处理中 3处理结束&#x27;,</span><br><span class="line">  `ignore_status` tinyint DEFAULT &#x27;0&#x27; COMMENT &#x27;忽略状态 0未忽略 1已忽略&#x27;,</span><br><span class="line">  `deal_man` tinyint DEFAULT &#x27;0&#x27; COMMENT &#x27;处理人&#x27;,</span><br><span class="line">  `deal_deadline` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;处理截止时间&#x27;,</span><br><span class="line">  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT &#x27;创建时间&#x27;,</span><br><span class="line">  `update_time` datetime DEFAULT NULL COMMENT &#x27;更新时间&#x27;,</span><br><span class="line">  `delete_time` datetime DEFAULT NULL COMMENT &#x27;删除时间&#x27;,</span><br><span class="line">  `create_by` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;创建人&#x27;,</span><br><span class="line">  `update_by` varchar(64) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT &#x27;更新人&#x27;,</span><br><span class="line">  `status` int DEFAULT &#x27;0&#x27; COMMENT &#x27;逻辑删除标识位&#x27;,</span><br><span class="line">  `version` int DEFAULT &#x27;0&#x27; COMMENT &#x27;版本&#x27;,</span><br><span class="line">  PRIMARY KEY (`id`) USING BTREE,</span><br><span class="line">  UNIQUE KEY `idx_request_id` (`request_id`) USING BTREE,</span><br><span class="line">  KEY `idx_sn_code` (`sn_code`) USING BTREE,</span><br><span class="line">  KEY `idx_error_code` (`error_code`) USING BTREE,</span><br><span class="line">  KEY `idx_deal_status` (`deal_status`) USING BTREE,</span><br><span class="line">  KEY `idx_multiple` (`error_code_multiple`) USING BTREE,</span><br><span class="line">  KEY `idx_status` (`status`) USING BTREE</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=2663 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT=&#x27;异常上报总表&#x27;;</span><br><span class="line"></span><br><span class="line">CREATE DEFINER=`mcook_quadruple_test`@`%` TRIGGER `tri_insert_exception_all_clean` AFTER INSERT ON `msas_device_exceptions_all` FOR EACH ROW BEGIN</span><br><span class="line">    DECLARE amount int;</span><br><span class="line">    DECLARE error_code VARCHAR(255);</span><br><span class="line">    -- 获取当前设备符合条件的异常个数</span><br><span class="line">    SELECT COUNT(1) INTO amount FROM msas_device_exceptions_all_clean WHERE sn_code = new.sn_code AND deal_status &lt; 2 AND ignore_status = 0;</span><br><span class="line">    -- 获取当前设备符合条件的异常</span><br><span class="line">    SELECT error_code_multiple INTO error_code FROM msas_device_exceptions_all_clean WHERE sn_code = new.sn_code AND deal_status &lt; 2 AND ignore_status = 0;</span><br><span class="line">    -- E0：无需操作； 非E0：需要往清洗表中插入数据</span><br><span class="line">    IF (new.error_code_multiple != &#x27;E0&#x27;) THEN</span><br><span class="line">        -- 大于0，更新数据</span><br><span class="line">        IF (amount &gt; 0) THEN</span><br><span class="line">            UPDATE msas_device_exceptions_all_clean SET error_code_multiple = (</span><br><span class="line">              -- 聚合并去重异常，由E1,E5 + E1,E4 聚合为 E1,E4,E5</span><br><span class="line">              SELECT GROUP_CONCAT(DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(t.codes, &#x27;,&#x27;, n.n), &#x27;,&#x27;, -1) SEPARATOR &#x27;,&#x27;) AS combined_codes</span><br><span class="line">                FROM (</span><br><span class="line">                  SELECT CONCAT_WS(&#x27;,&#x27;, code1, code2) AS codes FROM (</span><br><span class="line">                    SELECT DISTINCT error_code AS code1, new.error_code_multiple AS code2 FROM dual</span><br><span class="line">                  ) AS t</span><br><span class="line">                ) AS t</span><br><span class="line">                CROSS JOIN (</span><br><span class="line">                  SELECT a.N + b.N * 10 + 1 AS n</span><br><span class="line">                  FROM (</span><br><span class="line">                      SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9</span><br><span class="line">                  ) AS a</span><br><span class="line">                  CROSS JOIN (</span><br><span class="line">                      SELECT 0 AS N UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9</span><br><span class="line">                  ) AS b</span><br><span class="line">                  ORDER BY n</span><br><span class="line">                ) AS n</span><br><span class="line">                WHERE n.n &lt;= 1 + (LENGTH(t.codes) - LENGTH(REPLACE(t.codes, &#x27;,&#x27;, &#x27;&#x27;)))</span><br><span class="line">            ) WHERE sn_code = new.sn_code AND deal_status &lt; 2 AND ignore_status = 0;</span><br><span class="line">        ELSE</span><br><span class="line">            -- 等于0，插入新数据</span><br><span class="line">            INSERT INTO msas_device_exceptions_all_clean(sn_code, device_type, device_model, product_key, iot_id, device_name, error_code_multiple, create_time)</span><br><span class="line">            VALUES(new.sn_code, new.device_type, new.device_model, new.product_key, new.iot_id, new.device_name, new.error_code_multiple, new.create_time);</span><br><span class="line">        END IF;</span><br><span class="line">    END IF;</span><br><span class="line">END;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/MySQL/%E8%A7%A6%E5%8F%91%E5%99%A8/">http://example.com/2023/05/06/MySQL/%E8%A7%A6%E5%8F%91%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/MySQL/%E8%A1%8C%E5%88%97%E8%BD%AC%E6%8D%A2/" title="行列转换"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">行列转换</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/MySQL/%E9%97%AE%E9%A2%98/" title="问题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">问题</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

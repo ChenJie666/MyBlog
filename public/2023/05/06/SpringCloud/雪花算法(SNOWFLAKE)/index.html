@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>雪花算法(SNOWFLAKE) | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SnowFlake 算法，是 Twitter 开源的分布式 id 生成算法。其核心思想就是：使用一个 64 bit 的 long 型的数字作为全局唯一 id。在分布式系统中的应用十分广泛，且ID 引入了时间戳，基本上保持自增的，后面的代码中有详细的注解。 对比UUID和自增主键UUID无序且长度过长，自增主键无法保证分库分表情况下的自增。所以使用雪花算法，保证了自增和高效。 基本结构这 64 个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="雪花算法(SNOWFLAKE)">
+<meta property="og:url" content="http://example.com/2023/05/06/SpringCloud/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95(SNOWFLAKE)/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="SnowFlake 算法，是 Twitter 开源的分布式 id 生成算法。其核心思想就是：使用一个 64 bit 的 long 型的数字作为全局唯一 id。在分布式系统中的应用十分广泛，且ID 引入了时间戳，基本上保持自增的，后面的代码中有详细的注解。 对比UUID和自增主键UUID无序且长度过长，自增主键无法保证分库分表情况下的自增。所以使用雪花算法，保证了自增和高效。 基本结构这 64 个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/SpringCloud/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95(SNOWFLAKE)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '雪花算法(SNOWFLAKE)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">雪花算法(SNOWFLAKE)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.035Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.035Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringCloud/">SpringCloud</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="雪花算法(SNOWFLAKE)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>SnowFlake 算法，是 Twitter 开源的分布式 id 生成算法。其核心思想就是：使用一个 64 bit 的 long 型的数字作为全局唯一 id。在分布式系统中的应用十分广泛，且ID 引入了时间戳，基本上保持自增的，后面的代码中有详细的注解。</p>
+<p><strong>对比UUID和自增主键</strong><br>UUID无序且长度过长，自增主键无法保证分库分表情况下的自增。所以使用雪花算法，保证了自增和高效。</p>
+<p><strong>基本结构</strong><br>这 64 个 bit 中（转为十进制位数为18-19位），其中 1 个 bit 是不用的，然后用其中的 41 bit 作为毫秒数，用 10 bit 作为工作机器 id，12 bit 作为序列号。</p>
+<ul>
+<li>第一个部分，是 1 个 bit：0，这个是无意义的。</li>
+<li>第二个部分是 41 个 bit：表示的是时间戳。41 bit 可以表示的数字多达 2^41 - 1，也就是可以标识 2 ^ 41 - 1 个毫秒值，换算成年就是表示 69 年的时间。</li>
+<li>第三个部分是 5 个 bit：表示的是机房 id，10001。最多代表 2 ^ 5 个机房（32 个机房）</li>
+<li>第四个部分是 5 个 bit：表示的是机器 id，1 1001。每个机房里可以代表 2 ^ 5 个机器（32 台机器）</li>
+<li>第五个部分是 12 个 bit：表示的序号，就是某个机房某台机器上这一毫秒内同时生成的 id 的序号，0000 00000000。12 bit 可以代表的最大正整数是 2 ^ 12 - 1 &#x3D; 4096，也就是说可以用这个 12 bit 代表的数字来区分同一个毫秒内的 4096 个不同的 id。</li>
+</ul>
+<p>结论：这个算法可以保证，一个机房的一台机器上，在同一毫秒内，生成了一个唯一的 id。可能一个毫秒内会生成多个 id，但是有最后 12 个 bit 的序号来区分开来。</p>
+<p><strong>SnowFlake算法的优点：</strong><br>（1）高性能高可用：生成时不依赖于数据库，完全在内存中生成。<br>（2）容量大：每秒中能生成数百万的自增ID。理论上雪花算法方案的QPS约为409.6w&#x2F;s。<br>（3）ID自增：存入数据库中，索引效率高。</p>
+<p><strong>SnowFlake算法的缺点：</strong><br>依赖与系统时间的一致性，如果系统时间被回调，或者改变，可能会造成id冲突或者重复。</p>
+<p><strong>解决方案：</strong><br>方案一是发现时钟回拨后，算出来回拨多少，保存为时间偏移量，然后后面每次获取时间戳都加上偏移量，每回拨一次更新一次偏移量<br>方案二是，只在第一次生成id或启动时获取时间戳并保存下来，每生成一个id，就计下数，每个毫秒数能生成的id数是固定的，到生成满了，再把时间戳加一，这样就不依赖于系统时间了，每个毫秒数的使用率也最高</p>
+<p><strong>代码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">public class SnowFlake &#123;</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 起始的时间戳（可设置当前时间之前的邻近时间）</span><br><span class="line">  */</span><br><span class="line"> private final static long START_STAMP = 1480166465631L;</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 序列号占用的位数</span><br><span class="line">  */</span><br><span class="line"> private final static long SEQUENCE_BIT = 12;</span><br><span class="line"> /**</span><br><span class="line">  * 机器标识占用的位数</span><br><span class="line">  */</span><br><span class="line"> private final static long MACHINE_BIT = 5;</span><br><span class="line"> /**</span><br><span class="line">  * 数据中心占用的位数</span><br><span class="line">  */</span><br><span class="line"> private final static long DATA_CENTER_BIT = 5;</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 每一部分的最大值</span><br><span class="line">  */</span><br><span class="line"> private final static long MAX_DATA_CENTER_NUM = ~(-1L &lt;&lt; DATA_CENTER_BIT);</span><br><span class="line"> private final static long MAX_MACHINE_NUM = ~(-1L &lt;&lt; MACHINE_BIT);</span><br><span class="line"> private final static long MAX_SEQUENCE = ~(-1L &lt;&lt; SEQUENCE_BIT);</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 每一部分向左的位移</span><br><span class="line">  */</span><br><span class="line"> private final static long MACHINE_LEFT = SEQUENCE_BIT;</span><br><span class="line"> private final static long DATA_CENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;</span><br><span class="line"> private final static long TIMESTAMP_LEFT = DATA_CENTER_LEFT + DATA_CENTER_BIT;</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 数据中心ID(0~31)</span><br><span class="line">  */</span><br><span class="line"> private final long dataCenterId;</span><br><span class="line"> /**</span><br><span class="line">  * 工作机器ID(0~31)</span><br><span class="line">  */</span><br><span class="line"> private final long machineId;</span><br><span class="line"> /**</span><br><span class="line">  * 毫秒内序列(0~4095)</span><br><span class="line">  */</span><br><span class="line"> private long sequence = 0L;</span><br><span class="line"> /**</span><br><span class="line">  * 上次生成ID的时间截</span><br><span class="line">  */</span><br><span class="line"> private long lastStamp = -1L;</span><br><span class="line"></span><br><span class="line"> public SnowFlake(long dataCenterId, long machineId) &#123;</span><br><span class="line">  if (dataCenterId &gt; MAX_DATA_CENTER_NUM || dataCenterId &lt; 0) &#123;</span><br><span class="line">   throw new IllegalArgumentException(&quot;dataCenterId can&#x27;t be greater than MAX_DATA_CENTER_NUM or less than &quot; +</span><br><span class="line">     &quot;0&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  if (machineId &gt; MAX_MACHINE_NUM || machineId &lt; 0) &#123;</span><br><span class="line">   throw new IllegalArgumentException(&quot;machineId can&#x27;t be greater than MAX_MACHINE_NUM or less than 0&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  this.dataCenterId = dataCenterId;</span><br><span class="line">  this.machineId = machineId;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> /**</span><br><span class="line">  * 产生下一个ID</span><br><span class="line">  */</span><br><span class="line"> public synchronized long nextId() &#123;</span><br><span class="line">  long currStamp = getNewStamp();</span><br><span class="line">  if (currStamp &lt; lastStamp) &#123;</span><br><span class="line">   throw new RuntimeException(&quot;Clock moved backwards.  Refusing to generate id&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (currStamp == lastStamp) &#123;</span><br><span class="line">   //相同毫秒内，序列号自增</span><br><span class="line">   sequence = (sequence + 1) &amp; MAX_SEQUENCE;</span><br><span class="line">   //同一毫秒的序列数已经达到最大</span><br><span class="line">   if (sequence == 0L) &#123;</span><br><span class="line">    //阻塞到下一个毫秒,获得新的时间戳</span><br><span class="line">    currStamp = getNextMill();</span><br><span class="line">   &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">   //不同毫秒内，序列号置为0</span><br><span class="line">   sequence = 0L;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  lastStamp = currStamp;</span><br><span class="line"></span><br><span class="line">  // 移位并通过或运算拼到一起组成64位的ID</span><br><span class="line">  return (currStamp - START_STAMP) &lt;&lt; TIMESTAMP_LEFT //时间戳部分</span><br><span class="line">    | dataCenterId &lt;&lt; DATA_CENTER_LEFT       //数据中心部分</span><br><span class="line">    | machineId &lt;&lt; MACHINE_LEFT             //机器标识部分</span><br><span class="line">    | sequence;                             //序列号部分</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> private long getNextMill() &#123;</span><br><span class="line">  long mill = getNewStamp();</span><br><span class="line">  while (mill &lt;= lastStamp) &#123;</span><br><span class="line">   mill = getNewStamp();</span><br><span class="line">  &#125;</span><br><span class="line">  return mill;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> private long getNewStamp() &#123;</span><br><span class="line">  return System.currentTimeMillis();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> public static void main(String[] args) &#123;</span><br><span class="line">  SnowFlake snowFlake = new SnowFlake(11, 11);</span><br><span class="line"></span><br><span class="line">  long start = System.currentTimeMillis();</span><br><span class="line">  for (int i = 0; i &lt; 10; i++) &#123;</span><br><span class="line">   System.out.println(snowFlake.nextId());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  System.out.println(System.currentTimeMillis() - start);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中，在算法的核心方法上，通过加synchronized锁来保证线程安全。这样，同一服务器线程是安全的，生成的ID不会出现重复，而不同服务器由于机器码不同，就算同一时刻两台服务器都产生了雪花ID，结果也是不一样的。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/SpringCloud/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95(SNOWFLAKE)/">http://example.com/2023/05/06/SpringCloud/%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95(SNOWFLAKE)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/SpringCloud/%E6%B3%A8%E5%85%A5%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AF%B9%E8%B1%A1/" title="注入线程池对象"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">注入线程池对象</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E4%B8%AD%E9%97%B4%E4%BB%B6/Docker%E5%AE%9E%E7%8E%B0Redis%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2/" title="Docker实现Redis集群部署"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Docker实现Redis集群部署</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>VSCode、JS、Vue简单语法 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Vue框架编写基本的操作流程：在src&#x2F;api中定义接口的方法 —》在src&#x2F;router中写路由—》在src&#x2F;views中调用方法渲染页面。Vue框架中ES6的语法支持js间的方法调用，axios进行了封装 ###VSCode操作安装插件chinese（中文简体）、live server（类似tomcat服务器）、vetur（vue工具）、vue-helper（vu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VSCode、JS、Vue简单语法">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/VSCode%E3%80%81JS%E3%80%81Vue%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Vue框架编写基本的操作流程：在src&#x2F;api中定义接口的方法 —》在src&#x2F;router中写路由—》在src&#x2F;views中调用方法渲染页面。Vue框架中ES6的语法支持js间的方法调用，axios进行了封装 ###VSCode操作安装插件chinese（中文简体）、live server（类似tomcat服务器）、vetur（vue工具）、vue-helper（vu">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.043Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.043Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/VSCode%E3%80%81JS%E3%80%81Vue%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'VSCode、JS、Vue简单语法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">VSCode、JS、Vue简单语法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.043Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="VSCode、JS、Vue简单语法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Vue框架编写基本的操作流程：在src&#x2F;api中定义接口的方法 —》在src&#x2F;router中写路由—》在src&#x2F;views中调用方法渲染页面。<br>Vue框架中ES6的语法支持js间的方法调用，axios进行了封装</p>
+<p>###VSCode操作<br>安装插件chinese（中文简体）、live server（类似tomcat服务器）、vetur（vue工具）、vue-helper（vue脚手架）</p>
+<p>1.本地创建空文件夹<br>2.通过vscode在文件夹中创建工作区<br>3.可以通过live server启动服务器，访问127.0.0.1:5500访问所有的命名空间。</p>
+<p>VSCode的debug模式，在需要加断点的地方插入debugger，就会在该行停止。<br>![image.png](VSCode、JS、Vue简单语法.assetsdc06e112fef4c8a80a8f38ddbfa05d8.png)</p>
+<p>###JS的基本语法<br>ES6是一套标准，JS是这套标准的实现。<br>1.定义变量</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">            可以使用var和let定义变量</span></span><br><span class="line"><span class="comment">            区别一:作用范围不同，let定义局部变量，var定义全局变量</span></span><br><span class="line"><span class="comment">            区别二:let只能定义一次 ，var可以相同定义多次           </span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">var</span> a = <span class="number">1</span>;  <span class="comment">//可以重复定义</span></span><br><span class="line">        <span class="keyword">let</span> b = <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在代码块外输出代码</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a) <span class="comment">//输出10</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(b) <span class="comment">//Uncaught ReferenceError: b is not defined</span></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>2.定义常量</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">AA</span>  <span class="comment">//定义常量必须初始化</span></span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">PI</span> = <span class="string">&quot;3.1415926&quot;</span></span><br><span class="line">    <span class="variable constant_">PI</span> = <span class="number">3</span>  <span class="comment">//常量一旦定义不能改变</span></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>3.结构赋值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//传统写法</span></span><br><span class="line">    <span class="keyword">let</span> a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(a,b,c)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//es6写法</span></span><br><span class="line">    <span class="keyword">let</span> [x,y,z] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(x,y,z)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>4.对象解构</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//定义对象</span></span><br><span class="line">    <span class="keyword">let</span> user = &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;lucy&quot;</span>,<span class="string">&quot;age&quot;</span>:<span class="number">20</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//传统写法</span></span><br><span class="line">    <span class="keyword">let</span> name1 = user.<span class="property">name</span></span><br><span class="line">    <span class="keyword">let</span> age1 = user.<span class="property">age</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(name1+<span class="string">&quot;==&quot;</span>+age1)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//es6写法,和数组用[]不同的是，对象用&#123;&#125;,且变量名与属性名一致</span></span><br><span class="line">    <span class="keyword">let</span> &#123;age,name&#125; = user</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(name+<span class="string">&quot;==&quot;</span>+age)</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>5.模板字符串</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//1.使用`符号能实现换行</span></span><br><span class="line">    <span class="keyword">let</span> str1 = <span class="string">`hello,</span></span><br><span class="line"><span class="string">    es6 demo up!`</span></span><br><span class="line">    </span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(str1)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.字符串插入变量和表达式。变量名写在$&#123;&#125;中，$&#123;&#125;中可以放入JavaScript表达式</span></span><br><span class="line">    <span class="keyword">let</span> name = <span class="string">&quot;Lucy&quot;</span></span><br><span class="line">    <span class="keyword">let</span> age = <span class="number">19</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> str2 = <span class="string">`hello,<span class="subst">$&#123;name&#125;</span>&#x27;age is <span class="subst">$&#123;age + <span class="number">1</span>&#125;</span>`</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(str2) <span class="comment">//输出 hello,Lucy&#x27;age is 20</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//3.调用方法</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;have fun!!!&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> str3 = <span class="string">`Game start,<span class="subst">$&#123;f()&#125;</span>`</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(str3) <span class="comment">//输出 Game start,have fun!!!</span></span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>6.对象声明</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">const</span> name = <span class="string">&quot;lucy&quot;</span></span><br><span class="line">    <span class="keyword">const</span> age = <span class="number">20</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//传统方式定义对象</span></span><br><span class="line">    <span class="keyword">const</span> p1 = &#123;<span class="attr">name</span>:name,<span class="attr">age</span>:age&#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(p1)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//es6定义对象</span></span><br><span class="line">    <span class="keyword">const</span> p2 = &#123;name,age&#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(p2)</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>7.方法声明</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//传统方式定义方法</span></span><br><span class="line">    <span class="keyword">const</span> person1 = &#123;</span><br><span class="line">        <span class="attr">sayHi</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hi&quot;</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">eat</span>:<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;eat&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    person1.<span class="title function_">sayHi</span>()  <span class="comment">//方法调用</span></span><br><span class="line">    person1.<span class="title function_">eat</span>()   <span class="comment">//方法调用</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//es6方式定义方法,可以省略function</span></span><br><span class="line">    <span class="keyword">const</span> person2 = &#123;</span><br><span class="line">        <span class="title function_">sayHi</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hi&quot;</span>)</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">eat</span>(<span class="params"></span>)&#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;eat&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    person2.<span class="title function_">sayHi</span>()</span><br><span class="line">    person2.<span class="title function_">eat</span>()</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>8.对象拓展运算符</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//1.对象复制</span></span><br><span class="line">    <span class="type">let</span> <span class="variable">person1</span> <span class="operator">=</span> &#123;<span class="string">&quot;name&quot;</span>:<span class="string">&quot;lucy&quot;</span>,<span class="string">&quot;age&quot;</span>:<span class="number">20</span>&#125;</span><br><span class="line">    <span class="type">let</span> <span class="variable">person2</span> <span class="operator">=</span> &#123;...person1&#125;</span><br><span class="line"></span><br><span class="line">    console.log(person2)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.合并对象</span></span><br><span class="line">    <span class="type">let</span> <span class="variable">name</span> <span class="operator">=</span> &#123;name:<span class="string">&quot;mary&quot;</span>&#125;</span><br><span class="line">    <span class="type">let</span> <span class="variable">age</span> <span class="operator">=</span> &#123;age:<span class="number">15</span>&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">let</span> <span class="variable">p2</span> <span class="operator">=</span> &#123;...name,...age&#125;</span><br><span class="line"></span><br><span class="line">    console.log(p2)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>9.箭头函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="comment">//传统定义函数写法</span></span><br><span class="line">    <span class="type">var</span> <span class="variable">f1</span> <span class="operator">=</span> function(a)&#123;</span><br><span class="line">        <span class="keyword">return</span> a</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(f1(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="type">var</span> <span class="variable">f2</span> <span class="operator">=</span> function(a,b)&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b</span><br><span class="line">    &#125;</span><br><span class="line">    console.log(f2(<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ES6定义函数写法（类似lambda表达式）</span></span><br><span class="line">    <span class="type">var</span> <span class="variable">f3</span> <span class="operator">=</span> a =&gt; a</span><br><span class="line">    console.log(f3(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="type">var</span> <span class="variable">f4</span> <span class="operator">=</span> (a,b) =&gt; a+b</span><br><span class="line">    console.log(f2(<span class="number">1</span>,<span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+
+<p>#VUE<br><em><strong>标签</strong></em></p>
+<ul>
+<li><p>v-on（@）：事件绑定</p>
+<ul>
+<li>v-on:submit.prevent修饰符告诉v-on指令对于触发的事件调用js的event.preventDefault()，即阻止表单提交的默认行为；</li>
+<li>v-on:click.once修饰符表示只能调用一次</li>
+</ul>
+</li>
+<li><p>v-bind（：）：变量绑定</p>
+</li>
+<li><p>v-model：变量双向绑定</p>
+</li>
+<li><p>v-if、v-else-if、v-else：条件渲染，惰性的，如果条件为false，则不渲染。</p>
+</li>
+<li><p>v-show：效果同v-if，会渲染全部的元素。</p>
+</li>
+<li><p>v-for：列表渲染</p>
+</li>
+<li><p>el：view名称定义</p>
+</li>
+<li><p>data：变量定义</p>
+</li>
+<li><p>method：方法定义</p>
+</li>
+<li><p>compute：计算方法定义</p>
+</li>
+<li><p>components：组件定义</p>
+</li>
+<li><p>beforeCreate </p>
+</li>
+<li><p><strong>created</strong>：在页面渲染之前执行</p>
+</li>
+<li><p>beforeMount</p>
+</li>
+<li><p><strong>mounted</strong>：在页面渲染之后执行</p>
+</li>
+<li><p>beforeUpdate</p>
+</li>
+<li><p>updated </p>
+</li>
+<li><p>beforeDestroy</p>
+</li>
+<li><p>destroyed</p>
+</li>
+<li><p><input type="text" v-model="name"> 文本框</p>
+</li>
+<li><textarea v-model="msg"></textarea> 多行文本框</li>
+<li><p><input type="checkbox" v-model="check"> 单个复选框</p>
+</li>
+<li> 多个复选框
+<p>  <input type="checkbox" value="male" v-model="checklist">M<br>  <input type="checkbox" value="female" v-model="checklist">F<br>  <input type="checkbox" value="other" v-model="checklist">O</p>
+</li>
+<li> 单选框
+<p>  <input type="radio" value="查找" v-model="picked">A<br>  <input type="radio" value="删除" v-model="picked">B</p>
+</li>
+<li> 下拉框
+  <select v-model="select">
+      <!-- disabled表示无法选中，select和value为一样都为空，则显示该标签的内容 -->
+      <option disabled value="">请选择</option>
+      <option value="北京">北京</option>
+      <option value="上海">上海</option>
+      <option value="杭州">杭州</option>
+  </select></li>
+</ul>
+<p>###axios<br>axios是独立的项目，经常和axios一起使用，实现ajax操作。</p>
+<p>###element-ui组件库<br>是饿了么前端开源的基于Vue.js的后台组件库，方便程序员进行页面的快速布局和构建。</p>
+<p>###node.js<br>1.node.js是JS的运行环境，用于执行JS代码环境，不需要浏览器。<br>2.模拟服务器，直接使用node.js运行JS代码。<br>node -v  &#x2F;&#x2F;检查版本<br>node js文件路径   &#x2F;&#x2F;可以直接运行js文件</p>
+<p>###npm<br>NPM(Node Package Manager)是Node.js包管理工具，相当于前端的Maven，管理前端js依赖，比如jquery。安装node.js时会自动安装npm，npm -v查看版本。<br>1.npm项目初始化操作<br>npm init [-y]<br>完成后会生成package.json文件，类似于pom.xml文件</p>
+<p>2.npm下载js依赖<br>&#x2F;&#x2F;设置为淘宝镜像<br>npm config set registry <a target="_blank" rel="noopener" href="https://registry.npm.taobao.org/">https://registry.npm.taobao.org</a><br>&#x2F;&#x2F;查看镜像源<br>npm config list</p>
+<p>3.1下载依赖<br>npm install 依赖名称@版本</p>
+<p>![项目目录](VSCode、JS、Vue简单语法.assets14ced6c8e0641b2b02794387b957881.png)<br>下载完成后会生成package-lock.json文件和modules模块：<br>① package-lock.json记录了依赖的版本并锁定，只能使用记录的版本的依赖<br>② modules存储了<br>③ 根据package.json下载依赖</p>
+<p>3.2根据目录下的package.json下载指定版本的依赖<br>npm install</p>
+<p>###babel<br>babel是转码器，把es6代码转换成es5的代码，提高兼容性。<br>1.安装babel<br>npm install –global babel-cli<br>babel –version<br>2.在项目根目录下新建配置文件.babelrc<br>{<br>    “presets”:[“es2015”]<br>}<br>3.安装转码器<br>npm install –save-dev babel-preset-es2015<br>4.创建用es6语法编写的js文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义数组</span></span><br><span class="line"><span class="keyword">let</span> input = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line"><span class="comment">//将数组每个元素加一</span></span><br><span class="line">input = input.<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> item + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(input)</span><br></pre></td></tr></table></figure>
+<p>5.进行转码<br>①根据文件转码babel src&#x2F;example.js -o dist&#x2F;compiled.js<br>②根据文件夹转码babel src -d dist<br>转码会将es6的语法转换为es5的语法</p>
+<p>###模块化<br>前端js与js之间的互相调用叫做前端的模块化。<br>创建01.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义方法</span></span><br><span class="line"><span class="keyword">const</span> sum = <span class="keyword">function</span>(<span class="params">a,b</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">parseInt</span>(a) + <span class="built_in">parseInt</span>(b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subtract = <span class="keyword">function</span>(<span class="params">a,b</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">parseInt</span>(a) - <span class="built_in">parseInt</span>(b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置哪些方法可以被其他js调用</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    sum,</span><br><span class="line">    subtract</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建02.js，并在02.js中调用01.js的方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//引入01.js文件</span></span><br><span class="line"><span class="keyword">const</span> m = <span class="built_in">require</span>(<span class="string">&#x27;./01.js&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sum = m.<span class="title function_">sum</span>(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"><span class="keyword">const</span> sub = m.<span class="title function_">subtract</span>(<span class="number">1</span>,<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sub)</span><br></pre></td></tr></table></figure>
+<p>注意：如果使用es6写法实现模块化操作，在node.js环境中是不能直接运行的，需要用babel将es6转换为es5语法。<br>如下：<br>创建03.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写法一</span></span><br><span class="line"><span class="comment">// export function sum()&#123;</span></span><br><span class="line"><span class="comment">//     console.log(&#x27;sum...&#x27;)</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// export function subtract()&#123;</span></span><br><span class="line"><span class="comment">//     console.log(&#x27;subtract...&#x27;)</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//写法二</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span>&#123;</span><br><span class="line">    <span class="title function_">sum</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;sum...&#x27;</span>)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">subtract</span>(<span class="params"></span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;subtract...&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>创建04.js，并引入03.js方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//引入js</span></span><br><span class="line"><span class="keyword">import</span> m <span class="keyword">from</span> <span class="string">&#x27;./03.js&#x27;</span></span><br><span class="line"></span><br><span class="line">m.<span class="title function_">sum</span>()</span><br><span class="line">m.<span class="title function_">subtract</span>()</span><br></pre></td></tr></table></figure>
+
+<p>###webpack<br>webpack是前端资源的加载&#x2F;打包工具，可以将js、css、less等文件打包为一个文件，减少页面的请求次数，提高访问效率。</p>
+<p><em><strong>打包js文件</strong></em><br>1.全局安装<br>npm install -g webpack webpack-cli<br>webpack -v 查看版本<br>2.创建用于打包的js文件<br>创建三个js文件<br>![image.png](VSCode、JS、Vue简单语法.assets21df5e8b9ce49e18b626275e0d87ada.png)<br>common.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exports</span>.<span class="property">info</span> = <span class="keyword">function</span>(<span class="params">str</span>)&#123;</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">write</span>(str);  <span class="comment">//在浏览器上输出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>utils.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exports</span>.<span class="property">add</span> = <span class="keyword">function</span>(<span class="params">a,b</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">parseInt</span>(a) + <span class="built_in">parseInt</span>(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>main.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">&#x27;./common.js&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> utils = <span class="built_in">require</span>(<span class="string">&#x27;./utils.js&#x27;</span>)</span><br><span class="line"></span><br><span class="line">common.<span class="title function_">info</span>(<span class="string">&quot;result:&quot;</span> + utils.<span class="title function_">add</span>(<span class="number">1</span>,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>3.在webpack目录下创建配置文件webpack.config.js<br>创建webpack配置文件，配置打包信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>); <span class="comment">//Node.js内置模块</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">entry</span>: <span class="string">&#x27;./src/main.js&#x27;</span>, <span class="comment">//配置入口文件</span></span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname,<span class="string">&#x27;./dist&#x27;</span>),<span class="comment">//输出路径，_dirname：当前文件所在的路径</span></span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;bundle.js&#x27;</span> <span class="comment">//输出文件</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>4.执行打包操作<br>webpack [–mode&#x3D;development&#x2F;production]</p>
+<p>验证需要编写html文件将打包后的js引入，通过浏览器打开</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">&quot;./dist/bundle.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p><em><strong>打包css文件</strong></em><br>1.安装css加载工具<br>npm install –save-dev style-loader css-loader<br>2.创建css文件<br>style.css</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">    <span class="attribute">background-color</span>: red</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.在main.js中引入css文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//引入js文件</span></span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">&#x27;./common.js&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> utils = <span class="built_in">require</span>(<span class="string">&#x27;./utils.js&#x27;</span>)</span><br><span class="line"><span class="comment">//引入css文件</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">&#x27;./style.css&#x27;</span>)</span><br><span class="line"></span><br><span class="line">common.<span class="title function_">info</span>(<span class="string">&quot;result:&quot;</span> + utils.<span class="title function_">add</span>(<span class="number">1</span>,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>4.在webpack.config.js文件中添加css的配置模块module</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>); <span class="comment">//Node.js内置模块</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    <span class="attr">entry</span>: <span class="string">&#x27;./src/main.js&#x27;</span>, <span class="comment">//配置入口文件</span></span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname,<span class="string">&#x27;./dist&#x27;</span>),<span class="comment">//输出路径，_dirname：当前文件所在的路径</span></span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;bundle.js&#x27;</span> <span class="comment">//输出文件</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">test</span>: <span class="regexp">/\.css$/</span>,  <span class="comment">//打包规则应用到以css结尾的文件上</span></span><br><span class="line">                <span class="attr">use</span>: [<span class="string">&#x27;style-loader&#x27;</span>,<span class="string">&#x27;css-loader&#x27;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/VSCode%E3%80%81JS%E3%80%81Vue%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95/">http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/VSCode%E3%80%81JS%E3%80%81Vue%E7%AE%80%E5%8D%95%E8%AF%AD%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%89%8D%E7%AB%AF/Umeng%E5%9F%8B%E7%82%B9/" title="Umeng埋点"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Umeng埋点</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%89%8D%E7%AB%AF/VUE3-0%E9%83%A8%E7%BD%B2/" title="VUE3-0部署"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">VUE3-0部署</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

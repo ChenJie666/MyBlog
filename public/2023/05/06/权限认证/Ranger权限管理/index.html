@@ -1,0 +1,533 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Ranger权限管理 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、介绍1.1 什么是RangerApache Ranger是一个用来在Hadoop平台上进行监控，启用服务，以及全方位数据安全访问管理的安全框架。Ranger的愿景是在Apache Hadoop生态系统中提供全面的安全管理。随着企业业务的拓展，企业可能在多用户环境中运行多个工作任务，这就要求Hadoop内的数据安全性需要扩展为同时支持多种不同的需求进行数据访问，同时还需要提供一个可以对安全策略进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ranger权限管理">
+<meta property="og:url" content="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、介绍1.1 什么是RangerApache Ranger是一个用来在Hadoop平台上进行监控，启用服务，以及全方位数据安全访问管理的安全框架。Ranger的愿景是在Apache Hadoop生态系统中提供全面的安全管理。随着企业业务的拓展，企业可能在多用户环境中运行多个工作任务，这就要求Hadoop内的数据安全性需要扩展为同时支持多种不同的需求进行数据访问，同时还需要提供一个可以对安全策略进">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.075Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.075Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ranger权限管理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Ranger权限管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.075Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.075Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/">权限认证</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Ranger权限管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h1><h2 id="1-1-什么是Ranger"><a href="#1-1-什么是Ranger" class="headerlink" title="1.1 什么是Ranger"></a>1.1 什么是Ranger</h2><p>Apache Ranger是一个用来在Hadoop平台上进行监控，启用服务，以及全方位数据安全访问管理的安全框架。<br>Ranger的愿景是在Apache Hadoop生态系统中提供全面的安全管理。随着企业业务的拓展，企业可能在多用户环境中运行多个工作任务，这就要求Hadoop内的数据安全性需要扩展为同时支持多种不同的需求进行数据访问，同时还需要提供一个可以对安全策略进行集中管理，配置和监控用户访问的框架。Ranger由此产生！<br>Ranger的官网：<a target="_blank" rel="noopener" href="https://ranger.apache.org/">https://ranger.apache.org/</a></p>
+<h2 id="1-2-Ranger的目标"><a href="#1-2-Ranger的目标" class="headerlink" title="1.2 Ranger的目标"></a>1.2 Ranger的目标</h2><ul>
+<li>允许用户使用UI或REST API对所有和安全相关的任务进行集中化的管理</li>
+<li>允许用户使用一个管理工具对操作Hadoop体系中的组件和工具的行为进行细粒度的授权</li>
+<li>支持Hadoop体系中各个组件的授权认证标准</li>
+<li>增强了对不同业务场景需求的授权方法支持，例如基于角色的授权或基于属性的授权</li>
+<li>支持对Hadoop组件所有涉及安全的审计行为的集中化管理</li>
+</ul>
+<h2 id="1-3-Ranger支持的框架"><a href="#1-3-Ranger支持的框架" class="headerlink" title="1.3 Ranger支持的框架"></a>1.3 Ranger支持的框架</h2><ul>
+<li>Apache Hadoop</li>
+<li>Apache Hive：Hive支持多种模式的鉴权，如自己写鉴权代码，打jar包后放到lib目录下。这种就没有Ranger方便快捷。</li>
+<li>Apache HBase</li>
+<li>Apache Storm</li>
+<li>Apache Knox</li>
+<li>Apache Solr</li>
+<li>Apache Kafka</li>
+<li>YARN</li>
+<li>NIFI</li>
+</ul>
+<h2 id="1-4-Ranger工作原理"><a href="#1-4-Ranger工作原理" class="headerlink" title="1.4 Ranger工作原理"></a>1.4 Ranger工作原理</h2><p>Ranger主要由三个组件组成：</p>
+<ul>
+<li><p>Ranger Admin<br>Ranger的核心是Web应用程序，也称为RangerAdmin模块，此模块由管理策略，审计日志和报告等三部分组成。管理员角色的用户可以通过RangerAdmin提供的web界面或REST APIS来定制安全策略。您可以创建和更新安全访问策略，这些策略被存储在数据库中。各个组件的Plugin定期对这些策略进行轮询。这些策略会由Ranger提供的轻量级的针对不同Hadoop体系中组件的插件来执行。插件会在Hadoop的不同组件的核心进程启动后，启动对应的插件进程来进行安全管理！</p>
+</li>
+<li><p>Ranger Plugins<br>Plugin嵌入在各个集群组件的进程里，是一个轻量级的Java程序。例如，Ranger对Hive的组件，就被嵌入在Hiveserver2里。这些Plugin从Ranger Admin服务端拉取策略，并把它们存储在本地文件中。当接收到来自组件的用户请求时，对应组件的Plugin会拦截该请求，并根据安全策略对其进行评估。</p>
+</li>
+<li><p>Ranger UserSync<br>Ranger提供了一个用户同步工具。您可以从Unix或者LDAP中拉取用户和用户组的信息。这些用户和用户组的信息被存储在Ranger Admin的数据库中，可以在定义策略时使用。</p>
+</li>
+</ul>
+<p><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5C2baee3aa6b50402683ab7bac7aa368e4.png" alt="image.png"></p>
+<br>
+# 二、源码编译
+需要从官网下载ranger源码，通过maven编译后进行使用。
+[ranger2.0.0源码 下载地址](https://dist.apache.org/repos/dist/release/ranger/2.0.0/apache-ranger-2.0.0.tar.gz)
+
+<p><code>Ranger2.0要求对应的Hadoop为3.x以上，Hive为3.x以上版本，JDK为1.8以上版本！</code></p>
+<p><strong>推荐在Linux 系统上进行编译，比较方便，需要进行如下准备</strong></p>
+<ul>
+<li>安装maven-3.6.3(这是ranger2.0.0推荐的maven版本)；</li>
+<li>安装gcc：yum install -y gcc (需要对C语言进行编译，如果不安装，编译Unix Native Authenticator模块时会报错找不到gcc命令)；</li>
+<li>安装python2：如果系统自带python2，那么直接忽略，如centos7.x；</li>
+</ul>
+<p>解压源码包，进入ranger-2.0.0父项目的路径下，执行如下命令(mvn命令没有写到环境变量的话需要写全mvn的路径)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -DskipTests clean compile package install assembly:assembly</span><br></pre></td></tr></table></figure>
+
+<p>编译开始，需要等待下载依赖和完成编译打包，耗时个把小时。如果某一个模块编译出错了，可以单独进入该模块进行编译，启动编译命令时加上-X参数，显示debug信息，方便找到错误。</p>
+<p>编译完成后，可以在父项目的target文件中找到所有组件的压缩文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 target]# ll</span><br><span class="line">total 1605360</span><br><span class="line">drwxr-xr-x 2 root root        28 Sep 10 15:28 antrun</span><br><span class="line">drwxr-xr-x 2 root root       116 Sep 10 15:40 archive-tmp</span><br><span class="line">drwxr-xr-x 3 root root        22 Sep 10 15:28 maven-shared-archive-resources</span><br><span class="line">-rw-r--r-- 1 root root 248578820 Sep 10 15:37 ranger-2.0.0-admin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root 249667518 Sep 10 15:38 ranger-2.0.0-admin.zip</span><br><span class="line">-rw-r--r-- 1 root root  27796446 Sep 10 15:39 ranger-2.0.0-atlas-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  27832766 Sep 10 15:39 ranger-2.0.0-atlas-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  31560169 Sep 10 15:40 ranger-2.0.0-elasticsearch-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  31606662 Sep 10 15:40 ranger-2.0.0-elasticsearch-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  26643418 Sep 10 15:34 ranger-2.0.0-hbase-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  26666456 Sep 10 15:34 ranger-2.0.0-hbase-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  23972037 Sep 10 15:33 ranger-2.0.0-hdfs-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  23998268 Sep 10 15:33 ranger-2.0.0-hdfs-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  23831930 Sep 10 15:33 ranger-2.0.0-hive-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  23855462 Sep 10 15:34 ranger-2.0.0-hive-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  39940594 Sep 10 15:35 ranger-2.0.0-kafka-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  39984673 Sep 10 15:35 ranger-2.0.0-kafka-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  90990768 Sep 10 15:38 ranger-2.0.0-kms.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  91107780 Sep 10 15:39 ranger-2.0.0-kms.zip</span><br><span class="line">-rw-r--r-- 1 root root  28391293 Sep 10 15:34 ranger-2.0.0-knox-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  28411851 Sep 10 15:34 ranger-2.0.0-knox-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  23947177 Sep 10 15:40 ranger-2.0.0-kylin-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  23980871 Sep 10 15:40 ranger-2.0.0-kylin-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root     34222 Sep 10 15:38 ranger-2.0.0-migration-util.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root     37740 Sep 10 15:38 ranger-2.0.0-migration-util.zip</span><br><span class="line">-rw-r--r-- 1 root root  26393845 Sep 10 15:35 ranger-2.0.0-ozone-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  26421956 Sep 10 15:35 ranger-2.0.0-ozone-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  40301292 Sep 10 15:40 ranger-2.0.0-presto-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  40342416 Sep 10 15:40 ranger-2.0.0-presto-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  22234270 Sep 10 15:39 ranger-2.0.0-ranger-tools.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  22248968 Sep 10 15:39 ranger-2.0.0-ranger-tools.zip</span><br><span class="line">-rw-r--r-- 1 root root     42210 Sep 10 15:38 ranger-2.0.0-solr_audit_conf.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root     45636 Sep 10 15:38 ranger-2.0.0-solr_audit_conf.zip</span><br><span class="line">-rw-r--r-- 1 root root  26974799 Sep 10 15:36 ranger-2.0.0-solr-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  27010869 Sep 10 15:36 ranger-2.0.0-solr-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  23952172 Sep 10 15:39 ranger-2.0.0-sqoop-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  23986865 Sep 10 15:39 ranger-2.0.0-sqoop-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root   4012596 Sep 10 15:39 ranger-2.0.0-src.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root   6257752 Sep 10 15:39 ranger-2.0.0-src.zip</span><br><span class="line">-rw-r--r-- 1 root root  37239595 Sep 10 15:34 ranger-2.0.0-storm-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  37269537 Sep 10 15:34 ranger-2.0.0-storm-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root  32770865 Sep 10 15:38 ranger-2.0.0-tagsync.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  32782295 Sep 10 15:38 ranger-2.0.0-tagsync.zip</span><br><span class="line">-rw-r--r-- 1 root root  16260331 Sep 10 15:38 ranger-2.0.0-usersync.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  16281055 Sep 10 15:38 ranger-2.0.0-usersync.zip</span><br><span class="line">-rw-r--r-- 1 root root  23962337 Sep 10 15:35 ranger-2.0.0-yarn-plugin.tar.gz</span><br><span class="line">-rw-r--r-- 1 root root  23993168 Sep 10 15:35 ranger-2.0.0-yarn-plugin.zip</span><br><span class="line">-rw-r--r-- 1 root root    166727 Sep 10 15:28 rat.txt</span><br><span class="line">-rw-r--r-- 1 root root         5 Sep 10 15:32 version</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果编译的是ranger-2.2.0源码，需要安装phthon3; 且编译命令不能加assembly:assembly，会有冲突。</p>
+</blockquote>
+<br>
+# 三、部署
+[安装部署官网教程](https://cwiki.apache.org/confluence/display/RANGER/Ranger+Installation+Guide)
+## 3.1 数据库配置
+创建数据库
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create database ranger;</span><br></pre></td></tr></table></figure>
+创建用户
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; grant all privileges on ranger.* to ranger@&#x27;%&#x27; identified by &#x27;bigdata123&#x27;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-2-安装组件"><a href="#3-2-安装组件" class="headerlink" title="3.2 安装组件"></a>3.2 安装组件</h2><h3 id="3-2-1-RangerAdmin"><a href="#3-2-1-RangerAdmin" class="headerlink" title="3.2.1 RangerAdmin"></a>3.2.1 RangerAdmin</h3><h4 id="安装RangerAdmin"><a href="#安装RangerAdmin" class="headerlink" title="安装RangerAdmin"></a>安装RangerAdmin</h4><p>①创建目录mkdir &#x2F;opt&#x2F;module&#x2F;ranger-2.0.0<br>解压ranger-2.0.0-admin.tar.gz到该目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0]# tar -zxvf /opt/software/ranger-2.0.0-admin.tar.gz -C /opt/module/ranger-2.0.0/</span><br></pre></td></tr></table></figure>
+<p>②配置文件install.properties</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#mysql驱动</span><br><span class="line">SQL_CONNECTOR_JAR=/opt/module/ranger-2.0.0/ranger-2.0.0-admin/mysql-connector-java-5.1.45.jar</span><br><span class="line">#mysql的主机名和root用户的用户名密码</span><br><span class="line">db_root_user=root</span><br><span class="line">db_root_password=Password@123</span><br><span class="line">db_host=192.168.101.174</span><br><span class="line">#ranger需要的数据库名和用户信息，和2.2.1创建的信息要一一对应</span><br><span class="line">db_name=ranger</span><br><span class="line">db_user=ranger</span><br><span class="line">db_password=bigdata123</span><br><span class="line">#其他ranger admin需要的用户密码</span><br><span class="line">rangerAdmin_password=bigdata123</span><br><span class="line">rangerTagsync_password=bigdata123</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">keyadmin_password=bigdata123</span><br><span class="line">#ranger存储审计日志的路径，默认为solr，这里为了方便暂不设置</span><br><span class="line">audit_store=</span><br><span class="line">#策略管理器的url,rangeradmin安装在哪台机器，主机名就为对应的主机名，不能写ip</span><br><span class="line">policymgr_external_url=http://bigdata1:6080</span><br><span class="line">#启动ranger admin进程的linux用户信息</span><br><span class="line">unix_user=hxr</span><br><span class="line">unix_user_pwd=bigdata123</span><br><span class="line">unix_group=hxr</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br></pre></td></tr></table></figure>
+<p>③切换到用户root进行安装<br><code>./setup.sh</code></p>
+<blockquote>
+<p>注意：如果使用<code>sudo ./setup.sh</code>安装会找不到JAVA_HOME，但是使用<code>sudo echo $&#123;JAVA_HOME&#125;</code> 是可以正常打印的，很奇怪？？？</p>
+</blockquote>
+<p>④root用户下软路由配置文件<br>只需要执行<code>./set_globals.sh</code>就会自动进行软路由<br>执行结果如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@cos-bigdata-hadoop-01 ranger-2.0.0-admin]# sudo -u -i ranger ./set_globals.sh </span><br><span class="line">usermod：无改变</span><br><span class="line">[2021/08/03 15:27:25]:  [I] Soft linking /etc/ranger/admin/conf to ews/webapp/WEB-INF/classes/conf</span><br></pre></td></tr></table></figure>
+
+<br>
+#### 启动Ranger Admin
+安装时会自动将启动脚本放到/usr/bin目录下，同时根据配置的install.properties自动生成配置文件ranger-admin-site.xml。
+执行链接命令时会将/etc/ranger/admin/conf目录链接到ews/webapp/WEB-INF/classes/conf目录。
+也会将服务设为开机自启，所以无需我们设置开机自启。
+
+<p>但是自动生成的配置文件有两处错误，我们需要手动修改。</p>
+<p>①修改配置文件 &#x2F;etc&#x2F;ranger&#x2F;admin&#x2F;conf&#x2F;ranger-admin-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.jpa.jdbc.password&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;bigdata123&lt;/value&gt;</span><br><span class="line">        &lt;description /&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.service.host&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;192.168.101.179&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>②启动和关闭RangerAdmin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ranger-admin start/stop/restart</span><br></pre></td></tr></table></figure>
+<p>启动后其后台进程名为<strong>EmbeddedServer</strong></p>
+<p>③访问UI<br>管理员账号密码为admin&#x2F;bigdata123<br><a target="_blank" rel="noopener" href="http://192.168.101.179:6080/">http://192.168.101.179:6080</a></p>
+<h3 id="3-2-2-RangerUsersync"><a href="#3-2-2-RangerUsersync" class="headerlink" title="3.2.2 RangerUsersync"></a>3.2.2 RangerUsersync</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>RangerUsersync作为Ranger提供的一个管理模块，可以将Linux机器上的用户和组信息同步到RangerAdmin的数据库中进行管理。也可以同步LDAP等公司现有的用户框架体系中的用户到Ranger Admin中。</p>
+<p>①解压</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0]# tar -zxvf /opt/software/ranger-2.0.0-usersync.tar.gz -C /opt/module/ranger-2.0.0/</span><br></pre></td></tr></table></figure>
+
+<p>②修改配置文件install.properties<br>这里既可以配置同步linux上的用户，也可以配置同步ldap上的用户<br><strong>Ⅰ. 同步linux用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#rangeradmin的url</span><br><span class="line">POLICY_MGR_URL =http://192.168.101.179:6080</span><br><span class="line">#同步间隔时间，单位(分钟)</span><br><span class="line">SYNC_INTERVAL = 1</span><br><span class="line">#运行此进程的linux用户</span><br><span class="line">unix_user=hxr</span><br><span class="line">unix_group=hxr</span><br><span class="line">#rangerUserSync的用户密码，参考rangeradmin中install.properties的配置</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br></pre></td></tr></table></figure>
+
+<p><strong>Ⅱ.同步ldap用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#rangeradmin的url</span><br><span class="line">POLICY_MGR_URL =http://192.168.101.179:6080</span><br><span class="line">#同步间隔时间，单位(分钟)</span><br><span class="line">SYNC_INTERVAL = 60</span><br><span class="line"></span><br><span class="line">#运行此进程的linux用户</span><br><span class="line">unix_user=hxr</span><br><span class="line">unix_group=hxr</span><br><span class="line">#rangerUserSync的用户密码，参考rangeradmin中install.properties的配置</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line"></span><br><span class="line"># 同步的数据源类型，unix为同步linux用户，ldap为同步ldap用户</span><br><span class="line">SYNC_SOURCE = ldap</span><br><span class="line"></span><br><span class="line"># 同步时间，单位为min(不能小于60min)</span><br><span class="line">SYNC_INTERVAL = 60  </span><br><span class="line"># ldap地址</span><br><span class="line">SYNC_LDAP_URL = ldap://192.168.101.174:389</span><br><span class="line"># ldap管理员用户密码</span><br><span class="line">SYNC_LDAP_BIND_DN = cn=admin,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line">SYNC_LDAP_BIND_PASSWORD = bigdata123</span><br><span class="line"># 同步用户所在的路径</span><br><span class="line">SYNC_LDAP_SEARCH_BASE = ou=hive,dc=ldap,dc=chenjie,dc=asia</span><br></pre></td></tr></table></figure>
+
+<p>③在root用户下安装<br><code>./setup.sh</code></p>
+<p>④修改配置文件 conf&#x2F;ranger-ugsync-site.xml </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.usersync.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h4><p><code>ranger-usersync start/stop/restart</code></p>
+<p>ranger-usersync服务也是开机自启动的，因此之后不需要手动启动！</p>
+<p>![可以看到已经将节点上的部分用户同步过来了](Ranger权限管理.assets5018bb6f21d497cb9b0373600b191d2.png)</p>
+<h3 id="3-2-3-Ranger-Hive-plugin"><a href="#3-2-3-Ranger-Hive-plugin" class="headerlink" title="3.2.3 Ranger Hive-plugin"></a>3.2.3 Ranger Hive-plugin</h3><h4 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h4><p>①解压ranger-2.0.0-hive-plugin.tar.gz</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0]# tar -zxvf /opt/software/ranger-2.0.0-hive-plugin.tar.gz -C /opt/module/ranger-2.0.0</span><br></pre></td></tr></table></figure>
+
+<p>②修改配置文件inistall.propreties</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#策略管理器的url地址</span><br><span class="line">POLICY_MGR_URL=http://192.168.101.179:6080</span><br><span class="line">#组件名称可以自定义</span><br><span class="line">REPOSITORY_NAME=hivedev</span><br><span class="line">#hive的安装目录</span><br><span class="line">COMPONENT_INSTALL_DIR_NAME=/opt/module/hive-3.1.2</span><br><span class="line">#hive组件的启动用户</span><br><span class="line">CUSTOM_USER=hxr</span><br><span class="line">#hive组件启动用户所属组</span><br><span class="line">CUSTOM_GROUP=hxr</span><br></pre></td></tr></table></figure>
+
+<p>③将hive配置文件软连接到Ranger Hive-plugin目录下<br><code>ln -s /opt/module/hive-3.1.2/conf /opt/module/ranger-2.0.0/ranger-2.0.0-hive-plugin</code></p>
+<h4 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h4><p>使用root用户启动Ranger Hive-plugin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./enable-hive-plugin.sh</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>执行.&#x2F;disable-hive-plugin.sh 可以关闭插件</p>
+</blockquote>
+<p>会在hive的conf目录下生成配置文件hiveserver2-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;&lt;!--</span><br><span class="line">Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">contributor license agreements. See the NOTICE file distributed with</span><br><span class="line">this work for additional information regarding copyright ownership.</span><br><span class="line">The ASF licenses this file to You under the Apache License, Version 2.0</span><br><span class="line">(the &quot;License&quot;); you may not use this file except in compliance with</span><br><span class="line">the License. You may obtain a copy of the License at</span><br><span class="line"></span><br><span class="line">http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line"></span><br><span class="line">Unless required by applicable law or agreed to in writing, software</span><br><span class="line">distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span><br><span class="line">WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">See the License for the specific language governing permissions and</span><br><span class="line">limitations under the License.</span><br><span class="line">--&gt;&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authorization.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authorization.manager&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;org.apache.ranger.authorization.hive.authorizer.RangerHiveAuthorizerFactory&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authenticator.manager&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.conf.restricted.list&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hive.security.authorization.enabled,hive.security.authorization.manager,hive.security.authenticator.manager&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+
+<p>重启hiveserver2生效</p>
+<br>
+### 3.2.4 Ranger HDFS-plugin
+#### 安装
+①解压ranger-2.0.0-hdfs-plugin.tar.gz
+`tar -zxvf /opt/software/ranger-2.0.0-hdfs-plugin.tar.gz -C /opt/module/ranger-2.0.0`
+
+<p>②修改配置文件inistall.propreties</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#策略管理器的url地址</span><br><span class="line">POLICY_MGR_URL=http://192.168.101.179:6080</span><br><span class="line">#组件名称可以自定义</span><br><span class="line">REPOSITORY_NAME=hdfsdev</span><br><span class="line">#hdfs的安装目录</span><br><span class="line">COMPONENT_INSTALL_DIR_NAME=/opt/module/hadoop-3.1.3</span><br><span class="line">#hdfs组件的启动用户</span><br><span class="line">CUSTOM_USER=hxr</span><br><span class="line">#hdfs组件启动用户所属组</span><br><span class="line">CUSTOM_GROUP=hxr</span><br></pre></td></tr></table></figure>
+
+<p>③创建软连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ln -s /opt/module/hadoop-3.1.3/etc/hadoop  /opt/module/ranger-2.0.0/ranger-2.0.0-hive-plugin/conf</span><br><span class="line">/opt/module/ranger-2.0.0/ranger-2.0.0-hive-plugin/conf</span><br><span class="line">ln -s /opt/module/hadoop-3.1.3/</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0-hdfs-plugin]# ./enable-hdfs-plugin.sh</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>关闭hdfs插件命令为<code>./disable-hdfs-plugin.sh </code>。除了关闭插件外，还需要删除hadoop配置文件中ranger相关的配置文件，并且删除hdfs-site.xml中插件添加的相关配置。</p>
+</blockquote>
+<p>重启hdfs生效</p>
+<br>
+# 三、权限配置
+## 3.1 Hive权限管理
+### 3.1.1 添加hive组件
+在Ranger Admin上配置hive插件。
+在首页上点击Hive标签的加号，跳转到hive配置页面
+![配置hive页面](Ranger权限管理.assets\51584528a69c49bda39fe077b79ee2fa.png)
+>- Service Name：hivedev   (必须与配置文件中的REPOSITORY_NAME一致)
+>- Username：hxr 
+>- Password：无密码可以随便填
+>- jdbc.driverClassName：org.apache.hive.jdbc.HiveDriver
+>- jdbc.url：jdbc:hive2://192.168.101.179:10000
+
+<p><strong>需要注意的是：</strong></p>
+<ol>
+<li>hiveserver2需要进行重启才能正常的使用Ranger Hive插件。在UI中配置hive完成后，先进行save，save完成后才会生成权限，否则所有用户都没有任何权限。</li>
+<li>username需要在core-site.xml中设置代理。</li>
+</ol>
+<h2 id="3-1-2-使用Ranger对Hive进行权限管理"><a href="#3-1-2-使用Ranger对Hive进行权限管理" class="headerlink" title="3.1.2 使用Ranger对Hive进行权限管理"></a>3.1.2 使用Ranger对Hive进行权限管理</h2><p>save之后可以进入配置中，为每个用户进行更细粒度的权限配置。</p>
+<h4 id="3-1-2-1-权限配置示例"><a href="#3-1-2-1-权限配置示例" class="headerlink" title="3.1.2.1 权限配置示例"></a>3.1.2.1 权限配置示例</h4><p>在ACCESS中可以对权限进行配置<br><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5C4698f13edfbb415fba5a090b1fb32de0.png" alt="image.png"></p>
+<h4 id="3-1-2-2-脱敏配置示例"><a href="#3-1-2-2-脱敏配置示例" class="headerlink" title="3.1.2.2 脱敏配置示例"></a>3.1.2.2 脱敏配置示例</h4><p>在Masking可以指定用户和字段，用户在查询表是将返回的该字段进行脱敏。<br>![image.png](Ranger权限管理.assetsabac9590c0a4d62b531e73d10f58724.png)</p>
+<h4 id="3-1-2-3-行级过滤示例"><a href="#3-1-2-3-行级过滤示例" class="headerlink" title="3.1.2.3 行级过滤示例"></a>3.1.2.3 行级过滤示例</h4><p>可以指定用户和需要过滤掉的行，该用户查询时不会返回过滤掉的行记录。<br><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5C9a940ba49c8f4dd48eb6044d0555eb5b.png" alt="image.png"></p>
+<br>
+## 3.2 HDFS权限管理
+### 3.2.1 添加hdfs组件
+![image.png](Ranger权限管理.assets7959551c514469db7b3b79798adb469.png)
+
+<h3 id="3-2-2-使用Ranger对hdfs进行权限管理"><a href="#3-2-2-使用Ranger对hdfs进行权限管理" class="headerlink" title="3.2.2 使用Ranger对hdfs进行权限管理"></a>3.2.2 使用Ranger对hdfs进行权限管理</h3><p>![image.png](Ranger权限管理.assets485add2148c4b1da8e49a3a82a35f1d.png)</p>
+<blockquote>
+<p>注：因为配置了网页端代理用户hxr，所以单独使用没有什么效果，需要配合Kerberos使用。</p>
+</blockquote>
+<br>
+# 四、整合Kerberos完成认证鉴权
+以上配置的是通过LDAP完成认证，Ranger完成鉴权。
+也可以通过Kerberos完成认证，Ranger完成鉴权。
+
+<p>如果Hadoop集群中已经配置了Kerberos安全认证，Ranger也可以与Kerberos配合使用完成用户的认证和权限控制。</p>
+<p><strong>配置见文章:</strong> <a target="_blank" rel="noopener" href="https://www.jianshu.com/writer#/notebooks/45459270/notes/90930960">Kerberos认证管理</a></p>
+<h2 id="4-1-创建系统用户和Kerberos主题"><a href="#4-1-创建系统用户和Kerberos主题" class="headerlink" title="4.1 创建系统用户和Kerberos主题"></a>4.1 创建系统用户和Kerberos主题</h2><p>Ranger的启动和运行需使用特定的用户，故须在Ranger所在节点创建所需系统用户并在Kerberos中创建所需主体。</p>
+<ol>
+<li><p>创建ranger系统用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">useradd ranger -G hadoop</span><br><span class="line">echo ranger | passwd --stdin ranger</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>参数-G表示创建的ranger同时属于hadoop组和ranger组。</p>
+</blockquote>
+</li>
+<li><p>检查HTTP主体是否正常(该主体在Hadoop开启Kerberos时已创建)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kinit -kt /etc/security/keytab/spnego.service.keytab HTTP/bigdata1@IOTMARS.COM</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建rangeradmin主体<br>1）创建主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;addprinc -randkey rangeradmin/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>2）生成keytab文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;xst -k /etc/security/keytab/rangeradmin.keytab rangeradmin/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>3）修改keytab文件所有者</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown ranger:ranger /etc/security/keytab/rangeradmin.keytab</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建rangerlookup主体<br>1）创建主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;addprinc -randkey rangerlookup/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>2）生成keytab文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;xst -k /etc/security/keytab/rangerlookup.keytab rangerlookup/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>3）修改keytab文件所有者</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown ranger:ranger /etc/security/keytab/rangerlookup.keytab</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建rangerusersync主体<br>1）创建主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;addprinc -randkey rangerusersync/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>2）生成keytab文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin -padmin/admin -wPassword@123 -q &quot;xst -k /etc/security/keytab/rangerusersync.keytab rangerusersync/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>3）修改keytab文件所有者</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown ranger:ranger /etc/security/keytab/rangerusersync.keytab</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="4-2-安装和启动RangerAdmin"><a href="#4-2-安装和启动RangerAdmin" class="headerlink" title="4.2 安装和启动RangerAdmin"></a>4.2 安装和启动RangerAdmin</h2><h4 id="安装RangerAdmin-1"><a href="#安装RangerAdmin-1" class="headerlink" title="安装RangerAdmin"></a>安装RangerAdmin</h4><p>①创建目录mkdir &#x2F;opt&#x2F;module&#x2F;ranger-2.0.0<br>解压ranger-2.0.0-admin.tar.gz到该目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0]# tar -zxvf /opt/software/ranger-2.0.0-admin.tar.gz -C /opt/module/ranger-2.0.0/</span><br></pre></td></tr></table></figure>
+
+<p>②配置文件install.properties</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#mysql驱动</span><br><span class="line">SQL_CONNECTOR_JAR=SQL_CONNECTOR_JAR=/opt/module/ranger-2.0.0/ranger-2.0.0-admin/mysql-connector-java-5.1.45.jar</span><br><span class="line">#mysql的主机名和root用户的用户名密码</span><br><span class="line">db_root_user=root</span><br><span class="line">db_root_password=Password@123</span><br><span class="line">db_host=192.168.101.174</span><br><span class="line">#ranger需要的数据库名和用户信息，和2.2.1创建的信息要一一对应</span><br><span class="line">db_name=ranger</span><br><span class="line">db_user=ranger</span><br><span class="line">db_password=bigdata123</span><br><span class="line">#其他ranger admin需要的用户密码</span><br><span class="line">rangerAdmin_password=bigdata123</span><br><span class="line">rangerTagsync_password=bigdata123</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">keyadmin_password=bigdata123</span><br><span class="line">#ranger存储审计日志的路径，默认为solr，这里为了方便暂不设置</span><br><span class="line">audit_store=</span><br><span class="line">#策略管理器的url,rangeradmin安装在哪台机器，主机名就为对应的主机名，不能写ip地址</span><br><span class="line">policymgr_external_url=http://bigdata1:6080</span><br><span class="line">#启动ranger admin进程的linux用户信息。会将目录所属用户改为ranger</span><br><span class="line">unix_user=ranger</span><br><span class="line">unix_user_pwd=ranger</span><br><span class="line">unix_group=ranger</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line"></span><br><span class="line">#Kerberos相关配置</span><br><span class="line">spnego_principal=HTTP/bigdata1@IOTMARS.COM</span><br><span class="line">spnego_keytab=/etc/security/keytab/spnego.service.keytab</span><br><span class="line">token_valid=30</span><br><span class="line">cookie_domain=</span><br><span class="line">cookie_path=/</span><br><span class="line">admin_principal=rangeradmin/bigdata1@IOTMARS.COM</span><br><span class="line">admin_keytab=/etc/security/keytab/rangeradmin.keytab</span><br><span class="line">lookup_principal=rangerlookup/bigdata1@IOTMARS.COM</span><br><span class="line">lookup_keytab=/etc/security/keytab/rangerlookup.keytab</span><br></pre></td></tr></table></figure>
+
+<p>③在root用户下进行安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0-admin]# ./setup.sh</span><br></pre></td></tr></table></figure>
+<p>出现如下信息表示安装成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2021-10-08 14:43:27,184  [I] Ranger all admins default password has already been changed!!</span><br><span class="line">Installation of Ranger PolicyManager Web Application is completed.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：如果使用<code>sudo ./setup.sh</code>安装会找不到JAVA_HOME，但是使用<code>sudo echo $&#123;JAVA_HOME&#125;</code> 是可以正常打印的，很奇怪？？？</p>
+</blockquote>
+<h4 id="启动Ranger-Admin"><a href="#启动Ranger-Admin" class="headerlink" title="启动Ranger Admin"></a>启动Ranger Admin</h4><p>安装时会自动将启动脚本放到&#x2F;usr&#x2F;bin目录下，同时根据配置的install.properties自动生成配置文件ranger-admin-site.xml。<br>执行链接命令时会将&#x2F;etc&#x2F;ranger&#x2F;admin&#x2F;conf目录链接到ews&#x2F;webapp&#x2F;WEB-INF&#x2F;classes&#x2F;conf目录。<br>也会将服务设为开机自启，所以无需我们设置开机自启。</p>
+<p>但是自动生成的配置文件有两处错误，我们需要手动修改。</p>
+<p>①修改配置文件 &#x2F;etc&#x2F;ranger&#x2F;admin&#x2F;conf&#x2F;ranger-admin-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.jpa.jdbc.password&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;bigdata123&lt;/value&gt;</span><br><span class="line">        &lt;description /&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.service.host&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;192.168.101.179&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>②启动和关闭RangerAdmin<br>使用ranger用户启动&#x2F;关闭&#x2F;重启 ranger-admin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0-admin]# sudo -i -u ranger ranger-admin start/stop/restart</span><br></pre></td></tr></table></figure>
+
+<p>启动后其后台进程名为<strong>EmbeddedServer</strong></p>
+<p>③访问UI<br>管理员账号密码为admin&#x2F;bigdata123<br><a target="_blank" rel="noopener" href="http://192.168.101.179:6080/">http://192.168.101.179:6080</a></p>
+<p>访问路径还是为 <a target="_blank" rel="noopener" href="http://192.168.101.179:6080/login.jsp">http://192.168.101.179:6080/login.jsp</a></p>
+<h2 id="4-3-安装RangerUsersync"><a href="#4-3-安装RangerUsersync" class="headerlink" title="4.3 安装RangerUsersync"></a>4.3 安装RangerUsersync</h2><h3 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h3><p>RangerUsersync作为Ranger提供的一个管理模块，可以将Linux机器上的用户和组信息同步到RangerAdmin的数据库中进行管理。也可以同步LDAP等公司现有的用户框架体系中的用户到Ranger Admin中。</p>
+<p>①解压</p>
+<p>[root@bigdata1 ranger-2.0.0]# tar -zxvf &#x2F;opt&#x2F;software&#x2F;ranger-2.0.0-usersync.tar.gz -C &#x2F;opt&#x2F;module&#x2F;ranger-2.0.0&#x2F;<br>②修改配置文件install.properties<br>这里既可以配置同步linux上的用户，也可以配置同步ldap上的用户</p>
+<h4 id="Ⅰ-同步linux用户"><a href="#Ⅰ-同步linux用户" class="headerlink" title="Ⅰ. 同步linux用户"></a>Ⅰ. 同步linux用户</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#rangeradmin的url</span><br><span class="line">POLICY_MGR_URL=http://192.168.101.179:6080</span><br><span class="line">#同步linux用户</span><br><span class="line">SYNC_SOURCE = unix</span><br><span class="line">#同步间隔时间，单位(分钟)</span><br><span class="line">SYNC_INTERVAL = 1</span><br><span class="line">#运行此进程的linux用户</span><br><span class="line">unix_user=hxr</span><br><span class="line">unix_group=hxr</span><br><span class="line">#rangerUserSync的用户密码，参考rangeradmin中install.properties的配置</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line">#Kerberos相关配置</span><br><span class="line">usersync_principal=rangerusersync/bigdata1@IOTMARS.COM</span><br><span class="line">usersync_keytab=/etc/security/keytab/rangerusersync.keytab</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要配置Kerberos。</p>
+</blockquote>
+<h4 id="Ⅱ-同步ldap用户"><a href="#Ⅱ-同步ldap用户" class="headerlink" title="Ⅱ. 同步ldap用户"></a>Ⅱ. 同步ldap用户</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">#rangeradmin的url</span><br><span class="line">POLICY_MGR_URL=http://192.168.101.179:6080</span><br><span class="line">#运行此进程的linux用户</span><br><span class="line">unix_user=ranger</span><br><span class="line">unix_group=ranger</span><br><span class="line">#rangerUserSync的用户密码，参考rangeradmin中install.properties的配置</span><br><span class="line">rangerUsersync_password=bigdata123</span><br><span class="line">#hadoop的配置文件目录</span><br><span class="line">hadoop_conf=/opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line">#Kerberos相关配置</span><br><span class="line">usersync_principal=rangerusersync/bigdata1@IOTMARS.COM</span><br><span class="line">usersync_keytab=/etc/security/keytab/rangerusersync.keytab</span><br><span class="line"></span><br><span class="line"># 日志保存路径</span><br><span class="line">logdir=/opt/module/ranger-2.2.0/ranger-2.2.0-usersync/logs</span><br><span class="line"></span><br><span class="line"># 同步ldap数据</span><br><span class="line">## 同步的数据源类型，默认为unix，同步linux用户；这里配置为ldap，同步ldap用户</span><br><span class="line">SYNC_SOURCE = ldap</span><br><span class="line">## 同步时间，单位为min (不能小于60min)</span><br><span class="line">SYNC_INTERVAL = 60 </span><br><span class="line">## ldap地址</span><br><span class="line">SYNC_LDAP_URL = ldap://192.168.101.174:389</span><br><span class="line">## ldap管理员用户密码</span><br><span class="line">SYNC_LDAP_BIND_DN = cn=admin,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line">SYNC_LDAP_BIND_PASSWORD = bigdata123</span><br><span class="line">## 定义一个路径</span><br><span class="line">SYNC_LDAP_SEARCH_BASE = ou=hive,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line"></span><br><span class="line"># PID保存路径</span><br><span class="line">USERSYNC_PID_DIR_PATH=/var/run/ranger</span><br><span class="line"></span><br><span class="line"># 同步用户</span><br><span class="line">## 同步用户所在的路径，默认值为SYNC_LDAP_SEARCH_BASE</span><br><span class="line">SYNC_LDAP_USER_SEARCH_BASE =</span><br><span class="line">## 查找用户的范围，可选base/one/sub，默认为sub</span><br><span class="line">SYNC_LDAP_USER_SEARCH_SCOPE = sub</span><br><span class="line">## default value: person</span><br><span class="line">SYNC_LDAP_USER_OBJECT_CLASS = person</span><br><span class="line">## default value is empty</span><br><span class="line">SYNC_LDAP_USER_SEARCH_FILTER =</span><br><span class="line">## 用户名的属性，默认为 cn</span><br><span class="line">SYNC_LDAP_USER_NAME_ATTRIBUTE = cn</span><br><span class="line">##  default value is memberof,ismemberof</span><br><span class="line">SYNC_LDAP_USER_GROUP_NAME_ATTRIBUTE = memberof,ismemberof</span><br><span class="line">## possible values:  none, lower, upper</span><br><span class="line">SYNC_LDAP_USERNAME_CASE_CONVERSION=lower</span><br><span class="line">SYNC_LDAP_GROUPNAME_CASE_CONVERSION=lower</span><br><span class="line"></span><br><span class="line"># 同步用户组</span><br><span class="line">## 是否同步用户的所在组，默认值为 false</span><br><span class="line">SYNC_GROUP_SEARCH_ENABLED=true</span><br><span class="line">SYNC_GROUP_USER_MAP_SYNC_ENABLED=true</span><br><span class="line"></span><br><span class="line">##  同步用户组所在的路径，默认值为SYNC_LDAP_SEARCH_BASE</span><br><span class="line">SYNC_GROUP_SEARCH_BASE=</span><br><span class="line">## default value: sub</span><br><span class="line">SYNC_GROUP_SEARCH_SCOPE=</span><br><span class="line">## default value: groupofnames</span><br><span class="line">SYNC_GROUP_OBJECT_CLASS=posixGroup</span><br><span class="line">## default value is empty</span><br><span class="line">SYNC_LDAP_GROUP_SEARCH_FILTER=</span><br><span class="line">## default value: cn</span><br><span class="line">SYNC_GROUP_NAME_ATTRIBUTE=</span><br><span class="line">## 组中的用户属性，默认为 member</span><br><span class="line">SYNC_GROUP_MEMBER_ATTRIBUTE_NAME=memberUid</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在ldap中添加用户时，在Membership中指定用户组。</p>
+</blockquote>
+<p>③在root用户下安装<br>.&#x2F;setup.sh</p>
+<p>④修改配置文件 conf&#x2F;ranger-ugsync-site.xml </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;ranger.usersync.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-x2F-关闭-x2F-重启"><a href="#启动-x2F-关闭-x2F-重启" class="headerlink" title="启动&#x2F;关闭&#x2F;重启"></a>启动&#x2F;关闭&#x2F;重启</h3><p><code>sudo -i -u ranger ranger-usersync start/stop/restart</code></p>
+<p>ranger-usersync服务也是开机自启动的，因此之后不需要手动启动！</p>
+<h2 id="4-4-安装Ranger-Hive-plugin"><a href="#4-4-安装Ranger-Hive-plugin" class="headerlink" title="4.4 安装Ranger Hive-plugin"></a>4.4 安装Ranger Hive-plugin</h2><h3 id="安装-3"><a href="#安装-3" class="headerlink" title="安装"></a>安装</h3><p>①解压ranger-2.0.0-hive-plugin.tar.gz</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0]# tar -zxvf /opt/software/ranger-2.0.0-hive-plugin.tar.gz -C /opt/module/ranger-2.0.0</span><br></pre></td></tr></table></figure>
+<p>②修改配置文件inistall.propreties</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#策略管理器的url地址</span><br><span class="line">POLICY_MGR_URL=http://192.168.101.179:6080</span><br><span class="line">#组件名称可以自定义</span><br><span class="line">REPOSITORY_NAME=hivedev</span><br><span class="line">#hive的安装目录</span><br><span class="line">COMPONENT_INSTALL_DIR_NAME=/opt/module/hive-3.1.2</span><br><span class="line">#hive组件的启动用户</span><br><span class="line">CUSTOM_USER=hive</span><br><span class="line">#hive组件启动用户所属组</span><br><span class="line">CUSTOM_GROUP=hadoop</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-3"><a href="#启动-3" class="headerlink" title="启动"></a>启动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0-hive-plugin]# ./enable-hive-plugin.sh</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关闭hive插件命令为<code>./disable-hive-plugin.sh </code>，除了执行命令外，还需要删除hive配置文件目录下ranger相关的配置文件。</p>
+</blockquote>
+<p>会在hive的conf目录下生成多个配置文件</p>
+<ul>
+<li>ranger-hive-audit.xml</li>
+<li>ranger-hive-security.xml</li>
+<li>ranger-policymgr-ssl.xml</li>
+<li>ranger-security.xml</li>
+<li>hiveserver2-site.xml<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span><br><span class="line">&lt;?xml-stylesheet type=&quot;text/xsl&quot; href=&quot;configuration.xsl&quot;?&gt;&lt;!--</span><br><span class="line">Licensed to the Apache Software Foundation (ASF) under one or more</span><br><span class="line">contributor license agreements. See the NOTICE file distributed with</span><br><span class="line">this work for additional information regarding copyright ownership.</span><br><span class="line">The ASF licenses this file to You under the Apache License, Version 2.0</span><br><span class="line">(the &quot;License&quot;); you may not use this file except in compliance with</span><br><span class="line">the License. You may obtain a copy of the License at</span><br><span class="line"></span><br><span class="line">http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line"></span><br><span class="line">Unless required by applicable law or agreed to in writing, software</span><br><span class="line">distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span><br><span class="line">WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span><br><span class="line">See the License for the specific language governing permissions and</span><br><span class="line">limitations under the License.</span><br><span class="line">--&gt;&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authorization.enabled&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authorization.manager&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;org.apache.ranger.authorization.hive.authorizer.RangerHiveAuthorizerFactory&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.security.authenticator.manager&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hive.conf.restricted.list&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hive.security.authorization.enabled,hive.security.authorization.manager,hive.security.authenticator.manager&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<br>
+**重启hiveserver2生效**
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ranger-2.0.0-hive-plugin]# sudo -i -u hive nohup hiveserver2 1&gt;/opt/module/hive-3.1.2/logs/hive-on-spark.log 2&gt;/opt/module/hive-3.1.2/logs/hive-on-spark.err &amp;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<br>
+### 在ranger admin上配置hive插件
+1. 授予hive用户在Ranger中的Admin角色
+添加hive用户，并将hive用户的角色设置为Admin，组设置为hadoop。
+
+<ol start="2">
+<li>配置hive插件<br><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5C7d2c4abcc1fe4af5865bbc87f4e8402e.png" alt="image.png"></li>
+</ol>
+<p>此时点击Test Connection，会报错如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Connection Failed.</span><br><span class="line">Unable to retrieve any files using given parameters, You can still save the repository and start creating policies, but you would not be able to use autocomplete for resource names. Check ranger_admin.log for more info.</span><br><span class="line"></span><br><span class="line">org.apache.ranger.plugin.client.HadoopException: Unable to execute SQL [show databases like &quot;*&quot;]..</span><br><span class="line">Unable to execute SQL [show databases like &quot;*&quot;]..</span><br><span class="line">Error while compiling statement: FAILED: HiveAccessControlException Permission denied: user [rangerlookup] does not have [USE] privilege on [Unknown resource!!].</span><br><span class="line">Permission denied: user [rangerlookup] does not have [USE] privilege on [Unknown resource!!].</span><br></pre></td></tr></table></figure>
+<p>说明连接是正常的，只是没有访问权限（即是这个访问不通也没有影响，最终hiveserver2会拉取配置的规则缓存到本地目录下）。</p>
+<p>配置访问规则即可，规则配置同上。</p>
+<ol start="3">
+<li>添加访问权限</li>
+</ol>
+<br>
+# 五、总结
+## 5.1 UI和进程
+UI界面：http://192.168.101.179:6080  （admin/bigdata123）
+
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>进程名</th>
+<th>启动命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ranger Admin</td>
+<td>EmbeddedServer</td>
+<td>ranger-admin start&#x2F;stop&#x2F;restart</td>
+</tr>
+<tr>
+<td>RangerUsersync</td>
+<td>UnixAuthenticationService(root用户可见)</td>
+<td>ranger-usersync start&#x2F;stop&#x2F;restart(root用户下启动)</td>
+</tr>
+</tbody></table>
+<p>Hive Plugin启动命令： <code>./enable-hive-plugin.sh</code> <code>./disable-hive-plugin.sh</code></p>
+<h2 id="5-2-异常"><a href="#5-2-异常" class="headerlink" title="5.2 异常"></a>5.2 异常</h2><ul>
+<li>现象：使用Ranger的hive组件后报错<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User: root is not allowed to impersonate root</span><br></pre></td></tr></table></figure></li>
+<li>原因：可能是root用户启动的Ranger Hive Plugin，该插件通过权限判断后最终提交任务时是以root用户提交的，所以hadoop需要允许root用户进行外部访问。</li>
+<li>解决：core-site.xml中添加root代理<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置root允许通过代理访问主机节点 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.root.hosts&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!-- 配置root允许通过代理用户所属组 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.root.groups&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="5-3-添加用户流程"><a href="#5-3-添加用户流程" class="headerlink" title="5.3 添加用户流程"></a>5.3 添加用户流程</h2><h3 id="5-3-1-创建Kerberos用户"><a href="#5-3-1-创建Kerberos用户" class="headerlink" title="5.3.1 创建Kerberos用户"></a>5.3.1 创建Kerberos用户</h3><p>为用户添加kerberos主体，设置密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local -q &quot;addprinc chenjie&quot;</span><br></pre></td></tr></table></figure>
+<p>导出keytab（如果希望导出keytab且密码不改变，需要在KDC所在节点执行如下命令）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local -q &quot;xst  -norandkey -k ./chenjie.keytab chenjie@IOTMARS.COM&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-2-创建Ranger用户"><a href="#5-3-2-创建Ranger用户" class="headerlink" title="5.3.2 创建Ranger用户"></a>5.3.2 创建Ranger用户</h3><p>如果配置了ranger-usersync插件，可以在对应的ldap中添加用户等待同步；也可以直接在Ranger UI中添加用户。<br>添加用户后为其设置对应的hive&#x2F;hdfs权限。</p>
+<h3 id="5-3-3-beeline连接hiveserver2"><a href="#5-3-3-beeline连接hiveserver2" class="headerlink" title="5.3.3 beeline连接hiveserver2"></a>5.3.3 beeline连接hiveserver2</h3><p>首先需要在节点上认证身份</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kinit chenjie</span><br></pre></td></tr></table></figure>
+<p>然后通过beeline连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beeline -u &quot;jdbc:hive2://bigdata1:10000/;principal=hive/bigdata1@IOTMARS.COM&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-4-访问NameNode-UI"><a href="#5-3-4-访问NameNode-UI" class="headerlink" title="5.3.4 访问NameNode UI"></a>5.3.4 访问NameNode UI</h3><p>安装Kerberos客户端，配置配置文件 C:\ProgramData\MIT\Kerberos5\krb5.ini</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[libdefaults]</span><br><span class="line"> dns_lookup_realm = false</span><br><span class="line"> ticket_lifetime = 24h</span><br><span class="line"> forwardable = true</span><br><span class="line"> rdns = false</span><br><span class="line"> default_realm = IOTMARS.COM</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line"> IOTMARS.COM = &#123;</span><br><span class="line">  kdc = 192.168.101.174</span><br><span class="line">  admin_server = 192.168.101.174</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">[domain_realm]</span><br></pre></td></tr></table></figure>
+<p>配置完成后，启动Kerberos客户端，认证用户；</p>
+<p>最后配置火狐浏览器在访问bigdata1节点时使用Kerberos认证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">about:config</span><br><span class="line">network.negotiate-auth.trusted-uris = bigdata1</span><br><span class="line">network.auth.use-sspi = false</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-5-DataGrip连接"><a href="#5-3-5-DataGrip连接" class="headerlink" title="5.3.5 DataGrip连接"></a>5.3.5 DataGrip连接</h3><h4 id="5-3-5-1-DataGrip客户端"><a href="#5-3-5-1-DataGrip客户端" class="headerlink" title="5.3.5.1 DataGrip客户端"></a>5.3.5.1 DataGrip客户端</h4><p>DataGrip中的Hive连接驱动没有整合Kerberos认证，所以需要自定义Hive驱动。</p>
+<h4 id="5-3-5-2-新建Driver"><a href="#5-3-5-2-新建Driver" class="headerlink" title="5.3.5.2 新建Driver"></a>5.3.5.2 新建Driver</h4><ol>
+<li><p>创建Driver<br><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5Cdabc053842474feb964bf0f713860e7b.png" alt="image.png"></p>
+</li>
+<li><p>配置Driver</p>
+</li>
+</ol>
+<p>![image.png](Ranger权限管理.assets51cf8c64f1a48ce80a249b8a34af196.png)</p>
+<p>URL templates：<code>jdbc:hive2://&#123;host&#125;:&#123;port&#125;/&#123;database&#125;[;&lt;;,&#123;:identifier&#125;=&#123;:param&#125;&gt;]</code></p>
+<h4 id="5-3-5-3-新建连接"><a href="#5-3-5-3-新建连接" class="headerlink" title="5.3.5.3 新建连接"></a>5.3.5.3 新建连接</h4><p>1）基础配置<br>![image.png](Ranger权限管理.assets8bc793970b64b508e9582aef706f719.png)</p>
+<p>url：<code>jdbc:hive2://bigdata1:10000/;principal=hive/bigdata1@IOTMARS.COM</code></p>
+<p>2）高级配置<br><img src="/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.assets%5C8ea60d23b1be43339824a94f43ab6a87.png" alt="image.png"></p>
+<p>配置参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Djava.security.krb5.conf=&quot;C:\ProgramData\MIT\Kerberos5\krb5.ini&quot;</span><br><span class="line">-Djava.security.auth.login.config=&quot;C:\ProgramData\MIT\Kerberos5\chenjie.conf&quot;</span><br><span class="line">-Djavax.security.auth.useSubjectCredsOnly=false</span><br></pre></td></tr></table></figure>
+
+<p>3）编写JAAS（Java认证授权服务）配置文件chenjie.conf，内容如下，文件名和路径须和上图中java.security.auth.login.config参数的值保持一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">com.sun.security.jgss.initiate&#123;</span><br><span class="line">      com.sun.security.auth.module.Krb5LoginModule required</span><br><span class="line">      useKeyTab=true</span><br><span class="line">      useTicketCache=false</span><br><span class="line">      keyTab=&quot;C:\ProgramData\MIT\Kerberos5\chenjie.keytab&quot;</span><br><span class="line">      principal=&quot;hxr@IOTMARS.COM&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4）将第一步生成的chenjie.keytab文件放到chenjie.conf中配置的keytab的路径下</p>
+<p>5）测试连接</p>
+<br>
+# 六、Ranger整合LDAP
+在原先的基础上，继续修改ranger的配置文件ranger-admin-site.xml
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">authentication_method=LDAP</span><br><span class="line">xa_ldap_url=ldap://192.168.101.174:389</span><br><span class="line">xa_ldap_userDNpattern=uid=&#123;0&#125;,ou=hive,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line">xa_ldap_groupSearchBase=</span><br><span class="line">xa_ldap_groupSearchFilter=</span><br><span class="line">xa_ldap_groupRoleAttribute=</span><br><span class="line">xa_ldap_base_dn=ou=hive,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line">xa_ldap_bind_dn=cn=admin,dc=ldap,dc=chenjie,dc=asia</span><br><span class="line">xa_ldap_bind_password=bigdata123</span><br><span class="line">xa_ldap_referral=</span><br><span class="line">xa_ldap_userSearchFilter=</span><br></pre></td></tr></table></figure>
+在root用户下 ./setup.sh 进行安装，然后重启 `ranger-admin restart`。
+在配置文件中配置的admin的密码仍然有效，登录后仍然是管理员用户。ldap中的用户也可以进行登陆，这些都是普通用户。
+
+<br>
+# 七、总结
+至此完成了一下功能
+1. 通过ranger来对hiveserver2的权限进行验证
+2. usersync组件定时同步LDAP的hive用户到Ranger中
+3. Ranger的UI可以使用LDAP的ranger组的用户进行登陆
+
+<p>Hive整合LDAP进行登陆认证，翻看文章 <a target="_blank" rel="noopener" href="https://www.jianshu.com/writer#/notebooks/45459270/notes/91146529">LDAP</a></p>
+<br>
+# 参考
+[详细信息可以浏览官网](Row-level+filtering+and+column-masking+using+Apache+Ranger+policies+in+Apache+Hive)
+[usersync for ldap](https://issues.apache.org/jira/browse/RANGER-2406)
+[ranger 配置(如LDAP验证登陆)](https://cwiki.apache.org/confluence/display/RANGER/Apache+Ranger+0.5.0+Installation)
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/">http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Ranger%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/%E4%BC%AA%E8%A3%85%E4%B8%BAkswapd0%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%8C%96%E7%9F%BF%E6%9C%A8%E9%A9%AC/" title="伪装为kswapd0进程的挖矿木马"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">伪装为kswapd0进程的挖矿木马</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8/JAVA%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E8%8A%82%E9%80%89/" title="JAVA开发手册节选"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JAVA开发手册节选</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">一、介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AFRanger"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 什么是Ranger</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Ranger%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Ranger的目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-Ranger%E6%94%AF%E6%8C%81%E7%9A%84%E6%A1%86%E6%9E%B6"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 Ranger支持的框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-Ranger%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 Ranger工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%AE%89%E8%A3%85%E7%BB%84%E4%BB%B6"><span class="toc-number">1.5.</span> <span class="toc-text">3.2 安装组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-RangerAdmin"><span class="toc-number">1.5.1.</span> <span class="toc-text">3.2.1 RangerAdmin</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85RangerAdmin"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">安装RangerAdmin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-RangerUsersync"><span class="toc-number">1.5.2.</span> <span class="toc-text">3.2.2 RangerUsersync</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-Ranger-Hive-plugin"><span class="toc-number">1.5.3.</span> <span class="toc-text">3.2.3 Ranger Hive-plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-1"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-1"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-2"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">启动</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-2-%E4%BD%BF%E7%94%A8Ranger%E5%AF%B9Hive%E8%BF%9B%E8%A1%8C%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-number">1.6.</span> <span class="toc-text">3.1.2 使用Ranger对Hive进行权限管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-1-%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.0.1.</span> <span class="toc-text">3.1.2.1 权限配置示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-2-%E8%84%B1%E6%95%8F%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.0.2.</span> <span class="toc-text">3.1.2.2 脱敏配置示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-3-%E8%A1%8C%E7%BA%A7%E8%BF%87%E6%BB%A4%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.0.3.</span> <span class="toc-text">3.1.2.3 行级过滤示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E4%BD%BF%E7%94%A8Ranger%E5%AF%B9hdfs%E8%BF%9B%E8%A1%8C%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="toc-number">1.6.1.</span> <span class="toc-text">3.2.2 使用Ranger对hdfs进行权限管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%88%9B%E5%BB%BA%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E5%92%8CKerberos%E4%B8%BB%E9%A2%98"><span class="toc-number">1.7.</span> <span class="toc-text">4.1 创建系统用户和Kerberos主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E5%AE%89%E8%A3%85%E5%92%8C%E5%90%AF%E5%8A%A8RangerAdmin"><span class="toc-number">1.8.</span> <span class="toc-text">4.2 安装和启动RangerAdmin</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85RangerAdmin-1"><span class="toc-number">1.8.0.1.</span> <span class="toc-text">安装RangerAdmin</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8Ranger-Admin"><span class="toc-number">1.8.0.2.</span> <span class="toc-text">启动Ranger Admin</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E5%AE%89%E8%A3%85RangerUsersync"><span class="toc-number">1.9.</span> <span class="toc-text">4.3 安装RangerUsersync</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-2"><span class="toc-number">1.9.1.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%85%A0-%E5%90%8C%E6%AD%A5linux%E7%94%A8%E6%88%B7"><span class="toc-number">1.9.1.1.</span> <span class="toc-text">Ⅰ. 同步linux用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%85%A1-%E5%90%8C%E6%AD%A5ldap%E7%94%A8%E6%88%B7"><span class="toc-number">1.9.1.2.</span> <span class="toc-text">Ⅱ. 同步ldap用户</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-x2F-%E5%85%B3%E9%97%AD-x2F-%E9%87%8D%E5%90%AF"><span class="toc-number">1.9.2.</span> <span class="toc-text">启动&#x2F;关闭&#x2F;重启</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-%E5%AE%89%E8%A3%85Ranger-Hive-plugin"><span class="toc-number">1.10.</span> <span class="toc-text">4.4 安装Ranger Hive-plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-3"><span class="toc-number">1.10.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8-3"><span class="toc-number">1.10.2.</span> <span class="toc-text">启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E5%BC%82%E5%B8%B8"><span class="toc-number">1.11.</span> <span class="toc-text">5.2 异常</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E6%B5%81%E7%A8%8B"><span class="toc-number">1.12.</span> <span class="toc-text">5.3 添加用户流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-1-%E5%88%9B%E5%BB%BAKerberos%E7%94%A8%E6%88%B7"><span class="toc-number">1.12.1.</span> <span class="toc-text">5.3.1 创建Kerberos用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-2-%E5%88%9B%E5%BB%BARanger%E7%94%A8%E6%88%B7"><span class="toc-number">1.12.2.</span> <span class="toc-text">5.3.2 创建Ranger用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-3-beeline%E8%BF%9E%E6%8E%A5hiveserver2"><span class="toc-number">1.12.3.</span> <span class="toc-text">5.3.3 beeline连接hiveserver2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-4-%E8%AE%BF%E9%97%AENameNode-UI"><span class="toc-number">1.12.4.</span> <span class="toc-text">5.3.4 访问NameNode UI</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-5-DataGrip%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.12.5.</span> <span class="toc-text">5.3.5 DataGrip连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-5-1-DataGrip%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.12.5.1.</span> <span class="toc-text">5.3.5.1 DataGrip客户端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-5-2-%E6%96%B0%E5%BB%BADriver"><span class="toc-number">1.12.5.2.</span> <span class="toc-text">5.3.5.2 新建Driver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-3-5-3-%E6%96%B0%E5%BB%BA%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.12.5.3.</span> <span class="toc-text">5.3.5.3 新建连接</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

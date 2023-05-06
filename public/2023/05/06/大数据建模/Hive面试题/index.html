@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hive面试题 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第 1 题 连续问题1 问题描述如下数据为蚂蚁森林中用户领取的减少碳排放量 1234567891011id dt lowcarbon1001 2021-12-12 1231002 2021-12-12 451001 2021-12-13 431001 2021-12-13 451001 2021-12-13 231002 2021-12-14 451001 2021-12-14 2301002 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive面试题">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Hive%E9%9D%A2%E8%AF%95%E9%A2%98/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="第 1 题 连续问题1 问题描述如下数据为蚂蚁森林中用户领取的减少碳排放量 1234567891011id dt lowcarbon1001 2021-12-12 1231002 2021-12-12 451001 2021-12-13 431001 2021-12-13 451001 2021-12-13 231002 2021-12-14 451001 2021-12-14 2301002 2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Hive%E9%9D%A2%E8%AF%95%E9%A2%98/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hive面试题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hive面试题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.051Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.051Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/">大数据建模</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hive面试题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第-1-题-连续问题"><a href="#第-1-题-连续问题" class="headerlink" title="第 1 题 连续问题"></a>第 1 题 连续问题</h1><h2 id="1-问题描述"><a href="#1-问题描述" class="headerlink" title="1 问题描述"></a>1 问题描述</h2><p>如下数据为蚂蚁森林中用户领取的减少碳排放量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">id dt lowcarbon</span><br><span class="line">1001 2021-12-12 123</span><br><span class="line">1002 2021-12-12 45</span><br><span class="line">1001 2021-12-13 43</span><br><span class="line">1001 2021-12-13 45</span><br><span class="line">1001 2021-12-13 23</span><br><span class="line">1002 2021-12-14 45</span><br><span class="line">1001 2021-12-14 230</span><br><span class="line">1002 2021-12-15 45</span><br><span class="line">1001 2021-12-15 23</span><br><span class="line">… …</span><br></pre></td></tr></table></figure>
+<p>找出连续 3 天及以上减少碳排放量在 100 以上的用户</p>
+<h2 id="2-解决"><a href="#2-解决" class="headerlink" title="2 解决"></a>2 解决</h2><ol>
+<li>首先计算每个用户每日的碳排放量，过滤掉小于100的数据</li>
+<li>开窗函数计算每条记录的排名，然后日期减去排名</li>
+<li>然后根据用户和计算后日期分组，如果日期统计数量&gt;&#x3D;3，那么该日期就是连续开始日期的前一天。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">select id, date_add(flag, 1) as start_date, count(*) as cnt</span><br><span class="line">from (</span><br><span class="line">         select id, date_sub(dt, rank) as flag</span><br><span class="line">         from (</span><br><span class="line">                  select id,</span><br><span class="line">                         dt,</span><br><span class="line">                         rank()</span><br><span class="line">                                 over (partition by id order by dt) as rank</span><br><span class="line">                  from (</span><br><span class="line">                           select id, dt, sum(lowcarbon) as carbon</span><br><span class="line">                           from default.question1</span><br><span class="line">                           group by id, dt</span><br><span class="line">                       ) t1</span><br><span class="line">                  where carbon &gt;= 100</span><br><span class="line">              ) t2</span><br><span class="line">     ) t3</span><br><span class="line">group by id, flag</span><br><span class="line">having cnt &gt;= 3;</span><br></pre></td></tr></table></figure>
+
+<br>
+# 第 2 题 分组问题
+## 1 问题描述
+如下为电商公司用户访问时间数据
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">id ts(秒)</span><br><span class="line">1001 17523641234</span><br><span class="line">1001 17523641256</span><br><span class="line">1002 17523641278</span><br><span class="line">1001 17523641334</span><br><span class="line">1002 17523641434</span><br><span class="line">1001 17523641534</span><br><span class="line">1001 17523641544</span><br><span class="line">1002 17523641634</span><br><span class="line">1001 17523641638</span><br><span class="line">1001 17523641654</span><br></pre></td></tr></table></figure>
+某个用户连续的访问记录如果时间间隔小于 60 秒，则分为同一个组，结果为：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">id ts(秒) group</span><br><span class="line">1001 17523641234 1</span><br><span class="line">1001 17523641256 1</span><br><span class="line">1001 17523641334 2</span><br><span class="line">1001 17523641534 3</span><br><span class="line">1001 17523641544 3</span><br><span class="line">1001 17523641638 4</span><br><span class="line">1001 17523641654 4</span><br><span class="line">1002 17523641278 1</span><br><span class="line">1002 17523641434 2</span><br><span class="line">1002 17523641634 3</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-解决-1"><a href="#2-解决-1" class="headerlink" title="2 解决"></a>2 解决</h2><ol>
+<li><p>首先计算出用户上次登陆时间与本次登陆时间的时间间隔gap</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">id, ts, gap</span><br><span class="line">1001,17523641234,17523641234</span><br><span class="line">1001,17523641256,22</span><br><span class="line">1001,17523641334,78</span><br><span class="line">1001,17523641534,200</span><br><span class="line">1001,17523641544,10</span><br><span class="line">1001,17523641638,94</span><br><span class="line">1001,17523641654,16</span><br><span class="line">1002,17523641278,17523641278</span><br><span class="line">1002,17523641434,156</span><br><span class="line">1002,17523641634,200</span><br></pre></td></tr></table></figure>
+<p>可以发现，每次时间间隔gap大于60时，就进入下一组</p>
+</li>
+<li><p>进行分组<br>这里需要使用比较巧妙的方法，判断时间间隔是否小于60，用0和1表示结果，将判断结果相加得到分组号。</p>
+</li>
+</ol>
+<p>hql如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select id,</span><br><span class="line">       ts,</span><br><span class="line">       sum(if(gap &gt;= 60, 1, 0)) over (partition by id order by ts rows between unbounded preceding and current row )</span><br><span class="line">from (</span><br><span class="line">         select id,</span><br><span class="line">                ts,</span><br><span class="line">                ts - lag(ts, 1, 0)</span><br><span class="line">                         over (partition by id order by ts) as gap</span><br><span class="line">         from default.question2) t1;</span><br></pre></td></tr></table></figure>
+
+
+<br>
+# 第 3 题 间隔连续问题
+## 1 问题描述
+某游戏公司记录的用户每日登录数据
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">id dt</span><br><span class="line">1001 2021-12-12</span><br><span class="line">1002 2021-12-12</span><br><span class="line">1001 2021-12-13</span><br><span class="line">1001 2021-12-14</span><br><span class="line">1001 2021-12-16</span><br><span class="line">1002 2021-12-16</span><br><span class="line">1001 2021-12-19</span><br><span class="line">1002 2021-12-17</span><br><span class="line">1001 2021-12-20</span><br></pre></td></tr></table></figure>
+计算每个用户最大的连续登录天数，可以间隔一天。解释：如果一个用户在 1,3,5,6 登录游戏，则视为连续 6 天登录。
+
+<h2 id="2-解决-2"><a href="#2-解决-2" class="headerlink" title="2 解决"></a>2 解决</h2><ol>
+<li>计算每个用户每次登陆的日期间隔</li>
+<li>使用问题2的分组方式分组</li>
+<li>合并分组获取连续登录的首日和末日，相减加一得到连续登录天数。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">select id,</span><br><span class="line">       min(dt) as first_day,</span><br><span class="line">       max(dt) as last_day,</span><br><span class="line">       datediff(max(dt), min(dt)) + 1</span><br><span class="line">from (</span><br><span class="line">         select id,</span><br><span class="line">                dt,</span><br><span class="line">                gap,</span><br><span class="line">                sum(if(gap &gt;= 3, 1, 0))</span><br><span class="line">                    over (partition by id order by dt rows between unbounded preceding and current row) as groupid</span><br><span class="line">         from (</span><br><span class="line">                  select id,</span><br><span class="line">                         dt,</span><br><span class="line">                         datediff(dt, lag(dt, 1, date_sub(dt, 1))</span><br><span class="line">                                          over (partition by id order by dt)) as gap</span><br><span class="line">                  from default.question3</span><br><span class="line">              ) t1</span><br><span class="line">     ) t2</span><br><span class="line">group by id, groupid;</span><br></pre></td></tr></table></figure>
+
+<br>
+# 第 4 题 打折日期交叉问题
+## 1 问题描述
+如下为平台商品促销数据：字段为品牌，打折开始日期，打折结束日期
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">brand stt edt</span><br><span class="line">oppo 2021-06-05 2021-06-09</span><br><span class="line">oppo 2021-06-11 2021-06-21</span><br><span class="line">vivo 2021-06-05 2021-06-15</span><br><span class="line">vivo 2021-06-09 2021-06-21</span><br><span class="line">redmi 2021-06-05 2021-06-21</span><br><span class="line">redmi 2021-06-09 2021-06-15</span><br><span class="line">redmi 2021-06-17 2021-06-26</span><br><span class="line">huawei 2021-06-05 2021-06-26</span><br><span class="line">huawei 2021-06-09 2021-06-15</span><br><span class="line">huawei 2021-06-17 2021-06-21</span><br></pre></td></tr></table></figure>
+计算每个品牌总的打折销售天数，注意其中的交叉日期，比如 vivo 品牌，第一次活动时间为 2021-06-05 到 2021-06-15，第二次活动时间为 2021-06-09 到 2021-06-21 其中 9 号到 15 号为重复天数，只统计一次，即 vivo 总打折天数为 2021-06-05 到 2021-06-21 共计 17 天。
+
+<h2 id="2-解决-3"><a href="#2-解决-3" class="headerlink" title="2 解决"></a>2 解决</h2><ol>
+<li>需要解决日期的重叠问题，将每个品牌的日期改为不重叠。思路就是，按照首日排序，排序后的记录的首日日期改为前序记录最大末日日期的后一天。</li>
+<li>然后计算每段日期的天数，筛掉负数后相加即可。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">select brand,</span><br><span class="line">       sum(if(datediff(edt, new_stt) &gt; 0, datediff(edt, new_stt) + 1, 0)) as date_sum</span><br><span class="line">from (</span><br><span class="line">         select brand,</span><br><span class="line">                stt,</span><br><span class="line">                edt,</span><br><span class="line">                if(datediff(max_edt, stt) &gt; 0, date_add(max_edt, 1), stt) as new_stt</span><br><span class="line">         from (</span><br><span class="line">                  select brand,</span><br><span class="line">                         stt,</span><br><span class="line">                         edt,</span><br><span class="line">                         max(edt)</span><br><span class="line">                             over (partition by brand order by stt rows between unbounded preceding and 1 preceding) as max_edt</span><br><span class="line">                  from default.question4</span><br><span class="line">              ) t1</span><br><span class="line">     ) t2</span><br><span class="line">group by brand;</span><br></pre></td></tr></table></figure>
+
+
+<br>
+# 第 5 题 同时在线问题
+## 1 问题描述
+如下为某直播平台主播开播及关播时间，根据该数据计算出平台最高峰同时在线的主播人数。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">id stt edt</span><br><span class="line">1001 2021-06-14 12:12:12 2021-06-14 18:12:12</span><br><span class="line">1003 2021-06-14 13:12:12 2021-06-14 16:12:12</span><br><span class="line">1004 2021-06-14 13:15:12 2021-06-14 20:12:12</span><br><span class="line">1002 2021-06-14 15:12:12 2021-06-14 16:12:12</span><br><span class="line">1005 2021-06-14 15:18:12 2021-06-14 20:12:12</span><br><span class="line">1001 2021-06-14 20:12:12 2021-06-14 23:12:12</span><br><span class="line">1006 2021-06-14 21:12:12 2021-06-14 23:15:12</span><br><span class="line">1007 2021-06-14 22:12:12 2021-06-14 23:10:12</span><br><span class="line">… …</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-解决-4"><a href="#2-解决-4" class="headerlink" title="2 解决"></a>2 解决</h2><ol>
+<li>采用流式计算的思想，按每个时间点进行相加。思路就是，将一条记录拆分为上线和下线记录。然后按时间进行累加，上线加一，下线减一。</li>
+<li>得到每个时间点的在线人数，筛选出最大值即可。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">select max(online_num) as max_online_num</span><br><span class="line">from (</span><br><span class="line">         select id, ts, sum(p) over (order by ts rows between unbounded preceding and current row ) as online_num</span><br><span class="line">         from (</span><br><span class="line">                  select id, stt as ts, 1 as p</span><br><span class="line">                  from default.question5</span><br><span class="line">                  union all</span><br><span class="line">                  select id, edt as ts, -1 as p</span><br><span class="line">                  from default.question5</span><br><span class="line">              ) t1</span><br><span class="line">     ) t2;</span><br></pre></td></tr></table></figure>
+
+<br>
+# 第6题 
+## 1 问题描述
+需要获取上次库存值非零的日期，即获取last_date这一列。
+|date|invt|$</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Hive%E9%9D%A2%E8%AF%95%E9%A2%98/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Hive%E9%9D%A2%E8%AF%95%E9%A2%98/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E4%BD%BF%E7%94%A8Flink%E5%88%B6%E4%BD%9C%E6%8B%89%E9%93%BE%E8%A1%A8/" title="使用Flink制作拉链表"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">使用Flink制作拉链表</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Spark%E4%BB%BB%E5%8A%A1%E5%8D%A1%E4%BD%8F%E9%97%AE%E9%A2%98%E6%9F%A5%E6%89%BE/" title="Spark任务卡住问题查找"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spark任务卡住问题查找</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC-1-%E9%A2%98-%E8%BF%9E%E7%BB%AD%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">第 1 题 连续问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1 问题描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3"><span class="toc-number">1.2.</span> <span class="toc-text">2 解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3-1"><span class="toc-number">1.3.</span> <span class="toc-text">2 解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3-2"><span class="toc-number">1.4.</span> <span class="toc-text">2 解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3-3"><span class="toc-number">1.5.</span> <span class="toc-text">2 解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3-4"><span class="toc-number">1.6.</span> <span class="toc-text">2 解决</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

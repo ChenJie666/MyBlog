@@ -1,0 +1,1880 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Android笔记 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.目录作用： drawable：放图片和xml文件夹 layout：放布局xml文件 mipmap：存放应用图标 values：放置字符串 build.gradle：编译工具的版本控制和依赖库 AndroidManifest.xml：整个项目的配置文件，程序中的四大组件都在这里注册，给应用程序添加权限声明。 2.@string&#x2F;tv_test  可以从values文件夹下的string">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android笔记">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/Android%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.目录作用： drawable：放图片和xml文件夹 layout：放布局xml文件 mipmap：存放应用图标 values：放置字符串 build.gradle：编译工具的版本控制和依赖库 AndroidManifest.xml：整个项目的配置文件，程序中的四大组件都在这里注册，给应用程序添加权限声明。 2.@string&#x2F;tv_test  可以从values文件夹下的string">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.043Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.043Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/Android%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Android笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Android笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.043Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.043Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Android笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>1.目录作用：</p>
+<p>drawable：放图片和xml文件夹</p>
+<p>layout：放布局xml文件</p>
+<p>mipmap：存放应用图标</p>
+<p>values：放置字符串</p>
+<p>build.gradle：编译工具的版本控制和依赖库</p>
+<p>AndroidManifest.xml：整个项目的配置文件，程序中的四大组件都在这里注册，给应用程序添加权限声明。</p>
+<p>2.@string&#x2F;tv_test  可以从values文件夹下的string文件中读取定义的字符串</p>
+<p>3.android:text&#x3D;”胡涛爱学习”</p>
+<p>android:textSize&#x3D;”60sp”</p>
+<p>android:textColor&#x3D;”#909900”</p>
+<p>android:maxLines&#x3D;”1”</p>
+<p>android:ellipsize&#x3D;”end”</p>
+<p>文字相关的有五个标签。注意，需要把上面文字相关的单位改为sp，其他单位是dp。</p>
+<p>android:drawableLeft&#x3D;”@drawable&#x2F;row”</p>
+<p>android:drawablePadding&#x3D;”30dp”</p>
+<p>图片相关两个标签</p>
+<p>textStyle＝“bold” 字体加粗</p>
+<p>4.mTv_4 &#x3D; (TextView)findViewById(R.id.tv_4);&#x2F;&#x2F;获取该对象赋值给变量</p>
+<p>mTv_4.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);&#x2F;&#x2F;将该文本视图中加横线</p>
+<p>mTv_4.getPaint().setAntiAlias(true);&#x2F;&#x2F;去除锯齿</p>
+<p>5.mBtnTextView &#x3D; (Button) findViewById(R.id.btn_textview);&#x2F;&#x2F;将View类型强转为其子类Button类</p>
+<p>mBtnTextView.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    //跳转到TextView演示界面
+
+    Intent intent = new Intent(MainActivity.this,TextViewActivity.class);
+
+    startActivity(intent);
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>页面跳转</p>
+<p>6.mtv_5 &#x3D; (TextView)findViewById(R.id.tv_5);</p>
+<p>mtv_5.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);&#x2F;&#x2F;文本加下划线</p>
+<p>7.mtv_6 &#x3D; (TextView) findViewById(R.id.tv_6);</p>
+<p>mtv_6.setText(Html.fromHtml(“<u>&lt;span style&#x3D;&quot;color:#F00&quot;&gt;胡涛在学习</span></u>“));</p>
+<p>mtv_6.setTextSize(TypedValue.COMPLEX_UNIT_DIP,30);</p>
+<p>&#x2F;&#x2F;可以在java代码中调用html类来输出html格式的text文字</p>
+<p>8.android:text&#x3D;””</p>
+<p>android:drawableRight&#x3D;”@drawable&#x2F;row”</p>
+<p>android:drawablePadding&#x3D;”20sp”</p>
+<p>&#x2F;&#x2F;接上面代码，文字大小只能在java代码中设置。该表格还是正常，箭头也是正常的。</p>
+<p>9.android:singleLine&#x3D;”true”</p>
+<p>android:ellipsize&#x3D;”marquee”</p>
+<p>android:marqueeRepeatLimit&#x3D;”marquee_forever”</p>
+<p>android:focusable&#x3D;”true”</p>
+<p>android:focusableInTouchMode&#x3D;”true”</p>
+<p>&#x2F;&#x2F;跑马灯效果，需要…省略才能跑起来</p>
+<p>10.android:id</p>
+<p>android:layout_width</p>
+<p>android:layout_height</p>
+<p>android:background&#x3D;”#100000”</p>
+<p>android:padding</p>
+<p>android:layout_margin</p>
+<p>android:gravity center 在布局中的位置</p>
+<p>android:layout_weight</p>
+<p>android:layout_above&#x3D;”@+id&#x2F;view_1”</p>
+<p>android:maxLines&#x3D;”1” &#x2F;&#x2F;控制行数</p>
+<p>android:visibility&#x3D;”invisible” &#x2F;&#x2F;visible可见、invisible不可见、gone不可见且不留位置</p>
+<p>LinearLayout  线性布局标签</p>
+<p>android:orientation  horizontal、vertical</p>
+<p>RelativeLayout 相对布局标签</p>
+<p>android:layout_alignParentEnd&#x3D;”true”</p>
+<p>android:layout_alignParentBottom&#x3D;”true”&#x2F;&#x2F;与父控件的边缘对齐</p>
+<p>android:layout_toLeftOf&#x3D;”@+id&#x2F;view_1”</p>
+<p>android:layout_toRightOf&#x3D;”@id&#x2F;view_11”&#x2F;&#x2F;与其他view的相对位置</p>
+<p>layout_above和layout_below是属于RelativeLayout标签的</p>
+<p>11.button圆角</p>
+<p>在drawable文件夹下创建一个drawable  .xml文件，文件中的shape标签中加上android:shape&#x3D;”rectangle”，</p>
+<p>&lt;solid</p>
+<pre><code>android:color=&quot;#FF9900&quot;/&gt;
+</code></pre>
+<p>&lt;corners</p>
+<pre><code>android:radius=&quot;20dp&quot;/&gt;
+</code></pre>
+<p>在background中调用该xml文件。</p>
+<p>button描边</p>
+<p>将solid标签换成</p>
+<p>&lt;stroke</p>
+<pre><code>android:width=&quot;2dp&quot;
+
+android:color=&quot;#000FFF&quot;/&gt;
+</code></pre>
+<p>button按压效果</p>
+<p>用selector标签</p>
+<item android:state_pressed="true">
+
+<pre><code>&lt;shape&gt;
+
+    &lt;solid
+
+        android:width=&quot;2dp&quot;
+
+        android:color=&quot;#FF9900&quot;/&gt;
+
+    &lt;corners android:radius=&quot;10dp&quot;/&gt;
+
+&lt;/shape&gt;
+</code></pre>
+</item>
+
+<item android:state_pressed="false">
+
+<pre><code>&lt;shape&gt;
+
+    &lt;stroke
+
+        android:width=&quot;3dp&quot;
+
+        android:color=&quot;#FF0000&quot;/&gt;
+
+    &lt;corners android:radius=&quot;20dp&quot;/&gt;
+
+&lt;/shape&gt;
+</code></pre>
+</item>
+
+<p>用item包装点击和非点击的样式</p>
+<p>12.添加点击弹框</p>
+<p>方式一：</p>
+<p>btn_4.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    Toast.makeText(TextButton.this,&quot;我被点击了&quot;,Toast.LENGTH_SHORT).show();
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>方式二：</p>
+<p>在xml文件中添加 android:onClick&#x3D;”showToast”</p>
+<p>public void showToast(View view){</p>
+<pre><code>Toast.makeText(this,&quot;wait for response&quot;,Toast.LENGTH_SHORT).show();
+</code></pre>
+<p>}</p>
+<p>点击事件TextView类也可以实现，方式二可以自己命名。</p>
+<p>13.EditText：用于输入和监听输入的事件，制作登录界面</p>
+<p>EditText标签中可以用text指定输入的文字的大小和颜色；用hint来做提示文字；android:inputType&#x3D;”number”指定输入类型；android:inputType&#x3D;”textPassword”指定输入隐藏；通过drawable在输入框找那个插入图片；</p>
+<p>可以实时监控text的输入：</p>
+<p>editText.addTextChangedListener(new TextWatcher() {</p>
+<pre><code>@Override
+
+public void beforeTextChanged(CharSequence s, int start, int count, int after) &#123;
+
+
+
+&#125;
+
+
+
+@Override
+
+public void onTextChanged(CharSequence s, int start, int before, int count) &#123;
+
+
+
+&#125;
+
+
+
+@Override
+
+public void afterTextChanged(Editable s) &#123;
+
+
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>onTextChang方法每改变一个字符就调用一次。通过Log.d(“输出:”,s.toString)打印到控制台</p>
+<p>字母设置为小写：android:textAllCaps&#x3D;”false”</p>
+<p>14.多个按键事件可以将共同的提取出来：</p>
+<p>private void setListeners(){</p>
+<pre><code>OnClick onClick = new OnClick();
+
+mBtnTextView.setOnClickListener(onClick);
+
+mBtnButton.setOnClickListener(onClick);
+
+mBtnEditText.setOnClickListener(onClick);
+
+mBtnRadioButton.setOnClickListener(onClick);
+</code></pre>
+<p>}</p>
+<p>private class OnClick implements View.OnClickListener{</p>
+<pre><code>Intent intent;
+
+
+
+@Override
+
+public void onClick(View v) &#123;
+
+    switch (v.getId()) &#123;
+
+        case R.id.btn_textview:
+
+            Intent intent = new Intent(MainActivity.this, TextViewActivity.class);
+
+            startActivity(intent);
+
+            break;
+
+        case R.id.btn_text:
+
+            intent = new Intent(MainActivity.this, TextButton.class);
+
+            startActivity(intent);
+
+            break;
+
+        case R.id.edittext:
+
+            intent = new Intent(MainActivity.this, EditTextActivity.class);
+
+            startActivity(intent);
+
+            break;
+
+        case R.id.btn_radio:
+</code></pre>
+<p>15.通过RadioButton标签可以制作选择器圆点。用RadioGroup可以对许多RadioButton进行单选。</p>
+<p>android:checked&#x3D;”true”  默认选中该RadioButton</p>
+<p>android:button&#x3D;”@null”  去掉前面的小圆点；</p>
+<p>drawable中需要设置state_checked&#x3D;”true”来表示是否选中。</p>
+<p>16.复选框CheckBox：</p>
+<p>标签为CheckBox</p>
+<p>通过如下xml文件来设置选中和未选中时的图标</p>
+<item android:state_checked="false" android:drawable="@drawable/cryface"/>
+
+<item android:state_checked="true" android:drawable="@drawable/smileface"/>
+
+<p>通过button标签来引用，通过paddingleft标签来隔开图标和文字</p>
+<p>打印和获取CheckBox的信息：</p>
+<p>mCb5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {</p>
+<pre><code>@Override
+
+public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) &#123;
+
+    Toast.makeText(CheckBoxActivity.this, isChecked ? &quot;已选中&quot; : &quot;已取消&quot;, Toast.LENGTH_SHORT).show();
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>17.图片展示标签ImageView：</p>
+<p>android:src&#x3D;”@drawable&#x2F;row” 设置图片</p>
+<p>android:scaleType&#x3D;”centerCrop” fitXY铺满，fitCenter宽高比不变完全显示，centerCrop宽高比不变覆盖控件</p>
+<p>在src中可以设置本地图片，也可以在java代码中设置网络图片：</p>
+<p>使用第三方库Glide拉取网络图片，在build.gradle引入glide包，需要在AndroidManifest中设置允许联网<uses-permission android:name="android.permission.INTERNET"/></p>
+<p>在Activity中设置加载网络图片</p>
+<p>mIv2 &#x3D; (ImageView) findViewById(R.id.iv_2);</p>
+<p>Glide.with(this).load(“图片地址”).into(mIv2);</p>
+<p>18.网状视图GridView</p>
+<p>需要定义两个类和两个layout布局：GridViewActivity类绑定activity_gridview.xml布局，并通过mGv.setAdapter(new GridViewAdapter(GridViewActivity.this));来定义网状视图中每个格子的布局。在GridViewActivity类中，</p>
+<p>public class GridViewAdapter extends BaseAdapter {</p>
+<pre><code>private Context mContext;  //TODO 上下文
+
+private LayoutInflater mLayoutInflater; //TODO 布局填充器
+
+public GridViewAdapter(Context context)&#123;    //TODO 有参构造器，传入上下文
+
+    this.mContext = context;
+
+    mLayoutInflater = LayoutInflater.from(context); //TODO 获取布局填充器
+
+&#125;
+
+@Override
+
+public int getCount() &#123;
+
+    return 100;  //TODO 网状视图数量
+
+&#125;
+
+@Override
+
+public Object getItem(int position) &#123;
+
+    return null;
+
+&#125;
+
+@Override
+
+public long getItemId(int position) &#123;
+
+    return 0;
+
+&#125;
+
+static class ViewHolder&#123;    //TODO 网状视图的格子，包括图片和文字
+
+    public ImageView imageView1;
+
+    public ImageView imageView2;
+
+    public TextView textView;
+
+&#125;
+
+private int tag = 0;
+
+@Override
+
+public View getView(int position, View convertView, ViewGroup parent) &#123; //TODO 若view布局不同，加载view和值；若view布局相同，则只加载值
+
+    ViewHolder viewHolder = null;  //TODO 网状视图的格子
+
+    if(convertView==null)&#123;
+
+        convertView = mLayoutInflater.inflate(R.layout.layout_gridview,null);  //TODO 通过布局填充器载入需要加载的布局资源和将当前载入的视图绑定到层级结构中的根视图中(为null表示不绑定)
+
+        viewHolder = new ViewHolder();  //TODO 创建格子
+
+        viewHolder.imageView1 = (ImageView)convertView.findViewById(R.id.iv_grid1);  //TODO 获取id对应的布局ImageView
+
+        viewHolder.imageView2 = (ImageView)convertView.findViewById(R.id.iv_grid2);  //TODO 获取id对应的布局ImageView
+
+        viewHolder.textView = (TextView)convertView.findViewById(R.id.tv_title);    //TODO 获取id对应的布局TextView
+
+        convertView.setTag(viewHolder); //TODO 将索引给View对象，后面进行赋值
+
+    &#125;else&#123;
+
+        viewHolder = (ViewHolder)convertView.getTag();  //TODO 取出ViewHolder对象用于赋值
+
+    &#125;
+
+    //TODO 给TextView对象和ImageView对象赋值
+
+    viewHolder.textView.setText(&quot;花&quot;);
+
+    Glide.with(mContext).load(&quot;http://xxx&quot;).into(viewHolder.imageView1);
+</code></pre>
+<p>Glide.with(mContext).load(“<a target="_blank" rel="noopener" href="http://xxx").into(viewholder.imageview2)/">http://xxx&quot;).into(viewHolder.imageView2)</a>;</p>
+<pre><code>    return convertView; //TODO 返回视图View
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>屏幕上显示的网状图都是新建的converView，当向下滑动出现新的网格时，会对之前创建的converView进行复用，因为大多数情况下item的View是相同的。</p>
+<p>定义一个网状视图的布局：</p>
+<p>&lt;GridView</p>
+<pre><code>android:id=&quot;@+id/gv_1&quot;
+
+android:layout_width=&quot;match_parent&quot;
+
+android:layout_height=&quot;wrap_content&quot;
+
+android:numColumns=&quot;2&quot;
+
+android:horizontalSpacing=&quot;50dp&quot;
+
+android:verticalSpacing=&quot;20dp&quot;/&gt;
+</code></pre>
+<p>定义网状视图格子的布局：</p>
+<p>可以插入ImageView、TextView等</p>
+<p>19.滚动视图</p>
+<p>垂直滚动：ScrollView</p>
+<p>水平滚动：HorizontalScrollView</p>
+<p>每个标签中只能有一个元素</p>
+<p>20.RecyclerView中</p>
+<p>设置layout，&lt;androidx.recyclerview.widget.RecyclerView&#x2F;&gt;是RecyclerView的空间。通过Activity关联该layout，</p>
+<p>mRvMain &#x3D; (RecyclerView) findViewById(R.id.rv_main);</p>
+<p>mRvMain.setLayoutManager(new LinearLayoutManager(LinearRecyclerViewActivity.this));</p>
+<p>mRvMain.setAdapter(new LinearAdapter(LinearRecyclerViewActivity.this）;通过创建Adapter类来处理RecyclerView中的item。</p>
+<p>21.public class LinearAdapter extends RecyclerView.Adapter&lt;LinearAdapter.LinearViewHolder&gt; {</p>
+<pre><code>private Context mContext;  //TODO Activity类的对象（上下文）
+
+private List&lt;String&gt; list;  //TODO 存放格子中的内容
+
+private OnItemClickListener mlistener;
+
+public LinearAdapter(Context context,List&lt;String&gt; list,OnItemClickListener listener)&#123;
+
+    this.mContext = context;
+
+    this.list = list;
+
+    this.mlistener = listener;
+
+&#125;
+
+@NonNull
+
+@Override
+
+public LinearViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) &#123;
+
+    return new LinearViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_linear_item,parent,false),list);  //TODO ViewHolder是格子的模版；inflate方法将layout转换为View对象
+
+&#125;
+
+@Override
+
+public void onBindViewHolder(@NonNull LinearViewHolder holder, final int position) &#123;
+
+    holder.textView.setText(list.get(position));      //TODO 此处可以对layout中的内容进行修改
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() &#123;
+
+        @Override
+
+        public void onClick(View v) &#123;
+</code></pre>
+<p>&#x2F;&#x2F;                Toast.makeText(mContext, “position:” + position, Toast.LENGTH_SHORT).show();    &#x2F;&#x2F;设置点击事件</p>
+<pre><code>            mlistener.onClick(position);
+
+        &#125;
+
+    &#125;);
+
+    holder.itemView.setOnLongClickListener(new View.OnLongClickListener() &#123;
+
+        @Override
+
+        public boolean onLongClick(View v) &#123;
+
+            mlistener.onLongClick(position);
+
+            return true;
+
+        &#125;
+
+    &#125;);
+
+&#125;
+
+@Override
+
+public int getItemCount() &#123;    //列表长度
+
+    return list.size();
+
+&#125;
+
+class LinearViewHolder extends RecyclerView.ViewHolder&#123;
+
+    private TextView textView;  //将layout转换为view后，通过view对layout中的元素进行操作
+
+    public LinearViewHolder(@NonNull View itemView,List list) &#123;  //构造方法,传入视图转化过来的view对象，和存储了内容的list对象
+
+        super(itemView);
+
+        textView = itemView.findViewById(R.id.rv_tv_1);
+
+    &#125;
+
+&#125;
+
+public interface OnItemClickListener&#123;
+
+    void onClick(int pos);
+</code></pre>
+<p>void onLongClick(int pos);</p>
+<p>  }</p>
+<p>}</p>
+<p>22.可以在values中设置dimens.xml文件来定义下划线</p>
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<resources>
+
+<pre><code>&lt;dimen name=&quot;dividerHeight&quot;&gt;3dp&lt;/dimen&gt;
+</code></pre>
+</resources>
+
+<p>通过mRvMain.addItemDecoration(new MyDecoration());  &#x2F;&#x2F;onDraw方法(视图绘制前生效),onDrawOver(视图绘制后生效),getItemOffsets(在item周边绘制) 来为item绘制（划线颜色和background颜色一致）。</p>
+<p>&#x2F;&#x2F;TODO 为每个格子下面添加线</p>
+<p>class MyDecoration extends RecyclerView.ItemDecoration{</p>
+<pre><code>@Override
+
+public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) &#123;
+
+    super.getItemOffsets(outRect, view, parent, state);
+
+    outRect.set(0,0,0,getResources().getDimensionPixelOffset(R.dimen.dividerHeight));
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>23.在Activity类中设置点击事件，可以通过回调函数实现。</p>
+<p>24.设置横向滑动的RecyclerView</p>
+<p>LinearLayoutManager layoutManager &#x3D;  new LinearLayoutManager(LinearRecyclerViewActivity.this);</p>
+<p>layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);</p>
+<p>mRvMainHo.setLayoutManager(layoutManager);</p>
+<p>25.网格布局</p>
+<p>GridLayoutManager gridLayoutManager &#x3D; new GridLayoutManager(LinearRecyclerViewActivity.this, 3);</p>
+<p>mRvMainGrid.setLayoutManager(gridLayoutManager);</p>
+<p>26.瀑布流布局</p>
+<p>mRv.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.HORIZONTAL));</p>
+<p>轮子：addHeadView、addFootView、下拉刷新、上拉加载</p>
+<p>27.如果一个adapter（即一个RecyclerView）中需要引入两类item，需要定义两个holder类（即两个item），在getItemViewType方法中添加返回值，通过viewType判断要放哪个holder</p>
+<p>28.WebView</p>
+<p>通过在main下创建assets文件夹，可以访问其中的.html页面</p>
+<p>mWv.loadUrl(“file:&#x2F;&#x2F;&#x2F;android_asset&#x2F;text.html”);</p>
+<p>29.加载网络上的网页</p>
+<p>mWv.getSettings().setJavaScriptEnabled(true);&#x2F;&#x2F;如果有js，需要设置js可用</p>
+<p>mWv.loadUrl(“<a target="_blank" rel="noopener" href="https://m.baidu.com/">https://m.baidu.com</a>“);</p>
+<p>30.新建类继承WebVeiwClient，改写方法：</p>
+<p>class MyWebViewClient extends WebViewClient{</p>
+<pre><code>@Override
+
+public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) &#123;
+
+    view.loadUrl(request.getUrl().toString());  //TODO 在该WebView中加载请求而不跳转到浏览器
+
+    return true;
+
+&#125;
+
+@Override
+
+public void onPageStarted(WebView view, String url, Bitmap favicon) &#123;
+
+    super.onPageStarted(view, url, favicon);
+
+    Toast.makeText(WebViewActivity.this,&quot;onPageStart...&quot;,Toast.LENGTH_SHORT).show();
+
+&#125;
+
+@Override
+
+public void onPageFinished(WebView view, String url) &#123;
+
+    super.onPageFinished(view, url);
+
+    Toast.makeText(WebViewActivity.this,&quot;onPageFinished...&quot;,Toast.LENGTH_SHORT).show();
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>对元素进行设置：</p>
+<p>mWv.setWebViewClient(new MyWebViewClient());    &#x2F;&#x2F;TODO 设置WebView的客户端属性</p>
+<p>后退键不会回退到Activity处：</p>
+<p>@Override</p>
+<p>public boolean onKeyDown(int keyCode, KeyEvent event) {</p>
+<pre><code>if (keyCode == KeyEvent.KEYCODE_BACK &amp;&amp; mWv.canGoBack()) &#123;  //TODO 是会退操作且可以回退
+
+    mWv.goBack();
+
+    return true;    //TODO 返回true结束
+
+&#125;
+
+return super.onKeyDown(keyCode, event); //TODO 退到Activity
+</code></pre>
+<p>}</p>
+<p>31.另一种WebView客户端</p>
+<p>class MyWebChromeClient extends WebChromeClient {</p>
+<pre><code>@Override
+
+public void onProgressChanged(WebView view, int newProgress) &#123;
+
+    super.onProgressChanged(view, newProgress); //加载进度
+
+&#125;
+
+@Override
+
+public void onReceivedTitle(WebView view, String title) &#123;
+
+    super.onReceivedTitle(view, title);
+
+    setTitle(title);    //TODO 设置html的title属性
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>mWv.setWebChromeClient(new MyWebChromeClient());&#x2F;&#x2F;TODO 设置WebView的客户端属性</p>
+<p>mWv.evaluateJavascript(); &#x2F;&#x2F;TODO 可以执行javascript代码，还有回调函数</p>
+<p>mWv.loadUrl(“javascript:alert(‘hello’)”);&#x2F;&#x2F;也可以执行javascript代码</p>
+<p>可以将js代码放到不同的客户端方法中，如可以在加载或者加载完成时调用</p>
+<p>32.3.提示框</p>
+<p>Toast框位置改变</p>
+<p>Toast toast_center &#x3D; Toast.makeText(getApplicationContext(), “Toast center”, Toast.LENGTH_LONG);</p>
+<p>toast_center.setGravity(Gravity.CENTER,0,0);</p>
+<p>toast_center.show();</p>
+<p>自定义Toast（带图片和文字）</p>
+<p>先自定义Layout文件，包含了ImageView和TextView</p>
+<p>Toast toast_diy &#x3D; Toast.makeText(getApplicationContext(), “Toast diy”, Toast.LENGTH_LONG);</p>
+<p>View view &#x3D; LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_toast, null);</p>
+<p>ImageView imageView &#x3D; (ImageView) view.findViewById(R.id.toast_iv);</p>
+<p>imageView.setImageResource(R.drawable.icon);</p>
+<p>TextView textView &#x3D; (TextView)view.findViewById(R.id.toast_tv);</p>
+<p>textView.setText(“阿里妈妈”);</p>
+<p>toast_diy.setView(view);</p>
+<p>toast_diy.show();</p>
+<p>34.如何使Toast实时显示而不需要等待前一个完成：</p>
+<p>方式一：将Toast对象在下一个Toast生效前调用cancel()方法取消掉</p>
+<p>方式二：创建一个Toast对象单例的工具类，在单例Toast生效时会将之前的效果中断。</p>
+<p>private static Toast mToast;</p>
+<p>public static void showMsg(Context context, String msg) {</p>
+<pre><code>if (mToast == null) &#123;
+
+    mToast = Toast.makeText(context, msg, Toast.LENGTH_LONG);
+
+&#125; else &#123;
+
+    Random random = new Random();
+
+    mToast.setText(msg+random.nextInt());
+
+&#125;
+
+mToast.show();
+</code></pre>
+<p>}</p>
+<p>35.Dialog选择框</p>
+<p>AlertDialog.Builder builder &#x3D; new AlertDialog.Builder(DialogActivity.this);&#x2F;&#x2F;用getApplicationContext()会报错</p>
+<p>builder.setTitle(“请回答:”).setMessage(“这书好看吗?”)</p>
+<pre><code>    .setPositiveButton(text,new DialogInterface.OnClickListener()&#123;OnClick()&#123;...&#125;&#125;)
+</code></pre>
+<p>可以设置setPositiveButton、setNeuTralButton和setNegativeButton三个按键并设置点击事件。</p>
+<p>36.多选框：</p>
+<p>builder2.setTitle(“掌握的语言:”)&#x2F;<em>.setMessage(“掌握的语言”)</em>&#x2F; &#x2F;&#x2F;TODO 有items就不能设置message</p>
+<pre><code>    .setIcon(R.drawable.icon).setItems(array2, new DialogInterface.OnClickListener() &#123;
+
+@Override
+
+public void onClick(DialogInterface dialog, int which) &#123;
+
+&#125;
+</code></pre>
+<p>}).show();</p>
+<p>单选框：</p>
+<p>将setItems替换为setSingleChoiceItems（array，默认选择下标，listener）</p>
+<p>点击弹框外可以取消弹框，需要设置.setCancelable(false)</p>
+<p>如果需要点击选项后弹框消失，在onClick中设置dialog.dismiss();</p>
+<p>多选框</p>
+<p>还需要传入boolean数组来对应选项数组是否被默认选中。用setMultiChoiceItems方法来设置多选框，用setPositiveButton和setNegativeButton来设置按钮。</p>
+<p>37.自定义AlertDialog：通过setView方法将自定义的布局设置到弹框中</p>
+<p>View view &#x3D; LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_dialog_item,null);</p>
+<p>final EditText editText1 &#x3D; (EditText)view.findViewById(R.id.dialog_et_1);</p>
+<p>final EditText editText2 &#x3D; (EditText)view.findViewById(R.id.dialog_et_2);</p>
+<p>Button btn_dialog &#x3D; (Button)view.findViewById(R.id.dialog_btn_1);</p>
+<p>btn_dialog.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    ToastUtil.showMsg(getApplication(),editText1.getText().toString() + &quot;	&quot; + editText2.getText().toString());
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>builder5.setTitle(“请登录”).setView(view).show();</p>
+<p>38.ProgressBar设置加载符号或进度</p>
+<p>&lt;ProgressBar</p>
+<pre><code>android:id=&quot;@+id/pb_3&quot;
+
+android:layout_width=&quot;match_parent&quot;
+
+android:layout_height=&quot;wrap_content&quot;
+
+android:layout_marginTop=&quot;20dp&quot;
+
+style=&quot;@android:style/Widget.ProgressBar.Horizontal&quot;
+
+android:max=&quot;100&quot;
+
+android:progress=&quot;10&quot;
+
+android:secondaryProgress=&quot;30&quot;
+
+/&gt;
+</code></pre>
+<p>通过handler和runnable互调使进度条不断上升，直到边界</p>
+<p>Handler handler &#x3D; new Handler(){</p>
+<pre><code>@Override
+
+public void handleMessage(@NonNull Message msg) &#123;
+
+    super.handleMessage(msg);
+
+    if(mPb4.getProgress() &lt; 100)&#123;
+
+        handler.postDelayed(runnable, 500); //TODO 延迟发送消息给runnable
+
+    &#125;else &#123;
+
+        ToastUtil.showMsg(ProgressBarActivity.this,&quot;Load Complete!&quot;); //TODO 边界
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>Runnable runnable &#x3D; new Runnable() {</p>
+<pre><code>@Override
+
+public void run() &#123;
+
+    mPb4.setProgress(mPb4.getProgress() + 5);  //TODO 进度条+5
+
+    handler.sendEmptyMessage(0);    //TODO 发送消息给handler，循环调用直到边界
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>mPb4 &#x3D; (ProgressBar) findViewById(R.id.pb_4);</p>
+<p>mBtn.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    handler.sendEmptyMessage(0);    //TODO 点击之后发送消息执行handle的handlerMessage方法
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>ProgressBar中自定义旋转的图片的设置</p>
+<?xml version="1.0" encoding="utf-8"?>
+
+<p>&lt;animated-rotate xmlns:android&#x3D;”<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>“</p>
+<pre><code>android:drawable=&quot;@drawable/touxiang&quot;
+
+android:pivotX=&quot;50%&quot;
+
+android:pivotY=&quot;50%&quot;&gt;
+</code></pre>
+</animated-rotate>
+
+
+
+<p>在styles.xml文件中 引用自己的旋转图片配置创建自定义的style</p>
+<style name="MyProgressBar">
+
+    <item name="android:indeterminateDrawable">@drawable/bg_progress</item>
+
+</style>
+
+
+
+<p><item name="android:indeterminate">true</item> 表示模糊模式，用于旋转的图片；如果为false表示非模糊模式，用于进度条。</p>
+<p>39.点击按钮弹出对话</p>
+<p>mBtn2.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    ProgressDialog progressDialog = new ProgressDialog(ProgressBarActivity.this);
+
+    progressDialog.setTitle(&quot;提示&quot;);
+
+    progressDialog.setMessage(&quot;正在加载&quot;);
+
+    progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() &#123; //TODO 如果对话被取消则调用该方法
+
+        @Override
+
+        public void onCancel(DialogInterface dialog) &#123;
+
+            ToastUtil.showMsg(getApplicationContext(),&quot;cancal..&quot;);
+
+        &#125;
+
+    &#125;);
+
+    progressDialog.setCancelable(false); //不能被取消，可以在加载完后调用dismiss方法取消
+
+    progressDialog.show();
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>40.点击按钮弹出对话，加载到100%时自动退出</p>
+<p>mBtn3.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    progressDialog = new ProgressDialog(ProgressBarActivity.this);
+
+    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+    progressDialog.setTitle(&quot;提示&quot;);
+
+    progressDialog.setMessage(&quot;正在下载...&quot;);
+
+    progressDialog.setMax(100);
+
+    progressDialog.setCancelable(false);
+
+    progressDialog.show();
+
+    handler2.sendEmptyMessage(0);
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>Handler handler2 &#x3D; new Handler(){</p>
+<pre><code>@Override
+
+public void handleMessage(@NonNull Message msg) &#123;
+
+    super.handleMessage(msg);
+
+    if(progressDialog.getProgress()&lt;100)&#123;
+
+        progressDialog.setProgress(progressDialog.getProgress() + 5);
+
+        handler2.postDelayed(runnable2, 200);
+
+    &#125;else&#123;
+
+        ToastUtil.showMsg(getApplicationContext(),&quot;Complete!&quot;);
+
+        progressDialog.dismiss();
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>Runnable runnable2 &#x3D; new Runnable() {</p>
+<pre><code>@Override
+
+public void run() &#123;
+
+    handler2.sendEmptyMessage(0);
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>ProgressDialog继承自AlertDialog继承自Dialog。</p>
+<p>AlertDialog弹框可以设置各种信息；progressBar和ProgressDialog都分为转圈和进度条两种，progressBar在页面上显示，ProgressDialog点击后以对话框形式出现。</p>
+<p>ProgressDialog可以在对话框中设置点击按钮，包括BUTTON_POSITIVE，BUTTON_NEUTRAL和BUTTON_POSITIVE</p>
+<p>progressDialog.setButton(DialogInterface.BUTTON_POSITIVE, “很好”, new DialogInterface.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(DialogInterface dialog, int which) &#123;
+
+    ToastUtil.showMsg(getApplicationContext(),&quot;good&quot;);
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>41.自定义Dialog</p>
+<p>创建一个CustomDialog类继承Dialog，创建一个layout文件写成一个登陆页面。在Dialog中关联这个layout，获取其中的标签，设置成为需要的参数。参数和listener可以通过set方法传入。new Dialog对象设置参数和listener，调用show方法来显示自定义layout形式的dialog框。</p>
+<p>CustomDialog.IOnCancelListener cancelListener &#x3D; new CustomDialog.IOnCancelListener() {</p>
+<pre><code>@Override
+
+public void onCancel(CustomDialog dialog) &#123;
+
+    ToastUtil.showMsg(getApplicationContext(), &quot;取消成功&quot;);
+
+    dialog.dismiss();
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>CustomDialog.IOnConfirmListener confirmListener &#x3D; new CustomDialog.IOnConfirmListener() {</p>
+<pre><code>@Override
+
+public void onConfirm(CustomDialog dialog) &#123;
+
+    ToastUtil.showMsg(getApplicationContext(), &quot;确认&quot;);
+
+    dialog.dismiss();
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>CustomDialog customDialog &#x3D; new CustomDialog(DialogActivity.this).setTitle(“警告”).setMsg(“确定删除此项”).setCancel(“取消”, cancelListener).setConfirm(“确认”, confirmListener);</p>
+<p>customDialog.show();</p>
+<p>public class CustomDialog extends Dialog implements TextView.OnClickListener{</p>
+<pre><code>private TextView mTvTitle,mTvMsg,mTvCancel,mTvConfirm;
+
+private String title,msg,cancel,confirm;
+
+private IOnCancelListener cancelListener;
+
+private IOnConfirmListener confirmListener;
+
+public CustomDialog(@NonNull Context context) &#123;
+
+    super(context);
+
+&#125;
+
+public CustomDialog(@NonNull Context context, int themeResId) &#123;
+
+    super(context, themeResId);
+
+&#125;
+
+public CustomDialog setTitle(String title) &#123;
+
+    this.title = title;
+
+    return this;
+
+&#125;
+
+public CustomDialog setMsg(String msg) &#123;
+
+    this.msg = msg;
+
+    return this;
+
+&#125;
+
+public CustomDialog setCancel(String cancel,IOnCancelListener cancelListener) &#123;
+
+    this.cancel = cancel;
+
+    this.cancelListener = cancelListener;
+
+    return this;
+
+&#125;
+
+public CustomDialog setConfirm(String confirm,IOnConfirmListener confirmListener) &#123;
+
+    this.confirm = confirm;
+
+    this.confirmListener = confirmListener;
+
+    return this;
+
+&#125;
+
+@Override
+
+protected void onCreate(@Nullable Bundle savedInstanceState) &#123;
+
+    super.onCreate(savedInstanceState);
+
+    setContentView(R.layout.layout_customdialog);
+
+    mTvTitle = (TextView) findViewById(R.id.custom_tv1);
+
+    mTvMsg = (TextView) findViewById(R.id.custom_tv2);
+
+    mTvCancel = (TextView) findViewById(R.id.custom_tv3);
+
+    mTvConfirm = (TextView) findViewById(R.id.custom_tv4);
+
+    //设置宽度
+
+    WindowManager m = getWindow().getWindowManager();
+
+    Display d = m.getDefaultDisplay();
+
+    WindowManager.LayoutParams p = getWindow().getAttributes();
+
+    Point size = new Point();
+
+    d.getSize(size);
+
+    p.width = (int)(size.x * 0.8); //TODO 设置dialog的宽度为当前手机屏幕宽度的0.8倍
+
+    getWindow().setAttributes(p);
+
+    if(!TextUtils.isEmpty(title)) &#123;
+
+        mTvTitle.setText(title);
+
+    &#125;
+
+    if (!TextUtils.isEmpty(msg)) &#123;
+
+        mTvMsg.setText(msg);
+
+    &#125;
+
+    if (!TextUtils.isEmpty(cancel))&#123;
+
+    mTvCancel.setText(cancel);
+
+    &#125;
+
+    if (!TextUtils.isEmpty(confirm)) &#123;
+
+        mTvConfirm.setText(confirm);
+
+    &#125;
+</code></pre>
+<p>&#x2F;&#x2F;        mTvCancel.setOnClickListener(this);</p>
+<p>&#x2F;&#x2F;        mTvConfirm.setOnClickListener(this);</p>
+<pre><code>    mTvCancel.setOnClickListener(new View.OnClickListener() &#123;
+
+        @Override
+
+        public void onClick(View v) &#123;
+
+            cancelListener.onCancel(CustomDialog.this);
+
+        &#125;
+
+    &#125;);
+
+    mTvConfirm.setOnClickListener(new View.OnClickListener() &#123;
+
+        @Override
+
+        public void onClick(View v) &#123;
+
+            confirmListener.onConfirm(CustomDialog.this);
+
+        &#125;
+
+    &#125;);
+
+&#125;
+
+@Override
+
+public void onClick(View v) &#123;
+
+    switch (v.getId())&#123;
+
+        case R.id.custom_tv3:
+
+            cancelListener.onCancel(this);
+
+            break;
+
+        case R.id.custom_tv4:
+
+            confirmListener.onConfirm(this);
+
+            break;
+
+    &#125;
+
+&#125;
+
+public interface IOnCancelListener&#123;
+
+    void onCancel(CustomDialog dialog);
+
+&#125;
+
+public interface IOnConfirmListener&#123;
+
+    void onConfirm(CustomDialog dialog);
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>通过以下方法来设置框的宽度占屏幕的比重：</p>
+<p>WindowManager m &#x3D; getWindow().getWindowManager();</p>
+<p>Display d &#x3D; m.getDefaultDisplay();</p>
+<p>WindowManager.LayoutParams p &#x3D; getWindow().getAttributes();</p>
+<p>Point size &#x3D; new Point();</p>
+<p>d.getSize(size);</p>
+<p>p.width &#x3D; (int)(size.x * 0.8); &#x2F;&#x2F;TODO 设置dialog的宽度为当前手机屏幕宽度的0.8倍</p>
+<p>getWindow().setAttributes(p);</p>
+<p>圆角矩形边框样式</p>
+<?xml version="1.0" encoding="utf-8" ?>
+
+<p>&lt;shape xmlns:android&#x3D;”<a target="_blank" rel="noopener" href="http://schemas.android.com/apk/res/android">http://schemas.android.com/apk/res/android</a>“</p>
+<pre><code>android:shape=&quot;rectangle&quot;&gt;
+
+&lt;solid android:color=&quot;@color/colorWhite&quot;/&gt;
+
+&lt;corners android:radius=&quot;20dp&quot;/&gt;
+</code></pre>
+</shape>
+
+
+
+<p>布局很简单，就是正常的界面，用View标签，宽度设置为0.5来做分割线。</p>
+<p>因为继承Dialog类有title和背景，所以会有灰色部分。</p>
+<p>可以设置styles.xml文件设置去除和透明，通过构造器构造Dialog对象（在layout文件中的设置会被Dialog类覆盖）：</p>
+<style name="CustomDialog" parent="android:Theme.Dialog">
+
+    <item name="windowNoTitle">true</item>
+
+    <item name="android:windowIsFloating">true</item>
+
+    <item name="android:windowBackground">@color/colorTransparent</item>
+
+</style>
+
+
+
+<p>其他详细设置</p>
+<p></style></p>
+<pre><code>&lt;style name=&quot;dialog_parent&quot; parent=&quot;@android:style/Theme.Dialog&quot;&gt;
+
+  &lt;!--  设置背景透明--&gt;
+
+    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/transparent&lt;/item&gt;
+
+    &lt;!--设置是否有边框--&gt;
+
+    &lt;item name=&quot;android:windowFrame&quot;&gt;@null&lt;/item&gt;
+
+    &lt;!--设置是否有标题栏--&gt;
+
+    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;
+
+  &lt;!-- 设置是否有遮盖--&gt;
+
+    &lt;item name=&quot;android:windowContentOverlay&quot;&gt;@null&lt;/item&gt;
+
+  &lt;!-- 设置是否浮在activity之上--&gt;
+
+    &lt;item name=&quot;android:windowIsFloating&quot;&gt;true&lt;/item&gt;
+
+    &lt;!--添加我们的drawable文件--&gt;
+
+    &lt;item name=&quot;android:background&quot;&gt;@drawable/dialog_background_parent_moving&lt;/item&gt;
+
+&lt;/style&gt;
+</code></pre>
+<p>ViewGroup.LayoutParams是什么？？？</p>
+<p>42.获取popup框的宽度和高度</p>
+<p>mBtn_Popup.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT</p>
+<p>43.PopupWindow</p>
+<p>mBtn_Popup &#x3D; (Button) findViewById(R.id.btn_popup);</p>
+<pre><code>    mBtn_Popup.setOnClickListener(new View.OnClickListener() &#123;
+
+        @Override
+
+        public void onClick(View v) &#123;
+
+            View view = getLayoutInflater().inflate(R.layout.layout_popup, null);
+
+            View tv_good = view.findViewById(R.id.tv_good);
+
+            tv_good.setOnClickListener(new View.OnClickListener() &#123; //TODO 设置View中的TextView的点击事件
+
+                @Override
+
+                public void onClick(View v) &#123;
+
+                    mPop.dismiss();
+
+                    ToastUtil.showMsg(getApplicationContext(),&quot;good&quot;);
+
+                &#125;
+
+            &#125;);
+
+            mPop = new PopupWindow(view,mBtn_Popup.getWidth(), ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            mPop.setBackgroundDrawable(new BitmapDrawable());//TODO 以下设置生效的前提
+
+            mPop.setOutsideTouchable(true); //TODO 窗口会响应窗口外的点击事件（会取消窗口）
+
+            mPop.setFocusable(true);    //TODO 点击按钮时不会再次生效，焦点完全在pop框中
+</code></pre>
+<p>&#x2F;&#x2F;                mPop.setAnimationStyle(); &#x2F;&#x2F;设置动画效果</p>
+<pre><code>            mPop.showAsDropDown(mBtn_Popup);//TODO 以锚点为相对位置确定弹框的位置
+</code></pre>
+<p>&#x2F;&#x2F;                mPop.showAtLocation(view, Gravity.CENTER,100,300);&#x2F;&#x2F;TODO 在父页面中的位置</p>
+<pre><code>        &#125;
+
+    &#125;);
+</code></pre>
+<p>44.通过在AndroidManifest中设置android:label&#x3D;”Test”</p>
+<p>android:theme&#x3D;”@style&#x2F;Theme.AppCompat.Light.NoActionBar”，来设置是否有标题栏和名字。android:screenOrientation&#x3D;”landscape&#x2F;portrait”设置横竖屏</p>
+<p>android:launchMode设置启动模式；<intent-filter>标签用于设置启动默认启动activity；</p>
+<p>45.activity的生命周期：onCreate、onStart、onResume、onPause、onStop和onDestroy。onCreate中绑定页面，onResume中可以设置数据刷新，onPause设置页面暂停，onDestroy用于销毁资源。</p>
+<p>46.显示跳转：</p>
+<p>&#x2F;&#x2F;TODO 显示跳转方式一：</p>
+<p>&#x2F;&#x2F;                Intent intent &#x3D; new Intent(getApplicationContext(),BActivity.class);</p>
+<p>&#x2F;&#x2F;                startActivity(intent);</p>
+<pre><code>            //TODO 显示跳转方式二：
+</code></pre>
+<p>&#x2F;&#x2F;                Intent intent &#x3D; new Intent();</p>
+<p>&#x2F;&#x2F;                intent.setClass(getApplicationContext(), BActivity.class);</p>
+<p>&#x2F;&#x2F;                startActivity(intent);</p>
+<pre><code>            //TODO 显示跳转方式三：
+</code></pre>
+<p>&#x2F;&#x2F;                Intent intent &#x3D; new Intent();</p>
+<p>&#x2F;&#x2F;                intent.setClassName(getApplicationContext(), “com.example.myapplication.jump.BActivity”);</p>
+<p>&#x2F;&#x2F;                startActivity(intent);</p>
+<pre><code>            //TODO 显示跳转方式四：
+</code></pre>
+<p>&#x2F;&#x2F;                Intent intent &#x3D; new Intent();</p>
+<p>&#x2F;&#x2F;                intent.setComponent(new ComponentName(getApplicationContext(), “com.example.myapplication.jump.BActivity”));</p>
+<p>&#x2F;&#x2F;                startActivity(intent);</p>
+<p>隐式跳转：</p>
+<p>需要在AndroidManifest中设置</p>
+<p><action android:name="com.example.myapplication.BActivity" />&#x2F;&#x2F;起别名（随意取名），下面的名字要和这个对应</p>
+<category android:name="android.intent.category.DEFAULT" />
+
+<p>&#x2F;&#x2F;TODO 隐式调用</p>
+<p>Intent intent &#x3D; new Intent();</p>
+<p>intent.setAction(“com.example.myapplication.BActivity”);</p>
+<p>startActivity(intent);</p>
+<p>intent.setAction()可以设置调用电话、发邮件、摄像头等。</p>
+<p>47.Activity之间的数据传递：</p>
+<p>可以在前一个页面通过</p>
+<p>Bundle bundle &#x3D; new Bundle();</p>
+<p>bundle.putString(“name”,”记账”);</p>
+<p>intent.putExtras(bundle); &#x2F;&#x2F;直接传入bundle</p>
+<p>intent.putExtra(“version”, 1); &#x2F;&#x2F;通过方法传入bundle，内部也是创建bundle</p>
+<p>startActivity(intent);</p>
+<p>将信息存入intent中，并在下一页面获取intent信息：</p>
+<p>Bundle extras &#x3D; getIntent().getExtras();</p>
+<p>String name &#x3D; extras.getString(“name”);</p>
+<p>int version &#x3D; extras.getInt(“version”);</p>
+<p>48.startActivityForResult：</p>
+<p>通过startActivityForResult(intent,0)方法跳转页面，可以带一个标志符，表示是哪个方法进行跳转的。跳转的页面通过</p>
+<p>Intent intent &#x3D; new Intent();</p>
+<p>Bundle bundle &#x3D; new Bundle();</p>
+<p>bundle.putString(“title”,”I am back!!!”);</p>
+<p>intent.putExtras(bundle);</p>
+<p>setResult(Activity.RESULT_OK,intent);</p>
+<p>finish();</p>
+<p>intent携带返回的信息，并将自己关闭。</p>
+<p>原页面通过方法</p>
+<p>@Override</p>
+<p>protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {</p>
+<pre><code>super.onActivityResult(requestCode, resultCode, data);
+
+ToastUtil.showMsg(getApplicationContext(),data.getExtras().getString(&quot;title&quot;) + &quot;-&quot; + requestCode + &quot;-&quot; + resultCode);
+</code></pre>
+<p>}</p>
+<p>获取返回的信息</p>
+<p>49.Activity的4种启动模式：</p>
+<p>在Android：Manifest中设置android：launchMode属性</p>
+<p>standard：标准模式，默认</p>
+<p>singleTop：Task栈顶复用</p>
+<p>singleTask：在同一个任务栈中存在，则会复用，并且该activity上面的activity会被弹栈</p>
+<p>singleInstance：全局中存在同一个activity则会被复用。用于支付界面等。</p>
+<p>this.getTaskId()方法获取当前的任务栈号</p>
+<p>this.hashCode()方法获取当前对象的哈希值</p>
+<p>ActivityInfo activityInfo &#x3D; getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);</p>
+<p>Log.d(“AActivity”, activityInfo.taskAffinity);获取当前对象的任务栈名（默认包名，通过该对象跳转的activity都在此栈中），可以通过android:taskAffinity&#x3D;“…”来启动新任务栈。</p>
+<p>当复用activity对象时会调用onNewIntent方法；新建activity对象时会调用onCreate方法。</p>
+<p>50.Fragment：</p>
+<p>Fragment有自己的声明周期且依赖于Activity。通过getActivity获取Activity，通过FragmentManager的findFragmentById()或findFragmentByTag()获取Fragment。</p>
+<p>Fragment和Activity是多对多的关系。</p>
+<p>①编写一个layout文件，文件中包括Button和FrameLayout两标签，新建一个ContainerActivity类继承AppCompatActivity类绑定该layout文件。</p>
+<p>&lt;FrameLayout</p>
+<pre><code>android:id=&quot;@+id/fl_container&quot;
+
+android:layout_width=&quot;match_parent&quot;
+
+android:layout_height=&quot;match_parent&quot;
+
+android:layout_below=&quot;@id/btn_change&quot;
+
+/&gt;
+</code></pre>
+<p>②编写两个类继承Fragment，在类中有两个方法，方法onCreateView中绑定layout，另一个方法onViewCreated在页面创建后生效。编写两个包含TextView标签的layout文件分别绑定两个类。</p>
+<p>③ContainerActivity类中的FrameLayout用于放置Fragment类，Button用于切换FrameLayout中的Fragment类。</p>
+<p>&#x2F;&#x2F; 实例化AFragment</p>
+<p>AFragment aFragment &#x3D; new AFragment();</p>
+<p>&#x2F;&#x2F;把AFragment添加到Activity中,记得调用commit</p>
+<p>getSupportFragmentManager().beginTransaction().add(R.id.fl_container, aFragment).commitAllowingStateLoss();&#x2F;&#x2F;避免状态丢失报错崩溃</p>
+<p>}</p>
+<p>通过给Button设置点击事件，点击事件中设置</p>
+<p>if (bFragment &#x3D;&#x3D; null) {</p>
+<pre><code>bFragment = new BFragment();
+</code></pre>
+<p>}</p>
+<p>getSupportFragmentManager().beginTransaction().replace(R.id.fl_container, bFragment).commitAllowingStateLoss();</p>
+<p>替换原有的Fragment，达到不刷新页面替换页面中的内容的效果。</p>
+<p>51.Fragment传入参数：</p>
+<p>Fragment类中有onAttach方法和onDetach方法，用于创建时绑定activity和脱离activity；在onDestroy中设置fragment销毁时取消异步操作任务，否则会有空指针异常。</p>
+<p>可以通过新建构造方法传入参数，也可以通过静态工厂方法获取绑定参数的Fragment对象，这样重构该fragment时参数不会消失：</p>
+<p>public static AFragment newInstant(String title){</p>
+<pre><code>AFragment fragment = new AFragment();
+
+Bundle bundle = new Bundle();
+
+bundle.putString(&quot;title&quot;,title);
+
+fragment.setArguments(bundle);  //TODO 重新构造该fragment时会通过反射传入bundle
+
+return fragment;
+</code></pre>
+<p>}</p>
+<p>通过getArguments方法获取参数并设置：</p>
+<p>if(getArguments() !&#x3D; null){</p>
+<pre><code>mTvTitle.setText(getArguments().getString(&quot;title&quot;));
+</code></pre>
+<p>}</p>
+<p>在Activity中通过该静态工厂方法获取带参的fragment对象，添加到layout的framelayout标签中：</p>
+<p>AFragment aFragment &#x3D; AFragment.newInstant(“静态方法获取对象并传入参数”);</p>
+<p>getSupportFragmentManager().beginTransaction().add(R.id.fl_container, aFragment).commitAllowingStateLoss();</p>
+<p>52.Fragment回退栈：</p>
+<p>通过在Fragment中设置点击事件，用fragment替换当前的fragment，当返回时直接退出fragment所在的layout页面。需要在每次替换时将fragment放入回收栈当中：</p>
+<p>getFragmentManager().beginTransaction().replace(R.id.fl_container,new BFragment()).addToBackStack(null).commitAllowingStateLoss();</p>
+<p>通过addToBackStace()方法回收被replace()的fragment，在回退时取出。虽然对象是同一个，但是取出fragment时会调用onViewCreated方法重新创建视图view，而不会保留跳转前的view。</p>
+<p>如果需要保存fragment的视图，就不能用replace()方法，需要通过隐藏该fragment然后add新的fragment的方式来替代replace()方法。</p>
+<p>Fragment fragment &#x3D; getFragmentManager().findFragmentByTag(“a”);&#x2F;&#x2F;在Activity中add方法添加fragment时有个tag参数用来标记该fragment，如将tag设为“a”</p>
+<p>if (fragment !&#x3D; null) {</p>
+<p>getFragmentManager().beginTransaction().hide(AFragment.this).add(R.id.fl_container, bFragment).addToBackStack(null).commitAllowingStateLoss();</p>
+<p>} else {</p>
+<pre><code>getFragmentManager().beginTransaction().replace(R.id.fl_container, bFragment).addToBackStack(null).commitAllowingStateLoss();
+</code></pre>
+<p>}</p>
+<p>可以在fragment中修改view的属性，修改后就会生效（如通过点击事件修改view的属性）</p>
+<p>53.fragment向activity通讯：</p>
+<p>可以在activity中添加方法，在fragment通过getActivity()方法获取activity对象调用添加的方法进行传值。</p>
+<p>更规范的写法：在fragment类中写一个接口，activity类继承接口，onAttach方法在关联activity时就会调用，可以在该方法中将context强转为接口对象并调用接口方法完成赋值。</p>
+<p>54.监听事件处理机制：</p>
+<p>设置监听器有三个要素，分别为事件源，事件和事件监听器。如OnTouchListener监听器的onTouch方法中的参数MotionEvent event就是事件。event.getAction()方法获取该事件的动作，动作分为MotionEvent.ACTION_DOWN、MotionEvent.ACTION_UP等。</p>
+<p>监听事件实现方法：</p>
+<p>内部类实现</p>
+<p>匿名内部类</p>
+<p>事件源所在类实现（让activity实现OnClickListener接口，将activity对象作为监听器）</p>
+<p>通过外部类实现</p>
+<p>布局文件中onClick属性（针对点击事件）</p>
+<p>通过布局文件中onClick属性实现监听：</p>
+<p>在布局文件中添加标签并通过onClick设置方法名</p>
+<p>&lt;Button</p>
+<p>android:id&#x3D;”@+id&#x2F;btn_listener”</p>
+<p>…</p>
+<p>android:onClick&#x3D;”show”</p>
+<p>&#x2F;&gt;</p>
+<p>在activity中添加方法</p>
+<p>public void show(View v){</p>
+<p>switch(v.getId()){</p>
+<p>  case R.id.btn_listener:</p>
+<p>  Toast……</p>
+<p>  break;</p>
+<p>}</p>
+<p>}</p>
+<p>多个事件廷加同种类型监听器，监听器只会执行最后一个监听器（布局文件中的onClick方法默认是最先执行的）。</p>
+<p>55.基于回调的事件处理机制：</p>
+<p>①创建MyButton类继承AppCompatButton类，在类中可以重写回调方法，包括onTouchEvent（按键触摸时回调)、onKeyDown（键盘按下时回调）。②然后在Activity的布局文件layout中，将该类名作为标签设置按键，在启动程序点击按键时就会触发MyButton的回调方法，类似监听器，但是如果设置了监听器，监听器的回调方法比Button类的回调方法更快。③可以重写Activity类的回调方法，如onTouchEvent方法，在触发Button类的回调方法后也会触发Activity类的回调方法；可以通过在回调方法中返回true，阻止触发后续的回调方法。</p>
+<p>56.为自定义类MyButton按键设置监听器（触摸监听器和点击监听器）和回调方法（触摸回调和点击回调）和dispatchTouchEvent方法。分别在方法中打印自己的信息，顺序如下：</p>
+<p>D&#x2F;MyButton: —dispatchTouchEvent— &#x2F;&#x2F;是所有触摸方法的入口</p>
+<p>D&#x2F;Listener: —onTouch— &#x2F;&#x2F;先调用监听器（return false）</p>
+<p>D&#x2F;MyButton: —onTouchEvent &#x2F;&#x2F;在回调函数</p>
+<p>D&#x2F;MyButton: —dispatchTouchEvent— &#x2F;&#x2F;ActionUp也会调用该方法</p>
+<p>D&#x2F;Listener: —onClick &#x2F;&#x2F;只调用监听器</p>
+<p>dispatchTouchEvent方法中调用的次序是OnTouchListener的回调方法，OnTouchEvent的回调方法；</p>
+<p>onTouchEvent方法中调用onClick&#x2F;onLongClick方法，在ActionDown触发时发送一个100ms延时的runnable信息，检测此时动作，若还是ActionDown且ActionMove没有离开控件，则判定为onClick事件；如果还是ActionDown，则会发送400ms的延时信息判断状态，如果此时还是ActionDown且ActionMove没有离开控件，则判断为onLongClick事件。</p>
+<p>57.Handler类作用：</p>
+<p>一：未来做某事</p>
+<p>mHandler &#x3D; new Handler();</p>
+<p>mHandler.postDelayed(new Runnable() {</p>
+<pre><code>@Override
+
+public void run() &#123;
+
+    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+    startActivity(intent);
+
+&#125;
+</code></pre>
+<p>}, 3000);</p>
+<p>设置延迟事件，事件触发后在3秒后跳转到主页面。</p>
+<p>二：线程间通讯</p>
+<p>创建Handler并</p>
+<p>mHandler &#x3D; new Handler(){</p>
+<pre><code>@Override
+
+public void handleMessage(Message msg)&#123;
+
+    super.handleMessage(msg);
+
+    switch (msg.what) &#123;
+
+        case 1:
+
+            ToastUtil.showMsg(getApplication(),&quot;通讯成功&quot;);
+
+            break;
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>};</p>
+<p>&#x2F;&#x2F;开启新线程，并向Handler传递Message</p>
+<p>new Thread(){</p>
+<pre><code>@Override
+
+public void run() &#123;
+
+    Message message = new Message();
+
+    message.what = 1;
+
+    mHandler.sendMessageDelay(message,2000);
+
+&#125;
+</code></pre>
+<p>}.start();</p>
+<p>在mHandler接收到Message后会回调handleMessage方法。</p>
+<p>58.数据存储：</p>
+<p>SharedPreferences轻量数据存储（是否是第一次打开、用户名密码、设置自动登录等）</p>
+<p>xml文件，以K-V形式存储在data&#x2F;data&#x2F;{applicationName}&#x2F;shared_prefs文件夹中。</p>
+<p>①在布局文件中设置：</p>
+<p>EditText：用于输入</p>
+<p>Button：点击保存输入的内容</p>
+<p>Button：点击读取保存的内容</p>
+<p>TextView：显示保存的内容</p>
+<p>②在Activity类中首先获取SharePreferences对象和Editor对象：</p>
+<p>sharedPreferences &#x3D; getSharedPreferences(“date”, MODE_PRIVATE); &#x2F;&#x2F;TODO PRIVATE表示只在该app使用（其他设置因为安全性问题已废弃），APPEND表示如果存在同名文件则追加内容</p>
+<p>mEditor &#x3D; sharedPreferences.edit();</p>
+<p>③设置点击保存和点击读取的事件：</p>
+<p>mBtn_save.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    mEditor.putString(&quot;name&quot;, mEt_enter.getText().toString());
+
+    mEditor.apply();    //TODO apply()方法异步存储到磁盘，commit()方法同步存储到磁盘
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>mBtn_load.setOnClickListener(new View.OnClickListener() {</p>
+<pre><code>@Override
+
+public void onClick(View v) &#123;
+
+    String name = sharedPreferences.getString(&quot;name&quot;,&quot;&quot;);
+
+    mTv_show.setText(name);
+
+&#125;
+</code></pre>
+<p>});</p>
+<p>点击保存按钮将内容保存到本地，点击读取将本地内容读取出来并显示。</p>
+<p>59.applicationId不是包名（创建项目时默认applicationId就是包名），而是应用的ID；相同ID的应用只能下载一个，可以通过修改applicationId来下载多个相同的应用。</p>
+<p>date.xml文件内容如下：</p>
+<?xml version="1.0" encoding="UTF-8" standalone='yes' ?>
+
+<map>
+
+<p>  <string name="name"></string></p>
+<p>  ……</p>
+</map>
+
+
+
+<p>60.内部存储（Internal Storage）</p>
+<p>&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;shared_prefs</p>
+<p>&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;databases &#x2F;&#x2F;操作SQLite数据库</p>
+<p>&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;files</p>
+<p>&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;cache</p>
+<p>分别通过方法如下方法获得：</p>
+<p>getSharedPreferences()</p>
+<p>context.getCacheDir()</p>
+<p>context.getFilesDir()</p>
+<p>61.外部存储：</p>
+<p>公有目录(应用卸载不删除)：Environment.getExternalStoragePublicDirectory(int type)</p>
+<p>私有目录(随应用卸载而删除)：</p>
+<p>&#x2F;mnt&#x2F;sdcard&#x2F;Android&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;cache</p>
+<p>&#x2F;mnt&#x2F;sdcard&#x2F;Android&#x2F;data&#x2F;data&#x2F;<applicationId>&#x2F;files</p>
+<p>62.File内部存储：</p>
+<p>通过openFileInput方法和openFileOutput方法获取输入和输出流，通过流完成文件的内部存储和读取。</p>
+<p>public void save(String content){</p>
+<pre><code>FileOutputStream fos = null;
+
+try &#123;
+
+    fos = openFileOutput(FILENAME, MODE_PRIVATE);
+
+    fos.write(content.getBytes());
+
+&#125; catch (IOException e) &#123;
+
+    e.printStackTrace();
+
+&#125;finally &#123;
+
+    if (fos != null) &#123;
+
+        try &#123;
+
+            fos.close();
+
+        &#125; catch (IOException e) &#123;
+
+            e.printStackTrace();
+
+        &#125;
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>public String load(String file){</p>
+<pre><code>FileInputStream fis = null;
+
+try &#123;
+
+    fis = openFileInput(file);
+
+    byte[] buff = new byte[1024];
+
+    int length = 0;
+
+    StringBuffer sb = new StringBuffer();
+
+    while((length = fis.read(buff)) &gt; 0)&#123;
+
+        sb.append(new String(buff, 0, length, Charset.forName(&quot;utf-8&quot;)));
+
+    &#125;
+
+    return sb.toString();
+
+&#125; catch (IOException e) &#123;
+
+    e.printStackTrace();
+
+&#125;finally&#123;
+
+    if(fis != null)&#123;
+
+        try &#123;
+
+            fis.close();
+
+        &#125; catch (IOException e) &#123;
+
+            e.printStackTrace();
+
+        &#125;
+
+    &#125;
+
+&#125;
+
+return null;
+</code></pre>
+<p>}</p>
+<p>63.File的外部存储：</p>
+<p>原理和内部存储一样，不通过openFileInput&#x2F;openFileOutput方法而是创建FileOutputStream流来存储到指定路径上。</p>
+<p>public void savePath(String content,String path,String filename){</p>
+<pre><code>FileOutputStream fos = null;
+
+try &#123;
+
+    File dir = new File(Environment.getExternalStorageDirectory(),path);
+
+    if (!dir.exists()) &#123;
+
+        dir.mkdirs();
+
+    &#125;
+
+    Log.d(&quot;path&quot;, dir.getPath());
+
+    File file = new File(dir, filename);
+
+    if (!file.exists()) &#123;
+
+        file.createNewFile();
+
+    &#125;
+
+    fos = new FileOutputStream(file);
+
+    fos.write(content.getBytes());
+
+&#125;catch(IOException e)&#123;
+
+    e.printStackTrace();
+
+&#125;finally &#123;
+
+    if(fos != null) &#123;
+
+        try &#123;
+
+            fos.close();
+
+        &#125; catch (IOException e) &#123;
+
+            e.printStackTrace();
+
+        &#125;
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>}</p>
+<p>public String loadPath(String path,String filename) {</p>
+<pre><code>FileInputStream fis = null;
+
+try &#123;
+
+    File file = new File(Environment.getExternalStorageDirectory()+File.separator+path,filename);
+
+    fis = new FileInputStream(file);
+
+    byte[] buff = new byte[1024];
+
+    StringBuffer sb = new StringBuffer();
+
+    int len = 0;
+
+    while ((len = fis.read(buff)) &gt; 0) &#123;
+
+        sb.append(new String(buff, 0, len, Charset.forName(&quot;utf-8&quot;)));
+
+    &#125;
+
+    return sb.toString();
+
+&#125; catch (IOException e) &#123;
+
+    e.printStackTrace();
+
+&#125;finally&#123;
+
+    if (fis != null) &#123;
+
+        try &#123;
+
+            fis.close();
+
+        &#125; catch (IOException e) &#123;
+
+            e.printStackTrace();
+
+        &#125;
+
+    &#125;
+
+&#125;
+
+return null;
+</code></pre>
+<p>}</p>
+<p>需要注意的是创建文件夹需要在AndroidManifest中设置外部存储权限</p>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+<p>可能还需要在MainActivity中动态获取权限</p>
+<p>ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1); &#x2F;&#x2F;TODO 动态获取外部存储的写权限，数组中是需要的权限，响应参数会标志方法的调用</p>
+<p>64.动态获取权限会进行弹框显示，需要用户点击授权后才能操作；这里就需要考虑用户不授权或已经授权不需要弹框的情况。</p>
+<p>65.broadcast广播：</p>
+<p>在发送广播的类中：</p>
+<p>Intent intent &#x3D; new Intent(“CJ”);</p>
+<p>LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);</p>
+<p>获取该上下文对应的广播管理器实例，发送广播，内容为String action。</p>
+<p>在接收广播的类中，需要注册广播接收器：</p>
+<p>LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(myBroadcast,filter);</p>
+<p>需要传入两个参数，</p>
+<p>一个是广播接收器对象：</p>
+<p>private class MyBroadcast extends BroadcastReceiver{</p>
+<pre><code>    @Override
+
+    public void onReceive(Context context, Intent intent) &#123;
+
+        switch (intent.getAction())&#123;
+
+            case &quot;CJ&quot;:
+
+                mTv_show.setText(&quot;收到广播&quot;);
+</code></pre>
+<p>&#x2F;&#x2F;                    Message msg &#x3D; new Message();</p>
+<p>&#x2F;&#x2F;                    msg.what &#x3D; 1;</p>
+<p>&#x2F;&#x2F;                    mHandler.sendMessage(msg);</p>
+<pre><code>                Log.d(&quot;进入方法&quot;,mTv_show.getText().toString());
+
+                break;
+
+        &#125;
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>创建类继承BroadcastReceiver，重写onReceive方法（接收广播后的处理逻辑），每次发送都广播都会回调该方法。</p>
+<p>另一个是过滤器，对需要监听的action进行筛选：</p>
+<p>IntentFilter filter &#x3D; new IntentFilter();</p>
+<p>filter.addAction(“CJ”); &#x2F;&#x2F;只接收action为“CJ”的广播</p>
+<p>最后需要在onDestroy方法中注销掉监听器：</p>
+<p>@Override</p>
+<p>protected void onDestroy() {</p>
+<pre><code>super.onDestroy();
+</code></pre>
+<p>  LocalBroadcastManager.getInstance(getApplication()).unregisterReceiver(myBroadcast);</p>
+<p>}</p>
+<p>66.属性动画和补间动画：属性动画是实际位置发生改变；补间动画实际位置不变，只是障眼法。</p>
+<p>常用的类：</p>
+<p>ValueAnimator</p>
+<p>ObjectAnimator.ofFloat()</p>
+<p>设置旋转动画：</p>
+<p>mTv_rotation.animate().rotationYBy(540).setDuration(2000).start();</p>
+<p>设置平移动画：</p>
+<p>mTv_translation.animate().translationYBy(500).setDuration(2000).start();</p>
+<p>&#x2F;&#x2F;translationY是移动到固定位置，translationYBy是移动设定距离。</p>
+<p>设置缩放动画：</p>
+<p>mTv_translation.animate().scaleXBy(-1).scaleYBy(-1).setDuration(2000).start();&#x2F;&#x2F;参数为-1和-1，动画为缩小为点；参数为-2，-2，动画为对称翻转。</p>
+<p>设置透明度动画：</p>
+<p>mBtn_alpha.animate().alpha(0).setDuration(2000).start();&#x2F;&#x2F;TODO 透明度，0表示全透明。</p>
+<p>67.监听器和复杂动画：</p>
+<p>为valueAnimator设置监听器，监听value的变化情况：</p>
+<p>ValueAnimator valueAnimator &#x3D; new ValueAnimator().ofInt(0, 100);</p>
+<p>valueAnimator.setDuration(2000);</p>
+<p>valueAnimator.addUpdateListener(this);</p>
+<p>valueAnimator.start();</p>
+<p>@Override</p>
+<p>public void onAnimationUpdate(ValueAnimator animation) {</p>
+<pre><code>//TODO 实际值，与设定有关
+
+Log.d(&quot;abc&quot;, animation.getAnimatedValue() + &quot;&quot;);
+
+//TODO 进度值0-1
+
+Log.d(&quot;abc&quot;, animation.getAnimatedFraction() + &quot;&quot;);
+</code></pre>
+<p>}</p>
+<p>复杂的动画可以通过ObjectAnimator实现：</p>
+<p>ObjectAnimator objectAnimator &#x3D; ObjectAnimator.ofFloat(mBtn_objAnim_rotation, “rotationY”, 0, 360, 180);&#x2F;&#x2F;从0度旋转到360度，再从360度旋转到180度</p>
+<p>objectAnimator.setDuration(2000);</p>
+<p>objectAnimator.addUpdateListener(this);</p>
+<p>objectAnimator.start();</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/Android%E7%AC%94%E8%AE%B0/">http://example.com/2023/05/06/%E5%89%8D%E7%AB%AF/Android%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/Netty02-%E5%85%A5%E9%97%A8%EF%BC%88%E8%BD%AC%EF%BC%89/" title="Netty02-入门（转）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Netty02-入门（转）</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%89%8D%E7%AB%AF/VUE%E8%AF%AD%E6%B3%95%E5%85%A5%E9%97%A8/" title="VUE语法入门"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">VUE语法入门</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

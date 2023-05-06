@@ -1,0 +1,1068 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Kerberos认证管理 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、Windows中的认证1.1 单机认证NTLM Hash是支持Net NTML认证协议及本地认证过程中的一个重要参与物，其长度为32位，由数字与字母组成。NTLM前身是LM Hash，目前基本淘汰。  Windows本身不存储用户的明文密码。它会将用户的明文密码经过指纹加密算法后存储在SAM数据库中。 当用户登陆时，将用户输入的明文密码也加密成NTML Hash，与SAM数据库中的NTML H">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kerberos认证管理">
+<meta property="og:url" content="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、Windows中的认证1.1 单机认证NTLM Hash是支持Net NTML认证协议及本地认证过程中的一个重要参与物，其长度为32位，由数字与字母组成。NTLM前身是LM Hash，目前基本淘汰。  Windows本身不存储用户的明文密码。它会将用户的明文密码经过指纹加密算法后存储在SAM数据库中。 当用户登陆时，将用户输入的明文密码也加密成NTML Hash，与SAM数据库中的NTML H">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.071Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.071Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Kerberos认证管理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Kerberos认证管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.071Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.071Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/">权限认证</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Kerberos认证管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、Windows中的认证"><a href="#一、Windows中的认证" class="headerlink" title="一、Windows中的认证"></a>一、Windows中的认证</h1><h2 id="1-1-单机认证"><a href="#1-1-单机认证" class="headerlink" title="1.1 单机认证"></a>1.1 单机认证</h2><p>NTLM Hash是支持Net NTML认证协议及本地认证过程中的一个重要参与物，其长度为32位，由数字与字母组成。NTLM前身是LM Hash，目前基本淘汰。</p>
+<ol>
+<li>Windows本身不存储用户的明文密码。它会将用户的明文密码经过指纹加密算法后存储在SAM数据库中。</li>
+<li>当用户登陆时，将用户输入的明文密码也加密成NTML Hash，与SAM数据库中的NTML Hash进行比较。</li>
+</ol>
+<h2 id="1-2-网络认证"><a href="#1-2-网络认证" class="headerlink" title="1.2 网络认证"></a>1.2 网络认证</h2><p>在内网渗透中，经常遇到工作组环境，工作组间的机器无法互相建立一个完美的信任机制，只能点对点，没有<strong>信托机构</strong>。<br>假设A与B属于一个工作组，A想访问B注解上的资料，需要将一个存在于B主机上的账户凭证发送到B主机，经过认证才能访问B主机上的资源。最常见的服务就是SMB服务，端口号为445。</p>
+<p>微软采用了NTLM(NT LAN Manager)协议进行多节点之间的验证。</p>
+<ol>
+<li>Server接收到Client发送的用户名后，判断本地账户列表是否有用户名share_user。如果没有，返回认证失败；如果有，生成16位的随机字符串challenge，并从本地查找share_user对应的密码指纹NTLM Hash，使用NTLM Hash加密Challenge，生成Net-NTLM Hash存储在内存中，并将Challenge发送给Client。</li>
+<li>Client接收到Challenge后，将自己提供的share_user的密码加密为NTLM Hash，然后使用NTLM Hash加密Challenge，这个结果叫Response，发送给Server。</li>
+<li>Server接收到Client发送的Response，将Response与之前的Net-NTLM Hash进行比较，如果相等，则认证通过。</li>
+</ol>
+<p><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C578c54447e914618969101538814cfe6.png" alt="image.png"></p>
+<br>
+# 二、Kerberos验证体系
+## 2.1 概念
+**Kerberos是一种网络协议**，设计目的是通过密钥系统为客户端和服务器应用系统提供强大的认证服务。该认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，**并假设网络上传送的数据包可以被任意读取、修改和插入数据**。在以上情况下，Kerberos作为一种可信任的**第三方认证服务**，是通过传统的密码技术(如共享密钥)执行认证服务的。
+Kerberos是比NTLM更新的验证体系，不怕中间人攻击，而NTLM的Net-NTLM Hash是有可能被拦截并破解的。
+
+<p>Kerberos 中有以下一些概念需要了解</p>
+<ol>
+<li>KDC(Key Distribute Center)：密钥分发中心，负责存储用户信息，管理发放票据。</li>
+<li>Realm：Kerberos所管理的一个领域或范围，称之为一个Realm</li>
+<li>Principal：Kerberos所管理的一个用户或者一个服务，可以理解为Kerberos中保存的一个账号，其格式通常如下：primary&#x2F;instance@realm  ，即 账号&#x2F;实例名@域名，其中instance可以省略。</li>
+<li>Keytab：Kerberos中的用户认证，可通过密码或者密钥文件证明身份，keytab指密钥文件。</li>
+</ol>
+<h2 id="2-2-从原理上来分析"><a href="#2-2-从原理上来分析" class="headerlink" title="2.2 从原理上来分析"></a>2.2 从原理上来分析</h2><p>Authentication解决的是“如何证明某个人确确实实就是他或她所声称的那个人”的问题。对于如何进行Authentication，我们采用这样的方法：如果一个秘密（secret）仅仅存在于A和B，那么有个人对B声称自己就是A，B通过让A提供这个秘密来证明这个人就是他或她所声称的A。这个过程实际上涉及到3个重要的关于Authentication的方面：</p>
+<ul>
+<li>Secret如何表示。</li>
+<li>A如何向B提供Secret。</li>
+<li>B如何识别Secret。</li>
+</ul>
+<p>基于这3个方面，我们把Kerberos Authentication进行最大限度的简化：整个过程涉及到Client和Server，他们之间的这个Secret我们用一个Key（KServer-Client）来表示。Client为了让Server对自己进行有效的认证，向对方提供如下两组信息：</p>
+<ul>
+<li>代表Client自身Identity的信息，为了简便，它以明文的形式传递。</li>
+<li>将Client的Identity使用 KServer-Client作为Public Key、并采用对称加密算法进行加密。</li>
+</ul>
+<p>由于KServer-Client仅仅被Client和Server知晓，所以被Client使用KServer-Client加密过的Client Identity只能被Client和Server解密。同理，Server接收到Client传送的这两组信息，先通过KServer-Client对后者进行解密，随后将机密的数据同前者进行比较，如果完全一样，则可以证明Client能过提供正确的KServer-Client，而这个世界上，仅仅只有真正的Client和自己知道KServer-Client，所以可以对方就是他所声称的那个人。</p>
+<p><strong>如何使得client和server双方拿到KServer-Client且保证该KServer-Client是短期有效的，防止被破解？</strong></p>
+<p>这里引入了第三方角色KDC(Kerberos Distribution Center)，其包含以下三个组件：</p>
+<ul>
+<li>AD(account database)：存储所有client的白名单，只有存在于白名单的client才能顺利申请到TGT(Ticket Granting Ticket，即申请票据的票据)</li>
+<li>AS(Authentication Service)：为client提供认证服务，通过认证后返回TGT</li>
+<li>TGS(Ticket Granting Service)：为client提供通过TGT兑换Ticket的服务，生成某个服务的ticket</li>
+</ul>
+<p><strong>KDC分发SServer-Client的简单的过程：</strong>首先Client向KDC发送一个对SServer-Client的申请。这个申请的内容可以简单概括为“我是某个Client，我需要一个Session Key用于访问某个Server ”。KDC在接收到这个请求的时候，生成一个随机串Session Key，为了保证这个Session Key仅仅限于发送请求的Client和他希望访问的Server知晓，KDC会为这个Session Key生成两个Copy，分别被Client和Server使用。然后从Account Database中查询Client和Server的密码指纹NTLM Hash分别对这两个Copy进行对称加密，前者加密得到Client Hash。对于后者，和Session Key一起被加密的还包含关于Client的一些信息，称为TGT。<br>通过TGT向AS请求获取认证Server端的Ticket。</p>
+<p>但是Client Hash和Ticket并不是分别发送给Client和Server端的，而是都发送给Client端，这样避免了网络延迟等情况导致Server端未收到Ticket，无法验证Client的请求。最后统一由Client发送给Server。这样Client端会收到两个信息，一个是自己的密码指纹可以解密的Client Hash，另一个是Server的密码指纹才能解密的Ticket。</p>
+<p><strong>如果避免B客户端伪造为A客户端请求KDC认证的情况发生呢？</strong><br>因为KDC会查询A客户端的密码指纹NTLM Hash进行对称加密，B客户端不知道这个指纹，是无法解密Client Hash的。但是存在暴力破解的情况，所以Client需要更多信息才证明自己的合法性，这里引入了Timestamp标记了创建时间，如果时间花费过多，那么存在中间人拦截后暴力破解伪造请求的可能性。</p>
+<p>Client使用自己的指纹解密Client Hash后获取Session Key，创建Authenticator(Client Info + Timestamp)并使用Session Key进行加密。随后将Authenticator和缓存的Ticket发送给Server进行验证。</p>
+<p>Server端收到请求后，使用自己的密码指纹解密Ticket，获取到Session Key，Client Info和Timestamp，然后使用Session Key解密Authenticator获取Client Info和Timestamp，比较两个Client Info和Timestamp，如果Client Info相同且时间戳在合理误差内，则验证通过。</p>
+<p><strong>Kerberos一个重要的优势在于它能够提供双向认证：</strong><br>不但Server可以对Client 进行认证，Client也能对Server进行认证。如果Client需要对他访问的Server进行认证，会在它向Server发送的Credential中设置一个是否需要认证的Flag。Server在对Client认证成功之后，会把Authenticator中的Timestamp提出出来，通过Session Key进行加密，当Client接收到并使用Session Key进行解密之后，如果确认Timestamp和原来的完全一致，那么他可以认定Server正式他试图访问的Server。因为Server获取Session Key的唯一途径是使用本机的密码指纹来解密Session Ticket，这样就可以认证Server。</p>
+<p><strong>小结</strong><br>Kerberos实际上一个基于Ticket的认证方式。Client想要获取Server端的资源，先得通过Server的认证；而认证的先决条件是Client向Server提供从KDC获得的一个有Server的密码指纹进行加密的Session Ticket（Session Key + Client Info）。可以这么说，Session Ticket是Client进入Server领域的一张门票。而这张门票必须从一个合法的Ticket颁发机构获得，这个颁发机构就是Client和Server双方信任的KDC， 同时这张Ticket具有超强的防伪标识：它是被Server的密码指纹加密的。对Client来说， 获得Session Ticket是整个认证过程中最为关键的部分。</p>
+<h2 id="2-3-详细流程"><a href="#2-3-详细流程" class="headerlink" title="2.3 详细流程"></a>2.3 详细流程</h2><p><strong>知识点</strong></p>
+<ul>
+<li>每次通信，消息包含两部分，一部分可解码，一部分不可解码。</li>
+<li>服务端不会直接向KDC通信</li>
+<li>KDC保存所有机器的账户名和密码</li>
+<li>KDC本身具有一个密码</li>
+</ul>
+<p><strong>流程</strong><br>![image.png](Kerberos认证管理.assetsf08500a968a430bb1635b525fc05aba.png)</p>
+<ol>
+<li><p>Client与AS通讯获取TGT(Ticket Granting Ticket)：想要获取http服务，需要向KDC进行认证并返回TGT。Kerberos可以通过kinit获取。</p>
+<ul>
+<li>请求信息包含：①用户名&#x2F;ID ②IP地址</li>
+</ul>
+<p>AS收到之后会查询AD，验证该用户是否信任，如果信任，AS会生成随机串Session Key。查询Client的密码指纹并使用该指纹加密Challenge得到加密的Session Key，同时使用KDC的密码指纹加密Session Key和Client Info。</p>
+<ul>
+<li>响应消息包含两个加密数据包：①TGT(Challenge，Client Info，Timestamp，TGT到期时间，Session Key) ②Client指纹加密的Session Key</li>
+</ul>
+<p>Client收到两个数据包，加密的Session Key可以使用自己的密码指纹解密得到Session Key，另一个TGT无法解密先进行缓存。</p>
+</li>
+<li><p>Client与TGS通讯获取Ticket：上一步获取了TGT和加密的Session Key，现在就可以向KDC请求访问某一个Server的Ticket了。TGT原封不动，将Client Info和Timestamp经过Session Key加密后得到Client Hash，明文Client Info和Server Info作为请求数据进行请求。</p>
+<ul>
+<li>请求信息包括：①TGT ②Client Hash ③Client Info和Server Info</li>
+</ul>
+<p>TGS收到请求后，使用自己的密码指纹解密TGT，获取Session Key和Timestamp，使用Session Key解密Client Hash获得Client Info和Timestamp。对比两个Timestamp是否在合理误差内，检查认证器是否已在HTTP服务端的缓存中（避免应答攻击），获取客户端信息比较是否相同，再判断Client是否有访问Server的权限。如果都通过，则TGS会再生成一个随机串Server Session Key，将Client Info，Server Info，Timestamp，Server Session Key，Ticket生命周期用Server的密码指纹进行加密生成Ticket后返回。</p>
+<ul>
+<li>响应信息包括：①Ticket(Client Info，Server Info，Timestamp，Server Session Key，Ticket生命周期) ②Client指纹加密后的(Client Info，Server Session Key，Timestamp，生命周期)</li>
+</ul>
+<p>Client收到两个数据包，加密的Authenticator可以使用自己的密码指纹解密得到Server Session Key，另一个TGT无法解密先进行缓存。</p>
+</li>
+<li><p>Client与Server通讯：每次获取Http服务，在Ticket没有过期，或者无更新的情况下，都可直接进行访问。将Client Info，Server Session Key，Timestamp和生命周期用Server Session Key进行加密后得到Authenticator。将Authenticator和Ticket作为请求数据进行请求。</p>
+<ul>
+<li>请求信息包括：①Authenticator(Client Info，Server Session Key，Timestamp，生命周期) ②Ticket</li>
+</ul>
+<p>Server收到请求后，通过自己的指纹解密Ticket得到Server Session Key，Client Info和Timestamp。使用Server Session Key解密Authenticator，对比两个Timestamp是否在合理误差内，是否已经过期，获取客户端信息比较是否相同。如果通过则能成功访问Server的资源。</p>
+</li>
+</ol>
+<br>
+# 三、Kerberos使用
+## 3.1 相关命令
+| 说明 | 命令 |
+| --- | --- |
+| 进入kadmin | kadmin.local / kadmin |
+| 创建数据库 | kdb5_util create -r HADOOP.COM -s　 |
+| 启动kdc服务 | systemctl start krb5kdc |
+| 启动kadmin服务 | systemctl start kadmin |
+| 修改当前密码 | kpasswd |
+| 测试keytab可用性 | kinit -k -t /home/chen/cwd.keytab [chenweidong@HADOOP.COM](mailto:chenweidong@HADOOP.COM) |
+| 查看keytab | klist -e -k -t /home/chen/cwd.keytab　 |
+| 清除缓存 | kdestroy |
+| 通过keytab文件认证hxr用户登录 | kinit hxr -kt /home/chen/cwd.keytab [chenweidong@HADOOP.COM](mailto:chenweidong@HADOOP.COM) |
+
+<table>
+<thead>
+<tr>
+<th>kadmin模式中</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生成随机key的principal</td>
+<td>addprinc -randkey root&#x2F;<a href="mailto:master@HADOOP.COM">master@HADOOP.COM</a></td>
+</tr>
+<tr>
+<td>生成指定key的principal</td>
+<td>addprinc -pw admin&#x2F;<a href="mailto:admin@HADOOP.COM">admin@HADOOP.COM</a></td>
+</tr>
+<tr>
+<td>查看principal</td>
+<td>listprincs</td>
+</tr>
+<tr>
+<td>修改admin&#x2F;admin的密码</td>
+<td>cpw -pw xxxx admin&#x2F;admin</td>
+</tr>
+<tr>
+<td>添加&#x2F;删除principle</td>
+<td>addprinc&#x2F;delprinc admin&#x2F;admin</td>
+</tr>
+<tr>
+<td>直接生成到keytab</td>
+<td>ktadd -k &#x2F;home&#x2F;chen&#x2F;cwd.keytab <a href="mailto:chenweidong@HADOOP.COM">chenweidong@HADOOP.COM</a>xst -norandkey -k &#x2F;home&#x2F;chen&#x2F;cwd.keytab <a href="mailto:chenweidong@HADOOP.COM">chenweidong@HADOOP.COM</a> #注意：在生成keytab文件时需要加参数”-norandkey”，否则会导致直接使用kinit <a href="mailto:chenweidong@HADOOP.COM">chenweidong@HADOOP.COM</a>初始化时会提示密码错误。</td>
+</tr>
+<tr>
+<td>设置密码策略(policy)</td>
+<td>addpol -maxlife “90 days” -minlife “75 days” -minlength 8 -minclasses 3 -maxfailure 10 -history 10 user</td>
+</tr>
+<tr>
+<td>添加带有密码策略的用户</td>
+<td>addprinc -policy user hello&#x2F;<a href="mailto:admin@HADOOP.COM">admin@HADOOP.COM</a></td>
+</tr>
+<tr>
+<td>修改用户的密码策略</td>
+<td>modprinc -policy user1 hello&#x2F;<a href="mailto:admin@HADOOP.COM">admin@HADOOP.COM</a></td>
+</tr>
+<tr>
+<td>删除密码策略</td>
+<td>delpol [-force] user</td>
+</tr>
+<tr>
+<td>修改密码策略</td>
+<td>modpol -maxlife “90 days” -minlife “75 days” -minlength 8 -minclasses 3 -maxfailure 10 user</td>
+</tr>
+</tbody></table>
+<h2 id="3-2-Kerberos安装"><a href="#3-2-Kerberos安装" class="headerlink" title="3.2 Kerberos安装"></a>3.2 Kerberos安装</h2><h3 id="3-2-1-安装Kerberos相关服务"><a href="#3-2-1-安装Kerberos相关服务" class="headerlink" title="3.2.1 安装Kerberos相关服务"></a>3.2.1 安装Kerberos相关服务</h3><p>选择集群中的一台注解作为Kerberos服务端，安装KDC，所有主机都需要部署Kerveros客户端。<br><strong>服务端主机安装命令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y krb5-server</span><br></pre></td></tr></table></figure>
+<p><strong>客户端主机安装命令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y krb5-workstation krb5-libs</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-2-修改配置文件"><a href="#3-2-2-修改配置文件" class="headerlink" title="3.2.2 修改配置文件"></a>3.2.2 修改配置文件</h3><p><strong>服务端</strong><br>&#x2F;var&#x2F;kerberos&#x2F;krb5kdc&#x2F;kdc.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[kdcdefaults]</span><br><span class="line"> kdc_ports = 88</span><br><span class="line"> kdc_tcp_ports = 88</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line"> IOTMARS.COM = &#123; </span><br><span class="line">  #master_key_type = aes256-cts</span><br><span class="line">  acl_file = /var/kerberos/krb5kdc/kadm5.acl</span><br><span class="line">  dict_file = /usr/share/dict/words</span><br><span class="line">  admin_keytab = /var/kerberos/krb5kdc/kadm5.keytab</span><br><span class="line">  supported_enctypes = aes256-cts:normal aes128-cts:normal des3-hmac-sha1:normal arcfour-hmac:normal camellia256-cts:normal camellia128-cts:normal des-hmac-sha1:normal des-cbc-md5:normal des-cbc-crc:normal</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>[kdcdefaults] 对kdc进行配置，指定了kdc的端口</li>
+<li>[realms] 对域进行详细的配置</li>
+<li>keytab是最终获取到的Ticket，可以在Server进行验证。这个- keytab是admin的Ticket，不需要去AS和TGS换取Ticket，而是在本地保存了Ticket。</li>
+<li>supported_enctypes是支持的加密类型</li>
+</ul>
+<p>只需要修改域的名称即可，端口号、文件位置和加密算法可以不修改。</p>
+<p><strong>客户端</strong><br>修改配置 &#x2F;etc&#x2F;krb5.conf 并同步到所有客户端节点和服务端节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># Configuration snippets may be placed in this directory as well</span><br><span class="line">includedir /etc/krb5.conf.d/</span><br><span class="line"></span><br><span class="line">[logging]</span><br><span class="line"> default = FILE:/var/log/krb5libs.log</span><br><span class="line"> kdc = FILE:/var/log/krb5kdc.log</span><br><span class="line"> admin_server = FILE:/var/log/kadmind.log</span><br><span class="line"></span><br><span class="line">[libdefaults]</span><br><span class="line"> dns_lookup_realm = false</span><br><span class="line"> dns_lookup_kdc = false</span><br><span class="line"> ticket_lifetime = 24h</span><br><span class="line"> renew_lifetime = 7d</span><br><span class="line"> forwardable = true</span><br><span class="line"> rdns = false</span><br><span class="line"> pkinit_anchors = FILE:/etc/pki/tls/certs/ca-bundle.crt</span><br><span class="line"> default_realm = IOTMARS.COM</span><br><span class="line"> #default_ccache_name = KEYRING:persistent:%&#123;uid&#125;</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line"> IOTMARS.COM = &#123;</span><br><span class="line">  kdc = 192.168.101.174</span><br><span class="line">  admin_server = 192.168.101.174</span><br><span class="line"> &#125;</span><br><span class="line">[domain_realm]</span><br><span class="line"> #.example.com = EXAMPLE.COM</span><br><span class="line"> #example.com = EXAMPLE.COM</span><br></pre></td></tr></table></figure>
+<ul>
+<li>default_realm：每次输入principal都需要写全primary&#x2F;instance@realm，如果配置了default_realm就可以省略@realm；</li>
+<li>dns_lookup_kdc：请求kdc时是否需要经过dns。我们直接访问ip即可，设为false；</li>
+<li>default_ccache_name：与系统不兼容，需要注释掉；</li>
+<li>kdc：kdc服务所在的域名或ip</li>
+<li>admin_server：admin_server可以向kdc服务注册自己的信息。需要填写kdc所在的域名或ip。</li>
+<li>[domain_realm] 表示进行域名转换，匹配到的域名都转换到指定的域。这里可以不写。</li>
+</ul>
+<h3 id="3-2-3-初始化KDC数据库"><a href="#3-2-3-初始化KDC数据库" class="headerlink" title="3.2.3 初始化KDC数据库"></a>3.2.3 初始化KDC数据库</h3><p>在服务端执行如下命令，并根据提示输入密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kdb5_util create -s -r IOTMARS.COM</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-s选项指定将数据库的主节点密钥存储在文件中，从而可以在每次启动KDC时自动重新生成主节点密钥。记住主密钥，稍后回使用。</li>
+<li>-d指定数据库名字</li>
+</ul>
+<p>查看目录&#x2F;var&#x2F;kerberos&#x2F;krb5kdc，发现多了4个文件（principal，principal.kadm5，principal.kadm5.lock，principal.ok），如果需要再次初始化KDC数据库，需要先删除这些文件。</p>
+<h3 id="3-2-4-修改管理员权限配置文件"><a href="#3-2-4-修改管理员权限配置文件" class="headerlink" title="3.2.4 修改管理员权限配置文件"></a>3.2.4 修改管理员权限配置文件</h3><p>在服务端主机修改&#x2F;var&#x2F;kerberos&#x2F;krb5kdc&#x2F;kadm5.acl文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/admin@IOTMARS.COM     *</span><br></pre></td></tr></table></figure>
+<p>表示realm域中的admin组下的所有用户拥有所有权限。</p>
+<h3 id="3-2-5-启动Kerberos服务"><a href="#3-2-5-启动Kerberos服务" class="headerlink" title="3.2.5 启动Kerberos服务"></a>3.2.5 启动Kerberos服务</h3><p>在服务端启动KDC，并设置开机自启</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start krb5kdc</span><br><span class="line">systemctl enable krb5kdc</span><br></pre></td></tr></table></figure>
+<p>在主节点启动Kadmin，该服务为KDC数据库访问入口，即我们配置的admin_server服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start kadmin</span><br><span class="line">systemctl enable kadmin</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-6-创建Kerberos管理员用户"><a href="#3-2-6-创建Kerberos管理员用户" class="headerlink" title="3.2.6 创建Kerberos管理员用户"></a>3.2.6 创建Kerberos管理员用户</h3><p>在KDC服务端执行如下命令创建管理员账户，并按提示创建管理员账户的密码，我自己将密码设置为Password@123。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local -q &quot;addprinc admin/admin&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>kadmin.local相当于是KDC数据库的本地客户端，可以通过该命令来操作KDC数据库。</li>
+<li>-q 就是 -query，表示执行-q后面的语句。</li>
+<li>addprinc即add principal，增加一个账户信息，此处增加了一个管理员账户，且省略了@realm。</li>
+</ul>
+<p>本地客户端登陆是不需要账号密码的，所以是安全的。<br>创建的管理员账户就是为了远程客户端也可以进行访问。</p>
+<h2 id="3-3-Kerberos使用"><a href="#3-3-Kerberos使用" class="headerlink" title="3.3 Kerberos使用"></a>3.3 Kerberos使用</h2><p>登录后双击Tab，可以看到所有的kadmin命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  </span><br><span class="line">?                 delpol            get_principal     list_policies     modprinc</span><br><span class="line">addpol            delprinc          get_principals    listpols          purgekeys</span><br><span class="line">add_policy        delstr            getprincs         list_principals   q</span><br><span class="line">addprinc          del_string        getprivs          listprincs        quit</span><br><span class="line">add_principal     exit              get_privs         list_requests     rename_principal</span><br><span class="line">ank               getpol            get_strings       lock              renprinc</span><br><span class="line">change_password   get_policies      getstrs           lr                setstr</span><br><span class="line">cpw               get_policy        ktadd             modify_policy     set_string</span><br><span class="line">delete_policy     getpols           ktrem             modify_principal  unlock</span><br><span class="line">delete_principal  getprinc          ktremove          modpol            xst</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-1-Kerberos数据库操作"><a href="#3-3-1-Kerberos数据库操作" class="headerlink" title="3.3.1 Kerberos数据库操作"></a>3.3.1 Kerberos数据库操作</h3><ol>
+<li><p>登陆数据库<br>1）本地登陆（无需认证）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local</span><br></pre></td></tr></table></figure>
+<p>2）远程登录（需要进行主体认证）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin</span><br></pre></td></tr></table></figure>
+<p>按提示输入密码完成认证即可登陆。</p>
+</li>
+<li><p>创建Kerberos主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local -q &quot;addprinc test&quot;</span><br></pre></td></tr></table></figure>
+<p>或登录后输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local: addprinc test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改主体密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local: cpw test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local: delprinc test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看所有主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local: list_principals</span><br></pre></td></tr></table></figure>
+<p>可以看到除了我们创建的主体外，还有几个程序自动创建的主体。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local:  list_principals</span><br><span class="line">K/M@IOTMARS.COM</span><br><span class="line">admin/admin@IOTMARS.COM</span><br><span class="line">kadmin/admin@IOTMARS.COM</span><br><span class="line">kadmin/changepw@IOTMARS.COM</span><br><span class="line">kadmin/cos-bigdata-mysql@IOTMARS.COM</span><br><span class="line">kiprop/cos-bigdata-mysql@IOTMARS.COM</span><br><span class="line">krbtgt/IOTMARS.COM@IOTMARS.COM</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>需要退出客户端时输入：exit</p>
+</li>
+</ol>
+<h3 id="3-3-2-Kerberos认证操作"><a href="#3-3-2-Kerberos认证操作" class="headerlink" title="3.3.2 Kerberos认证操作"></a>3.3.2 Kerberos认证操作</h3><ol>
+<li><p>密码认证<br>1）使用kinit进行主体认证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kinit test</span><br></pre></td></tr></table></figure>
+<p>输入密码正确后，没有任何报错信息，则认证成功.</p>
+<p>2）查看认证凭证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@cos-bigdata-hadoop-01 kerberos]# klist</span><br><span class="line">Ticket cache: FILE:/tmp/krb5cc_0</span><br><span class="line">Default principal: test@IOTMARS.COM</span><br><span class="line"></span><br><span class="line">Valid starting       Expires              Service principal</span><br><span class="line">2021-09-24T18:46:59  2021-09-25T18:46:59  krbtgt/IOTMARS.COM@IOTMARS.COM</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>密钥文件认证<br>1）首先需要生成主体test的keytab密钥文件，可以生成到指定目录&#x2F;root&#x2F;test.keytab</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kadmin.local -q &quot;xst  -norandkey -k /root/test.keytab test@IOTMARS.COM&quot;</span><br></pre></td></tr></table></figure>
+<p>注：-norandkey的作用是声明不随机生成密码。若不加该参数，会为该用户生成随机密码并写入到密钥文件中。这样会导致之前的密码失效，只能使用密钥文件进行认证。</p>
+<p>2）使用keytab进行认证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kinit -kt /root/test.keytab test</span><br></pre></td></tr></table></figure>
+<p>-kt表示使用密钥文件进行认证。</p>
+</li>
+<li><p>销毁凭证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kdestroy</span><br></pre></td></tr></table></figure></li>
+</ol>
+<br>
+# 四、Hadoop Kerberos配置
+**需要进行认证的环节：**
+- 启动各个hadoop进程
+- 各个服务之间通讯
+- 通过hadoop fs命令操作数据
+- NameNode Web认证并操作数据
+- 提交yarn任务需要进行认证，且认证用户需要有/user等目录的权限
+- 启动和连接 hive/hiveserver2 (hive on spark)，并提交执行任务
+
+<h2 id="4-1-认证原理"><a href="#4-1-认证原理" class="headerlink" title="4.1 认证原理"></a>4.1 认证原理</h2><p>启动hadoop集群的用户就是该集群的超级用户，而在core-site.xml中配置的hadoop.http.staticuser.user信息就是通过NameNode的UI或hadoop命令进行访问的静态用户，一旦配置为超级用户，那么任何用户都可以通过NameNode的UI或者hadoop命令对集群中的数据进行操作，这造成了数据的不安全。所以我们必须引入Kerberos进行用户认证。</p>
+<p><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C3ba0822c59794068bee8d292a82e9ceb.png" alt="image.png"></p>
+<p><strong>流程如下：</strong></p>
+<ol>
+<li>首先在客户端输入kinit命令，携带principal，到KDC的AS服务进行认证；</li>
+<li>AS服务访问Database获取用户的Principal然后进行认证。认证通过后，返回TGT给客户端；</li>
+<li>客户端获取TGT后，缓存到本地，然后携带TGT访问TGS服务；</li>
+<li>TGS服务会查询Database获取目标节点的相关信息，完成目标节点的认证，并验证TGT是否有效，有效则可以换取访问目标节点的Server Ticket；</li>
+<li>获取到Server Ticket后，客户端就可以与目标节点进行交互了</li>
+</ol>
+<p><strong>主要工作</strong></p>
+<ol>
+<li>创建系统用户</li>
+<li>创建Kerberos主体</li>
+<li>导出主体的keytab到主机</li>
+<li>配置Hadoop配置文件，包括启用Kerberos认证、指定keytab位置等。</li>
+<li>配置Https协议。</li>
+<li>切换为LinuxContainerExecutor，设置对应权限和配置文件。</li>
+</ol>
+<br>
+## 4.2 创建Hadoop系统用户和组
+
+<p>为Hadoop开启Kerberos，需为不同服务准备不同的用户，启动服务时需要使用相应的用户。须在所有节点创建以下用户和用户组。</p>
+<table>
+<thead>
+<tr>
+<th><strong>User:Group</strong></th>
+<th><strong>Daemons</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>hdfs:hadoop</strong></td>
+<td>NameNode, Secondary NameNode, JournalNode, DataNode</td>
+</tr>
+<tr>
+<td><strong>yarn:hadoop</strong></td>
+<td>ResourceManager, NodeManager</td>
+</tr>
+<tr>
+<td><strong>mapred:hadoop</strong></td>
+<td>MapReduce JobHistory Server</td>
+</tr>
+</tbody></table>
+<p>创建hadoop组</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# groupadd hadoop</span><br><span class="line">[root@bigdata2 ~]# groupadd hadoop</span><br><span class="line">[root@bigdata3 ~]# groupadd hadoop</span><br></pre></td></tr></table></figure>
+<p>创建各用户并设置密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# useradd hdfs -g hadoop</span><br><span class="line">[root@bigdata1 ~]# echo hdfs | passwd --stdin  hdfs</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# useradd yarn -g hadoop</span><br><span class="line">[root@bigdata1 ~]# echo yarn | passwd --stdin yarn</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# useradd mapred -g hadoop</span><br><span class="line">[root@bigdata1 ~]# echo mapred | passwd --stdin mapred</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd hdfs -g hadoop</span><br><span class="line">[root@bigdata2 ~]# echo hdfs | passwd --stdin  hdfs</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd yarn -g hadoop</span><br><span class="line">[root@bigdata2 ~]# echo yarn | passwd --stdin yarn</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd mapred -g hadoop</span><br><span class="line">[root@bigdata2 ~]# echo mapred | passwd --stdin mapred</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd hdfs -g hadoop</span><br><span class="line">[root@bigdata3 ~]# echo hdfs | passwd --stdin  hdfs</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd yarn -g hadoop</span><br><span class="line">[root@bigdata3 ~]# echo yarn | passwd --stdin yarn</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd mapred -g hadoop</span><br><span class="line">[root@bigdata3 ~]# echo mapred | passwd --stdin mapred</span><br></pre></td></tr></table></figure>
+
+<br>
+### 4.3 为Hadoop各服务创建Kerberos主体(Principal)
+主体格式如下：ServiceName/HostName@REALM，例如 dn/bigdata1@IOTMARS.COM
+
+<p><strong>1. 各服务所需主体如下</strong><br>环境：3台节点，主机名分别为bigdata1，bigdata2，bigdata3</p>
+<table>
+<thead>
+<tr>
+<th><strong>服务</strong></th>
+<th><strong>所在主机</strong></th>
+<th><strong>主体（Principal）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NameNode</td>
+<td>bigdata1</td>
+<td>nn&#x2F;bigdata1</td>
+</tr>
+<tr>
+<td>DataNode</td>
+<td>bigdata1</td>
+<td>dn&#x2F;bigdata1</td>
+</tr>
+<tr>
+<td>DataNode</td>
+<td>bigdata2</td>
+<td>dn&#x2F;bigdata2</td>
+</tr>
+<tr>
+<td>DataNode</td>
+<td>bigdata3</td>
+<td>dn&#x2F;bigdata3</td>
+</tr>
+<tr>
+<td>Secondary NameNode</td>
+<td>bigdata3</td>
+<td>sn&#x2F;bigdata3</td>
+</tr>
+<tr>
+<td>ResourceManager</td>
+<td>bigdata2</td>
+<td>rm&#x2F;bigdata2</td>
+</tr>
+<tr>
+<td>NodeManager</td>
+<td>bigdata1</td>
+<td>nm&#x2F;bigdata1</td>
+</tr>
+<tr>
+<td>NodeManager</td>
+<td>bigdata2</td>
+<td>nm&#x2F;bigdata2</td>
+</tr>
+<tr>
+<td>NodeManager</td>
+<td>bigdata3</td>
+<td>nm&#x2F;bigdata3</td>
+</tr>
+<tr>
+<td>JobHistory Server</td>
+<td>bigdata3</td>
+<td>jhs&#x2F;bigdata3</td>
+</tr>
+<tr>
+<td>Web UI</td>
+<td>bigdata1</td>
+<td>HTTP&#x2F;bigdata1</td>
+</tr>
+<tr>
+<td>Web UI</td>
+<td>bigdata2</td>
+<td>HTTP&#x2F;bigdata2</td>
+</tr>
+<tr>
+<td>Web UI</td>
+<td>bigdata3</td>
+<td>HTTP&#x2F;bigdata3</td>
+</tr>
+</tbody></table>
+<p><strong>2. 创建主体说明</strong><br>1） 路径准备：为服务创建的主体，需要通过密钥文件keytab文件进行认证，故需为各服务准备一个安全的路径用来存储keytab文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# mkdir /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chmod 770 /etc/security/keytab/</span><br></pre></td></tr></table></figure>
+<p>2）管理员主体认证<br>为执行创建主体的语句，需登录Kerberos 数据库客户端，登录之前需先使用Kerberos的管理员用户进行认证，执行以下命令并根据提示输入密码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kinit admin/admin</span><br></pre></td></tr></table></figure>
+<p>3）登录数据库客户端，输入密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin</span><br></pre></td></tr></table></figure>
+<p>4）执行创建主体的语句 </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kadmin:  addprinc -randkey test/test</span><br><span class="line">kadmin:  xst -k /etc/security/keytab/test.keytab test/test</span><br></pre></td></tr></table></figure>
+<ul>
+<li>addprinc：增加主体</li>
+<li>-randkey：密码随机，因hadoop各服务均通过keytab文件认证，故密码可随机生成</li>
+<li>test&#x2F;test：新增的主体</li>
+<li>xst：将主体的密钥写入keytab文件</li>
+<li>-k &#x2F;etc&#x2F;security&#x2F;keytab&#x2F;test.keytab：指明keytab文件路径和文件名</li>
+<li>test&#x2F;test：主体</li>
+</ul>
+<p>为方便创建主体，可使用如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey test/test&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/test.keytab test/test&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>-p：主体</li>
+<li>-w：密码</li>
+<li>-q：执行语句</li>
+</ul>
+<p><strong>3. 创建主体</strong><br>1）在所有节点创建keytab文件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# mkdir /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chmod 770 /etc/security/keytab/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# mkdir /etc/security/keytab/</span><br><span class="line">[root@bigdata2 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata2 ~]# chmod 770 /etc/security/keytab/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# mkdir /etc/security/keytab/</span><br><span class="line">[root@bigdata3 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata3 ~]# chmod 770 /etc/security/keytab/</span><br></pre></td></tr></table></figure>
+
+<p>2）以下命令在bigdata1节点执行<br>NameNode（bigdata1）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey nn/bigdata1&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/nn.service.keytab nn/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>DataNode（bigdata1）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey dn/bigdata1&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/dn.service.keytab dn/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>NodeManager（bigdata1）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey nm/bigdata1&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/nm.service.keytab nm/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+<p>Web UI（bigdata1）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey HTTP/bigdata1&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/spnego.service.keytab HTTP/bigdata1&quot;</span><br></pre></td></tr></table></figure>
+
+<p>2）以下命令在bigdata2执行<br>ResourceManager（bigdata2）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey rm/bigdata2&quot;</span><br><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/rm.service.keytab rm/bigdata2&quot;</span><br></pre></td></tr></table></figure>
+<p>DataNode（bigdata2）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey dn/bigdata2&quot;</span><br><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/dn.service.keytab dn/bigdata2&quot;</span><br></pre></td></tr></table></figure>
+<p>NodeManager（bigdata2）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey nm/bigdata2&quot;</span><br><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/nm.service.keytab nm/bigdata2&quot;</span><br></pre></td></tr></table></figure>
+<p>Web UI（bigdata2）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey HTTP/bigdata2&quot;</span><br><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/spnego.service.keytab HTTP/bigdata2&quot;</span><br></pre></td></tr></table></figure>
+
+<p>3）以下命令在bigdata3执行<br>DataNode（bigdata3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey dn/bigdata3&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/dn.service.keytab dn/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+<p>Secondary NameNode（bigdata3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey sn/bigdata3&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/sn.service.keytab sn/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+<p>NodeManager（bigdata3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey nm/bigdata3&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/nm.service.keytab nm/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+<p>JobHistory Server（bigdata3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey jhs/bigdata3&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/jhs.service.keytab jhs/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+<p>Web UI（bigdata3）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey HTTP/bigdata3&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/spnego.service.keytab HTTP/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.修改所有节点keytab文件的所有者和访问权限</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chmod 660 /etc/security/keytab/*</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata2 ~]# chmod 660 /etc/security/keytab/*</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata3 ~]# chmod 660 /etc/security/keytab/*</span><br></pre></td></tr></table></figure>
+<br>
+### 4.4 修改Hadoop配置文件
+需要修改的内容如下，修改完毕需要分发所改文件。
+
+<p><strong>1. core-site.xml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Kerberos主体到系统用户的映射机制 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.security.auth_to_local.mechanism&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;MIT&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Kerberos主体到系统用户的具体映射规则 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.security.auth_to_local&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;</span><br><span class="line">    RULE:[2:$1/$2@$0]([ndsj]n\/.*@IOTMARS\.COM)s/.*/hdfs/</span><br><span class="line">    RULE:[2:$1/$2@$0]([rn]m\/.*@IOTMARS\.COM)s/.*/yarn/</span><br><span class="line">    RULE:[2:$1/$2@$0](jhs\/.*@IOTMARS\.COM)s/.*/mapred/</span><br><span class="line">    DEFAULT</span><br><span class="line">  &lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 启用Hadoop集群Kerberos安全认证 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.security.authentication&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;kerberos&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 启用Hadoop集群授权管理 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.security.authorization&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Hadoop集群间RPC通讯设为仅认证模式 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hadoop.rpc.protection&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;authentication&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此处<code>[2:$1/$2@$0]</code>中的 ‘2’ 表示主体名包含了<code>$</code>1和<code>$2</code>两部分，<code>$1</code>和<code>$2</code>组成了主体名，<code>$0</code>是域名。<code>([ndj]n\/.*@IOTMARS\.COM)s/.*/hdfs/</code> 是通过正则表达式进行匹配，主体匹配上规则，<code>s</code>表示替换，<code>.*</code>表示所有内容，即将主体全部替换为hdfs，对应主机上的hdfs用户；若匹配不上，进行下一个规则的匹配。如果都没有匹配上，则使用<code>DEFAULT</code>规则，即只取<code>$1</code>的部分替换全部内容，对应主机上的<code>$1</code>用户。</p>
+</blockquote>
+<p><strong>2. hdfs-site.xml</strong><br>读取文件时，需要先访问NameNode获取block信息，然后去block所在节点获取数据；此过程需要进行Kerberos认证，dfs.block.access.token.enable参数设置为true，则在NameNode返回block信息还会返回block所在节点的token，这样客户端在获取block时不再需要进行DataNode节点的认证。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 访问DataNode数据块时需通过Kerberos认证 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.block.access.token.enable&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- NameNode服务的Kerberos主体,_HOST会自动解析为服务所在的主机名 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.kerberos.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;nn/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- NameNode服务的Kerberos密钥文件路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.keytab.file&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/nn.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Secondary NameNode服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.secondary.namenode.kerberos.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;sn/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Secondary NameNode服务的Kerberos密钥文件路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.secondary.namenode.keytab.file&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/sn.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;!-- NameNode Web服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.namenode.kerberos.internal.spnego.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;HTTP/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- WebHDFS REST服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.web.authentication.kerberos.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;HTTP/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Secondary NameNode Web UI服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.secondary.namenode.kerberos.internal.spnego.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;HTTP/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Hadoop Web UI的Kerberos密钥文件路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.web.authentication.kerberos.keytab&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/spnego.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- DataNode服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.datanode.kerberos.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;dn/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- DataNode服务的Kerberos密钥文件路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.datanode.keytab.file&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/dn.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 配置NameNode Web UI 使用HTTPS协议 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.http.policy&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;HTTPS_ONLY&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 配置DataNode数据传输保护策略为仅认证模式 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;dfs.data.transfer.protection&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;authentication&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. mapred-site.xml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 历史服务器的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;mapreduce.jobhistory.keytab&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/jhs.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 历史服务器的Kerberos密钥文件 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;mapreduce.jobhistory.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;jhs/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>这个_HOST官网解释如下：</strong><br>Hadoop simplifies the deployment of configuration files by allowing the hostname component of the service principal to be specified as the _HOST wildcard. Each service instance will substitute _HOST with its own fully qualified hostname at runtime. This allows administrators to deploy the same set of configuration files on all nodes. However, the keytab files will be different.<br>但是实际使用发现貌似不是主机名称，很奇怪！</p>
+</blockquote>
+<p><strong>实际测试发现：</strong></p>
+<ol>
+<li><p>启动Datanode时，会调用KerberosUtil.java中的getLocalHostName()方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* Return fqdn of the current host */</span><br><span class="line">static String getLocalHostName() throws UnknownHostException &#123;</span><br><span class="line">  return InetAddress.getLocalHost().getCanonicalHostName();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现使用的是java.net包中的getCanonicalHostName()方法获取全限定主机名。需要在&#x2F;etc&#x2F;hosts中的第一行添加  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[本机ip] [hostname]</span><br></pre></td></tr></table></figure>
+<p>各个节点启动时会读取这个hostname并赋值给_HOST。</p>
+</li>
+<li><p>启动SecondaryNameNode时，会读取配置中的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;cos-bigdata-test-hadoop-03:9868&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>启动SecondaryNameNode就会将_HOST设置为cos-bigdata-test-hadoop-03。</p>
+</li>
+<li><p>启动NameNode时，会读取配置中的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://cos-bigdata-test-hadoop-01:9820&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>启动NameNode就会将_HOST设置为cos-bigdata-test-hadoop-01。</p>
+</li>
+<li><p>启动ResouceManager时，会读取配置中的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;cos-bigdata-test-hadoop-02&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>启动ResouceManager就会将_HOST设置为cos-bigdata-test-hadoop-02。</p>
+</li>
+</ol>
+<p><strong>4. yarn-site.xml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Resource Manager 服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;rm/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Resource Manager 服务的Kerberos密钥文件 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.resourcemanager.keytab&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/rm.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Node Manager 服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.principal&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;nm/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Node Manager 服务的Kerberos密钥文件 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.keytab&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/nm.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要注意的是，即使通过了kerberos认证的用户，如果该用户不是所有yarn服务器的用户且与启动yarn服务的用户不同组），那么会报错 <strong>User xxx not found</strong></p>
+</blockquote>
+<p>修改完成后分发配置文件到其他节点。</p>
+<br>
+## 4.5 配置HDFS使用HTTPS安全传输协议
+Keytool是java数据证书的管理工具，使用户能够管理自己的公/私钥对及相关证书。
+-keystore    指定密钥库的名称及位置(产生的各类信息将存在.keystore文件中)
+-genkey(或者-genkeypair)      生成密钥对
+-alias  为生成的密钥对指定别名，如果没有默认是mykey
+-keyalg  指定密钥的算法 RSA/DSA 默认是DSA
+
+<p>1）生成 keystore的密码及相应信息的密钥库<br>   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -keystore /etc/security/keytab/keystore -alias jetty -genkey -keyalg RSA</span><br></pre></td></tr></table></figure><br>   注意：CN设置为访问的域名，即hosts中配置的cos-bigdata-test-hadoop-01</p>
+<p>2）修改keystore文件的所有者和访问权限<br>   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown -R root:hadoop /etc/security/keytab/keystore</span><br><span class="line">chmod 660 /etc/security/keytab/keystore</span><br></pre></td></tr></table></figure><br>   注意：<br>   （1）密钥库的密码至少6个字符，可以是纯数字或者字母或者数字和字母的组合等等<br>   （2）确保hdfs用户（HDFS的启动用户）具有对所生成keystore文件的读权限</p>
+<p>3）将该证书分发到集群中的每台节点的相同路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xsync /etc/security/keytab/keystore</span><br></pre></td></tr></table></figure>
+
+<p>4）修改hadoop配置文件ssl-server.xml.example，<br>该文件位于$HADOOP_HOME&#x2F;etc&#x2F;hadoop目录<br>修改文件名为ssl-server.xml<br>修改以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- SSL密钥库路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;ssl.server.keystore.location&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/keystore&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- SSL密钥库密码 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;ssl.server.keystore.password&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;123456&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- SSL可信任密钥库路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;ssl.server.truststore.location&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/etc/security/keytab/keystore&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- SSL密钥库中密钥的密码 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;ssl.server.keystore.keypassword&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;Password@123&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- SSL可信任密钥库密码 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;ssl.server.truststore.password&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;Password@123&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>分发配置文件到所有的节点。</p>
+<p>5）将证书添加到jdk的信任库中<br>默认每分钟Secondarynamenode会发起fetchImage的https请求，如果不配置自签名证书可信任，就会导致请求失败，Secondarynamenode功能失效。报错如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2021-10-15 10:52:08,774 INFO org.apache.hadoop.hdfs.server.namenode.TransferFsImage: Opening connection to https://cos-bigdata-test-hadoop-01:9871/imagetransfer?getimage=1&amp;txid=4419&amp;storageInfo=-64:2014770126:1634089984720:CID-b3e0e3d0-2f3d-49f2-a41c-5725d56b89b5&amp;bootstrapstandby=false</span><br><span class="line">2021-10-15 10:52:08,802 ERROR org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode: Exception in doCheckpoint</span><br><span class="line">javax.net.ssl.SSLHandshakeException: Error while authenticating with endpoint: https://cos-bigdata-test-hadoop-01:9871/imagetransfer?getimage=1&amp;txid=4419&amp;storageInfo=-64:2014770126:1634089984720:CID-b3e0e3d0-2f3d-49f2-a41c-5725d56b89b5&amp;bootstrapstandby=false</span><br><span class="line">   ......</span><br><span class="line">Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target</span><br></pre></td></tr></table></figure>
+<p>首先导出证书</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -export -rfc -alias jetty -file cos-bigdata-test-hadoop-01.cet -keystore /etc/security/keytab/keystore -storepass bigdata123 -keypass bigdata123</span><br></pre></td></tr></table></figure>
+<p>将证书添加到secondarynamenode所在节点的jdk的信任库中，jdk的信任库文件是cacerts。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -import -v -trustcacerts -alias cos-bigdata-test-hadoop-01 -file /etc/security/keytab/cos-bigdata-test-hadoop-01.crt -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit</span><br></pre></td></tr></table></figure>
+
+<br>
+## 4.6 配置Yarn使用LinuxContainerExecutor
+- DefaultContainerExecutor：默认的启动Container进程的程序，该进程所属的用户是启动Resourcemanager的用户，而不是提交任务的用户。
+- LinuxContainerExecutor：与DefaultContanerExecutor不同点是，启动Container进程的用户是提交任务的用户，而不是启动ResourceManager的用户。需要保证启动任务的用户是系统用户，否则会找不到用户。
+
+<p>1）修改所有节点的container-executor所有者和权限，要求其所有者为root，所有组为hadoop（启动NodeManger的yarn用户的所属组），权限为6050。其默认路径为$HADOOP_HOME&#x2F;bin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/bin/container-executor</span><br><span class="line">[root@bigdata1 ~]# chmod 6050 /opt/module/hadoop-3.1.3/bin/container-executor</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/bin/container-executor</span><br><span class="line">[root@bigdata2 ~]# chmod 6050 /opt/module/hadoop-3.1.3/bin/container-executor</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/bin/container-executor</span><br><span class="line">[root@bigdata3 ~]# chmod 6050 /opt/module/hadoop-3.1.3/bin/container-executor</span><br></pre></td></tr></table></figure>
+
+<p>2）修改所有节点的container-executor.cfg文件的所有者和权限，要求该文件及其所有的上级目录的所有者均为root，所有组为hadoop（启动NodeManger的yarn用户的所属组），权限为400。其默认路径为$HADOOP_HOME&#x2F;etc&#x2F;hadoop</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc</span><br><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module/hadoop-3.1.3</span><br><span class="line">[root@bigdata1 ~]# chown root:hadoop /opt/module</span><br><span class="line">[root@bigdata1 ~]# chmod 400 /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc</span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module/hadoop-3.1.3</span><br><span class="line">[root@bigdata2 ~]# chown root:hadoop /opt/module</span><br><span class="line">[root@bigdata2 ~]# chmod 400 /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc/hadoop</span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module/hadoop-3.1.3/etc</span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module/hadoop-3.1.3</span><br><span class="line">[root@bigdata3 ~]# chown root:hadoop /opt/module</span><br><span class="line">[root@bigdata3 ~]# chmod 400 /opt/module/hadoop-3.1.3/etc/hadoop/container-executor.cfg</span><br></pre></td></tr></table></figure>
+
+<p>3）修改$HADOOP_HOME&#x2F;etc&#x2F;hadoop&#x2F;container-executor.cfg<br>内容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># nodemanager所在的组</span><br><span class="line">yarn.nodemanager.linux-container-executor.group=hadoop</span><br><span class="line"># 设置禁止启动的yarn的用户，可以将启动集群的几个超级用户禁用其启动任务</span><br><span class="line">banned.users=hdfs,yarn,mapred</span><br><span class="line"># 我们创建的用户的用户id是1000+，此处表示启动任务的最小用户id，阻止系统超级用户启动任务</span><br><span class="line">min.user.id=1000</span><br><span class="line"># 设置允许启动任务的系统用户</span><br><span class="line">allowed.system.users=</span><br><span class="line">feature.tc.enabled=false</span><br></pre></td></tr></table></figure>
+
+<p>4）修改$HADOOP_HOME&#x2F;etc&#x2F;hadoop&#x2F;yarn-site.xml文件<br>增加以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置Node Manager使用LinuxContainerExecutor管理Container --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.container-executor.class&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 配置Node Manager的启动用户的所属组 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.linux-container-executor.group&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hadoop&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!-- LinuxContainerExecutor脚本路径 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;yarn.nodemanager.linux-container-executor.path&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;/opt/module/hadoop-3.1.3/bin/container-executor&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<p>5）分发container-executor.cfg和yarn-site.xml文件到其他节点</p>
+<br>
+# 五、安全模式下启动Hadoop
+## 5.1 修改特定本地路径权限
+| **local** | $HADOOP_LOG_DIR             | hdfs:hadoop | drwxrwxr-x |
+| --------- | --------------------------- | ----------- | ---------- |
+| **local** | dfs.namenode.name.dir       | hdfs:hadoop | drwx------ |
+| **local** | dfs.datanode.data.dir       | hdfs:hadoop | drwx------ |
+| **local** | dfs.namenode.checkpoint.dir | hdfs:hadoop | drwx------ |
+| **local** | yarn.nodemanager.local-dirs | yarn:hadoop | drwxrwxr-x |
+| **local** | yarn.nodemanager.log-dirs   | yarn:hadoop | drwxrwxr-x |
+
+<p>1）$HADOOP_LOG_DIR（所有节点）</p>
+<p>该变量位于hadoop-env.sh文件，默认值为 ${HADOOP_HOME}&#x2F;logs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown hdfs:hadoop /opt/module/hadoop-3.1.3/logs/</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown hdfs:hadoop /opt/module/hadoop-3.1.3/logs/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown hdfs:hadoop /opt/module/hadoop-3.1.3/logs/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/</span><br></pre></td></tr></table></figure>
+
+<p>2）dfs.namenode.name.dir（NameNode节点）</p>
+<p>该参数位于hdfs-site.xml文件，默认值为file:&#x2F;&#x2F;${hadoop.tmp.dir}&#x2F;dfs&#x2F;name</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/data/dfs/name/</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# chmod 700 /opt/module/hadoop-3.1.3/data/dfs/name/</span><br></pre></td></tr></table></figure>
+
+<p>3）dfs.datanode.data.dir（DataNode节点）</p>
+<p>该参数为于hdfs-site.xml文件，默认值为file:&#x2F;&#x2F;${hadoop.tmp.dir}&#x2F;dfs&#x2F;data</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/data/dfs/data/</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# chmod 700 /opt/module/hadoop-3.1.3/data/dfs/data/</span><br></pre></td></tr></table></figure>
+
+<p>4）dfs.namenode.checkpoint.dir（SecondaryNameNode节点）</p>
+<p>该参数位于hdfs-site.xml文件，默认值为file:&#x2F;&#x2F;${hadoop.tmp.dir}&#x2F;dfs&#x2F;namesecondary</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/data/dfs/namesecondary/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chmod 700 /opt/module/hadoop-3.1.3/data/dfs/namesecondary/</span><br></pre></td></tr></table></figure>
+
+<p>5）yarn.nodemanager.local-dirs（NodeManager节点）</p>
+<p>该参数位于yarn-site.xml文件，默认值为file:&#x2F;&#x2F;${hadoop.tmp.dir}&#x2F;nm-local-dir</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R yarn:hadoop /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown -R yarn:hadoop /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown -R yarn:hadoop /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/data/nm-local-dir/</span><br></pre></td></tr></table></figure>
+
+<p>6）yarn.nodemanager.log-dirs（NodeManager节点）</p>
+<p>该参数位于yarn-site.xml文件，默认值为$HADOOP_LOG_DIR&#x2F;userlogs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown yarn:hadoop /opt/module/hadoop-3.1.3/logs/userlogs/</span><br><span class="line"></span><br><span class="line">[root@bigdata1 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/userlogs/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown yarn:hadoop /opt/module/hadoop-3.1.3/logs/userlogs/</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/userlogs/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown yarn:hadoop /opt/module/hadoop-3.1.3/logs/userlogs/</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chmod 775 /opt/module/hadoop-3.1.3/logs/userlogs/</span><br></pre></td></tr></table></figure>
+
+<p>7）HADOOP_PID_DIR<br>如果修改过该参数，则需要保证该存储pid文件的路径允许hdfs:hadoop用户访问。我在profile文件中将HADOOP_PID_DIR设置为${HADOOP_HOME}&#x2F;pids&#x2F;hdfs，则需要修改该路径的用户和权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/pids/hdfs</span><br><span class="line">[root@bigdata1 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/hdfs</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/pids/hdfs</span><br><span class="line">[root@bigdata2 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/hdfs</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown -R hdfs:hadoop /opt/module/hadoop-3.1.3/pids/hdfs</span><br><span class="line">[root@bigdata3 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/hdfs</span><br></pre></td></tr></table></figure>
+
+<p>8）HADOOP_MAPRED_PID_DIR<br>如果修改过该参数，则需要保证该存储pid文件的路径允许mapred:hadoop用户访问。我在profile文件中将HADOOP_MAPRED_PID_DIR设置为${HADOOP_HOME}&#x2F;pids&#x2F;mapred，则需要修改该路径的用户和权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R mapred:hadoop /opt/module/hadoop-3.1.3/pids/mapred</span><br><span class="line">[root@bigdata1 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/mapred</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown -R mapred:hadoop /opt/module/hadoop-3.1.3/pids/mapred</span><br><span class="line">[root@bigdata2 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/mapred</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown -R mapred:hadoop /opt/module/hadoop-3.1.3/pids/mapred</span><br><span class="line">[root@bigdata3 ~]# chmod -R 775 /opt/module/hadoop-3.1.3/pids/mapred</span><br></pre></td></tr></table></figure>
+
+<br>
+## 5.2 启动HDFS
+
+<p>需要注意的是，启动不同服务时需要使用对应的用户</p>
+<p><strong>1. 单点启动</strong></p>
+<p>（1）启动NameNode</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# sudo -i -u hdfs hdfs --daemon start namenode</span><br></pre></td></tr></table></figure>
+<p>（2）启动DataNode</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# sudo -i -u hdfs hdfs --daemon start datanode</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# sudo -i -u hdfs hdfs --daemon start datanode</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# sudo -i -u hdfs hdfs --daemon start datanode</span><br></pre></td></tr></table></figure>
+<p>（3）启动SecondaryNameNode</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# sudo -i -u hdfs hdfs --daemon start secondarynamenode</span><br></pre></td></tr></table></figure>
+<p><strong>说明：</strong><br>- -i：重新加载环境变量</p>
+<p>- -u：以特定用户的身份执行后续命令</p>
+<p><strong>2. 群起</strong></p>
+<p>1）在主节点（bigdata1）配置hdfs用户到所有节点的免密登录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-id bigdata2</span><br><span class="line">ssh-copu-id bigdata3</span><br></pre></td></tr></table></figure>
+<p>2）修改主节点（bigdata1）节点的$HADOOP_HOME&#x2F;sbin&#x2F;start-dfs.sh脚本，在顶部增加以下环境变量。在顶部增加如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">HDFS_DATANODE_USER=hdfs</span><br><span class="line"></span><br><span class="line">HDFS_NAMENODE_USER=hdfs</span><br><span class="line"></span><br><span class="line">HDFS_SECONDARYNAMENODE_USER=hdfs</span><br></pre></td></tr></table></figure>
+<p>注：$HADOOP_HOME&#x2F;sbin&#x2F;stop-dfs.sh也需在顶部增加上述环境变量才可使用。</p>
+<p>3）以root用户执行群起脚本，即可启动HDFS集群。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p><strong>3.查看HFDS web页面</strong></p>
+<p>访问地址为 <a target="_blank" rel="noopener" href="https://bigdata1:9871/">https://bigdata1:9871</a></p>
+<p>查看节点是否都注册成功。</p>
+<p><strong>注：</strong>如果遇到Datanode无法注册的问题，可能是jdk的jce版本问题。<a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html">下载</a>，解压得到的local_policy.jar和US_export_policy.jar替换到$JAVA_HOME&#x2F;jre&#x2F;lib&#x2F;security目录下。然后同步到其他节点，因为NodeManager同样会遇到这个问题。</p>
+<br>
+## 5.3 修改HDFS特定路径访问权限
+
+<table>
+<thead>
+<tr>
+<th><strong>hdfs</strong></th>
+<th>&#x2F;</th>
+<th>hdfs:hadoop</th>
+<th>drwxr-xr-x</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>hdfs</strong></td>
+<td>&#x2F;tmp</td>
+<td>hdfs:hadoop</td>
+<td>drwxrwxrwxt</td>
+</tr>
+<tr>
+<td><strong>hdfs</strong></td>
+<td>&#x2F;user</td>
+<td>hdfs:hadoop</td>
+<td>drwxrwxr-x</td>
+</tr>
+<tr>
+<td><strong>hdfs</strong></td>
+<td>yarn.nodemanager.remote-app-log-dir</td>
+<td>yarn:hadoop</td>
+<td>drwxrwxrwxt</td>
+</tr>
+<tr>
+<td><strong>hdfs</strong></td>
+<td>mapreduce.jobhistory.intermediate-done-dir</td>
+<td>mapred:hadoop</td>
+<td>drwxrwxrwxt</td>
+</tr>
+<tr>
+<td><strong>hdfs</strong></td>
+<td>mapreduce.jobhistory.done-dir</td>
+<td>mapred:hadoop</td>
+<td>drwxrwx—</td>
+</tr>
+</tbody></table>
+<p>说明：hdfs是启动集群的用户，所以是超级用户，将hdfs下的特定路径的所属用户组进行更改。若上述路径不存在，需手动创建</p>
+<p>1）创建hdfs&#x2F;hadoop主体，执行以下命令并按照提示输入密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin.local -q &quot;addprinc hdfs/hadoop&quot;</span><br></pre></td></tr></table></figure>
+<p>2）认证hdfs&#x2F;hadoop主体，执行以下命令并按照提示输入密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdasta1 ~]# kinit hdfs/hadoop</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>需要获取hdfs的超级用户时，需要认证为hdfs&#x2F;hadoop；需要获取kerberos管理员权限时，需要认证为admin&#x2F;admin。</p>
+</blockquote>
+<p>3）按照上述要求修改指定路径的所有者和权限<br>（1）修改&#x2F;、&#x2F;tmp、&#x2F;user路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdasta1 ~]# hadoop fs -chown hdfs:hadoop / /tmp /user</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 755 /</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 1777 /tmp</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 775 /user</span><br></pre></td></tr></table></figure>
+<p>（2）参数yarn.nodemanager.remote-app-log-dir位于yarn-site.xml文件，默认值&#x2F;tmp&#x2F;logs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdasta1 ~]# hadoop fs -chown yarn:hadoop /tmp/logs</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 1777 /tmp/logs</span><br></pre></td></tr></table></figure>
+<p>（3）参数mapreduce.jobhistory.intermediate-done-dir位于mapred-site.xml文件，默认值为&#x2F;tmp&#x2F;hadoop-yarn&#x2F;staging&#x2F;history&#x2F;done_intermediate，需保证该路径的所有上级目录（除&#x2F;tmp）的所有者均为mapred，所属组为hadoop，权限为770</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdasta1 ~]# hadoop fs -chown -R mapred:hadoop /tmp/hadoop-yarn/staging/history/done_intermediate</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod -R 1777 /tmp/hadoop-yarn/staging/history/done_intermediate</span><br><span class="line"></span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/staging/history/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/staging/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/</span><br><span class="line"></span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/staging/history/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/staging/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/</span><br></pre></td></tr></table></figure>
+
+<p>（4）参数mapreduce.jobhistory.done-dir位于mapred-site.xml文件，默认值为&#x2F;tmp&#x2F;hadoop-yarn&#x2F;staging&#x2F;history&#x2F;done，需保证该路径的所有上级目录（除&#x2F;tmp）的所有者均为mapred，所属组为hadoop，权限为770</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdasta1 ~]# hadoop fs -chown -R mapred:hadoop /tmp/hadoop-yarn/staging/history/done</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod -R 750 /tmp/hadoop-yarn/staging/history/done</span><br><span class="line"></span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/staging/history/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/staging/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chown mapred:hadoop /tmp/hadoop-yarn/</span><br><span class="line"></span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/staging/history/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/staging/</span><br><span class="line">[root@bigdasta1 ~]# hadoop fs -chmod 770 /tmp/hadoop-yarn/</span><br></pre></td></tr></table></figure>
+
+<br>
+## 5.4 启动Yarn
+
+<p><strong>1. 单点启动</strong><br><strong>启动ResourceManager</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# sudo -i -u yarn yarn --daemon start resourcemanager</span><br></pre></td></tr></table></figure>
+<p><strong>启动NodeManager</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# sudo -i -u yarn yarn --daemon start nodemanager</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# sudo -i -u yarn yarn --daemon start nodemanager</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# sudo -i -u yarn yarn --daemon start nodemanager</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 群起</strong><br>1）在Yarn主节点（bigdata2）配置<strong>yarn</strong>用户到所有节点的免密登录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2）修改主节点（bigdata2）的$HADOOP_HOME&#x2F;sbin&#x2F;start-yarn.sh，在顶部增加以下环境变量。在顶部增加如下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">YARN_RESOURCEMANAGER_USER=yarn</span><br><span class="line"></span><br><span class="line">YARN_NODEMANAGER_USER=yarn</span><br></pre></td></tr></table></figure>
+<p><strong>注：stop-yarn.sh也需在顶部增加上述环境变量才可使用。</strong></p>
+<p>3）以root用户执行$HADOOP_HOME&#x2F;sbin&#x2F;start-yarn.sh脚本即可启动yarn集群。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata2 ~]# start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 访问Yarnweb页面</strong></p>
+<p>访问地址为 <a target="_blank" rel="noopener" href="http://bigdata2:8088/">http://bigdata2:8088</a><br>查看节点是否都注册成功</p>
+<h2 id="5-5-启动HistoryServer"><a href="#5-5-启动HistoryServer" class="headerlink" title="5.5 启动HistoryServer"></a>5.5 启动HistoryServer</h2><p><strong>1.启动历史服务器</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 ~]# sudo -i -u mapred mapred --daemon start historyserver</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 查看历史服务器web页面</strong></p>
+<p>访问地址为 <a target="_blank" rel="noopener" href="http://bigdata3:19888/">http://bigdata3:19888</a></p>
+<br>
+# 六、安全集群使用说明
+## 6.1 用户要求
+**1. 具体要求**
+以下使用说明均基于普通用户，安全集群对用户有以下要求：
+1）集群中的每个节点都需要创建该用户
+2）该用户需要属于hadoop用户组
+3）需要创建该用户对应的Kerberos主体
+
+<p><strong>2. 实操</strong><br>此处以hxr用户为例，具体操作如下<br>1）创建用户（存在可跳过），须在所有节点执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# useradd hxr</span><br><span class="line">[root@bigdata1 ~]# echo hxr| passwd --stdin hxr</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd hxr</span><br><span class="line">[root@bigdata2 ~]# echo hxr| passwd --stdin hxr</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd hxr</span><br><span class="line">[root@bigdata3 ~]# echo hxr| passwd --stdin hxr</span><br></pre></td></tr></table></figure>
+
+<p>2）加入hadoop组，须在所有节点执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# usermod -a -G hadoop hxr</span><br><span class="line">[root@bigdata2 ~]# usermod -a -G hadoop hxr</span><br><span class="line">[root@bigdata3 ~]# usermod -a -G hadoop hxr</span><br></pre></td></tr></table></figure>
+
+<p>3）创建主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -p admin/admin -wadmin -q&quot;addprinc -pw bigdata123 hxr&quot;</span><br></pre></td></tr></table></figure>
+
+<br>
+## 6.2 访问HDFS集群文件
+### 6.2.1 Shell命令
+1. 认证
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ kinit hxr</span><br></pre></td></tr></table></figure>
+2. 查看当前认证用户
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ kinit hxr</span><br></pre></td></tr></table></figure>
+3. 执行命令
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ hadoop fs -ls /</span><br></pre></td></tr></table></figure>
+4.注销认证
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ kdestroy</span><br></pre></td></tr></table></figure>
+5.再次执行查看命令
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ hadoop fs -ls /</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-2-Win系统web页面"><a href="#6-2-2-Win系统web页面" class="headerlink" title="6.2.2 Win系统web页面"></a>6.2.2 Win系统web页面</h3><ol>
+<li><p>安装Kerberos客户端<br>官网： <a target="_blank" rel="noopener" href="http://web.mit.edu/kerberos/dist/#kfw-3.2">http://web.mit.edu/kerberos/dist/#kfw-3.2</a><br>下载地址：<a target="_blank" rel="noopener" href="http://web.mit.edu/kerberos/dist/kfw/4.1/kfw-4.1-amd64.msi">http://web.mit.edu/kerberos/dist/kfw/4.1/kfw-4.1-amd64.msi</a></p>
+<p>1）下载之后按照提示安装<br>2）编辑C:\ProgramData\MIT\Kerberos5\krb5.ini文件，内容如下</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[libdefaults]</span><br><span class="line"> dns_lookup_realm = false</span><br><span class="line"> ticket_lifetime = 24h</span><br><span class="line"> forwardable = true</span><br><span class="line"> rdns = false</span><br><span class="line"> default_realm = IOTMARS.COM</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line"> IOTMARS.COM = &#123;</span><br><span class="line">  kdc = 192.168.101.174</span><br><span class="line">  admin_server = 192.168.101.174</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">[domain_realm]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：安装完成后，会自动将kerberos的bin目录路径加到环境变量中。如果安装了JDK的用户需要注意将kerberos的环境变量挪到JDK变量之前，因为JDK中也有 kinit, klist 等命令，系统会按环境变量顺序来使用命令。</p>
+</blockquote>
+<ol start="2">
+<li><p>配置火狐浏览器<br>1）打开浏览器，在地址栏输入“about:config”，点击回车<br>2）搜索“network.negotiate-auth.trusted-uris”，修改值为要访问的主机名（bigdata1）<br>3）搜索“network.auth.use-sspi”，双击将值变为false</p>
+</li>
+<li><p>认证<br>1）启动Kerberos客户端，点击Get Ticket<br>2）输入主体名和密码，点击OK<br>3）认证成功</p>
+</li>
+<li><p>访问HDFS<br><a target="_blank" rel="noopener" href="https://bigdata1:9871/">https://bigdata1:9871</a> </p>
+</li>
+<li><p>注销认证；删除缓存数据并重启浏览器，再次访问HDFS，访问失败。</p>
+</li>
+</ol>
+<h3 id="6-2-3-IOS系统web页面"><a href="#6-2-3-IOS系统web页面" class="headerlink" title="6.2.3 IOS系统web页面"></a>6.2.3 IOS系统web页面</h3><p>Mac OS系统预安装了Kerberos，需要修改配置。<a target="_blank" rel="noopener" href="http://web.mit.edu/macdev/KfM/Common/Documentation/preferences-osx.html">官方教程</a></p>
+<p>创建配置文件 &#x2F;etc&#x2F;krb5.conf ，配置文件内容同上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[libdefaults]</span><br><span class="line"> dns_lookup_realm = false</span><br><span class="line"> ticket_lifetime = 24h</span><br><span class="line"> forwardable = true</span><br><span class="line"> rdns = false</span><br><span class="line"> default_realm = IOTMARS.COM</span><br><span class="line"></span><br><span class="line">[realms]</span><br><span class="line"> IOTMARS.COM = &#123;</span><br><span class="line">  kdc = 192.168.101.174</span><br><span class="line">  admin_server = 192.168.101.174</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">[domain_realm]</span><br></pre></td></tr></table></figure>
+<p>执行命令 <code>kinit xxx</code> 进行认证。<br>可以直接通过Safari访问。</p>
+<p>也可以使用火狐浏览器，配置同上。</p>
+<br>
+## 6.3 提交MapReduce任务
+1. 认证
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ kinit hxr</span><br></pre></td></tr></table></figure>
+
+<p>2.提交任务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ hadoop jar /opt/module/hadoop-3.1.3/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar pi 1 1</span><br></pre></td></tr></table></figure>
+
+<br>
+# 七、Hive用户认证配置
+## 7.1 前置要求
+### 7.1.1 Hadoop集群启动Kerberos认证
+按照上述步骤为Hadoop集群开启Kerberos安全认证。
+
+<p>Hadoop开启Kerberos认证后，直接通过bin&#x2F;hive命令启动hive本地客户端，也需要通过kinit 进行认证，否则无法读取到hdfs上的数据。</p>
+<p>如果hive配置的执行引擎是spark，那么spark向yarn提交任务时需要Kerberos认证，此时即是是hive本地客户端，也需要在hive-site.xml中配置Kerberos认证。</p>
+<p>以下是对Hive和HiveServer2服务进行Kerberos配置，为hive的本地提交任务和远程提交任务提供Kerberos认证。</p>
+<h3 id="7-1-2-创建Hive系统用户和Kerberos主体"><a href="#7-1-2-创建Hive系统用户和Kerberos主体" class="headerlink" title="7.1.2 创建Hive系统用户和Kerberos主体"></a>7.1.2 创建Hive系统用户和Kerberos主体</h3><ol>
+<li><p>创建系统用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata1 ~]# echo hive | passwd --stdin hive</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata2 ~]# echo hive | passwd --stdin hive</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata3  ~]# echo hive | passwd --stdin hive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建Kerberos主体并生成keytab文件<br>创建hive用户的Kerberos主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey hive/bigdata1&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey hive/bigdata2&quot;</span><br><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;addprinc -randkey hive/bigdata3&quot;</span><br></pre></td></tr></table></figure>
+<p>在Hive所部署的节点生成keytab文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/hive.service.keytab hive/bigdata1&quot;</span><br><span class="line">[root@bigdata2 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/hive.service.keytab hive/bigdata2&quot;</span><br><span class="line">[root@bigdata3 ~]# kadmin -padmin/admin -wadmin -q&quot;xst -k /etc/security/keytab/hive.service.keytab hive/bigdata3&quot;</span><br></pre></td></tr></table></figure></li>
+<li><p>修改keytab文件所有者和访问权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata1 ~]# chmod 660 /etc/security/keytab/hive.service.keytab</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata2 ~]# chmod 660 /etc/security/keytab/hive.service.keytab</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# chown -R root:hadoop /etc/security/keytab/</span><br><span class="line">[root@bigdata3 ~]# chmod 660 /etc/security/keytab/hive.service.keytab</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="7-2-配置认证"><a href="#7-2-配置认证" class="headerlink" title="7.2 配置认证"></a>7.2 配置认证</h2><ol>
+<li>修改$HIVE_HOME&#x2F;conf&#x2F;hive-site.xml文件，增加如下属性<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- HiveServer2启用Kerberos认证 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.authentication&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;kerberos&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- HiveServer2服务的Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.authentication.kerberos.principal&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hive/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- HiveServer2服务的Kerberos密钥文件 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.server2.authentication.kerberos.keytab&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/etc/security/keytab/hive.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Metastore启动认证 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.metastore.sasl.enabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!-- Metastore Kerberos密钥文件 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.metastore.kerberos.keytab.file&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/etc/security/keytab/hive.service.keytab&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;!-- Metastore Kerberos主体 --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hive.metastore.kerberos.principal&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hive/_HOST@IOTMARS.COM&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure></li>
+<li>修改$HADOOP_HOME&#x2F;etc&#x2F;hadoop&#x2F;core-site.xml文件，具体修改如下<br>1）删除以下参数<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.http.staticuser.user&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hxr&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hxr.hosts&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hxr.groups&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hxr.users&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>hadoop.http.staticuser.user是指定访问Namenode网页时的用户。目前已经被Kerberos取代了，所以可以删除。</p>
+</blockquote>
+</li>
+</ol>
+<p>2）增加以下参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hive.hosts&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hive.groups&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hadoop.proxyuser.hive.users&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;*&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>proxyuser就是为了hiveserver2进行配置的。试想一下，[hive]用户启动了hive客户端，如果[zhangsan]用户提交了一个hive任务，那么是以哪个用户身份向yarn提交任务呢？是以[hive]的身份提交任务，所以会造成权限的混乱。此时我们配置proxyuser代理用户为启动hiveserver2进程的[hive]用户，再次执行hive任务，那么此时一些启动和善后任务由代理用户[hive]执行，但是向yarn提交任务的用户是[zhangsan]。</p>
+</blockquote>
+<p>3.分发配置core-site.xml文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# xsync $HADOOP_HOME/etc/hadoop/core-site.xml</span><br></pre></td></tr></table></figure>
+<p>4.重启Hadoop集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# stop-dfs.sh</span><br><span class="line">[root@bigdata1 ~]# start-dfs.sh</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# stop-yarn.sh</span><br><span class="line">[root@bigdata2 ~]# start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-3-启动hiveserver2"><a href="#7-3-启动hiveserver2" class="headerlink" title="7.3 启动hiveserver2"></a>7.3 启动hiveserver2</h2><p>注：需使用hive用户启动</p>
+<p>修改日志文件所属用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown -R hive:hadoop /opt/module/hive-3.1.2/logs</span><br></pre></td></tr></table></figure>
+
+<p>如果是hive-on-spark，需要修改指定的spark日志存储路径的权限（如指定spark.eventLog.dir &#x3D; hdfs:&#x2F;&#x2F;bigdata1:9820&#x2F;spark&#x2F;history）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# hadoop fs -chown hive:hadoop /spark/history</span><br><span class="line">[root@bigdata1 ~]# hadoop fs -chmod 777 /spark/history</span><br></pre></td></tr></table></figure>
+
+<p>hive用户启动并输出日志</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# sudo -i -u hive nohup hiveserver2 1&gt;/opt/module/hive-3.1.2/logs/hive-on-spark.log 2&gt;/opt/module/hive-3.1.2/logs/hive-on-spark.err &amp;</span><br></pre></td></tr></table></figure>
+
+<br>
+# 八、Hive Kerberos认证使用说明
+以下说明均基于普通用户
+
+<p>注意：如果是本地hive启动的hive任务，那么当前用户就是启动hive客户端的用户；如果是启动了hiveserver2，然后通过远程客户端提交的任务，那么当前用户就是远程登陆的用户，而不是启动hiveserver2的用户。<br>此时就需要注意hdfs上执行任务所需目录的权限问题，包括spark-history、&#x2F;user&#x2F;[用户名] 等路径的读写权限。</p>
+<h2 id="8-1-beeline客户端"><a href="#8-1-beeline客户端" class="headerlink" title="8.1 beeline客户端"></a>8.1 beeline客户端</h2><p>1.认证，执行以下命令，并按照提示输入密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ kinit hxr</span><br></pre></td></tr></table></figure>
+<p>2.使用beeline客户端连接hiveserver2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[hxr@bigdata1 ~]$ beeline</span><br></pre></td></tr></table></figure>
+<p>使用如下url进行连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beeline&gt; !connect jdbc:hive2://bigdata1:10000/;principal=hive/bigdata1@IOTMARS.COM</span><br></pre></td></tr></table></figure>
+
+<p>3.查看当前登陆用户(当前kinit认证的用户)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:hive2://bigdata1:10000/&gt; select current_user();</span><br><span class="line"></span><br><span class="line">+------+</span><br><span class="line">| _c0  |</span><br><span class="line">+------+</span><br><span class="line">| hxr  |</span><br><span class="line">+------+</span><br><span class="line">1 row selected (0.454 seconds)</span><br></pre></td></tr></table></figure>
+
+<br>
+## 8.2 Win系统DataGrip客户端
+DataGrip中的Hive连接驱动没有整合Kerberos认证，所以需要自定义Hive驱动。
+
+<h3 id="8-2-1-新建Driver"><a href="#8-2-1-新建Driver" class="headerlink" title="8.2.1 新建Driver"></a>8.2.1 新建Driver</h3><ol>
+<li><p>创建Driver<br><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C5d223d206b8040f383ca6c9e9bc4c766.png" alt="image.png"></p>
+</li>
+<li><p>配置Driver</p>
+</li>
+</ol>
+<p><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C3a1e6217319d406fb315d5b4b0ba8a82.png" alt="image.png"></p>
+<p>URL templates：<code>jdbc:hive2://&#123;host&#125;:&#123;port&#125;/&#123;database&#125;[;&lt;;,&#123;:identifier&#125;=&#123;:param&#125;&gt;]</code></p>
+<h3 id="8-2-2-新建连接"><a href="#8-2-2-新建连接" class="headerlink" title="8.2.2 新建连接"></a>8.2.2 新建连接</h3><p>1）基础配置<br><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C2c8638510f8d4f598c32c43178397175.png" alt="image.png"></p>
+<p>url：<code>jdbc:hive2://bigdata1:10000/;principal=hive/bigdata1@IOTMARS.COM</code></p>
+<p>2）高级配置<br><img src="/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86.assets%5C31bf0e9ee45248d08a871b947a0a7d35.png" alt="image.png"></p>
+<p>配置参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Djava.security.krb5.conf=&quot;C:\ProgramData\MIT\Kerberos5\krb5.ini&quot;</span><br><span class="line">-Djava.security.auth.login.config=&quot;C:\ProgramData\MIT\Kerberos5\hxr.conf&quot;</span><br><span class="line">-Djavax.security.auth.useSubjectCredsOnly=false</span><br></pre></td></tr></table></figure>
+
+<p>3）编写JAAS（Java认证授权服务）配置文件hxr.conf，内容如下，文件名和路径须和上图中java.security.auth.login.config参数的值保持一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">com.sun.security.jgss.initiate&#123;</span><br><span class="line">      com.sun.security.auth.module.Krb5LoginModule required</span><br><span class="line">      useKeyTab=true</span><br><span class="line">      useTicketCache=false</span><br><span class="line">      keyTab=&quot;C:\ProgramData\MIT\Kerberos5\hxr.keytab&quot;</span><br><span class="line">      principal=&quot;hxr@IOTMARS.COM&quot;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>4）为用户生成keytab文件，在krb5kdc所在节点（192.168.101.174）执行以下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.101.174 ~]# kadmin.local -q&quot;xst -norandkey -k /root/hxr.keytab hxr&quot;</span><br></pre></td></tr></table></figure>
+
+<p>5）将上一步生成的hxr.keytab文件放到hxr.conf中配置的keytab的路径下</p>
+<p>6）测试连接</p>
+<br>
+## 8.3 IOS系统DataGrip客户端
+同Win系统的配置。
+
+
+<br>
+# 九、数仓全流程认证
+Hadoop启用Kerberos安全认证之后，之前的非安全环境下的全流程调度脚本和即席查询引擎均会遇到认证问题，故需要对其进行改进。
+
+<p><strong>需要认证的框架如下：</strong></p>
+<ul>
+<li>flume导出到hdfs</li>
+<li>运行hive任务脚本</li>
+<li>datax导入hdfs业务数据到hdfs</li>
+<li>sqoop导出hdfs数据到报表库</li>
+<li>Presto即席查询</li>
+</ul>
+<h2 id="9-1-准备工作"><a href="#9-1-准备工作" class="headerlink" title="9.1 准备工作"></a>9.1 准备工作</h2><p>此处统一将数仓的全部数据资源的所有者设为hive用户，全流程的每步操作均认证为hive用户。</p>
+<ol>
+<li><p>创建用户<br>前面已经创建过了可以跳过</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata1 ~]# echo hive | passwd --stdin hive</span><br><span class="line"></span><br><span class="line">[root@bigdata2 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata2 ~]# echo hive | passwd --stdin hive</span><br><span class="line"></span><br><span class="line">[root@bigdata3 ~]# useradd hive -g hadoop</span><br><span class="line">[root@bigdata3  ~]# echo hive | passwd --stdin hive</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为hive用户创建主体<br>现在创建的主体是为了用户进行登陆使用，注意与先前创建的用于hive服务认证的主体hive&#x2F;<a href="mailto:&#98;&#x69;&#x67;&#100;&#97;&#x74;&#x61;&#x31;&#64;&#73;&#79;&#84;&#x4d;&#x41;&#82;&#83;&#46;&#67;&#79;&#77;">&#98;&#x69;&#x67;&#100;&#97;&#x74;&#x61;&#x31;&#64;&#73;&#79;&#84;&#x4d;&#x41;&#82;&#83;&#46;&#67;&#79;&#77;</a>进行区别。<br>1）创建主体</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wPassword@123 -q&quot;addprinc -randkey hive&quot;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>2）生成keytab文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# kadmin -padmin/admin -wPassword@123 -q&quot;xst -k /etc/security/keytab/hive.keytab hive&quot;</span><br></pre></td></tr></table></figure>
+<p>3）修改keytab文件的所有者和访问权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata1 ~]# chown hive:hadoop /etc/security/keytab/hive.keytab</span><br><span class="line">[root@bigdata1 ~]# chmod 440 /etc/security/keytab/hive.keytab</span><br></pre></td></tr></table></figure>
+<p>4）分发到其他节点</p>
+<ol start="3">
+<li>修改HDFS存储数据的路径所有者<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@bigdata3 logs]# hadoop fs -chown -R hive:hadoop /warehouse</span><br><span class="line">[root@bigdata3 logs]# hadoop fs -chown -R hive:hadoop /origin_data</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="9-2-DataX认证配置"><a href="#9-2-DataX认证配置" class="headerlink" title="9.2 DataX认证配置"></a>9.2 DataX认证配置</h2><p>需要添加三个参数</p>
+<ul>
+<li>“haveKerberos”: “true”</li>
+<li>“kerberosKeytabFilePath”: “&#x2F;etc&#x2F;security&#x2F;keytab&#x2F;hive.keytab”</li>
+<li>“kerberosPrincipal”: “<a href="mailto:&#x68;&#105;&#118;&#x65;&#64;&#73;&#x4f;&#84;&#77;&#x41;&#x52;&#83;&#x2e;&#67;&#x4f;&#x4d;">&#x68;&#105;&#118;&#x65;&#64;&#73;&#x4f;&#84;&#77;&#x41;&#x52;&#83;&#x2e;&#67;&#x4f;&#x4d;</a>“</li>
+</ul>
+<p>例:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&quot;writer&quot;: &#123;</span><br><span class="line">  &quot;name&quot;: &quot;hdfswriter&quot;,</span><br><span class="line">  &quot;parameter&quot;: &#123;</span><br><span class="line">    &quot;defaultFS&quot;: &quot;hdfs://192.168.101.179:9820&quot;,</span><br><span class="line">    &quot;fileType&quot;: &quot;text&quot;,</span><br><span class="line">    &quot;path&quot;: &quot;/origin_data/compass/fineDB/FR_DIM_PRODUCT&quot;,</span><br><span class="line">    &quot;fileName&quot;: &quot;FR_DIM_PRODUCT&quot;,</span><br><span class="line">    &quot;writeMode&quot;: &quot;nonConflict&quot;,</span><br><span class="line">    &quot;fieldDelimiter&quot;: &quot;	&quot;,</span><br><span class="line">    &quot;haveKerberos&quot;: &quot;true&quot;,</span><br><span class="line">    &quot;kerberosKeytabFilePath&quot;: &quot;/etc/security/keytab/hive.keytab&quot;,</span><br><span class="line">    &quot;kerberosPrincipal&quot;: &quot;hive@IOTMARS.COM&quot;,</span><br><span class="line">    &quot;column&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;name&quot;: &quot;cinvcname_real&quot;,</span><br><span class="line">        &quot;type&quot;: &quot;string&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;name&quot;: &quot;channel1&quot;,</span><br><span class="line">        &quot;type&quot;: &quot;string&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注：如果出现异常Message stream modified (41)，将&#x2F;etc&#x2F;krb5.conf中的renew_lifetime &#x3D; xxx注释掉即可。</p>
+<p>实际使用中还出现了异常如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.apache.hadoop.ipc.RemoteException(java.io.IOException): File /origin_data/compass/fineDB/FR_DIM_PRODUCT__49f79963_22df_4c74_85c3_f67ea52d83b4/FR_DIM_PRODUCT__59313560_d74b_418d_bd9f_814bfa17288f could only be written to 0 of the 1 minReplication nodes. There are 3 datanode(s) running and 3 node(s) are excluded in this operation.</span><br></pre></td></tr></table></figure>
+<p>因为Hadoop集群的hdfs-site.xml中配置了dfs.data.transfer.protection&#x3D;authentication，而Datax没有配置，在Datax源码中加上<code>hadoopConf.set(&quot;dfs.data.transfer.protection&quot;, &quot;authentication&quot;);</code>后重新打包即可。</p>
+<h2 id="9-3-Flume认证配置"><a href="#9-3-Flume认证配置" class="headerlink" title="9.3 Flume认证配置"></a>9.3 Flume认证配置</h2><p>修改&#x2F;opt&#x2F;module&#x2F;flume&#x2F;conf&#x2F;kafka-flume-hdfs.conf配置文件，增加以下参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a1.sinks.k1.hdfs.kerberosPrincipal=hive@IOTMARS.COM</span><br><span class="line">a1.sinks.k1.hdfs.kerberosKeytab=/etc/security/keytab/hive.keytab</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-4-Hive脚本认证配置"><a href="#9-4-Hive脚本认证配置" class="headerlink" title="9.4 Hive脚本认证配置"></a>9.4 Hive脚本认证配置</h2><p>数仓各层脚本均需在顶部加入如下认证语句<br><code>kinit -kt /etc/security/keytab/hive.keytab hive</code></p>
+<p>注：可以使用sed命令快速添加语句，<code>sed -i &#39;1 a text&#39; file</code> 表示将text内容加入到file文件的第1行之后</p>
+<h2 id="9-5-Sqoop认证配置"><a href="#9-5-Sqoop认证配置" class="headerlink" title="9.5 Sqoop认证配置"></a>9.5 Sqoop认证配置</h2><p>修改sqoop每日同步脚本&#x2F;home&#x2F;atguigu&#x2F;bin&#x2F;mysql_to_hdfs.sh<br>在顶部增加如下认证语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kinit -kt /etc/security/keytab/hive.keytab hive</span><br></pre></td></tr></table></figure>
+
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">kinit -kt /etc/security/keytab/hive.keytab hive</span><br><span class="line"></span><br><span class="line">sqoop=/opt/module/sqoop-1.4.6/bin/sqoop</span><br><span class="line"></span><br><span class="line">if [ -n &#x27;$1&#x27; ];then</span><br><span class="line">  do_date=$1</span><br><span class="line">else</span><br><span class="line">  do_date=`date -d &#x27;-1 day&#x27; +%F`</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">import_data()&#123;</span><br><span class="line">$sqoop import \</span><br><span class="line">--connect &quot;jdbc:mysql://192.168.101.174:3306/azkaban?characterEncoding=utf-8&amp;useSSL=false&quot; \</span><br><span class="line">--username root \</span><br><span class="line">--password Password@123 \</span><br><span class="line">--query &quot;$2 and \$CONDITIONS&quot; \</span><br><span class="line">--num-mappers 1 \</span><br><span class="line">--target-dir /origin_data/compass/fineDB/$1/$do_date \</span><br><span class="line">--delete-target-dir \</span><br><span class="line">--fields-terminated-by &#x27;	&#x27; \</span><br><span class="line">--compress \</span><br><span class="line">--compression-codec lzop \</span><br><span class="line">--null-string &#x27;\N&#x27; \</span><br><span class="line">--null-non-string &#x27;\N&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">import_data test &quot;select * from executors where 1=1&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="9-6-Azkaban认证配置"><a href="#9-6-Azkaban认证配置" class="headerlink" title="9.6 Azkaban认证配置"></a>9.6 Azkaban认证配置</h2><p>只是调度脚本，不需要认证。<br>需要注意的是，调度脚本中的认证命令<code>kinit -kt /etc/security/keytab/hive.keytab hive</code>需要有权限，可以保证能成功执行。</p>
+<p>注：可以创建一个azkaban:hadoop用户来启动azkaban。</p>
+<h2 id="9-7-Presto认证配置"><a href="#9-7-Presto认证配置" class="headerlink" title="9.7 Presto认证配置"></a>9.7 Presto认证配置</h2><p>待续</p>
+<h2 id="9-8-Kylin认证配置"><a href="#9-8-Kylin认证配置" class="headerlink" title="9.8 Kylin认证配置"></a>9.8 Kylin认证配置</h2><p>待续</p>
+<h2 id="9-9-Flink-On-Yarn认证配置"><a href="#9-9-Flink-On-Yarn认证配置" class="headerlink" title="9.9 Flink On Yarn认证配置"></a>9.9 Flink On Yarn认证配置</h2><h3 id="9-9-1-使用本地主机的token认证"><a href="#9-9-1-使用本地主机的token认证" class="headerlink" title="9.9.1 使用本地主机的token认证"></a>9.9.1 使用本地主机的token认证</h3><ol>
+<li>在本地Kerberos客户端完成用户认证获取token<br><code>kinit chenjie</code></li>
+<li>在Flink的配置文件flink-conf.yaml中添加配置<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security.kerberos.login.use-ticket-cache: true</span><br></pre></td></tr></table></figure>
+这是直接运行Flink向Yarn提交任务时就会自动完成Kerberos认证。<br>但是token会过期，推荐使用keytab完成认证。</li>
+</ol>
+<h3 id="9-9-2-使用keytab认证"><a href="#9-9-2-使用keytab认证" class="headerlink" title="9.9.2 使用keytab认证"></a>9.9.2 使用keytab认证</h3><p>这种方式时通过客户端将keytab提交到Hadoop集群，再通过YARN分发keytab给AM和其他 worker container，具体步骤如下：</p>
+<ol>
+<li>Flink客户端在提交任务时，将keytab上传至HDFS，将其作为AM需要本地化的资源。</li>
+<li>AM container初始化时NodeManager将keytab拷贝至container的资源目录，然后再AM启动时通过UserGroupInformation.loginUserFromKeytab()来重新认证。</li>
+<li>当AM需要申请其他worker container时，也将 HDFS 上的keytab列为需要本地化的资源，因此worker container也可以仿照AM的认证方式进行认证。</li>
+<li>此外AM和container都必须额外实现一个线程来定时刷新TGT。</li>
+<li>任务运行结束后，集群中的keytab也会随container被清理掉。</li>
+</ol>
+<p>![image.png](Kerberos认证管理.assets</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86/">http://example.com/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Kerberos%E8%AE%A4%E8%AF%81%E7%AE%A1%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E6%9D%83%E9%99%90%E8%AE%A4%E8%AF%81/Oauth2%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0(%E8%BD%AC%E8%BD%BD)/" title="Oauth2代码实现(转载)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Oauth2代码实现(转载)</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/%E4%B8%AD%E5%9B%BD%E5%9C%B0%E5%9B%BE/" title="中国地图"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">中国地图</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Windows%E4%B8%AD%E7%9A%84%E8%AE%A4%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text">一、Windows中的认证</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%8D%95%E6%9C%BA%E8%AE%A4%E8%AF%81"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 单机认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%BD%91%E7%BB%9C%E8%AE%A4%E8%AF%81"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 网络认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E4%BB%8E%E5%8E%9F%E7%90%86%E4%B8%8A%E6%9D%A5%E5%88%86%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">2.2 从原理上来分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E8%AF%A6%E7%BB%86%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">2.3 详细流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-Kerberos%E5%AE%89%E8%A3%85"><span class="toc-number">1.5.</span> <span class="toc-text">3.2 Kerberos安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-%E5%AE%89%E8%A3%85Kerberos%E7%9B%B8%E5%85%B3%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.1.</span> <span class="toc-text">3.2.1 安装Kerberos相关服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.2.</span> <span class="toc-text">3.2.2 修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-%E5%88%9D%E5%A7%8B%E5%8C%96KDC%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">1.5.3.</span> <span class="toc-text">3.2.3 初始化KDC数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-4-%E4%BF%AE%E6%94%B9%E7%AE%A1%E7%90%86%E5%91%98%E6%9D%83%E9%99%90%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.4.</span> <span class="toc-text">3.2.4 修改管理员权限配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-5-%E5%90%AF%E5%8A%A8Kerberos%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.5.5.</span> <span class="toc-text">3.2.5 启动Kerberos服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-6-%E5%88%9B%E5%BB%BAKerberos%E7%AE%A1%E7%90%86%E5%91%98%E7%94%A8%E6%88%B7"><span class="toc-number">1.5.6.</span> <span class="toc-text">3.2.6 创建Kerberos管理员用户</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Kerberos%E4%BD%BF%E7%94%A8"><span class="toc-number">1.6.</span> <span class="toc-text">3.3 Kerberos使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-Kerberos%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-number">1.6.1.</span> <span class="toc-text">3.3.1 Kerberos数据库操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-Kerberos%E8%AE%A4%E8%AF%81%E6%93%8D%E4%BD%9C"><span class="toc-number">1.6.2.</span> <span class="toc-text">3.3.2 Kerberos认证操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E8%AE%A4%E8%AF%81%E5%8E%9F%E7%90%86"><span class="toc-number">1.7.</span> <span class="toc-text">4.1 认证原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-5-%E5%90%AF%E5%8A%A8HistoryServer"><span class="toc-number">1.8.</span> <span class="toc-text">5.5 启动HistoryServer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-2-Win%E7%B3%BB%E7%BB%9Fweb%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.8.1.</span> <span class="toc-text">6.2.2 Win系统web页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-3-IOS%E7%B3%BB%E7%BB%9Fweb%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.8.2.</span> <span class="toc-text">6.2.3 IOS系统web页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-2-%E5%88%9B%E5%BB%BAHive%E7%B3%BB%E7%BB%9F%E7%94%A8%E6%88%B7%E5%92%8CKerberos%E4%B8%BB%E4%BD%93"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.1.2 创建Hive系统用户和Kerberos主体</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-2-%E9%85%8D%E7%BD%AE%E8%AE%A4%E8%AF%81"><span class="toc-number">1.9.</span> <span class="toc-text">7.2 配置认证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-3-%E5%90%AF%E5%8A%A8hiveserver2"><span class="toc-number">1.10.</span> <span class="toc-text">7.3 启动hiveserver2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-1-beeline%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.11.</span> <span class="toc-text">8.1 beeline客户端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-1-%E6%96%B0%E5%BB%BADriver"><span class="toc-number">1.11.1.</span> <span class="toc-text">8.2.1 新建Driver</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-2-%E6%96%B0%E5%BB%BA%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.11.2.</span> <span class="toc-text">8.2.2 新建连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.12.</span> <span class="toc-text">9.1 准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-2-DataX%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.13.</span> <span class="toc-text">9.2 DataX认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-3-Flume%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.14.</span> <span class="toc-text">9.3 Flume认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-4-Hive%E8%84%9A%E6%9C%AC%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.15.</span> <span class="toc-text">9.4 Hive脚本认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-5-Sqoop%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.16.</span> <span class="toc-text">9.5 Sqoop认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-6-Azkaban%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.17.</span> <span class="toc-text">9.6 Azkaban认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-7-Presto%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.18.</span> <span class="toc-text">9.7 Presto认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-8-Kylin%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.19.</span> <span class="toc-text">9.8 Kylin认证配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-9-Flink-On-Yarn%E8%AE%A4%E8%AF%81%E9%85%8D%E7%BD%AE"><span class="toc-number">1.20.</span> <span class="toc-text">9.9 Flink On Yarn认证配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-9-1-%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E4%B8%BB%E6%9C%BA%E7%9A%84token%E8%AE%A4%E8%AF%81"><span class="toc-number">1.20.1.</span> <span class="toc-text">9.9.1 使用本地主机的token认证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-9-2-%E4%BD%BF%E7%94%A8keytab%E8%AE%A4%E8%AF%81"><span class="toc-number">1.20.2.</span> <span class="toc-text">9.9.2 使用keytab认证</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

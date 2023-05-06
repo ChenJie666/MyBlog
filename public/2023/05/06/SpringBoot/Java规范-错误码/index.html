@@ -1,0 +1,1068 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Java规范-错误码 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="用户问题    code msg     00000 一切 ok 正确执行后的返回   A0001 用户端错误 一级宏观错误码   A0100 用户注册错误 二级宏观错误码   A0101 用户未同意隐私协议    A0102 注册国家或地区受限    A0110 用户名校验失败    A0111 用户名已存在    A0112 用户名包含敏感词    A0113 用户名包含特殊字符    A01">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java规范-错误码">
+<meta property="og:url" content="http://example.com/2023/05/06/SpringBoot/Java%E8%A7%84%E8%8C%83-%E9%94%99%E8%AF%AF%E7%A0%81/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="用户问题    code msg     00000 一切 ok 正确执行后的返回   A0001 用户端错误 一级宏观错误码   A0100 用户注册错误 二级宏观错误码   A0101 用户未同意隐私协议    A0102 注册国家或地区受限    A0110 用户名校验失败    A0111 用户名已存在    A0112 用户名包含敏感词    A0113 用户名包含特殊字符    A01">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/SpringBoot/Java%E8%A7%84%E8%8C%83-%E9%94%99%E8%AF%AF%E7%A0%81/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java规范-错误码',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java规范-错误码</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.031Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.031Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java规范-错误码"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>用户问题</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>msg</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00000</td>
+<td>一切 ok</td>
+<td>正确执行后的返回</td>
+</tr>
+<tr>
+<td>A0001</td>
+<td>用户端错误</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>A0100</td>
+<td>用户注册错误</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0101</td>
+<td>用户未同意隐私协议</td>
+<td></td>
+</tr>
+<tr>
+<td>A0102</td>
+<td>注册国家或地区受限</td>
+<td></td>
+</tr>
+<tr>
+<td>A0110</td>
+<td>用户名校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0111</td>
+<td>用户名已存在</td>
+<td></td>
+</tr>
+<tr>
+<td>A0112</td>
+<td>用户名包含敏感词</td>
+<td></td>
+</tr>
+<tr>
+<td>A0113</td>
+<td>用户名包含特殊字符</td>
+<td></td>
+</tr>
+<tr>
+<td>A0120</td>
+<td>密码校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0121</td>
+<td>密码长度不够</td>
+<td></td>
+</tr>
+<tr>
+<td>A0122</td>
+<td>密码强度不够</td>
+<td></td>
+</tr>
+<tr>
+<td>A0130</td>
+<td>校验码输入错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0131</td>
+<td>短信校验码输入错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0132</td>
+<td>邮件校验码输入错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0133</td>
+<td>语音校验码输入错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0140</td>
+<td>用户证件异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A0141</td>
+<td>用户证件类型未选择</td>
+<td></td>
+</tr>
+<tr>
+<td>A0142</td>
+<td>大陆身份证编号校验非法</td>
+<td></td>
+</tr>
+<tr>
+<td>A0143</td>
+<td>护照编号校验非法</td>
+<td></td>
+</tr>
+<tr>
+<td>A0144</td>
+<td>军官证编号校验非法</td>
+<td></td>
+</tr>
+<tr>
+<td>A0150</td>
+<td>用户基本信息校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0151</td>
+<td>手机格式校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0152</td>
+<td>地址格式校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0153</td>
+<td>邮箱格式校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0200</td>
+<td>用户登陆异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0201</td>
+<td>用户账户不存在</td>
+<td></td>
+</tr>
+<tr>
+<td>A0202</td>
+<td>用户账户被冻结</td>
+<td></td>
+</tr>
+<tr>
+<td>A0203</td>
+<td>用户账户已作废</td>
+<td></td>
+</tr>
+<tr>
+<td>A0210</td>
+<td>用户密码错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0211</td>
+<td>用户输入密码次数超限</td>
+<td></td>
+</tr>
+<tr>
+<td>A0220</td>
+<td>用户身份校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0221</td>
+<td>用户指纹识别失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0222</td>
+<td>用户面容识别失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0223</td>
+<td>用户未获得第三方登陆授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0230</td>
+<td>用户登陆已过期</td>
+<td></td>
+</tr>
+<tr>
+<td>A0240</td>
+<td>用户验证码错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0241</td>
+<td>用户验证码尝试次数超限</td>
+<td></td>
+</tr>
+<tr>
+<td>A0300</td>
+<td>访问权限异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0301</td>
+<td>访问未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0302</td>
+<td>正在授权中</td>
+<td></td>
+</tr>
+<tr>
+<td>A0303</td>
+<td>用户授权申请被拒绝</td>
+<td></td>
+</tr>
+<tr>
+<td>A0310</td>
+<td>因访问对象隐私设置被拦截</td>
+<td></td>
+</tr>
+<tr>
+<td>A0311</td>
+<td>授权已过期</td>
+<td></td>
+</tr>
+<tr>
+<td>A0312</td>
+<td>无权限使用 API</td>
+<td></td>
+</tr>
+<tr>
+<td>A0320</td>
+<td>用户访问被拦截</td>
+<td></td>
+</tr>
+<tr>
+<td>A0321</td>
+<td>黑名单用户</td>
+<td></td>
+</tr>
+<tr>
+<td>A0322</td>
+<td>账号被冻结</td>
+<td></td>
+</tr>
+<tr>
+<td>A0323</td>
+<td>非法 IP 地址</td>
+<td></td>
+</tr>
+<tr>
+<td>A0324</td>
+<td>网关访问受限</td>
+<td></td>
+</tr>
+<tr>
+<td>A0325</td>
+<td>地域黑名单</td>
+<td></td>
+</tr>
+<tr>
+<td>A0330</td>
+<td>服务已欠费</td>
+<td></td>
+</tr>
+<tr>
+<td>A0340</td>
+<td>用户签名异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A0341</td>
+<td>RSA 签名错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A0400</td>
+<td>用户请求参数错误</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0401</td>
+<td>包含非法恶意跳转链接</td>
+<td></td>
+</tr>
+<tr>
+<td>A0402</td>
+<td>无效的用户输入</td>
+<td></td>
+</tr>
+<tr>
+<td>A0410</td>
+<td>请求必填参数为空</td>
+<td></td>
+</tr>
+<tr>
+<td>A0411</td>
+<td>用户订单号为空</td>
+<td></td>
+</tr>
+<tr>
+<td>A0412</td>
+<td>订购数量为空</td>
+<td></td>
+</tr>
+<tr>
+<td>A0413</td>
+<td>缺少时间戳参数</td>
+<td></td>
+</tr>
+<tr>
+<td>A0414</td>
+<td>非法的时间戳参数</td>
+<td></td>
+</tr>
+<tr>
+<td>A0420</td>
+<td>请求参数值超出允许的范围</td>
+<td></td>
+</tr>
+<tr>
+<td>A0421</td>
+<td>参数格式不匹配</td>
+<td></td>
+</tr>
+<tr>
+<td>A0422</td>
+<td>地址不在服务范围</td>
+<td></td>
+</tr>
+<tr>
+<td>A0423</td>
+<td>时间不在服务范围</td>
+<td></td>
+</tr>
+<tr>
+<td>A0424</td>
+<td>金额超出限制</td>
+<td></td>
+</tr>
+<tr>
+<td>A0425</td>
+<td>数量超出限制</td>
+<td></td>
+</tr>
+<tr>
+<td>A0426</td>
+<td>请求批量处理总个数超出限制</td>
+<td></td>
+</tr>
+<tr>
+<td>A0427</td>
+<td>请求 JSON 解析失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0430</td>
+<td>用户输入内容非法</td>
+<td></td>
+</tr>
+<tr>
+<td>A0431</td>
+<td>包含违禁敏感词</td>
+<td></td>
+</tr>
+<tr>
+<td>A0432</td>
+<td>图片包含违禁信息</td>
+<td></td>
+</tr>
+<tr>
+<td>A0433</td>
+<td>文件侵犯版权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0440</td>
+<td>用户操作异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A0441</td>
+<td>用户支付超时</td>
+<td></td>
+</tr>
+<tr>
+<td>A0442</td>
+<td>确认订单超时</td>
+<td></td>
+</tr>
+<tr>
+<td>A0443</td>
+<td>订单已关闭</td>
+<td></td>
+</tr>
+<tr>
+<td>A0500</td>
+<td>用户请求服务异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0501</td>
+<td>请求次数超出限制</td>
+<td></td>
+</tr>
+<tr>
+<td>A0502</td>
+<td>请求并发数超出限制</td>
+<td></td>
+</tr>
+<tr>
+<td>A0503</td>
+<td>用户操作请等待</td>
+<td></td>
+</tr>
+<tr>
+<td>A0504</td>
+<td>WebSocket 连接异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A0505</td>
+<td>WebSocket 连接断开</td>
+<td></td>
+</tr>
+<tr>
+<td>A0506</td>
+<td>用户重复请求</td>
+<td></td>
+</tr>
+<tr>
+<td>A0600</td>
+<td>用户资源异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0601</td>
+<td>账户余额不足</td>
+<td></td>
+</tr>
+<tr>
+<td>A0602</td>
+<td>用户磁盘空间不足</td>
+<td></td>
+</tr>
+<tr>
+<td>A0603</td>
+<td>用户内存空间不足</td>
+<td></td>
+</tr>
+<tr>
+<td>A0604</td>
+<td>用户 OSS 容量不足</td>
+<td></td>
+</tr>
+<tr>
+<td>A0605</td>
+<td>用户配额已用光</td>
+<td>蚂蚁森林浇水数或每天抽奖数</td>
+</tr>
+<tr>
+<td>A0700</td>
+<td>用户上传文件异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0701</td>
+<td>用户上传文件类型不匹配</td>
+<td></td>
+</tr>
+<tr>
+<td>A0702</td>
+<td>用户上传文件太大</td>
+<td></td>
+</tr>
+<tr>
+<td>A0703</td>
+<td>用户上传图片太大</td>
+<td></td>
+</tr>
+<tr>
+<td>A0704</td>
+<td>用户上传视频太大</td>
+<td></td>
+</tr>
+<tr>
+<td>A0705</td>
+<td>用户上传压缩文件太大</td>
+<td></td>
+</tr>
+<tr>
+<td>A0800</td>
+<td>用户当前版本异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0801</td>
+<td>用户安装版本与系统不匹配</td>
+<td></td>
+</tr>
+<tr>
+<td>A0802</td>
+<td>用户安装版本过低</td>
+<td></td>
+</tr>
+<tr>
+<td>A0803</td>
+<td>用户安装版本过高</td>
+<td></td>
+</tr>
+<tr>
+<td>A0804</td>
+<td>用户安装版本已过期</td>
+<td></td>
+</tr>
+<tr>
+<td>A0805</td>
+<td>用户 API 请求版本不匹配</td>
+<td></td>
+</tr>
+<tr>
+<td>A0806</td>
+<td>用户 API 请求版本过高</td>
+<td></td>
+</tr>
+<tr>
+<td>A0807</td>
+<td>用户 API 请求版本过低</td>
+<td></td>
+</tr>
+<tr>
+<td>A0900</td>
+<td>用户隐私未授权</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0901</td>
+<td>用户隐私未签署</td>
+<td></td>
+</tr>
+<tr>
+<td>A0902</td>
+<td>用户摄像头未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0903</td>
+<td>用户相机未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0904</td>
+<td>用户图片库未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0905</td>
+<td>用户文件未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0906</td>
+<td>用户位置信息未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A0907</td>
+<td>用户通讯录未授权</td>
+<td></td>
+</tr>
+<tr>
+<td>A1000</td>
+<td>用户设备异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A1001</td>
+<td>用户相机异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A1002</td>
+<td>用户麦克风异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A1003</td>
+<td>用户听筒异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A1004</td>
+<td>用户扬声器异常</td>
+<td></td>
+</tr>
+<tr>
+<td>A1005</td>
+<td>用户 GPS 定位异常</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>系统问题</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>msg</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B0001</td>
+<td>系统执行出错</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>B0100</td>
+<td>系统执行超时</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0101</td>
+<td>系统订单处理超时</td>
+<td></td>
+</tr>
+<tr>
+<td>B0200</td>
+<td>系统容灾功能被触发</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0210</td>
+<td>系统限流</td>
+<td></td>
+</tr>
+<tr>
+<td>B0220</td>
+<td>系统功能降级</td>
+<td></td>
+</tr>
+<tr>
+<td>B0300</td>
+<td>系统资源异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0310</td>
+<td>系统资源耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0311</td>
+<td>系统磁盘空间耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0312</td>
+<td>系统内存耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0313</td>
+<td>文件句柄耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0314</td>
+<td>系统连接池耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0315</td>
+<td>系统线程池耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0320</td>
+<td>系统资源访问异常</td>
+<td></td>
+</tr>
+<tr>
+<td>B0321</td>
+<td>系统读取磁盘文件失败</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>C 三方服务问题</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>msg</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C0001</td>
+<td>调用第三方服务出错</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>C0100</td>
+<td>中间件服务出错</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0110</td>
+<td>RPC 服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0111</td>
+<td>RPC 服务未找到</td>
+<td></td>
+</tr>
+<tr>
+<td>C0112</td>
+<td>RPC 服务未注册</td>
+<td></td>
+</tr>
+<tr>
+<td>C0113</td>
+<td>接口不存在</td>
+<td></td>
+</tr>
+<tr>
+<td>C0120</td>
+<td>消息服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0121</td>
+<td>消息投递出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0122</td>
+<td>消息消费出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0123</td>
+<td>消息订阅出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0124</td>
+<td>消息分组未查到</td>
+<td></td>
+</tr>
+<tr>
+<td>C0130</td>
+<td>缓存服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0131</td>
+<td>key 长度超过限制</td>
+<td></td>
+</tr>
+<tr>
+<td>C0132</td>
+<td>value 长度超过限制</td>
+<td></td>
+</tr>
+<tr>
+<td>C0133</td>
+<td>存储容量已满</td>
+<td></td>
+</tr>
+<tr>
+<td>C0134</td>
+<td>不支持的数据格式</td>
+<td></td>
+</tr>
+<tr>
+<td>C0140</td>
+<td>配置服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0150</td>
+<td>网络资源服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0151</td>
+<td>VPN 服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0152</td>
+<td>CDN 服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0153</td>
+<td>域名解析服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0154</td>
+<td>网关服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0200</td>
+<td>第三方系统执行超时</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0210</td>
+<td>RPC 执行超时</td>
+<td></td>
+</tr>
+<tr>
+<td>C0220</td>
+<td>消息投递超时</td>
+<td></td>
+</tr>
+<tr>
+<td>C0230</td>
+<td>缓存服务超时</td>
+<td></td>
+</tr>
+<tr>
+<td>C0240</td>
+<td>配置服务超时</td>
+<td></td>
+</tr>
+<tr>
+<td>C0250</td>
+<td>数据库服务超时</td>
+<td></td>
+</tr>
+<tr>
+<td>C0300</td>
+<td>数据库服务出错</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0311</td>
+<td>表不存在</td>
+<td></td>
+</tr>
+<tr>
+<td>C0312</td>
+<td>列不存在</td>
+<td></td>
+</tr>
+<tr>
+<td>C0321</td>
+<td>多表关联中存在多个相同名称的列</td>
+<td></td>
+</tr>
+<tr>
+<td>C0331</td>
+<td>数据库死锁</td>
+<td></td>
+</tr>
+<tr>
+<td>C0341</td>
+<td>主键冲突</td>
+<td></td>
+</tr>
+<tr>
+<td>C0400</td>
+<td>第三方容灾系统被触发</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0401</td>
+<td>第三方系统限流</td>
+<td></td>
+</tr>
+<tr>
+<td>C0402</td>
+<td>第三方功能降级</td>
+<td></td>
+</tr>
+<tr>
+<td>C0500</td>
+<td>通知服务出错</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0501</td>
+<td>短信提醒服务失败</td>
+<td></td>
+</tr>
+<tr>
+<td>C0502</td>
+<td>语音提醒服务失败</td>
+<td></td>
+</tr>
+<tr>
+<td>C0503</td>
+<td>邮件提醒服务失败</td>
+<td></td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/SpringBoot/Java%E8%A7%84%E8%8C%83-%E9%94%99%E8%AF%AF%E7%A0%81/">http://example.com/2023/05/06/SpringBoot/Java%E8%A7%84%E8%8C%83-%E9%94%99%E8%AF%AF%E7%A0%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/SpringBoot/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF/" title="6种@Transactional注解的失效场景"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">6种@Transactional注解的失效场景</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/SpringBoot/ModelAndView/" title="ModelAndView"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">ModelAndView</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用Flink制作拉链表 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、## 使用Table API 的尝试(失败) 方案1：说明：使用Flink Connector中的JDBC来读取MySQL中的数据，通过日志数据与拉链表中数据进行join，然后更新到表中；问题：最后Insert 到原表中时，发现mysql可以进行正常更新，但是并没有更新到Flink的动态表中，导致输出结果错误；原因：Table API中的动态表不同于状态后端，不能在程序末尾更新程序开头定义的动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Flink制作拉链表">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E4%BD%BF%E7%94%A8Flink%E5%88%B6%E4%BD%9C%E6%8B%89%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、## 使用Table API 的尝试(失败) 方案1：说明：使用Flink Connector中的JDBC来读取MySQL中的数据，通过日志数据与拉链表中数据进行join，然后更新到表中；问题：最后Insert 到原表中时，发现mysql可以进行正常更新，但是并没有更新到Flink的动态表中，导致输出结果错误；原因：Table API中的动态表不同于状态后端，不能在程序末尾更新程序开头定义的动">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E4%BD%BF%E7%94%A8Flink%E5%88%B6%E4%BD%9C%E6%8B%89%E9%93%BE%E8%A1%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用Flink制作拉链表',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用Flink制作拉链表</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.051Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.051Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/">大数据实时</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用Flink制作拉链表"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>一、## 使用Table API 的尝试(失败)</p>
+<h3 id="方案1："><a href="#方案1：" class="headerlink" title="方案1："></a>方案1：</h3><p>说明：使用Flink Connector中的JDBC来读取MySQL中的数据，通过日志数据与拉链表中数据进行join，然后更新到表中；<br>问题：最后Insert 到原表中时，发现mysql可以进行正常更新，但是并没有更新到Flink的动态表中，导致输出结果错误；<br>原因：Table API中的动态表不同于状态后端，不能在程序末尾更新程序开头定义的动态表；<br>并且sql不能自主管理状态后端中数据的过期时间，担心内存溢出导致程序崩溃。</p>
+<h3 id="方案2："><a href="#方案2：" class="headerlink" title="方案2："></a>方案2：</h3><p>说明：使用Flink-CDC中的mysql-cdc来监控MySQL的binlog文件，实时获取变化数据；这样就可以解决方案1中Flink中动态表不更新的问题；<br>问题：在插入数据并产出到MySQL时的数据时正确的，但是因为MySQL中的数据发生了变化，Flink监控到后重新触发了计算，并改写了MySQL中的记录导致结果出错；<br>原因：Flink-CDC是一张动态表而不是状态后端，其发生变化会触发计算导致失败。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br></pre></td><td class="code"><pre><span class="line">package com.iotmars.compass;</span><br><span class="line"></span><br><span class="line">import com.alibaba.fastjson.JSONObject;</span><br><span class="line">import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;</span><br><span class="line">import org.apache.flink.api.common.eventtime.WatermarkStrategy;</span><br><span class="line">import org.apache.flink.api.common.restartstrategy.RestartStrategies;</span><br><span class="line">import org.apache.flink.api.common.time.Time;</span><br><span class="line">import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;</span><br><span class="line">import org.apache.flink.streaming.api.CheckpointingMode;</span><br><span class="line">import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;</span><br><span class="line">import org.apache.flink.streaming.api.environment.CheckpointConfig;</span><br><span class="line">import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;</span><br><span class="line">import org.apache.flink.table.api.Table;</span><br><span class="line">import org.apache.flink.table.api.TableConfig;</span><br><span class="line">import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;</span><br><span class="line"></span><br><span class="line">import java.time.Duration;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 1.读取所有的end_date为9999-12-31的记录为动态表，join设备状态动态表(水位线延迟30s，60s自动推进水位线).</span><br><span class="line"> * 2.将原状态数据和新状态数据更新到ads_device_feiyan_error_status中.</span><br><span class="line"> *</span><br><span class="line"> * @author CJ</span><br><span class="line"> * @date: 2023/2/14 10:20</span><br><span class="line"> */</span><br><span class="line">public class DeviceErrorStatusAppTest &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line"></span><br><span class="line">        env.setParallelism(1);</span><br><span class="line"></span><br><span class="line">        // 设置checkpoint</span><br><span class="line">        env.enableCheckpointing(60 * 1000, CheckpointingMode.EXACTLY_ONCE);</span><br><span class="line">        env.getCheckpointConfig().setCheckpointTimeout(90 * 1000);</span><br><span class="line">        env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);</span><br><span class="line">        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(3000L);</span><br><span class="line">        env.getCheckpointConfig().enableExternalizedCheckpoints(</span><br><span class="line">                CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION</span><br><span class="line">        );</span><br><span class="line">        env.setRestartStrategy(RestartStrategies.failureRateRestart(</span><br><span class="line">                3, Time.days(1L), Time.minutes(1L)</span><br><span class="line">        ));</span><br><span class="line"></span><br><span class="line">        // 设置StateBackend</span><br><span class="line">        env.setStateBackend(new EmbeddedRocksDBStateBackend());</span><br><span class="line"></span><br><span class="line">        System.setProperty(&quot;HADOOP_USER_NAME&quot;, &quot;root&quot;);</span><br><span class="line">        env.getCheckpointConfig().setCheckpointStorage(&quot;hdfs://192.168.101.193:8020/flink/checkpoint/device_feiyan_error_status&quot;);</span><br><span class="line"></span><br><span class="line">        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);</span><br><span class="line">        TableConfig config = tableEnv.getConfig();</span><br><span class="line"></span><br><span class="line">        config.getConfiguration().setString(&quot;parallelism.default&quot;, &quot;3&quot;);</span><br><span class="line">//        config.getConfiguration().setString(&quot;table.exec.state.ttl&quot;, String.valueOf(24 * 60 * 60 * 1000)); // 如果state状态24小时不变，则回收。需要根据后面的逻辑调整。</span><br><span class="line">        config.getConfiguration().setString(&quot;table.exec.source.idle-timeout&quot;, String.valueOf(30 * 1000)); // 源在超时时间3000ms内未收到任何元素时，它将被标记为暂时空闲。这允许下游任务推进其水印.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        tableEnv.executeSql(&quot;CREATE TABLE cdc_device_feiyan_error_status_zip (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                product_key STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                iot_id STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                device_name STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                error_code STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                start_date STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                end_date STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                PRIMARY KEY (product_key,iot_id,device_name,end_date) NOT ENFORCED</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;        ) WITH (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;connector&#x27; = &#x27;mysql-cdc&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;hostname&#x27; = &#x27;iotmars-rds-wlan.mysql.rds.aliyuncs.com&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;port&#x27; = &#x27;3306&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;username&#x27; = &#x27;compass&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;password&#x27; = &#x27;compass@123&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;database-name&#x27; = &#x27;compass_test&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;            &#x27;table-name&#x27; = &#x27;device_feiyan_error_status_zip&#x27;&quot; +</span><br><span class="line">                &quot;        )&quot;);</span><br><span class="line"></span><br><span class="line">        SingleOutputStreamOperator&lt;LogOv&gt; dataStream = env.socketTextStream(&quot;192.168.32.242&quot;, 7779)</span><br><span class="line">                .map(log -&gt; &#123;</span><br><span class="line">                    LogOv logJson = JSONObject.parseObject(log, LogOv.class);</span><br><span class="line">                    System.out.println(logJson);</span><br><span class="line">                    return logJson;</span><br><span class="line">                &#125;);</span><br><span class="line">        SingleOutputStreamOperator&lt;LogOv&gt; logStream = dataStream.assignTimestampsAndWatermarks(WatermarkStrategy.&lt;LogOv&gt;forBoundedOutOfOrderness(Duration.ofSeconds(30L))</span><br><span class="line">                .withTimestampAssigner(new SerializableTimestampAssigner&lt;LogOv&gt;() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public long extractTimestamp(LogOv element, long recordTimestamp) &#123;</span><br><span class="line">                        return element.getGmtCreate();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;));</span><br><span class="line"></span><br><span class="line">        Table table = tableEnv.fromDataStream(logStream);</span><br><span class="line">        tableEnv.createTemporaryView(&quot;dwd_device_feiyan_log_event&quot;, table);</span><br><span class="line"></span><br><span class="line">        // 解析设备异常，然后输出到数据库中</span><br><span class="line">        tableEnv.executeSql(&quot;CREATE VIEW tmp AS (SELECT </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.productKey as new_product_key,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.iotId as new_iot_id,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.deviceName as new_device_name,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.eventValue as new_error_code,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.start_date as new_start_date,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_status.end_date as new_end_date,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.product_key as old_product_key,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.iot_id as old_iot_id,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.device_name as old_device_name,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.error_code as old_error_code,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.start_date as old_start_date,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_status.end_date as old_end_date</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;FROM (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    SELECT *, FROM_UNIXTIME(gmtCreate/1000, &#x27;yyyy-MM-dd&#x27;) as start_date, &#x27;9999-12-31&#x27; as end_date </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    FROM dwd_device_feiyan_log_event </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    WHERE eventName = &#x27;ErrorCode&#x27;</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    ) new_status </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    LEFT JOIN</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    SELECT * </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    FROM cdc_device_feiyan_error_status_zip </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    WHERE end_date=&#x27;9999-12-31&#x27;</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    ) old_status</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    ON new_status.productKey = old_status.product_key &quot; +</span><br><span class="line">//                &quot;       and new_status.eventValue &lt;&gt; old_status.error_code&quot; +</span><br><span class="line">                &quot;)&quot;);</span><br><span class="line"></span><br><span class="line">        tableEnv.toChangelogStream(tableEnv.sqlQuery(&quot;select * from tmp&quot;)).print(&quot;tmp   &quot;);</span><br><span class="line"></span><br><span class="line">        // sink</span><br><span class="line">        tableEnv.executeSql(&quot;CREATE TABLE sink_device_feiyan_error_status_zip (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                product_key STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                iot_id STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                device_name STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                error_code STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                start_date STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                end_date STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                PRIMARY KEY (product_key,iot_id,device_name,end_date) NOT ENFORCED</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;        ) WITH (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                &#x27;connector&#x27; = &#x27;jdbc&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                &#x27;url&#x27; = &#x27;jdbc:mysql://iotmars-rds-wlan.mysql.rds.aliyuncs.com:3306/compass_test&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                &#x27;table-name&#x27; = &#x27;device_feiyan_error_status_zip&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                &#x27;username&#x27; = &#x27;compass&#x27;,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;                &#x27;password&#x27; = &#x27;compass@123&#x27;</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;        )&quot;);</span><br><span class="line"></span><br><span class="line">        tableEnv.executeSql(&quot;INSERT INTO sink_device_feiyan_error_status_zip&quot; +</span><br><span class="line">                &quot; SELECT </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_product_key IS NOT NULL,new_product_key,old_product_key),</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_iot_id IS NOT NULL,new_iot_id,old_iot_id),</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_device_name IS NOT NULL,new_device_name,old_device_name),</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_error_code IS NOT NULL,new_error_code,old_error_code),</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_start_date IS NOT NULL,new_start_date,old_start_date) as start_date,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    IF(new_end_date IS NOT NULL,new_end_date,old_end_date) as end_date</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;FROM tmp</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;UNION ALL</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;SELECT </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_product_key,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_iot_id,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_device_name,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_error_code,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    old_start_date as start_date,</span><br><span class="line">&quot; +</span><br><span class="line">//                &quot;    FROM_UNIXTIME(1676648068495/1000, &#x27;yyyy-MM-dd&#x27;) as end_date</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    new_start_date as end_date</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;FROM tmp</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;WHERE new_device_name is not null </span><br><span class="line">&quot; +</span><br><span class="line">                &quot;    and old_device_name is not null&quot;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建MySQL表并插入数据</p>
+<table>
+<thead>
+<tr>
+<th>product_key</th>
+<th>iot_id</th>
+<th>device_name</th>
+<th>error_code</th>
+<th>start_date</th>
+<th>end_date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:1</td>
+<td>2023-02-01</td>
+<td>2023-02-16</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:2</td>
+<td>2023-02-16</td>
+<td>9999-12-31</td>
+</tr>
+</tbody></table>
+<p>准备三条日志数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;deviceType&quot;:&quot;a&quot;,&quot;iotId&quot;:&quot;a&quot;,&quot;requestId&quot;:&quot;a&quot;,&quot;checkFailedData&quot;:&quot;&#123;&#125;&quot;,&quot;productKey&quot;:&quot;a&quot;,&quot;gmtCreate&quot;:1676648668495,&quot;deviceName&quot;:&quot;a&quot;,&quot;eventName&quot;:&quot;ErrorCode&quot;,&quot;eventValue&quot;:&quot;ErrorCode:4&quot;,&quot;eventOriValue&quot;:&quot;ErrorCode:3&quot;&#125;</span><br><span class="line">&#123;&quot;deviceType&quot;:&quot;a&quot;,&quot;iotId&quot;:&quot;a&quot;,&quot;requestId&quot;:&quot;a&quot;,&quot;checkFailedData&quot;:&quot;&#123;&#125;&quot;,&quot;productKey&quot;:&quot;a&quot;,&quot;gmtCreate&quot;:1676649668495,&quot;deviceName&quot;:&quot;a&quot;,&quot;eventName&quot;:&quot;ErrorCode&quot;,&quot;eventValue&quot;:&quot;ErrorCode:5&quot;,&quot;eventOriValue&quot;:&quot;ErrorCode:4&quot;&#125;</span><br><span class="line">&#123;&quot;deviceType&quot;:&quot;a&quot;,&quot;iotId&quot;:&quot;a&quot;,&quot;requestId&quot;:&quot;a&quot;,&quot;checkFailedData&quot;:&quot;&#123;&#125;&quot;,&quot;productKey&quot;:&quot;a&quot;,&quot;gmtCreate&quot;:1676874269000,&quot;deviceName&quot;:&quot;a&quot;,&quot;eventName&quot;:&quot;ErrorCode&quot;,&quot;eventValue&quot;:&quot;ErrorCode:6&quot;,&quot;eventOriValue&quot;:&quot;ErrorCode:5&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p>当插入第一条日志时，MySQL中的结果最开始是正确的</p>
+<table>
+<thead>
+<tr>
+<th>product_key</th>
+<th>iot_id</th>
+<th>device_name</th>
+<th>error_code</th>
+<th>start_date</th>
+<th>end_date</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:1</td>
+<td>2023-02-01</td>
+<td>2023-02-16</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:2</td>
+<td>2023-02-16</td>
+<td>2023-02-17</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:4</td>
+<td>2023-02-17</td>
+<td>9999-12-31</td>
+</tr>
+<tr>
+<td>但是MySQL中的变化会被Flink监控到，触发计算改写了结果导致结果出错</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>product_key</td>
+<td>iot_id</td>
+<td>device_name</td>
+<td>error_code</td>
+<td>start_date</td>
+<td>end_date</td>
+</tr>
+<tr>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:1</td>
+<td>2023-02-01</td>
+<td>2023-02-16</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:4</td>
+<td>2023-02-17</td>
+<td>2023-02-17</td>
+</tr>
+<tr>
+<td>a</td>
+<td>a</td>
+<td>a</td>
+<td>ErrorCode:4</td>
+<td>2023-02-17</td>
+<td>9999-12-31</td>
+</tr>
+</tbody></table>
+<br>
+<br>
+## 二、使用Stream API
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E4%BD%BF%E7%94%A8Flink%E5%88%B6%E4%BD%9C%E6%8B%89%E9%93%BE%E8%A1%A8/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E4%BD%BF%E7%94%A8Flink%E5%88%B6%E4%BD%9C%E6%8B%89%E9%93%BE%E8%A1%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/flink%E8%AF%BB%E5%86%99kafka%E4%BF%9D%E8%AF%81%E7%AB%AF%E5%88%B0%E7%AB%AFexactly-once/" title="flink读写kafka保证端到端exactly-once"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">flink读写kafka保证端到端exactly-once</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Hive%E9%9D%A2%E8%AF%95%E9%A2%98/" title="Hive面试题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hive面试题</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%881%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">方案1：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%A1%882%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">方案2：</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

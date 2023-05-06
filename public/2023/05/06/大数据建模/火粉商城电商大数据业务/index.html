@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>火粉商城电商大数据业务 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="总结①ODS层进行建模后得到DWD层，ODS层和DWD层分为增量&#x2F;全量&#x2F;增量和变化&#x2F;特殊表。②DWD层到DWS层的每日行为宽表(设备&#x2F;会员&#x2F;商品&#x2F;活动&#x2F;地区 行为)，需要从DWD层表中获取需要的字段进行聚合。③DWS层到DWT层，计算 首次末次时间&#x2F;当天&#x2F;累积&#x2F;7天&#x2F;30天&#x2F;60天  等统计数据；DWT层表不需要进行分区，因为会把旧数据和新数据合成一张表overwrite到表中。④按主题进行聚合得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="火粉商城电商大数据业务">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="总结①ODS层进行建模后得到DWD层，ODS层和DWD层分为增量&#x2F;全量&#x2F;增量和变化&#x2F;特殊表。②DWD层到DWS层的每日行为宽表(设备&#x2F;会员&#x2F;商品&#x2F;活动&#x2F;地区 行为)，需要从DWD层表中获取需要的字段进行聚合。③DWS层到DWT层，计算 首次末次时间&#x2F;当天&#x2F;累积&#x2F;7天&#x2F;30天&#x2F;60天  等统计数据；DWT层表不需要进行分区，因为会把旧数据和新数据合成一张表overwrite到表中。④按主题进行聚合得">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.055Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.055Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '火粉商城电商大数据业务',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">火粉商城电商大数据业务</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.055Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.055Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/">大数据建模</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="火粉商城电商大数据业务"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>①ODS层进行建模后得到DWD层，ODS层和DWD层分为<code>增量/全量/增量和变化/特殊表</code>。<br>②DWD层到DWS层的每日行为宽表(<code>设备/会员/商品/活动/地区 行为</code>)，需要从DWD层表中获取需要的字段进行聚合。<br>③DWS层到DWT层，计算 <code>首次末次时间/当天/累积/7天/30天/60天 </code> 等统计数据；DWT层表不需要进行分区，因为会把旧数据和新数据合成一张表overwrite到表中。<br>④按主题进行聚合得到ads表(<code>设备/会员/商品/营销 主题</code>)，而每个主题都会有不同的指标进行统计，如果<code>设备包括活跃/新增/沉默/留存/连续登陆等信息</code>；ADS层表不需要分区，新数据计算后union查出来的旧数据(去重)，再overwrite插入，可以防止数据重复，减少小文件。</p>
+<h1 id="一、总览"><a href="#一、总览" class="headerlink" title="一、总览"></a>一、总览</h1><h2 id="1-1-关系模型"><a href="#1-1-关系模型" class="headerlink" title="1.1 关系模型"></a>1.1 关系模型</h2><p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C5ae1d0862c06460e852957fdfa1b4d02.png" alt="电商数据库表关系图.png"></p>
+<h2 id="1-2-维度模型-业务总线矩阵-："><a href="#1-2-维度模型-业务总线矩阵-：" class="headerlink" title="1.2 维度模型(业务总线矩阵)："></a>1.2 维度模型(业务总线矩阵)：</h2><p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C134712b59223421dafefc7941981e7f1.png" alt="image.png"></p>
+<p><strong>建模流程：</strong> <code>选择业务过程-&gt;声明粒度-&gt;确认维度-&gt;确认事实</code><br><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C67e213722b634ef0980985d182a13fd5.png" alt="业务总线矩阵"></p>
+<ol>
+<li><code>建宽表以维度为基准，每个维度对应一个主题宽表，宽表中的统计字段就是关联的事实表聚合后的度量值；</code></li>
+<li>一般统计结果可以从主题宽表中直接获取或再进行简单的统计，如用户宽表如果需要根据性别统计，那么再关联一张用户性别表，进行简单统计即可。如果无法从宽表中获取的指标，就得从最细粒度的dwd层中进行统计。</li>
+<li>DWS层存放的所有的主题对象当天的汇总行为，如每个地区当天的下单次数、下单金额等；  DWT层存放的是所有主题对象的累积行为，如每个地区最近7天的下单次数和金额。</li>
+</ol>
+<br>
+**关系建模：**
+- 优点：减少数据冗余，同时保证一次修改无需修改多个表，保证数据一致性。
+- 缺点：获取数据需要join多张表，降低性能。
+
+<p><strong>维度建模：</strong></p>
+<ul>
+<li>优点：1. 业务清晰 2. 减少join产生的shuffle过程，提高效率。</li>
+</ul>
+<br>
+## 1.3 确定全量/增量/特殊表
+![image.png](火粉商城电商大数据业务.assets\d1908005dd884f8f8b448668b455ef25.png)
+全量表：分区表，每天全量数据导入一个分区中；
+增量表：分区表，每天增量数据导入一个分区中；
+增量更新表：分区表，每天增量和更新数据导入一个分区中；  
+用户表：`需要使用拉链表`，第一天导入全量数据，之后每天导入新增及变化数据；
+特殊表：省份表、地区表、时间表等不会变动的表；
+购物车表和收藏表数据量很大，但是为了方便维度建模，采用全量表形式导入。
+
+<h2 id="1-4-事实表分类"><a href="#1-4-事实表分类" class="headerlink" title="1.4 事实表分类"></a>1.4 事实表分类</h2><p>1）事务型快照事实表(订单明细事实表&#x2F;支付事实表&#x2F;退款事实表&#x2F;评价事实表)<br>以每个事务或事件为单位，例如一个销售订单记录，一笔支付记录等，作为事实表里的一行数据。一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新。<br>2）周期型快照事实表(加购事实表&#x2F;收藏事实表)<br>周期型快照事实表中不会保留所有数据，只保留固定时间间隔的数据，例如每天或者每月的销售额，或每月的账户余额等。<br>3）累积型快照事实表(优惠券领用表&#x2F;订单表)<br>累计快照事实表用于跟踪业务事实的变化。例如，数据仓库中可能需要累积或者存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</p>
+<h1 id="二、业务"><a href="#二、业务" class="headerlink" title="二、业务"></a>二、业务</h1><h2 id="2-1-分层结构"><a href="#2-1-分层结构" class="headerlink" title="2.1 分层结构"></a>2.1 分层结构</h2><ul>
+<li>ODS（operation data store）：存放原始数据。保持数据原貌不变；创建分区表，防止后续的全表扫描；<code>时间分区</code>，采用<code>LZO压缩</code>，<code>指定输入输出格式</code>；创建外部表；导入表中用OUTPUTFORMAT，读取表用INPUTFORMAT。</li>
+<li>DWD（data warehouse detail）：结构粒度与ODS层保持一致，对ODS层数据进行清洗（去除无效数据、脏数据，数据脱敏，<code>维度退化</code>，<code>数据转换</code>等）。ETL数据清洗，用hive sql、MR、Python、Kettle、SparkSQL；<code>时间分区</code>，采用<code>LZO压缩</code>，采用<code>parquet格式</code>存储；创建外部表；<br>DWD层主要就是确定事实表和维度表dim。</li>
+<li>DWS（data warehouse service）：在DWD基础上，整合所有的维度和度量字段，按天进行轻度汇总。<code>时间分区</code>，采用<code>LZO压缩</code>，采用<code>parquet格式</code>存储；创建外部表；<br>DWS层主要就是以某一个维度轻度统计在业务总线矩阵中显示的与其关联的所有的事实表的度量值。DWS层存放的所有主题对象当天的汇总行为，例如每个地区当天的下单次数，下单金额等。</li>
+<li>DWT（data warehouse topic）：在DWS基础上，按主题进行汇总。<code>时间分区</code>，采用<code>LZO压缩</code>，采用<code>parquet格式</code>存储；创建外部表；<br>DWT层主要就是对DWS层的宽表的累积行为，例如每个地区最近7天（15天、30天、60天）的下单次数、下单金额等。</li>
+<li>ADS（Application Data Store）：为统计报表提供数据。<code>明确字段分割符</code>，与sqoop对应；创建外部表。</li>
+</ul>
+<p>在ODS层对原始数据进行存储，需要采用压缩（一般lzo为10倍压缩），创建分区表，防止后续的全表扫描。</p>
+<h2 id="2-2-维度建模（ods-gt-dwd）"><a href="#2-2-维度建模（ods-gt-dwd）" class="headerlink" title="2.2 维度建模（ods-&gt;dwd）"></a>2.2 维度建模（ods-&gt;dwd）</h2><p>历史数据取数 逻辑梳理：通过接口运行十小时获取edb所有的电商数据，以get_time为获取字段，该字段比更新时间的优势在于，get_time只会在支付等重大动作时变动，而非edb_updatetime经常变动，导致在取数的10小时候中有数据变动导致无法获取最新数据。<br>历史数据取数 方式：通过get_time字段从最早取到最近，而且要取到预估的结束时间为止，然后日更新数据还需要与当天的数据整合去重，防止数据丢失。</p>
+<h3 id="2-2-1-日志表："><a href="#2-2-1-日志表：" class="headerlink" title="2.2.1 日志表："></a>2.2.1 日志表：</h3><h4 id="2-2-1-1-日志结构"><a href="#2-2-1-1-日志结构" class="headerlink" title="2.2.1.1 日志结构"></a>2.2.1.1 日志结构</h4><p>ODS层分为启动表、行为表和异常表：</p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C29d7f8b108b245c5b933e8821bc864b4.png" alt="启动日志"></p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C9d66a12eb2a14f3f83fa8b0d2a402534.png" alt="页面日志"></p>
+<h4 id="2-2-1-2-日志解析"><a href="#2-2-1-2-日志解析" class="headerlink" title="2.2.1.2 日志解析"></a>2.2.1.2 日志解析</h4><p>解析为五张表：启动日志表、页面日志表(用户访问的所有页面)、动作日志表(用户在每张页面上进行的操作)、曝光日志表()、错误日志表()。</p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C21f0c4b79cce474087b9411a2d06be1e.png" alt="启动日志表"></p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C2e98dd1fad1249498314fe55981ce3fa.png" alt="页面日志表"></p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C895efeaa45bc4ff6b14704b73913549e.png" alt="动作日志表"></p>
+<p>![曝光日志表](火粉商城电商大数据业务.assets8824766c8024df7af4c9ada2d42e350.png)</p>
+<p><img src="/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1.assets%5C891533bafa0d4770b62c941395415803.png" alt="错误日志表"></p>
+<blockquote>
+<p>错误日志表将启动日志和页面日志的异常信息都写入了表中，如果是启动日志异常，则只有启动日志的字段；如果是页面日志异常，则只有页面日志的字段。</p>
+</blockquote>
+<br>
+### 2.2.2 业务表
+**事务型事实表：**每个事务或事件为单位，数据就不再进行更改。
+**周期型快照事实表：**不会保留所有数据，只保留固定时间间隔的数据
+**累积型快照事实表：**累计快照事实表用于跟踪业务事实的变化。
+#### 2.2.2.1 维度表
+##### 2.2.2.1.1 特殊表合并：
+`地区维度表：`将省份表和地区表合并作为地区维度表。
+
+<p>![地区维度表](火粉商城电商大数据业务.assets</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E7%81%AB%E7%B2%89%E5%95%86%E5%9F%8E%E7%94%B5%E5%95%86%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B8%9A%E5%8A%A1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hive%E5%9F%BA%E7%A1%80/" title="Hive基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hive基础</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/%E8%B0%83%E4%BC%98/" title="调优"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">调优</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%80%BB%E8%A7%88"><span class="toc-number">2.</span> <span class="toc-text">一、总览</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 关系模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E7%BB%B4%E5%BA%A6%E6%A8%A1%E5%9E%8B-%E4%B8%9A%E5%8A%A1%E6%80%BB%E7%BA%BF%E7%9F%A9%E9%98%B5-%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 维度模型(业务总线矩阵)：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%88%86%E7%B1%BB"><span class="toc-number">2.3.</span> <span class="toc-text">1.4 事实表分类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%9A%E5%8A%A1"><span class="toc-number">3.</span> <span class="toc-text">二、业务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 分层结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%EF%BC%88ods-gt-dwd%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 维度建模（ods-&gt;dwd）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-%E6%97%A5%E5%BF%97%E8%A1%A8%EF%BC%9A"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.2.1 日志表：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-1-%E6%97%A5%E5%BF%97%E7%BB%93%E6%9E%84"><span class="toc-number">3.2.1.1.</span> <span class="toc-text">2.2.1.1 日志结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-2-%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90"><span class="toc-number">3.2.1.2.</span> <span class="toc-text">2.2.1.2 日志解析</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

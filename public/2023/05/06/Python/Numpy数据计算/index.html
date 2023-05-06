@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Numpy数据计算 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="###安装pip install numpy pandas -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple&#x2F; ###引入import numpy as npimport pandas as pd ###创建矩阵  #####array方法创建矩阵代码array &#x3D; np.array([[1, 2, 3], [5, 6, 7]], dtype&amp;#x3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Numpy数据计算">
+<meta property="og:url" content="http://example.com/2023/05/06/Python/Numpy%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="###安装pip install numpy pandas -i https:&#x2F;&#x2F;pypi.tuna.tsinghua.edu.cn&#x2F;simple&#x2F; ###引入import numpy as npimport pandas as pd ###创建矩阵  #####array方法创建矩阵代码array &#x3D; np.array([[1, 2, 3], [5, 6, 7]], dtype&amp;#x3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.027Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.027Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/Python/Numpy%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Numpy数据计算',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Numpy数据计算</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.027Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.027Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Python/">Python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Numpy数据计算"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>###安装<br>pip install numpy pandas -i <a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple/">https://pypi.tuna.tsinghua.edu.cn/simple/</a></p>
+<p>###引入<br>import numpy as np<br>import pandas as pd</p>
+<p>###创建矩阵</p>
+<blockquote>
+<p>#####array方法创建矩阵<br><strong>代码</strong><br>array &#x3D; np.array([[1, 2, 3], [5, 6, 7]], dtype&#x3D;np.int64)<br>print(array)<br>print(‘array的元素类型为: {}’.format(array.dtype))<br>print(‘number of dim: {}’.format(array.ndim))  # 获取矩阵的维度<br>print(‘shape:’, array.shape)  # 获取矩阵的行列数<br>print(‘size:’, array.size)  # 获取矩阵的大小<br><strong>结果</strong><br>[[1 2 3]<br> [5 6 7]]<br>array的元素类型为: int64<br>number of dim: 2<br>shape: (2, 3)<br>size: 6</p>
+</blockquote>
+<blockquote>
+<p>#####zeros&#x2F;ones&#x2F;empty方法创建矩阵<br><strong>代码</strong><br>array1 &#x3D; np.zeros((2, 3))  # 构建指定行列数元素全为0的矩阵(还有np.ones、np.empty等)<br>print(‘a的元素类型为: {}’.format(array1.dtype))  # 默认类型为float64<br><strong>结果</strong><br>array1：<br>[[0. 0. 0.]<br> [0. 0. 0.]]</p>
+</blockquote>
+<blockquote>
+<p>#####arange规定数组范围和步长，reshape规定矩阵行列数<br><strong>代码</strong><br>array2 &#x3D; np.arange(10, 20, 2)  # 定义范围为10到20步长为2的数组<br>array3 &#x3D; np.arange(1, 13, 1).reshape(3, 4)  # 创建一个范围为1到13步长为1的行列数为3和4的矩阵<br><strong>结果</strong><br>array2： [10 12 14 16 18]<br>array3：<br>[[ 1  2  3  4]<br> [ 5  6  7  8]<br> [ 9 10 11 12]]</p>
+<p>#####linspace规定数组范围和个数，reshape规定矩阵行列数<br><strong>代码</strong><br>array4 &#x3D; np.linspace(0,10,6)  # 创建一个范围为1到10分为5段的数组<br>array5 &#x3D; np.linspace(0,10,6).reshape(2,3)  # 创建一个范围为1到10分为5段的行列数为2好3的矩阵<br><strong>结果</strong><br>array4 ：[ 0.  2.  4.  6.  8. 10.]<br>array5：<br>[[ 0.  2.  4.]<br> [ 6.  8. 10.]]</p>
+</blockquote>
+<blockquote>
+<p>#####随机生成矩阵<br><strong>代码</strong><br>array6 &#x3D; np.random.random((2, 4))  # 生成2行4列的矩阵，元素大小随机<br><strong>结果</strong><br>array6：<br>[[0.77692473 0.28440388 0.85873634 0.63594363]<br> [0.2773047  0.36780031 0.06101272 0.69213009]]</p>
+</blockquote>
+<br>
+
+<p>###矩阵运算<br>a1 &#x3D; np.array([[1, 2, 3], [4, 5, 6]])<br>a2 &#x3D; np.array([[7, 8, 9], [10, 11, 12]])</p>
+<blockquote>
+<p>#####矩阵转置<br><strong>代码</strong><br>tr1 &#x3D; np.transpose(a1)<br>tr2 &#x3D; a1.T<br><strong>结果</strong><br>tr1：[[1 4]<br> [2 5]<br> [3 6]]<br>tr2：[[1 4]<br> [2 5]<br> [3 6]]</p>
+</blockquote>
+<blockquote>
+<p>#####加减运算<br><strong>代码</strong><br>sum &#x3D; a1 + a2<br>sub &#x3D; a2 - a1<br><strong>结果</strong><br>sum ：<br>[[ 8 10 12]<br> [14 16 18]]<br>sub ：<br>[[6 6 6]<br> [6 6 6]]</p>
+</blockquote>
+<blockquote>
+<p>#####指数运算<br><strong>代码</strong><br>exp &#x3D; a1 ** 3  #将每个元素都进行三次方<br><strong>结果</strong><br>exp：<br>[[  1   8  27]<br> [ 64 125 216]]</p>
+</blockquote>
+<blockquote>
+<p>#####三角函数运算<br><strong>代码</strong><br>sin &#x3D; 10 * np.sin(a1)  # 对a1中的每个元素求sin，然后每个元素乘以10<br><strong>结果</strong><br>sin：<br>[[ 8.41470985  9.09297427  1.41120008]<br> [-7.56802495 -9.58924275 -2.79415498]]</p>
+</blockquote>
+<blockquote>
+<p>#####元素乘法运算<br><strong>代码</strong><br>ep &#x3D; a1 * a2  # 对应元素相乘<br><strong>结果</strong><br>[[ 7 16 27]<br> [40 55 72]]</p>
+</blockquote>
+<blockquote>
+<p>#####矩阵乘法运算<br><strong>代码</strong><br>mp &#x3D; np.dot(a1, a2.T)   # 矩阵相乘，同mp &#x3D; a1.dot(a2)<br><strong>结果</strong><br>[[ 50  68]<br> [122 167]]</p>
+</blockquote>
+<blockquote>
+<p>#####比较运算<br><strong>代码</strong><br>lt &#x3D; a1 &lt; 3<br><strong>结果</strong><br>lt：<br>[[ True  True False]<br> [False False False]]</p>
+</blockquote>
+<blockquote>
+<p>#####sum&#x2F;max&#x2F;min运算，axis指定轴(0表示列，1表示行)<br><strong>代码</strong><br>max1 &#x3D; np.max(a1) # 取矩阵所有元素的最大值<br>max2 &#x3D; np.max(a1, axis&#x3D;0) # 取矩阵每列的最大值<br>min1 &#x3D; np.min(a1) # 取矩阵所有元素的最小值<br>min2 &#x3D; np.min(a1, axis&#x3D;1) # 取矩阵每行的最大值<br>sum1 &#x3D; np.sum(a1) # 取矩阵所有元素的求和<br>sum2 &#x3D; np.sum(a1, axis&#x3D;1) # 矩阵矩阵每行求和<br><strong>结果</strong><br>max1：6<br>max2：[4 5 6]<br>min1：1<br>min2：[1 4]<br>sum1：21<br>sum2：[ 6 15]</p>
+</blockquote>
+<blockquote>
+<p>#####运算<br><strong>代码</strong><br>argmax1 &#x3D; np.argmax(a1) # 取矩阵最大值的索引<br>argmin1 &#x3D; np.argmin(a1) # 取矩阵最小值的索引<br>mean1 &#x3D; np.mean(a1)  # 计算矩阵的平均值,同a1.mean()<br>mean2 &#x3D; np.mean(a1, axis&#x3D;1)  # 计算矩阵每行的平均值<br>average1 &#x3D; np.average(a1)  # 计算矩阵的平均值<br>median1 &#x3D; np.median(a1)  # 计算矩阵的中位数<br>cumsum1 &#x3D; np.cumsum(a1)  # 第n项的值等于前n项原始值求和(数组)，类似斐波那契数列但是不同。<br>diff1 &#x3D; np.diff(a1)  # 每行第n项的值等于第n项减去第n-1项(矩阵列数减一)<br>nonzero1 &#x3D; np.nonzero(a1)  # 将非零元素的行列索引放到两个数组中<br>sort1 &#x3D; np.sort(np.arange(7, 1, -1).reshape(2, 3))  # 矩阵每行进行正序排列<br>clip1 &#x3D; np.clip(a1, 2, 4)  # 保留矩阵中在2和4之间的数，小于2的数取2，大于4的数取4<br><strong>结果</strong><br>argmax1：5<br>argmin1：0<br>mean1：3.5<br>mean2：[2. 5.]<br>average1：3.5<br>median1：3.5<br>cumsum1：[ 1  3  6 10 15 21]<br>diff1：<br>[[1 1]<br> [1 1]]<br>nonzero1：(array([0, 0, 0, 1, 1, 1], dtype&#x3D;int64), array([0, 1, 2, 0, 1, 2], dtype&#x3D;int64))<br>sort1：<br>[[5 6 7]<br> [2 3 4]]<br>clip1：<br>[[2 2 3]<br> [4 4 4]]</p>
+</blockquote>
+<br>
+
+<p>###numpy的索引<br>a &#x3D; np.arange(3, 15).reshape(3, 4)</p>
+<blockquote>
+<p>#####取矩阵中的所有元素<br>print(a[:, :])  # 索引到矩阵的所有数<br><strong>结果：</strong><br>[[ 3  4  5  6]<br> [ 7  8  9 10]<br>[11 12 13 14]]</p>
+</blockquote>
+<blockquote>
+<p>#####取某行或某列的所有元素<br>print(a[2])  # 索引到矩阵第3行的所有元素的值<br><strong>结果：</strong>[11 12 13 14]<br>print(a.T[2])  # 索引到矩阵第3列的所有元素的值<br><strong>结果：</strong>[ 5  9 13]</p>
+</blockquote>
+<blockquote>
+<p>#####取指定索引的元素<br>print(a[2, 1])  # 索引到矩阵第3行第2列的元素的值<br>print(a[2][1])  # 同上<br><strong>结果：</strong>12</p>
+</blockquote>
+<blockquote>
+<p>#####取指定行和列范围内的所有元素<br>print(a[1:3, 2:])  # 取第2行到第4行，第3列到最后一列的元素<br><strong>结果：</strong><br>[[ 9 10]<br> [13 14]]</p>
+</blockquote>
+<blockquote>
+<p>#####遍历所有的行<br>for row in a:<br>&amp;nbsp;&amp;nbsp;    print(“row:”, row)  # 遍历矩阵中所有的行<br><strong>结果：</strong><br>row: [3 4 5 6]<br>row: [ 7  8  9 10]<br>row: [11 12 13 14]</p>
+</blockquote>
+<blockquote>
+<p>#####遍历所有的列<br>for column in a.T:<br>&amp;nbsp;    print(“column:”, column)  # 遍历矩阵中所有的列<br><strong>结果：</strong><br>column: [ 3  7 11]<br>column: [ 4  8 12]<br>column: [ 5  9 13]<br>column: [ 6 10 14]</p>
+</blockquote>
+<blockquote>
+<p>#####遍历所有的列<br>print(a.flatten())  # 将矩阵转化为数组<br><strong>结果：</strong>[ 3  4  5  6  7  8  9 10 11 12 13 14]<br>for item in a.flat:  # 将矩阵a转化为遍历器进行遍历<br>&amp;nbsp;    print(“item:”, item)  # 打印矩阵中的所有元素<br><strong>结果：</strong><br>item: 3<br>item: 4<br>item: 5<br>item: 6<br>item: 7<br>item: 8<br>item: 9<br>item: 10<br>item: 11<br>item: 12<br>item: 13<br>item: 14</p>
+</blockquote>
+<br>
+
+<p>###array合并<br>a &#x3D; np.array([1,2,3])<br>b &#x3D; np.array([4,5,6])</p>
+<blockquote>
+<p>#####上下合并(纵向合并)<br>vstack1 &#x3D; np.vstack((A, B))  # vertical,矩阵上下合并(纵向合并)<br><strong>结果：</strong><br>vstack1 ：<br>[[1 2 3]<br> [4 5 6]]</p>
+</blockquote>
+<blockquote>
+<p>#####左右合并(水平合并)<br>hstack1 &#x3D; np.hstack((A, B))  # horizontal,矩阵左右合并(水平合并)<br><strong>结果：</strong><br>hstack1：[1 2 3 4 5 6]</p>
+</blockquote>
+<blockquote>
+<p>#####将数组转为矩阵（reshape，np.newaxis）<br>AT1 &#x3D; A.reshape(1, 3).T  # 通过重构矩阵将数组转化为矩阵，然后转置<br>AT2 &#x3D; A[np.newaxis, :].T  # 添加纵轴，效果同上<br>AT3 &#x3D; A[:, np.newaxis]  # 添加横轴，效果同上<br><strong>结果：</strong><br>AT1:<br>[[1]<br> [2]<br>[3]]</p>
+</blockquote>
+<blockquote>
+<p>#####多个矩阵进行合并（concatenate）<br>C &#x3D; np.array([1, 1, 1])[:, np.newaxis]<br>D &#x3D; np.array([2, 2, 2])[:, np.newaxis]<br>C:<br> [[1]<br>[1]<br> [1]]<br>D:<br>[[2]<br> [2]<br> [2]]</p>
+<p>con1 &#x3D; np.concatenate((A, B, B, A), axis&#x3D;0)  # 上下合并(纵向合并)<br>con2 &#x3D; np.concatenate((A, B, B, A), axis&#x3D;1)  # 左右合并(水平合并)<br>con3 &#x3D; np.concatenate((C, D, D, C), axis&#x3D;0)  # 上下合并(纵向合并)<br>con4 &#x3D; np.concatenate((C, D, D, C), axis&#x3D;1)  # 左右合并(水平合并)<br><strong>结果：</strong><br>con1：<br>[1 2 3 4 5 6 4 5 6 1 2 3]<br>con2：报错<br>con3：<br>[[1]<br> [1]<br> [1]<br> [2]<br> [2]<br> [2]<br> [2]<br> [2]<br> [2]<br> [1]<br> [1]<br> [1]]<br>con4：<br>[[1 2 2 1]<br> [1 2 2 1]<br> [1 2 2 1]]</p>
+</blockquote>
+<br>
+###array的分割
+A = np.arange(12).reshape((3, 4))
+
+<blockquote>
+<p>#####纵向&#x2F;横向等分分割<br>vsplit1 &#x3D; np.vsplit(A,3)  # 上下等量分割为指定数量的(纵向分割)，不能等量分割会报错<br>hsplit1 &#x3D; np.hsplit(A,2)  # 左右等量分割为指定数量(水平分割)，不能等量分割会报错<br>split1 &#x3D; np.split(A, 3, axis&#x3D;0)  # 上下等量分割为指定数量的(纵向分割)，不能等量分割会报错<br>split2 &#x3D; np.split(A, 2, axis&#x3D;1)  # 左右等量分割为指定数量(水平分割)，不能等量分割会报错<br>split3 &#x3D; np.array_split(A, 2, axis&#x3D;0)  # 上下等量分割为指定数量的(纵向分割)，会尽量保证等量不会报错<br>split4 &#x3D; np.array_split(A, 2, axis&#x3D;1)  # 左右等量分割为指定数量(水平分割)，会尽量保证等量不会报错<br>split5 &#x3D; np.split(A, [1, 2, 3], axis&#x3D;0)  # 多个索引上下分割(纵向分割)<br>split6 &#x3D; np.split(A, [1, 2, 3], axis&#x3D;1)  # 多个索引左右分割(水平分割)<br><strong>结果：</strong><br>vsplit1：<br>[array([[0, 1, 2, 3]]), array([[4, 5, 6, 7]]), array([[ 8,  9, 10, 11]])]<br>hsplit1：<br>[array([[0, 1],<br>       [4, 5],<br>       [8, 9]]), array([[ 2,  3],<br>       [ 6,  7],<br>       [10, 11]])]<br>split1：<br>[array([[0, 1, 2, 3]]), array([[4, 5, 6, 7]]), array([[ 8,  9, 10, 11]])]<br>split2：<br>[array([[0, 1],<br>       [4, 5],<br>       [8, 9]]), array([[ 2,  3],<br>       [ 6,  7],<br>       [10, 11]])]<br>split3:<br>[array([[0, 1, 2, 3],<br>      [4, 5, 6, 7]]), array([[ 8,  9, 10, 11]])]<br>split4:<br>[array([[0, 1],<br>       [4, 5],<br>       [8, 9]]), array([[ 2,  3],<br>       [ 6,  7],<br>       [10, 11]])]<br>split5：<br>[array([[0, 1, 2, 3]]), array([[4, 5, 6, 7]]), array([[ 8,  9, 10, 11]]), array([], shape&#x3D;(0, 4), dtype&#x3D;int32)]<br>split6：<br>[array([[0],<br>       [4],<br>       [8]]), array([[1],<br>       [5],<br>       [9]]), array([[ 2],<br>       [ 6],<br>       [10]]), array([[ 3],<br>       [ 7],<br>       [11]])]</p>
+</blockquote>
+<br>
+
+<p>###copy浅复制&amp;deep copy</p>
+<blockquote>
+<p>#####浅复制<br>a &#x3D; np.arange(4)<br>b &#x3D; a<br>c &#x3D; a<br>d &#x3D; b # 直接赋值不开辟新的内存空间，指向同一个内存地址</p>
+<p>a[0] &#x3D; -1<br>d[1:3] &#x3D; [-2, -3]<br>print(d is a)  # 判断a和d是否指向同一个内存地址<br><strong>结果：</strong><br>a,b,c,d都是：[-1 -2 -3  3]<br>d is a：True</p>
+</blockquote>
+<blockquote>
+<p>#####深复制<br>a &#x3D; np.arange(4)<br>b &#x3D; a.copy()  # 深复制，开辟新的内存空间<br>print(b is a)  # 判断a和d是否指向同一个内存地址<br><strong>结果：</strong><br>a：[-1  1  2  3]<br>b：[0 1 2 3]<br>b is a：False</p>
+</blockquote>
+<blockquote>
+<p>#####特殊情况（复制后值会变但是不是同一个变量）<br>a &#x3D; np.arange(4)<br>b &#x3D; a[:]  # 深复制，开辟新的内存空间<br>a[0] &#x3D; -1<br>print(b is a)<br><strong>结果：</strong><br>a：[-1  1  2  3]<br>b：[-1 1 2 3]<br>b is a：False</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/Python/Numpy%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/">http://example.com/2023/05/06/Python/Numpy%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/Python/Conda%E5%88%9B%E5%BB%BAPython%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/" title="Conda创建Python虚拟环境"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Conda创建Python虚拟环境</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/Python/Python3%E5%AE%89%E8%A3%85/" title="Python3安装"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Python3安装</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

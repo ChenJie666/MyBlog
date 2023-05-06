@@ -1,0 +1,1479 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Elasticsearch自定义分析器（上） | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="注：代码基于Elasticsearch 7.x，低版本语法稍有不同，需指定type！且低版本可能无法使用相关性计算的一些新特性。 一、分析器1.1 概念：分析器包括：  字符过滤器(CharacterFilters)：首先，字符串按顺序通过每个 字符过滤器 。他们的任务是在分词前整理字符串。一个字符过滤器可以用来去掉HTML，或者将 &amp; 转化成 and； 分词器(Tokenizer)：字符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch自定义分析器（上）">
+<meta property="og:url" content="http://example.com/2023/05/06/ELK/Elasticsearch%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%B8%8A%EF%BC%89/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="注：代码基于Elasticsearch 7.x，低版本语法稍有不同，需指定type！且低版本可能无法使用相关性计算的一些新特性。 一、分析器1.1 概念：分析器包括：  字符过滤器(CharacterFilters)：首先，字符串按顺序通过每个 字符过滤器 。他们的任务是在分词前整理字符串。一个字符过滤器可以用来去掉HTML，或者将 &amp; 转化成 and； 分词器(Tokenizer)：字符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.015Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.015Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/ELK/Elasticsearch%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%B8%8A%EF%BC%89/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Elasticsearch自定义分析器（上）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Elasticsearch自定义分析器（上）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.015Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.015Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ELK/">ELK</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Elasticsearch自定义分析器（上）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><code>注：代码基于Elasticsearch 7.x，低版本语法稍有不同，需指定type！且低版本可能无法使用相关性计算的一些新特性。</code></p>
+<h1 id="一、分析器"><a href="#一、分析器" class="headerlink" title="一、分析器"></a>一、分析器</h1><h2 id="1-1-概念："><a href="#1-1-概念：" class="headerlink" title="1.1 概念："></a>1.1 概念：</h2><p><strong>分析器包括：</strong></p>
+<ol>
+<li>字符过滤器(CharacterFilters)：首先，字符串按顺序通过每个 字符过滤器 。他们的任务是在分词前整理字符串。一个字符过滤器可以用来去掉HTML，或者将 &amp; 转化成 and；</li>
+<li>分词器(Tokenizer)：字符串被 分词器 分为单个的词条。得到分词，标记每个分词的顺序或位置（用于邻近查询），标记分词的起始和结束的偏移量（用于突出显示搜索片段），标记分词的类型；</li>
+<li>后过滤器(TokenFilter)：最后，词条按顺序通过每个 token 过滤器 。这个过程可能会改变词条（例如，小写化 Quick ），删除词条（例如， 像 a， and， the 等无用词），或者增加词条（例如，像 jump 和 leap 这种同义词）。</li>
+</ol>
+<br>
+## 1.2 字符过滤器CharacterFilters
+| 字符过滤器类型 | 说明 |
+|------------|-----------------|
+|  HTML Strip Character Filter(去除html标签和转换html实体)  | The `html_strip` character filter strips out HTML elements like `<b>` and decodes HTML entities like `&amp;`. |
+|  Mapping Character Filter(字符串替换操作)  | The `mapping` character filter replaces any occurrences of the specified strings with the specified replacements. |
+|  Pattern Replace Character Filter(正则匹配替换)  | The `pattern_replace` character filter replaces any characters matching a regular expression with the specified replacement. |
+
+<h4 id="①使用html-strip字符过滤器"><a href="#①使用html-strip字符过滤器" class="headerlink" title="①使用html_strip字符过滤器"></a>①使用html_strip字符过滤器</h4><p>过滤掉文本中的html标签。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>escaped_tags</td>
+<td>不进行过滤的标签名，多个标签用数组表示</td>
+</tr>
+</tbody></table>
+<p><strong>默认过滤器配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;keyword&quot;,</span><br><span class="line">  &quot;char_filter&quot;: [</span><br><span class="line">    &quot;html_strip&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;&lt;p&gt;I&amp;apos;m so &lt;b&gt;happy&lt;/b&gt;!&lt;/p&gt;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 得到结果 [ </span><br><span class="line">I&#x27;m so happy!</span><br><span class="line"> ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>定制过滤器配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;keyword&quot;,</span><br><span class="line">          &quot;char_filter&quot;: [</span><br><span class="line">            &quot;my_custom_html_strip_char_filter&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;char_filter&quot;: &#123;</span><br><span class="line">        &quot;my_custom_html_strip_char_filter&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;html_strip&quot;,</span><br><span class="line">          &quot;escaped_tags&quot;: [</span><br><span class="line">            &quot;b&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="②使用mapping-字符过滤器"><a href="#②使用mapping-字符过滤器" class="headerlink" title="②使用mapping 字符过滤器"></a>②使用mapping 字符过滤器</h4><p>对文本进行替换。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mappings</td>
+<td>使用key &#x3D;&gt; value来指定映射关系，多种映射关系用数组表示</td>
+</tr>
+<tr>
+<td>mappings_path</td>
+<td>指定配置了mappings映射关系的文件的路径，文件使用UTF-8格式编码，每个映射关系使用换行符分割</td>
+</tr>
+</tbody></table>
+<p><strong>默认过滤器配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;keyword&quot;,</span><br><span class="line">  &quot;char_filter&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;type&quot;: &quot;mapping&quot;,</span><br><span class="line">      &quot;mappings&quot;: [</span><br><span class="line">        &quot;٠ =&gt; 0&quot;,</span><br><span class="line">        &quot;١ =&gt; 1&quot;,</span><br><span class="line">        &quot;٢ =&gt; 2&quot;,</span><br><span class="line">        &quot;٣ =&gt; 3&quot;,</span><br><span class="line">        &quot;٤ =&gt; 4&quot;,</span><br><span class="line">        &quot;٥ =&gt; 5&quot;,</span><br><span class="line">        &quot;٦ =&gt; 6&quot;,</span><br><span class="line">        &quot;٧ =&gt; 7&quot;,</span><br><span class="line">        &quot;٨ =&gt; 8&quot;,</span><br><span class="line">        &quot;٩ =&gt; 9&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;My license plate is ٢٥٠١٥&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 得到结果 [ My license plate is 25015 ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>定制过滤器配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">PUT /my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;char_filter&quot;: [</span><br><span class="line">            &quot;my_mappings_char_filter&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;char_filter&quot;: &#123;</span><br><span class="line">        &quot;my_mappings_char_filter&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;mapping&quot;,</span><br><span class="line">          &quot;mappings&quot;: [</span><br><span class="line">            &quot;:) =&gt; _happy_&quot;,</span><br><span class="line">            &quot;:( =&gt; _sad_&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试过滤器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;keyword&quot;,</span><br><span class="line">  &quot;char_filter&quot;: [ &quot;my_mappings_char_filter&quot; ],</span><br><span class="line">  &quot;text&quot;: &quot;I&#x27;m delighted about it :(&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 结果  [ I&#x27;m delighted about it _sad_ ]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="③使用pattern-replace-字符过滤器"><a href="#③使用pattern-replace-字符过滤器" class="headerlink" title="③使用pattern_replace 字符过滤器"></a>③使用pattern_replace 字符过滤器</h4><p>对文本进行正则匹配，对匹配的字符串进行替换。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pattern</td>
+<td>java正则表达式</td>
+</tr>
+<tr>
+<td>replacement</td>
+<td>替换字符串, 使用 $1..$9 来对应替换位置</td>
+</tr>
+<tr>
+<td>flags</td>
+<td>Java regular expression <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#field.summary">flags</a>. Flags should be pipe-separated, eg <code>&quot;CASE_INSENSITIVE|COMMENTS&quot;</code>.</td>
+</tr>
+</tbody></table>
+<p><strong>定制过滤器配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-00001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;char_filter&quot;: [</span><br><span class="line">            &quot;my_char_filter&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;char_filter&quot;: &#123;</span><br><span class="line">        &quot;my_char_filter&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;pattern_replace&quot;,</span><br><span class="line">          &quot;pattern&quot;: &quot;(\d+)-(?=\d)&quot;,</span><br><span class="line">          &quot;replacement&quot;: &quot;$1_&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试过滤器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST my-index-00001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;My credit card is 123-456-789&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ My, credit, card, is, 123_456_789 ]</span><br></pre></td></tr></table></figure>
+
+<br>
+## 1.3 分词器Tokenizer
+### 1.3.1 Word Oriented Tokenizers
+| 分词器类型 | 说明 |
+|------------|-----------------|
+|Standard Tokenizer|The `standard` tokenizer divides text into terms on word boundaries, as defined by the Unicode Text Segmentation algorithm. It removes most punctuation symbols. It is the best choice for most languages.|
+|Letter Tokenizer|The `letter` tokenizer divides text into terms whenever it encounters a character which is not a letter.|
+|Lowercase Tokenizer|The `lowercase` tokenizer, like the `letter `tokenizer, divides text into terms whenever it encounters a character which is not a letter, but it also lowercases all terms.|
+|Whitespace Tokenizer|The `whitespace` tokenizer divides text into terms whenever it encounters any whitespace character.|
+|UAX URL Email Tokenizer|The `uax_url_email` tokenizer is like the `standard` tokenizer except that it recognises URLs and email addresses as single tokens.|
+|Classic Tokenizer|The `classic` tokenizer is a grammar based tokenizer for the English Language.|
+|Thai Tokenizer|The `thai` tokenizer segments Thai text into words.|
+
+<h4 id="①-Standard"><a href="#①-Standard" class="headerlink" title="① Standard"></a>① Standard</h4><p>Standard tokenizer是基于&lt;Unicode标准附录#29&gt;中指定的算法进行切分的，如whitespace，‘-’等符号都会进行切分。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>max_token_length</td>
+<td>切分后得到的token的长度如果超过最大token长度，以最大长度间隔拆分</td>
+<td>默认255</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ The, 2, QUICK, Brown, Foxes, jumped, over, the, lazy, dog&#x27;s, bone ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>定制</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;max_token_length&quot;: 5</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ The, 2, QUICK, Brown, Foxes, jumpe, d, over, the, lazy, dog&#x27;s, bone ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="②Letter"><a href="#②Letter" class="headerlink" title="②Letter"></a>②Letter</h4><p>Letter tokenizer遇到非字母时就会进行分词。也就是说，这个分词的结果可以是一整块的的连续的数据内容 。对欧洲语言友好，但是不适用于亚洲语言。</p>
+<p>无参数</p>
+<h4 id="③Lowercase"><a href="#③Lowercase" class="headerlink" title="③Lowercase"></a>③Lowercase</h4><p>Lowercase tokenizer可以看做Letter Tokenizer分词和Lower case Token Filter的结合体。即先用Letter Tokenizer分词，然后再把分词结果全部换成小写格式。</p>
+<p>无参数</p>
+<h4 id="④Whitespace"><a href="#④Whitespace" class="headerlink" title="④Whitespace"></a>④Whitespace</h4><p>Whitespace tokenizer 将文本通过空格进行分词。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>max_token_length</code></td>
+<td>经过此分词器后所得的数据的最大长度。</td>
+<td>默认 255</td>
+</tr>
+</tbody></table>
+<h4 id="⑤UAX-Email-URL"><a href="#⑤UAX-Email-URL" class="headerlink" title="⑤UAX Email URL"></a>⑤UAX Email URL</h4><p>Uax_url_email tokenizer和standard tokenizer类似，不同的是Uax_url_email tokenizer会将url和邮箱分为单独一个token。而standard tokenizer会将url和邮箱进行切分。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>max_token_length</code></td>
+<td>经过此分词器后所得的数据的最大长度。</td>
+<td>默认 255</td>
+</tr>
+</tbody></table>
+<h4 id="⑥Classic"><a href="#⑥Classic" class="headerlink" title="⑥Classic"></a>⑥Classic</h4><p>Classic tokenizer很适合英语编写的文档。 这个分词器对于英文的首字符缩写、 公司名字、 email 、 大部分网站域名都能很好的解决。 但是，对于除了英语之外的其他语言都不好用。</p>
+<ul>
+<li>会在大部分的标点符号处进行切分并移除标点符号，但是不在空格后的点不会被切分。</li>
+<li>会在连字符处切分，除非在这个token中有数字，那么整个token会被理解为产品编号而不切分。</li>
+<li>可以将邮件地址和节点主机名分割为一个token。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>max_token_length</code></td>
+<td>经过此分词器后所得的数据的最大长度。</td>
+<td>默认 255</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;classic&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ The, 2, QUICK, Brown, Foxes, jumped, over, the, lazy, dog&#x27;s, bone ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑦Thai"><a href="#⑦Thai" class="headerlink" title="⑦Thai"></a>⑦Thai</h4><p>泰语分词器</p>
+<p>无参数</p>
+<h3 id="1-3-2-Partial-Word-Tokenizers"><a href="#1-3-2-Partial-Word-Tokenizers" class="headerlink" title="1.3.2 Partial Word Tokenizers"></a>1.3.2 Partial Word Tokenizers</h3><table>
+<thead>
+<tr>
+<th>分词器类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>N-Gram Tokenizer</td>
+<td>The <code>ngram</code> tokenizer can break up text into words when it encounters any of a list of specified characters (e.g. whitespace or punctuation), then it returns n-grams of each word: a sliding window of continuous letters, e.g. <code>quick → [qu, ui, ic, ck]</code>.</td>
+</tr>
+<tr>
+<td>Edge N-Gram Tokenizer</td>
+<td>The <code>edge_ngram</code> tokenizer can break up text into words when it encounters any of a list of specified characters (e.g. whitespace or punctuation), then it returns n-grams of each word which are anchored to the start of the word, e.g. <code>quick → [q, qu, qui, quic, quick]</code>.</td>
+</tr>
+</tbody></table>
+<h4 id="①Ngram"><a href="#①Ngram" class="headerlink" title="①Ngram"></a>①Ngram</h4><p>一个nGram.类型的分词器。<br>以下是 nGram tokenizer  的设置:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>min_gram</code></td>
+<td>分词后词语的最小长度</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>max_gram</code></td>
+<td>分词后数据的最大长度</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>token_chars </code></td>
+<td>设置分词的形式，例如数字还是文字。elasticsearch将根据分词的形式对文本进行分词。</td>
+<td><code>[]</code> (Keep all characters)</td>
+</tr>
+<tr>
+<td>token_chars 所接受以下的形式：</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>token_chars</td>
+<td>举例</td>
+<td></td>
+</tr>
+<tr>
+<td>————-</td>
+<td>————————–</td>
+<td></td>
+</tr>
+<tr>
+<td><code>letter     </code></td>
+<td>例如 <code>a</code>, <code>b</code>, <code>ï</code> or <code>京</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>digit</code></td>
+<td>例如<code>3</code> or <code>7</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>whitespace</code></td>
+<td>例如 <code>&quot; &quot;</code> or &#96;”</td>
+<td></td>
+</tr>
+<tr>
+<td>“&#96;</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>punctuation</code></td>
+<td>例如 <code>!</code> or <code>&quot;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>symbol </code></td>
+<td>例如 <code>$</code> or <code>√</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>custom</code></td>
+<td>custom characters which need to be set using the <code>custom_token_chars</code> setting.</td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;ngram&quot;,</span><br><span class="line">          &quot;min_gram&quot;: 3,</span><br><span class="line">          &quot;max_gram&quot;: 3,</span><br><span class="line">          &quot;token_chars&quot;: [</span><br><span class="line">            &quot;letter&quot;,</span><br><span class="line">            &quot;digit&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;2 Quick Foxes.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ Qui, uic, ick, Fox, oxe, xes ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="②Edge-NGram"><a href="#②Edge-NGram" class="headerlink" title="②Edge NGram"></a>②Edge NGram</h4><p>这个分词和 nGram 非常的类似。但是只是相当于 n-grams 的分词的方式，只保留了“从头至尾”的分词。<br>以下是 edgeNGram 分词的设置：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>min_gram</td>
+<td>分词后词语的最小长度</td>
+<td>1</td>
+</tr>
+<tr>
+<td>max_gram</td>
+<td>分词后词语的最大长度</td>
+<td>2</td>
+</tr>
+<tr>
+<td>token_chars</td>
+<td>设置分词的形式，例如，是数字还是文字；将根据分词的形式对文本进行分词</td>
+<td>[] (Keep all characters)</td>
+</tr>
+</tbody></table>
+<p>token_chars 所接受以下的形式：</p>
+<table>
+<thead>
+<tr>
+<th>token_chars</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>letter     </code></td>
+<td>例如 <code>a</code>, <code>b</code>, <code>ï</code> or <code>京</code></td>
+</tr>
+<tr>
+<td><code>digit</code></td>
+<td>例如<code>3</code> or <code>7</code></td>
+</tr>
+<tr>
+<td><code>whitespace</code></td>
+<td>例如 <code>&quot; &quot;</code> or &#96;”</td>
+</tr>
+<tr>
+<td>“&#96;</td>
+<td></td>
+</tr>
+<tr>
+<td><code>punctuation</code></td>
+<td>例如 <code>!</code> or <code>&quot;</code></td>
+</tr>
+<tr>
+<td><code>symbol </code></td>
+<td>例如 <code>$</code> or <code>√</code></td>
+</tr>
+<tr>
+<td><code>custom</code></td>
+<td>custom characters which need to be set using the <code>custom_token_chars</code> setting.</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;Hélène Ségara it&#x27;s !&lt;&gt;#&quot;,</span><br><span class="line">  &quot;char_filter&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;type&quot;: &quot;pattern_replace&quot;,</span><br><span class="line">      &quot;pattern&quot;: &quot;[^\s\p&#123;L&#125;\p&#123;N&#125;]&quot;,</span><br><span class="line">      &quot;replacement&quot;: &quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot;: [</span><br><span class="line">    &quot;lowercase&quot;,</span><br><span class="line">    &quot;asciifolding&quot;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;type&quot;: &quot;edge_ngram&quot;,</span><br><span class="line">      &quot;min_gram&quot;: &quot;1&quot;,</span><br><span class="line">      &quot;max_gram&quot;: &quot;12&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [h]  [he]  [hel]  [hele]  [helen]  [s]  [se]  [seg]  [sega]  [segar] [Segara ]  [i]  [it]  [its]  </span><br></pre></td></tr></table></figure>
+
+
+<h3 id="1-3-3-Structured-Text-Tokenizers"><a href="#1-3-3-Structured-Text-Tokenizers" class="headerlink" title="1.3.3 Structured Text Tokenizers"></a>1.3.3 Structured Text Tokenizers</h3><table>
+<thead>
+<tr>
+<th>分词器类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Keyword Tokenizer</td>
+<td>The <code>keyword</code> tokenizer is a “noop” tokenizer that accepts whatever text it is given and outputs the exact same text as a single term. It can be combined with token filters like <code>lowercase</code> to normalise the analysed terms.</td>
+</tr>
+<tr>
+<td>Pattern Tokenizer</td>
+<td>The pattern <code>tokenizer</code> uses a regular expression to either split text into terms whenever it matches a word separator, or to capture matching text as terms.</td>
+</tr>
+<tr>
+<td>Simple Pattern Tokenizer</td>
+<td>The <code>simple_pattern</code> tokenizer uses a regular expression to capture matching text as terms. It uses a restricted subset of regular expression features and is generally faster than the <code>pattern</code> tokenizer.</td>
+</tr>
+<tr>
+<td>Char Group Tokenizer</td>
+<td>The <code>char_group</code> tokenizer is configurable through sets of characters to split on, which is usually less expensive than running regular expressions.</td>
+</tr>
+<tr>
+<td>Simple Pattern Split Tokenizer</td>
+<td>The <code>simple_pattern_split</code>  tokenizer uses the same restricted regular expression subset as the <code>simple_pattern</code> tokenizer, but splits the input at matches rather than returning the matches as terms.</td>
+</tr>
+<tr>
+<td>Path Tokenizer</td>
+<td>The <code>path_hierarchy</code> tokenizer takes a hierarchical value like a filesystem path, splits on the path separator, and emits a term for each component in the tree, e.g. <code>/foo/bar/baz → [/foo, /foo/bar, /foo/bar/baz ]</code>.</td>
+</tr>
+</tbody></table>
+<h4 id="①Simple-Pattern"><a href="#①Simple-Pattern" class="headerlink" title="①Simple Pattern"></a>①Simple Pattern</h4><p>Simple Pattern Tokenizer使用正则表达式来匹配符合文本，然后将匹配的文本提取出来作为token，其他部分舍弃。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>simple_pattern</td>
+<td><a target="_blank" rel="noopener" href="https://lucene.apache.org/core/8_8_0/core/org/apache/lucene/util/automaton/RegExp.html">Lucene正则表达式</a></td>
+<td>empty string</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;simple_pattern&quot;,</span><br><span class="line">          &quot;pattern&quot;: &quot;[0123456789]&#123;3&#125;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;fd-786-335-514-x&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ 786, 335, 514 ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="②Simple-Pattern-Split"><a href="#②Simple-Pattern-Split" class="headerlink" title="②Simple Pattern Split"></a>②Simple Pattern Split</h4><p>Simple Pattern Split Tokenizer使用Lucene正则表达式来匹配符合文本，将匹配的文本作为分隔符进行切分。它使用的Lucene正则语法没有pattern tokenizer使用的Java正则语法强大，但是效率更高。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>simple_pattern_split</code></td>
+<td><a target="_blank" rel="noopener" href="https://lucene.apache.org/core/8_8_0/core/org/apache/lucene/util/automaton/RegExp.html">Lucene正则表达式</a></td>
+<td>empty string</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;simple_pattern_split&quot;,</span><br><span class="line">          &quot;pattern&quot;: &quot;_&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;an_underscored_phrase&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ an, underscored, phrase ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="③Pattern"><a href="#③Pattern" class="headerlink" title="③Pattern"></a>③Pattern</h4><p>Pattern  Tokenizer使用Java正则表达式来匹配符合文本，将匹配的文本作为分隔符进行切分。 </p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pattern</code></td>
+<td>正则表达式的pattern</td>
+<td><code>\W+</code></td>
+</tr>
+<tr>
+<td><code>flags</code></td>
+<td>正则表达式的 flags. Flags should be pipe-separated, eg “CASE_INSENSITIVE|COMMENTS”</td>
+<td></td>
+</tr>
+<tr>
+<td><code>group</code></td>
+<td>哪个group去抽取数据。</td>
+<td><code>-1</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;pattern&quot;,</span><br><span class="line">          &quot;pattern&quot;: &quot;,&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;comma,separated,values&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ comma, separated, values ]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="④Keyword"><a href="#④Keyword" class="headerlink" title="④Keyword"></a>④Keyword</h4><p>Keyword Tokenizer 不会对文本进行操作，会将一整块的输入数据作为一个token。</p>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>buffer_size</code></td>
+<td>term buffer 的大小。不建议修改</td>
+<td>默认256</td>
+</tr>
+</tbody></table>
+<h4 id="⑤Path-Hierarchy"><a href="#⑤Path-Hierarchy" class="headerlink" title="⑤Path Hierarchy"></a>⑤Path Hierarchy</h4><p>Path_hierarchy Tokenizer会对路径进行逐级划分。示例如下：</p>
+<blockquote>
+<p><code>/something/something/else</code><br><strong>经过该分词器后会得到如下数据 tokens</strong><br><code>/something</code>，<code>/something/something</code>，<code>/something/something/else</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>delimiter</code></td>
+<td>分隔符</td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td><code>replacement</code></td>
+<td>替代符用于替换分隔符</td>
+<td>默认与<code>delimiter</code>的值相同</td>
+</tr>
+<tr>
+<td><code>buffer_size</code></td>
+<td>缓存buffer的大小</td>
+<td><code>1024</code></td>
+</tr>
+<tr>
+<td><code>reverse</code></td>
+<td>是否将分词后的tokens反转</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>skip</code></td>
+<td>The number of initial tokens to skip</td>
+<td><code>0</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;my_tokenizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tokenizer&quot;: &#123;</span><br><span class="line">        &quot;my_tokenizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;path_hierarchy&quot;,</span><br><span class="line">          &quot;delimiter&quot;: &quot;-&quot;,</span><br><span class="line">          &quot;replacement&quot;: &quot;/&quot;,</span><br><span class="line">          &quot;skip&quot;: 2</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;one-two-three-four-five&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ /three, /three/four, /three/four/five ]</span><br><span class="line"></span><br><span class="line"># 如果reverse设置为true，得到如下token</span><br><span class="line"># [ one/two/three/, two/three/, three/ ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑥Character-group"><a href="#⑥Character-group" class="headerlink" title="⑥Character group"></a>⑥Character group</h4><p><code>char_group</code> Tokenizer通过字符进行切分，可以在参数中指定字符进行切分。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tokenize_on_chars</code></td>
+<td>分隔符或分隔符组成的数组，like e.g. <code>-</code>, or character groups: <code>whitespace</code>, <code>letter</code>, <code>digit</code>, <code>punctuation</code>, <code>symbol</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>max_token_length</code></td>
+<td>token最大长度，超过后按最大长度再次切分</td>
+<td><code>255</code></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &#123;</span><br><span class="line">    &quot;type&quot;: &quot;char_group&quot;,</span><br><span class="line">    &quot;tokenize_on_chars&quot;: [</span><br><span class="line">      &quot;whitespace&quot;,</span><br><span class="line">      &quot;-&quot;,</span><br><span class="line">      &quot;</span><br><span class="line">&quot;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;text&quot;: &quot;The QUICK brown-fox&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ The, QUICK, brown, fox ]</span><br></pre></td></tr></table></figure>
+
+
+<br>
+## 1.4 后过滤器TokenFilter
+**后过滤器是有顺序的，所以需要注意数组中的顺序。**
+
+<p>太多了，需要的话直接点进官网看吧，常用的做下说明：</p>
+<table>
+<thead>
+<tr>
+<th>后过滤器类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-apostrophe-tokenfilter.html">Apostrophe</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-asciifolding-tokenfilter.html">ASCII folding</a></td>
+<td>Converts alphabetic, numeric, and symbolic characters that are not in the Basic Latin Unicode block (first 127 ASCII characters) to their ASCII equivalent, if one exists. For example, the filter changes à to a.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-cjk-bigram-tokenfilter.html">CJK bigram</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-cjk-width-tokenfilter.html">CJK width</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-classic-tokenfilter.html">Classic</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-common-grams-tokenfilter.html">Common grams</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-condition-tokenfilter.html">Conditional</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-decimal-digit-tokenfilter.html">Decimal digit</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-delimited-payload-tokenfilter.html">Delimited payload</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-dict-decomp-tokenfilter.html">Dictionary decompounder</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-edgengram-tokenfilter.html">Edge n-gram</a></td>
+<td>Forms an <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/N-gram">n-gram</a> of a specified length from the beginning of a token.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-elision-tokenfilter.html">Elision</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-fingerprint-tokenfilter.html">Fingerprint</a></td>
+<td>Sorts and removes duplicate tokens from a token stream, then concatenates the stream into a single output token.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-flatten-graph-tokenfilter.html">Flatten graph</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html">Hunspell</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html">Hyphenation decompounder</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keep-types-tokenfilter.html">Keep types</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keep-words-tokenfilter.html">Keep words</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keyword-marker-tokenfilter.html">Keyword marker</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-keyword-repeat-tokenfilter.html">Keyword repeat</a></td>
+<td>Outputs a keyword version of each token in a stream. These keyword tokens are not stemmed.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-kstem-tokenfilter.html">KStem</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-length-tokenfilter.html">Length</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-limit-token-count-tokenfilter.html">Limit token count</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lowercase-tokenfilter.html">Lowercase</a></td>
+<td>Changes token text to lowercase. For example, you can use the lowercase filter to change THE Lazy DoG to the lazy dog.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-minhash-tokenfilter.html">MinHash</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-multiplexer-tokenfilter.html">Multiplexer</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-ngram-tokenfilter.html">N-gram</a></td>
+<td>Forms <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/N-gram">n-grams</a> of specified lengths from a token.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-normalization-tokenfilter.html">Normalization</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-pattern-capture-tokenfilter.html">Pattern capture</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-pattern_replace-tokenfilter.html">Pattern replace</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-phonetic-tokenfilter.html">Phonetic</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-porterstem-tokenfilter.html">Porter stem</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-predicatefilter-tokenfilter.html">Predicate script</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-remove-duplicates-tokenfilter.html">Remove duplicates</a></td>
+<td>Removes duplicate tokens in the same position.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-reverse-tokenfilter.html">Reverse</a></td>
+<td>Reverses each token in a stream. For example, you can use the reverse filter to change cat to tac.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-shingle-tokenfilter.html">Shingle</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-snowball-tokenfilter.html">Snowball</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html">Stemmer</a></td>
+<td>Provides <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/stemming.html#algorithmic-stemmers" title="Algorithmic stemmers">algorithmic stemming</a> for several languages, some with additional variants. For a list of supported languages, see the <a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html#analysis-stemmer-tokenfilter-language-parm"><code>language</code></a> parameter.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-override-tokenfilter.html">Stemmer override</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stop-tokenfilter.html">Stop</a></td>
+<td>Removes <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Stop_words">stop words</a> from a token stream.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-synonym-tokenfilter.html">Synonym</a></td>
+<td>The synonym token filter allows to easily handle synonyms during the analysis process. Synonyms are configured using a configuration file.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-synonym-graph-tokenfilter.html">Synonym graph</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-trim-tokenfilter.html">Trim</a></td>
+<td>Removes leading and trailing whitespace from each token in a stream. While this can change the length of a token, the trim filter does not change a token’s offsets.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-truncate-tokenfilter.html">Truncate</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-unique-tokenfilter.html">Unique</a></td>
+<td>Removes duplicate tokens from a stream. For example, you can use the unique filter to change the lazy lazy dog to the lazy dog.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-uppercase-tokenfilter.html">Uppercase</a></td>
+<td>Changes token text to uppercase. For example, you can use the uppercase filter to change the Lazy DoG to THE LAZY DOG.</td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-word-delimiter-tokenfilter.html">Word delimiter</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-word-delimiter-graph-tokenfilter.html">Word delimiter graph</a></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="①Edge-n-gram"><a href="#①Edge-n-gram" class="headerlink" title="①Edge n-gram"></a>①Edge n-gram</h4><p><code>edge_ngram</code>效果同<code>ngram</code>，区别是<code>edge_ngram</code>只会从头开始切分，同样是fox，拆成[ f, fo ]</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>min_gram</code></td>
+<td>拆分的最小长度</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>max_gram</code></td>
+<td>拆分的最大长度</td>
+<td>2</td>
+</tr>
+<tr>
+<td>preserve_original</td>
+<td>Emits original token when set to <code>true</code>.</td>
+<td>false</td>
+</tr>
+<tr>
+<td>side</td>
+<td>已废弃. 指定从token的 <code>front</code> 或是 <code>back</code>开始截取</td>
+<td>front</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot;: [</span><br><span class="line">    &#123; &quot;type&quot;: &quot;edge_ngram&quot;,</span><br><span class="line">      &quot;min_gram&quot;: 1,</span><br><span class="line">      &quot;max_gram&quot;: 2</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;the quick brown fox jumps&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ t, th, q, qu, b, br, f, fo, j, ju ]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="②N-gram"><a href="#②N-gram" class="headerlink" title="②N-gram"></a>②N-gram</h4><p>可以使用<code>ngram</code>将fox拆成[ f, fo, o, ox, x ]。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>min_gram</code></td>
+<td>拆分的最小长度</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>max_gram</code></td>
+<td>拆分的最大长度</td>
+<td>2</td>
+</tr>
+<tr>
+<td>preserve_original</td>
+<td>Emits original token when set to <code>true</code>.</td>
+<td>false</td>
+</tr>
+</tbody></table>
+<p><strong>具体演示如下</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot;: [ &quot;ngram&quot; ],</span><br><span class="line">  &quot;text&quot;: &quot;Quick fox&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ Q, Qu, u, ui, i, ic, c, ck, k, f, fo, o, ox, x ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="③Stop"><a href="#③Stop" class="headerlink" title="③Stop"></a>③Stop</h4><p>Stop后过滤器用于过滤掉停用词。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td>_english_</td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ignore_case</code></td>
+<td>是否大小写敏感</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>remove_trailing</code></td>
+<td>如果流的最后一个token是停用词，是否删除</td>
+<td>true</td>
+</tr>
+</tbody></table>
+<p><strong>默认的_english_过滤词组用于过滤掉</strong><code>a, an, and, are, as, at, be, but, by, for, if, in, into, is, it, no, not, of, on, or, such, that, the, their, then, there, these, they, this, to, was, will,  with</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot;: [ &quot;stop&quot; ],</span><br><span class="line">  &quot;text&quot;: &quot;a quick fox jumps over the lazy dog&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ quick, fox, jumps, over, lazy, dog ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="④Stemmer"><a href="#④Stemmer" class="headerlink" title="④Stemmer"></a>④Stemmer</h4><p>为部分语言提供了<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/stemming.html#algorithmic-stemmers" title="Algorithmic stemmers">algorithmic stemming</a>。<br>获得token的词源并替换该token。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot;: [ &quot;stemmer&quot; ],</span><br><span class="line">  &quot;text&quot;: &quot;the foxes jumping quickly&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ the, fox, jump, quickli ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑤Keyword-repeat"><a href="#⑤Keyword-repeat" class="headerlink" title="⑤Keyword repeat"></a>⑤Keyword repeat</h4><p>对每个token进行复制并返回。一般配合Stemmer和Remove duplicates。Stemmer获取词源时不会保留原token，在Stemmer之前加Keyword repeat就可以同时获取词源和原词。但是有些token的词源就是原token，造成同一位置上有重复的token，则可以通过Remove duplicates进行去重。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;whitespace&quot;,</span><br><span class="line">  &quot;filter&quot;: [</span><br><span class="line">    &quot;keyword_repeat&quot;,</span><br><span class="line">    &quot;stemmer&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;fox running&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;tokens&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;fox&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 0,</span><br><span class="line">            &quot;end_offset&quot;: 3,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 0</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;fox&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 0,</span><br><span class="line">            &quot;end_offset&quot;: 3,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 0</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;running&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 4,</span><br><span class="line">            &quot;end_offset&quot;: 11,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 1</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;run&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 4,</span><br><span class="line">            &quot;end_offset&quot;: 11,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 1</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑥Remove-duplicates"><a href="#⑥Remove-duplicates" class="headerlink" title="⑥Remove duplicates"></a>⑥Remove duplicates</h4><p>删除同一位置(start_offset)上的相同的token。一般配合Stemmer和使用。</p>
+<p><strong>如下同一位置出现了重复的token</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;whitespace&quot;,</span><br><span class="line">  &quot;filter&quot;: [</span><br><span class="line">    &quot;keyword_repeat&quot;,</span><br><span class="line">    &quot;stemmer&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;jumping dog&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokens&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;jumping&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;jump&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;dog&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 8,</span><br><span class="line">      &quot;end_offset&quot;: 11,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;dog&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 8,</span><br><span class="line">      &quot;end_offset&quot;: 11,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 1</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>使用remove_duplicates</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot;: &quot;whitespace&quot;,</span><br><span class="line">  &quot;filter&quot;: [</span><br><span class="line">    &quot;keyword_repeat&quot;,</span><br><span class="line">    &quot;stemmer&quot;,</span><br><span class="line">    &quot;remove_duplicates&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;text&quot;: &quot;jumping dog&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokens&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;jumping&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;jump&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 0,</span><br><span class="line">      &quot;end_offset&quot;: 7,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot;: &quot;dog&quot;,</span><br><span class="line">      &quot;start_offset&quot;: 8,</span><br><span class="line">      &quot;end_offset&quot;: 11,</span><br><span class="line">      &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">      &quot;position&quot;: 1</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑦Uppercase"><a href="#⑦Uppercase" class="headerlink" title="⑦Uppercase"></a>⑦Uppercase</h4><p>将token都转变为大写。<br>如将 <code>The Lazy DoG</code> 转变为 <code>THE LAZY DOG</code>。</p>
+<h4 id="⑧Lowercase"><a href="#⑧Lowercase" class="headerlink" title="⑧Lowercase"></a>⑧Lowercase</h4><p>将token都转变为小写。<br>如将 <code>The Lazy DoG</code> 转变为 <code>the lazy dog</code>。</p>
+<h4 id="⑨ASCII-folding"><a href="#⑨ASCII-folding" class="headerlink" title="⑨ASCII folding"></a>⑨ASCII folding</h4><p><code>asciifolding</code>将不在基本拉丁Unicode块中的字母、数字和符号字符（前127个ASCII字符）转换为其ASCII等效字符（如果存在）。例如更改à 到a。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot; : &quot;standard&quot;,</span><br><span class="line">  &quot;filter&quot; : [&quot;asciifolding&quot;],</span><br><span class="line">  &quot;text&quot; : &quot;açaí à la carte&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ acai, a, la, carte ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑩Fingerprint"><a href="#⑩Fingerprint" class="headerlink" title="⑩Fingerprint"></a>⑩Fingerprint</h4><p>删除重复的token，并对token进行排序，然后将排序后的token作为一个token输出。</p>
+<p>如使用Fingerprint过滤 [ the, fox, was, very, very, quick ] 步骤如下：<br>1）先进行排序 [ fox, quick, the, very, very, was ]<br>2）删除重复的token<br>3）变成一个token输出 [fox quick the very was ]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;tokenizer&quot; : &quot;whitespace&quot;,</span><br><span class="line">  &quot;filter&quot; : [&quot;fingerprint&quot;],</span><br><span class="line">  &quot;text&quot; : &quot;zebra jumps over resting resting dog&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ dog jumps over resting zebra ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑪Trim"><a href="#⑪Trim" class="headerlink" title="⑪Trim"></a>⑪Trim</h4><p>删除每个token的最前和最后面的空格符，但是不会改变token的offset位置。<br><code>standard</code>和<code>whitespace</code> tokenizer默认使用Trim，当使用这两个时可以不用添加Trim后过滤器。</p>
+<h4 id="⑫Unique"><a href="#⑫Unique" class="headerlink" title="⑫Unique"></a>⑫Unique</h4><p>过滤掉重复的token，如the lazy lazy dog进行过滤后得到the lazy dog。<br>对比Remove duplicates，Unique只需要token相同即可。</p>
+<h4 id="⑬Synonym"><a href="#⑬Synonym" class="headerlink" title="⑬Synonym"></a>⑬Synonym</h4><p>同义词标记过滤器允许在分析过程中处理同义词。同义词是使用配置文件配置的。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>expand</code></td>
+<td>If the mapping was “bar, foo, baz” and <code>expand</code> was set to <code>false</code> no mapping would get added as when <code>expand=false</code> the target mapping is the first word. However, if <code>expand=true</code> then the mappings added would be equivalent to <code>foo, baz =&gt; foo, baz</code> i.e, all mappings other than the stop word.</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>lenient</code></td>
+<td>If <code>true</code> ignores exceptions while parsing the synonym configuration. It is important to note that only those synonym rules which cannot get parsed are ignored.</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>synonyms</code></td>
+<td>指定同义词，如 [ “foo, bar &#x3D;&gt; baz” ]</td>
+<td></td>
+</tr>
+<tr>
+<td><code>synonyms_path</code></td>
+<td>同义词文件的路径</td>
+<td></td>
+</tr>
+<tr>
+<td><code>tokenizer</code></td>
+<td>The <code>tokenizer</code> parameter controls the tokenizers that will be used to tokenize the synonym, this parameter is for backwards compatibility for indices that created before 6.0.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ignore_case</code></td>
+<td>The <code>ignore_case</code> parameter works with <code>tokenizer</code> parameter only.</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>注：如果目标同义词(&#x3D;&gt;符号后的词)是停用词，那么这个同义词映射就会失效。如果查询的词(&#x3D;&gt;符号前的词)是停用词，那么这个词就会失效。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">PUT /test_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">      &quot;analysis&quot;: &#123;</span><br><span class="line">        &quot;analyzer&quot;: &#123;</span><br><span class="line">          &quot;synonym&quot;: &#123;</span><br><span class="line">            &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">            &quot;filter&quot;: [ &quot;my_stop&quot;, &quot;synonym&quot; ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;filter&quot;: &#123;</span><br><span class="line">          &quot;my_stop&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;stop&quot;,</span><br><span class="line">            &quot;stopwords&quot;: [ &quot;bar&quot; ]</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;synonym&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;synonym&quot;,</span><br><span class="line">            &quot;lenient&quot;: true,</span><br><span class="line">            &quot;synonyms&quot;: [ &quot;foo, bar =&gt; baz&quot; ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>使用同义词配置文件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT /test_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;index&quot;: &#123;</span><br><span class="line">      &quot;analysis&quot;: &#123;</span><br><span class="line">        &quot;analyzer&quot;: &#123;</span><br><span class="line">          &quot;synonym&quot;: &#123;</span><br><span class="line">            &quot;tokenizer&quot;: &quot;whitespace&quot;,</span><br><span class="line">            &quot;filter&quot;: [ &quot;synonym&quot; ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;filter&quot;: &#123;</span><br><span class="line">          &quot;synonym&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;synonym&quot;,</span><br><span class="line">            &quot;synonyms_path&quot;: &quot;analysis/synonym.txt&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>文件格式如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"># Blank lines and lines starting with pound are comments.</span><br><span class="line"></span><br><span class="line"># Explicit mappings match any token sequence on the LHS of &quot;=&gt;&quot;</span><br><span class="line"># and replace with all alternatives on the RHS.  These types of mappings</span><br><span class="line"># ignore the expand parameter in the schema.</span><br><span class="line"># Examples:</span><br><span class="line">i-pod, i pod =&gt; ipod</span><br><span class="line">sea biscuit, sea biscit =&gt; seabiscuit</span><br><span class="line"></span><br><span class="line"># Equivalent synonyms may be separated with commas and give</span><br><span class="line"># no explicit mapping.  In this case the mapping behavior will</span><br><span class="line"># be taken from the expand parameter in the schema.  This allows</span><br><span class="line"># the same synonym file to be used in different synonym handling strategies.</span><br><span class="line"># Examples:</span><br><span class="line">ipod, i-pod, i pod</span><br><span class="line">foozball , foosball</span><br><span class="line">universe , cosmos</span><br><span class="line">lol, laughing out loud</span><br><span class="line"></span><br><span class="line"># If expand==true, &quot;ipod, i-pod, i pod&quot; is equivalent</span><br><span class="line"># to the explicit mapping:</span><br><span class="line">ipod, i-pod, i pod =&gt; ipod, i-pod, i pod</span><br><span class="line"># If expand==false, &quot;ipod, i-pod, i pod&quot; is equivalent</span><br><span class="line"># to the explicit mapping:</span><br><span class="line">ipod, i-pod, i pod =&gt; ipod</span><br><span class="line"></span><br><span class="line"># Multiple synonym mapping entries are merged.</span><br><span class="line">foo =&gt; foo bar</span><br><span class="line">foo =&gt; baz</span><br><span class="line"># is equivalent to</span><br><span class="line">foo =&gt; foo bar, baz</span><br></pre></td></tr></table></figure>
+
+<p>注：经验所得，带有 synonym 的 analyzer 适用于 search 而不适用于存储 index。</p>
+<ul>
+<li>synonym 增加了field 的 term 数量(导致评分参数 avgdl 变大)， 还有重要的是 如果使用 match query 的话，会导致 匹配的 termFreq 增加到 synonym 的数量，影响评分。</li>
+<li>如果 同义词变化的话，需要同步更新所有的关系到同义词的文档。</li>
+<li>对于匹配原词 和 他的同义词，往往原词的 评分应该更高。但是 ES 中却一视同仁。没有区别。虽然可以通过定义不同的 field ，一个 field 使用 完全切分，一个field 使用同义词，并且在search时，给 全完且分词field 一个较高的权重。但是又带来了怎加了term 存储的容量扩大问题。</li>
+</ul>
+<h4 id="⑭Reverse"><a href="#⑭Reverse" class="headerlink" title="⑭Reverse"></a>⑭Reverse</h4><p>将每个token翻转，如将cat替换为tac。</p>
+<br>
+## 1.5 分析器Analyzer
+以下是es自带的分析器，绝大多数的分析器我们可以通过以上介绍的CharFilter，Tokenizer和TokenFilter自己组合实现相同的功能。
+| 分析器类型 | 说明 |
+|----------------|--------|
+| Standard Analyzer | The `standard` analyzer divides text into terms on word boundaries, as defined by the Unicode Text Segmentation algorithm. It removes most punctuation, lowercases terms, and supports removing stop words. |
+| Simple Analyzer | The `simple` analyzer divides text into terms whenever it encounters a character which is not a letter. It lowercases all terms. |
+| Whitespace Analyzer | The `whitespace` analyzer divides text into terms whenever it encounters any whitespace character. It does not lowercase terms. |
+| Stop Analyzer | The `stop` analyzer is like the simple analyzer, but also supports removal of stop words. |
+| Keyword Analyzer | The `keyword` analyzer is a “noop” analyzer that accepts whatever text it is given and outputs the exact same text as a single term. |
+| Pattern Analyzer | The `pattern` analyzer uses a regular expression to split the text into terms. It supports lower-casing and stop words. |
+| Language Analyzer |Elasticsearch provides many language-specific analyzers like `english` or `french`.|
+| Fingerprint Analyzer | The `fingerprint` analyzer is a specialist analyzer which creates a fingerprint which can be used for duplicate detection. |
+
+<h4 id="①Standard-Analyzer"><a href="#①Standard-Analyzer" class="headerlink" title="①Standard Analyzer"></a>①Standard Analyzer</h4><p>standard analyzer 是 Elasticsearch 的缺省分析器：</p>
+<ul>
+<li>没有 Char Filter</li>
+<li>使用 standard tokonizer</li>
+<li>使用lowercase filter和stop token filter。默认的情况下 stop words 为 _none_，也即不过滤任何 stop words。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>max_token_length</code></td>
+<td>分词后单个token的最大长度，如果超过最大长度，按最大长度分词</td>
+<td>Defaults to <code>255</code>.</td>
+</tr>
+<tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td>Defaults to <code>_none_</code>.</td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>直接使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;standard&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ the, 2, quick, brown, foxes, jumped, over, the, lazy, dog&#x27;s, bone ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>指定参数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_english_analyzer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;max_token_length&quot;: 5,</span><br><span class="line">          &quot;stopwords&quot;: &quot;_english_&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_english_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ 2, quick, brown, foxes, jumpe, d, over, lazy, dog&#x27;s, bone ]</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="②Simple-Analyzer"><a href="#②Simple-Analyzer" class="headerlink" title="②Simple Analyzer"></a>②Simple Analyzer</h4><p>简单分析器</p>
+<ul>
+<li>没有Char Filter</li>
+<li>使用Lowercase Tokenier</li>
+<li>没有TokenFilter</li>
+</ul>
+<h4 id="③Whitespace-Analyzer"><a href="#③Whitespace-Analyzer" class="headerlink" title="③Whitespace Analyzer"></a>③Whitespace Analyzer</h4><p>空格分析器，遇到空格</p>
+<ul>
+<li>没有Char Filter</li>
+<li>使用Whitespace Tokenier</li>
+<li>没有TokenFilter</li>
+</ul>
+<h4 id="④Stop-Analyzer"><a href="#④Stop-Analyzer" class="headerlink" title="④Stop Analyzer"></a>④Stop Analyzer</h4><p>与简单分析器类似，但是添加了停用词，默认使用的是<code>_english_</code>停用词。</p>
+<ul>
+<li>没有Char Filter</li>
+<li>使用Lowercase Tokenier</li>
+<li>使用Stop token filter，默认为<code>_english_</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td><code>_none_</code></td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>直接使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;stop&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ quick, brown, foxes, jumped, over, lazy, dog, s, bone ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>指定参数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_stop_analyzer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;stop&quot;,</span><br><span class="line">          &quot;stopwords&quot;: [&quot;the&quot;, &quot;over&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_stop_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ quick, brown, foxes, jumped, lazy, dog, s, bone ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑤Keyword-Analyzer"><a href="#⑤Keyword-Analyzer" class="headerlink" title="⑤Keyword Analyzer"></a>⑤Keyword Analyzer</h4><p>keyword分析器</p>
+<ul>
+<li>没有Char Filter</li>
+<li>使用Keyword Tokenier</li>
+<li>没有TokenFilter</li>
+</ul>
+<h4 id="⑥Language-Analyzer"><a href="#⑥Language-Analyzer" class="headerlink" title="⑥Language Analyzer"></a>⑥Language Analyzer</h4><p>语言分析器，支持如下类型：<code>arabic</code>, <code>armenian</code>, <code>basque</code>, <code>bengali</code>, <code>brazilian</code>, <code>bulgarian</code>, <code>catalan</code>, <code>cjk</code>, <code>czech</code>, <code>danish</code>, <code>dutch</code>, <code>english</code>, <code>estonian</code>, <code>finnish</code>, <code>french</code>, <code>galician</code>, <code>german</code>, <code>greek</code>, <code>hindi</code>, <code>hungarian</code>, <code>indonesian</code>, <code>irish</code>, <code>italian</code>, <code>latvian</code>, <code>lithuanian</code>, <code>norwegian</code>, <code>persian</code>, <code>portuguese</code>, <code>romanian</code>, <code>russian</code>, <code>sorani</code>, <code>spanish</code>, <code>swedish</code>, <code>turkish</code>, <code>thai</code>.</p>
+<p><strong>我们只会用到type为english的分析器吧</strong></p>
+<ul>
+<li>没有Char Filter</li>
+<li>使用Standard Tokenizer</li>
+<li>使用Stemmer过滤器</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td>Defaults to <code>_english_</code>.</td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>直接使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;english&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;Running Apps in a Phone&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [run]  [app]  [phone]</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建一个自定义分析器实现english分析器的功能</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">PUT /english_example</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;english_stop&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:       &quot;stop&quot;,</span><br><span class="line">          &quot;stopwords&quot;:  &quot;_english_&quot; </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;english_keywords&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:       &quot;keyword_marker&quot;,</span><br><span class="line">          &quot;keywords&quot;:   [&quot;example&quot;] </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;english_stemmer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:       &quot;stemmer&quot;,</span><br><span class="line">          &quot;language&quot;:   &quot;english&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;english_possessive_stemmer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:       &quot;stemmer&quot;,</span><br><span class="line">          &quot;language&quot;:   &quot;possessive_english&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;rebuilt_english&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;:  &quot;standard&quot;,</span><br><span class="line">          &quot;filter&quot;: [</span><br><span class="line">            &quot;english_possessive_stemmer&quot;,</span><br><span class="line">            &quot;lowercase&quot;,</span><br><span class="line">            &quot;english_stop&quot;,</span><br><span class="line">            &quot;english_keywords&quot;,</span><br><span class="line">            &quot;english_stemmer&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑦Pattern-Analyzer"><a href="#⑦Pattern-Analyzer" class="headerlink" title="⑦Pattern Analyzer"></a>⑦Pattern Analyzer</h4><ul>
+<li>没有CharFilter</li>
+<li>分词器使用Pattern Tokenizer</li>
+<li>Token Filters使用Lower Case Token Filter和Stop Token Filter (disabled by default)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pattern</code></td>
+<td>Java正则表达式</td>
+<td><code>\W+</code></td>
+</tr>
+<tr>
+<td><code>flags</code></td>
+<td>Java regular expression flags. Flags should be pipe-separated, eg <code>&quot;CASE_INSENSITIVE|COMMENTS&quot;</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lowercase</code></td>
+<td>Should terms be lowercased or not. Defaults to <code>true</code>.</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td>_none_</td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>直接使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;pattern&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;The 2 QUICK Brown-Foxes jumped over the lazy dog&#x27;s bone.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ the, 2, quick, brown, foxes, jumped, over, the, lazy, dog, s, bone ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>指定参数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_email_analyzer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:      &quot;pattern&quot;,</span><br><span class="line">          &quot;pattern&quot;:   &quot;\W|_&quot;, </span><br><span class="line">          &quot;lowercase&quot;: true</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_email_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;John_Smith@foo-bar.com&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ john, smith, foo, bar, com ]</span><br></pre></td></tr></table></figure>
+
+<h4 id="⑧Fingerprint-Analyzer"><a href="#⑧Fingerprint-Analyzer" class="headerlink" title="⑧Fingerprint Analyzer"></a>⑧Fingerprint Analyzer</h4><p>Fingerprint Analyzer实现了<a target="_blank" rel="noopener" href="https://github.com/OpenRefine/OpenRefine/wiki/Clustering-In-Depth#fingerprint">fingerprinting</a><br>算法。文本会被转为小写格式，经过规范化处理后移除扩展字符，然后再经过排序，删除重复数据组合为单个token；</p>
+<ul>
+<li>没有CharFilter</li>
+<li>Tokenizer使用Standard Tokenizer</li>
+<li>Token Filters 使用Lower Case Token Filter、ASCII folding、Stop Token Filter (disabled by default)、Fingerprint</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>separator</code></td>
+<td>The character to use to concatenate the terms.</td>
+<td>Defaults to a space.</td>
+</tr>
+<tr>
+<td><code>max_output_size</code></td>
+<td>token允许的最大值就，超过该值直接丢弃</td>
+<td>255</td>
+</tr>
+<tr>
+<td><code>stopwords</code></td>
+<td>预先定义的停用词或停用词组成的数组</td>
+<td><em>none</em></td>
+</tr>
+<tr>
+<td><code>stopwords_path</code></td>
+<td>停用词文件的路径</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>直接使用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;fingerprint&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;Yes yes, Gödel said this sentence is consistent and.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ and consistent godel is said sentence this yes ]</span><br></pre></td></tr></table></figure>
+
+<p><strong>指定参数</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT my-index-000001</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_fingerprint_analyzer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;fingerprint&quot;,</span><br><span class="line">          &quot;stopwords&quot;: &quot;_english_&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST my-index-000001/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  &quot;analyzer&quot;: &quot;my_fingerprint_analyzer&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;Yes yes, Gödel said this sentence is consistent and.&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># [ consistent godel said sentence yes ]</span><br></pre></td></tr></table></figure>
+
+<br>
+## 1.6 自定义分析器示例
+#### 示例一
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">PUT chenjie.asia:9200/analyzetest</span><br><span class="line">&#123;</span><br><span class="line">    &quot;settings&quot;:&#123;</span><br><span class="line">        &quot;analysis&quot;:&#123;</span><br><span class="line">            &quot;analyzer&quot;:&#123;</span><br><span class="line">                &quot;my&quot;:&#123;                //分析器</span><br><span class="line">                    &quot;tokenizer&quot;:&quot;punctuation&quot;,    //指定所用的分词器</span><br><span class="line">                    &quot;type&quot;:&quot;custom&quot;,        //自定义类型的分析器</span><br><span class="line">                    &quot;char_filter&quot;:[&quot;emoticons&quot;],    //指定所用的字符过滤器</span><br><span class="line">                    &quot;filter&quot;:[&quot;lowercase&quot;,&quot;english_stop&quot;]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;char_filter&quot;:&#123;        //字符过滤器</span><br><span class="line">                &quot;emoticons&quot;:&#123;        //字符过滤器的名字</span><br><span class="line">                    &quot;type&quot;:&quot;mapping&quot;,    //匹配模式</span><br><span class="line">                    &quot;mappings&quot;:[</span><br><span class="line">                        &quot;:)=&gt;_happy_&quot;,        //如果匹配上:)，那么替换为_happy_</span><br><span class="line">                        &quot;:(=&gt;_sad_&quot;            //如果匹配上:(，那么替换为_sad_</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;tokenizer&quot;:&#123;        //分词器</span><br><span class="line">                &quot;punctuation&quot;:&#123;    //分词器的名字</span><br><span class="line">                    &quot;type&quot;:&quot;pattern&quot;,    //正则匹配分词器</span><br><span class="line">                    &quot;pattern&quot;:&quot;[.,!?]&quot;    //通过正则匹配方式匹配需要作为分隔符的字符，此处为 . , ! ? ，作为分隔符进行分词</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;filter&quot;:&#123;        //后过滤器</span><br><span class="line">                &quot;english_stop&quot;:&#123;    //后过滤器的名字</span><br><span class="line">                    &quot;type&quot;:&quot;stop&quot;,       //停用词</span><br><span class="line">                    &quot;stopwords&quot;:&quot;_english_&quot;    //指定停用词，过滤掉停用词</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># GET chenjie.asia:9200/analyzetest/_analyze</span><br><span class="line">&#123;</span><br><span class="line">	&quot;analyzer&quot;: &quot;my&quot;,</span><br><span class="line">	&quot;text&quot;: &quot;I am a  :)  person,and you&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+>上述自定义分析器对文本  "I am a  :)  person,and you"  进行分词 ，最终得到两个分词   "I am a  _happy_  person" 和 "and you"  ;
+> 第一步：用字符过滤器将 :) 替换为 _happy_
+> 第二步：用分词器，通过正则表达式匹配到逗号，在逗号处进行分词
+> 第三步：过滤停用词
+
+<h4 id="示例二"><a href="#示例二" class="headerlink" title="示例二"></a>示例二</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;my_content_analyzer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;custom&quot;,</span><br><span class="line">          &quot;char_filter&quot;: [</span><br><span class="line">            &quot;xschool_filter&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;filter&quot;: [</span><br><span class="line">            &quot;lowercase&quot;,</span><br><span class="line">            &quot;my_stop&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;char_filter&quot;: &#123;</span><br><span class="line">        &quot;xschool_filter&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;mapping&quot;,</span><br><span class="line">          &quot;mappings&quot;: [</span><br><span class="line">            &quot;X-School =&gt; XSchool&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;my_stop&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;stop&quot;,</span><br><span class="line">          &quot;stopwords&quot;: [&quot;so&quot;, &quot;to&quot;, &quot;the&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">  	&quot;type&quot;:&#123;</span><br><span class="line">	  &quot;properties&quot;: &#123;</span><br><span class="line">	    &quot;content&quot;: &#123;</span><br><span class="line">	      &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">	      &quot;analyzer&quot;: &quot;my_content_analyzer&quot;,</span><br><span class="line">	      &quot;search_analyzer&quot;: &quot;standard&quot;</span><br><span class="line">	    &#125;</span><br><span class="line">	  &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>可以指定搜索时，搜索进行制定具体的搜索词分析器 <code>search_analyzer</code>。</p>
+</blockquote>
+<br>
+# 二、ik和pinyin分词器
+## 2.1 安装ik和pinyin分词器
+1. 下载与es版本对应的分词器，这里使用的是7.6.2版本
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.6.2/elasticsearch-analysis-ik-7.6.2.zip   # ik分词器</span><br><span class="line">https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v7.6.2/elasticsearch-analysis-pinyin-7.6.2.zip   # pinyin分词器</span><br></pre></td></tr></table></figure>
+2. 将分词器进行安装
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">elasticsearch/bin/elasticsearch-plugin install elasticsearch-analysis-ik-7.6.2.zip</span><br><span class="line">elasticsearch/bin/elasticsearch-plugin install elasticsearch-analysis-pinyin-7.6.2.zip</span><br></pre></td></tr></table></figure>
+
+<p><strong>如何扩展ik分词器库</strong><br>添加自定义的词到ik分词器库，使得分词器可以切割出指定的词。<br>进入到plugins中的ik分词器的config文件夹下，创建文件myword.dic，在该文件中添加自定义词，然后将该文件配置到IKAnalyzer.conf.xml中的扩展字典中<entry key="ext_dict">myword.dic</entry>。然后重启。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;</span><br><span class="line">&lt;properties&gt;</span><br><span class="line">	&lt;comment&gt;IK Analyzer 扩展配置&lt;/comment&gt;</span><br><span class="line">	&lt;!--用户可以在这里配置自己的扩展字典 --&gt;</span><br><span class="line">	&lt;entry key=&quot;ext_dict&quot;&gt;custom/mydict.dic;custom/single_word_low_freq.dic&lt;/entry&gt;</span><br><span class="line">	 &lt;!--用户可以在这里配置自己的扩展停止词字典--&gt;</span><br><span class="line">	&lt;entry key=&quot;ext_stopwords&quot;&gt;custom/ext_stopword.dic&lt;/entry&gt;</span><br><span class="line"> 	&lt;!--用户可以在这里配置远程扩展字典 --&gt;</span><br><span class="line">	&lt;entry key=&quot;remote_ext_dict&quot;&gt;location&lt;/entry&gt;</span><br><span class="line"> 	&lt;!--用户可以在这里配置远程扩展停止词字典--&gt;</span><br><span class="line">	&lt;entry key=&quot;remote_ext_stopwords&quot;&gt;http://xxx.com/xxx.dic&lt;/entry&gt;</span><br><span class="line">&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>热更新 IK 分词使用方法</strong><br>目前该插件支持热更新 IK 分词，通过上文在 IK 配置文件中提到的如下配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">	&lt;!--用户可以在这里配置远程扩展字典 --&gt;</span><br><span class="line">&lt;entry key=&quot;remote_ext_dict&quot;&gt;location&lt;/entry&gt;</span><br><span class="line">	&lt;!--用户可以在这里配置远程扩展停止词字典--&gt;</span><br><span class="line">&lt;entry key=&quot;remote_ext_stopwords&quot;&gt;location&lt;/entry&gt;</span><br></pre></td></tr></table></figure>
+<p>其中 location 是指一个 url，比如 <a target="_blank" rel="noopener" href="http://yoursite.com/getCustomDict%EF%BC%8C%E8%AF%A5%E8%AF%B7%E6%B1%82%E5%8F%AA%E9%9C%80%E6%BB%A1%E8%B6%B3%E4%BB%A5%E4%B8%8B%E4%B8%A4%E7%82%B9%E5%8D%B3%E5%8F%AF%E5%AE%8C%E6%88%90%E5%88%86%E8%AF%8D%E7%83%AD%E6%9B%B4%E6%96%B0%E3%80%82">http://yoursite.com/getCustomDict，该请求只需满足以下两点即可完成分词热更新。</a></p>
+<ol>
+<li>该 http 请求需要返回两个头部(header)，一个是 Last-Modified，一个是 ETag，这两者都是字符串类型，只要有一个发生变化，该插件就会去抓取新的分词进而更新词库。</li>
+<li>该 http 请求返回的内容格式是一行一个分词，换行符用<br> 即可。</li>
+</ol>
+<p>满足上面两点要求就可以实现热更新分词了，不需要重启 ES 实例。<br>可以将需自动更新的热词放在一个 UTF-8 编码的 .txt 文件里，放在 nginx 或其他简易 http server 下，当 .txt 文件修改时，http server 会在客户端请求该文件时自动返回相应的 Last-Modified 和 ETag。可以另外做一个工具来从业务系统提取相关词汇，并更新这个 .txt 文件。</p>
+<br>
+## 2.2 ik分词器
+### 2.2.1 ik分词器
+Elasticsearch 内置的分词器对中文不友好，只会一个字一个字的分，无法形成词语，因此引入ik分词器。
+
+<p><strong>ik分词器包括</strong></p>
+<ul>
+<li>分析器Analyzer：ik_smart , ik_max_word</li>
+<li>分词器Tokenizer: ik_smart , ik_max_word</li>
+</ul>
+<blockquote>
+<p><strong>ik_max_word 和 ik_smart 什么区别?</strong></p>
+<ul>
+<li>ik_max_word: 会将文本做最细粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,中华人民,中华,华人,人民共和国,人民,人,民,共和国,共和,和,国国,国歌”，会穷尽各种可能的组合，适合 Term Query；</li>
+<li>ik_smart: 会做最粗粒度的拆分，比如会将“中华人民共和国国歌”拆分为“中华人民共和国,国歌”，适合 Phrase 查询。</li>
+</ul>
+</blockquote>
+<h3 id="2-2-2-同义词（TODO）"><a href="#2-2-2-同义词（TODO）" class="headerlink" title="2.2.2 同义词（TODO）"></a>2.2.2 同义词（TODO）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">PUT http://chenjie.asia:9200/ik_synonym</span><br><span class="line">&#123;</span><br><span class="line">	&quot;setting&quot;: &#123;</span><br><span class="line">		&quot;analysis&quot;: &#123;</span><br><span class="line">			&quot;analyzer&quot;: &#123;</span><br><span class="line">				&quot;ik_synonym_analyzer&quot;: &#123;</span><br><span class="line">					&quot;tokenizer&quot;: &quot;&quot;,</span><br><span class="line">					&quot;filter&quot;: &quot;&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;filter&quot;: &#123;</span><br><span class="line">				&quot;ik_synonym_filter&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;synonym&quot;,</span><br><span class="line">					&quot;synonyms_path&quot;: &quot;/&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;properties&quot;: &#123;</span><br><span class="line">			&quot;content&quot;: &#123;</span><br><span class="line">				&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">				&quot;analyzer&quot;: &quot;ik_smart&quot;</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;author&quot;: &#123;</span><br><span class="line">				&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">        	&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-3-停用词"><a href="#2-2-3-停用词" class="headerlink" title="2.2.3 停用词"></a>2.2.3 停用词</h3><br>
+## 2.3 pinyin分词器
+### 2.3.1 pinyin分词器
+该拼音分析插件用于汉字与拼音的转换，集成了[NLP工具](https://github.com/NLPchina/nlp-lang)。
+
+<p><strong>插件包括：</strong></p>
+<ul>
+<li>分析器Analyzer: pinyin </li>
+<li>分词器Tokenizer: pinyin</li>
+<li>后过滤器Token-filter:  pinyin</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>keep_first_letter</code></td>
+<td>保留拼音首字母组合</td>
+<td><code>刘德华</code>&gt;<code>ldh</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_separate_first_letter</code></td>
+<td>保留拼音首字母</td>
+<td><code>刘德华</code>&gt;<code>l</code>,<code>d</code>,<code>h</code></td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>limit_first_letter_length</code></td>
+<td>设置最长拼音首字母组合</td>
+<td></td>
+<td>16</td>
+</tr>
+<tr>
+<td><code>keep_full_pinyin</code></td>
+<td>保留全拼</td>
+<td><code>刘德华</code>&gt; [<code>liu</code>,<code>de</code>,<code>hua</code>]</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_joined_full_pinyin</code></td>
+<td>保留全拼组合</td>
+<td><code>刘德华</code>&gt; [<code>liudehua</code>]</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>keep_none_chinese</code></td>
+<td>过滤掉中文和数字</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_none_chinese_together</code></td>
+<td>不切分非中文字母</td>
+<td><strong>当设为true时：</strong><code>DJ音乐家</code> -&gt; <code>DJ</code>,<code>yin</code>,<code>yue</code>,<code>jia</code><br /><strong>当设为false时：</strong><code>DJ音乐家</code> -&gt; <code>D</code>,<code>J</code>,<code>yin</code>,<code>yue</code>,<code>jia</code> ；<strong>NOTE：</strong>keep_none_chinese需要为true</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_none_chinese_in_first_letter</code></td>
+<td>中文转为拼音首字母，并将非中文字母与拼音合并</td>
+<td><code>刘德华AT2016</code>-&gt;<code>ldhat2016</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_none_chinese_in_joined_full_pinyin</code></td>
+<td>中文转为全拼，并将非中文字母与拼音合并</td>
+<td><code>刘德华2016</code>-&gt;<code>liudehua2016</code></td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>none_chinese_pinyin_tokenize</code></td>
+<td>如果非中文字母是拼音，则将它们分成单独的拼音词。<code>keep_none_chinese</code> 和<code>keep_none_chinese_together</code> 需要为true。</td>
+<td><code>liudehuaalibaba13zhuanghan</code> -&gt; <code>liu</code>,<code>de</code>,<code>hua</code>,<code>a</code>,<code>li</code>,<code>ba</code>,<code>ba</code>,<code>13</code>,<code>zhuang</code>,<code>han</code></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>keep_original</code></td>
+<td>是否保留原输入</td>
+<td></td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>lowercase</code></td>
+<td>是否小写非中文字母</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>trim_whitespace</code></td>
+<td>首位去空格</td>
+<td></td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>remove_duplicated_term</code></td>
+<td>会移除重复的短语，可能会影响位置相关的查询结果。</td>
+<td><code>de的</code>&gt;<code>de</code></td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>ignore_pinyin_offset</code></td>
+<td>after 6.0, offset is strictly constrained, overlapped tokens are not allowed, with this parameter, overlapped token will allowed by ignore offset, please note, all position related query or highlight will become incorrect, you should use multi fields and specify different settings for different query purpose. if you need offset, please set it to false.</td>
+<td></td>
+<td>true</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-2-使用示例"><a href="#2-3-2-使用示例" class="headerlink" title="2.3.2 使用示例"></a>2.3.2 使用示例</h3><h4 id="使用pinyin分词器"><a href="#使用pinyin分词器" class="headerlink" title="使用pinyin分词器"></a>使用pinyin分词器</h4><p>创建一个名为diypytest的索引，该索引中使用了一个pinyin tokenizer。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># 创建索引</span><br><span class="line">PUT http://chenjie.asia:9200/diypytest</span><br><span class="line">&#123;</span><br><span class="line">	&quot;settings&quot;: &#123;</span><br><span class="line">		&quot;analysis&quot;: &#123;</span><br><span class="line">			&quot;analyzer&quot;: &#123;</span><br><span class="line">				&quot;pinyin_analyzer&quot;: &#123;</span><br><span class="line">					&quot;tokenizer&quot;: &quot;my_pinyin&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			&quot;tokenizer&quot;: &#123;</span><br><span class="line">				&quot;my_pinyin&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;pinyin&quot;,</span><br><span class="line">					&quot;keep_separate_first_letter&quot;: false,</span><br><span class="line">					&quot;keep_full_pinyin&quot;: true,</span><br><span class="line">					&quot;keep_original&quot;: true,</span><br><span class="line">					&quot;limit_first_letter_length&quot;: 16,</span><br><span class="line">					&quot;lowercase&quot;: true,</span><br><span class="line">					&quot;remove_duplicated_term&quot;: true</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;properties&quot;: &#123;</span><br><span class="line">			&quot;menu&quot;: &#123;</span><br><span class="line">				&quot;type&quot;: &quot;keyword&quot;,</span><br><span class="line">				&quot;fields&quot;: &#123;</span><br><span class="line">					&quot;pinyin&quot;: &#123;</span><br><span class="line">						&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">						&quot;store&quot;: false,</span><br><span class="line">						&quot;term_vector&quot;: &quot;with_offsets&quot;,</span><br><span class="line">						&quot;analyzer&quot;: &quot;pinyin_analyzer&quot;,</span><br><span class="line">						&quot;boost&quot;: 10</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 测试该分词器</span><br><span class="line">GET http://chenjie.asia:9200/diypytest/_analyze</span><br><span class="line">&#123;</span><br><span class="line">	&quot;analyzer&quot;: &quot;pinyin_analyzer&quot;,</span><br><span class="line">	&quot;text&quot;: &quot;西红柿鸡蛋&quot; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 插入数据</span><br><span class="line">PUT http://chenjie.asia:9200/diypytest/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">	&quot;menu&quot;:&quot;西红柿鸡蛋&quot;</span><br><span class="line">&#125;</span><br><span class="line">PUT http://chenjie.asia:9200/diypytest/_doc/2</span><br><span class="line">&#123;</span><br><span class="line">	&quot;menu&quot;:&quot;韭菜鸡蛋&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 查询数据</span><br><span class="line">GET http://chenjie.asia:9200/diypytest/_search?q=menu:xhsjd  // 查询为空</span><br><span class="line">GET http://chenjie.asia:9200/diypytest/_search?q=menu.pinyin:xhsjd  // 查询得到结果</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="使用pinyin-tokenFilter"><a href="#使用pinyin-tokenFilter" class="headerlink" title="使用pinyin-tokenFilter"></a>使用pinyin-tokenFilter</h4><p>创建一个名为diypytest2的索引，该索引中使用了一个pinyin后过滤器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># 创建索引</span><br><span class="line">http://chenjie.asia:9200/diypytest2</span><br><span class="line">&#123;</span><br><span class="line">    &quot;settings&quot; : &#123;</span><br><span class="line">        &quot;analysis&quot; : &#123;</span><br><span class="line">            &quot;analyzer&quot; : &#123;</span><br><span class="line">                &quot;menu_analyzer&quot; : &#123;</span><br><span class="line">                    &quot;tokenizer&quot; : &quot;whitespace&quot;,</span><br><span class="line">                    &quot;filter&quot; : &quot;pinyin_first_letter_and_full_pinyin_filter&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;filter&quot; : &#123;</span><br><span class="line">                &quot;pinyin_first_letter_and_full_pinyin_filter&quot; : &#123;</span><br><span class="line">                    &quot;type&quot; : &quot;pinyin&quot;,</span><br><span class="line">                    &quot;keep_first_letter&quot; : true,</span><br><span class="line">                    &quot;keep_full_pinyin&quot; : false,</span><br><span class="line">                    &quot;keep_none_chinese&quot; : true,</span><br><span class="line">                    &quot;keep_original&quot; : false,</span><br><span class="line">                    &quot;limit_first_letter_length&quot; : 16,</span><br><span class="line">                    &quot;lowercase&quot; : true,</span><br><span class="line">                    &quot;trim_whitespace&quot; : true,</span><br><span class="line">                    &quot;keep_none_chinese_in_first_letter&quot; : true</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 测试分词器</span><br><span class="line">http://chenjie.asia:9200/diypytest2/_analyze</span><br><span class="line">&#123;</span><br><span class="line">	&quot;analyzer&quot;:&quot;menu_analyzer&quot;,</span><br><span class="line">	&quot;text&quot;:&quot;西红柿鸡蛋 韭菜鸡蛋 糖醋里脊&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 结果如下</span><br><span class="line">&#123;</span><br><span class="line">    &quot;tokens&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;xhsjd&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 0,</span><br><span class="line">            &quot;end_offset&quot;: 5,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 0</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;jcjd&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 6,</span><br><span class="line">            &quot;end_offset&quot;: 10,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 1</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;token&quot;: &quot;tclj&quot;,</span><br><span class="line">            &quot;start_offset&quot;: 11,</span><br><span class="line">            &quot;end_offset&quot;: 15,</span><br><span class="line">            &quot;type&quot;: &quot;word&quot;,</span><br><span class="line">            &quot;position&quot;: 2</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="为索引添加自定义分词器"><a href="#为索引添加自定义分词器" class="headerlink" title="为索引添加自定义分词器"></a>为索引添加自定义分词器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">PUT  my_analyzer</span><br><span class="line">&#123;</span><br><span class="line">    &quot;settings&quot;:&#123;</span><br><span class="line">        &quot;analysis&quot;:&#123;</span><br><span class="line">            &quot;analyzer&quot;:&#123;</span><br><span class="line">                &quot;my&quot;:&#123;                //分析器</span><br><span class="line">                    &quot;tokenizer&quot;:&quot;punctuation&quot;,    //指定所用的分词器</span><br><span class="line">                    &quot;type&quot;:&quot;custom&quot;,        //自定义类型的分析器</span><br><span class="line">                    &quot;char_filter&quot;:[&quot;emoticons&quot;],    //指定所用的字符过滤器</span><br><span class="line">                    &quot;filter&quot;:[&quot;lowercase&quot;,&quot;english_stop&quot;]</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;char_filter&quot;:&#123;        //字符过滤器</span><br><span class="line">                    &quot;emoticons&quot;:&#123;        //字符过滤器的名字</span><br><span class="line">                        &quot;type&quot;:&quot;mapping&quot;,    //匹配模式</span><br><span class="line">                        &quot;mapping&quot;:[</span><br><span class="line">                            &quot;:)=&gt;_happy_&quot;,        //如果匹配上:)，那么替换为_happy_</span><br><span class="line">                            &quot;:(=&gt;_sad_&quot;            //如果匹配上:(，那么替换为_sad_</span><br><span class="line">                        ]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;tokenizer&quot;:&#123;        //分词器</span><br><span class="line">                    &quot;punctuation&quot;:&#123;    //分词器的名字</span><br><span class="line">                        &quot;type&quot;:&quot;pattern&quot;,    //正则匹配分词器</span><br><span class="line">                        &quot;pattern&quot;:&quot;[.,!?]&quot;    //通过正则匹配方式匹配需要作为分隔符的字符，此处为 . , ! ? ，作为分隔符进行分词</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;filter&quot;:&#123;        //后过滤器</span><br><span class="line">                    &quot;english_stop&quot;:&#123;    //后过滤器的名字</span><br><span class="line">                        &quot;type&quot;:&quot;stop&quot;,       //停用词</span><br><span class="line">                        &quot;stopwords&quot;:&quot;_english_&quot;    //指定停用词，不影响分词，但不允许查询</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>例如用上述自定义分析器对文本  “I am a  :)  person,and you”  进行分词 ，最终得到两个分词   “I am a  <em>happy</em>  person” 和 “and you”  ;<br>第一步：用字符过滤器将 :) 替换为 <em>happy</em><br>第二步：用分词器，通过正则表达式匹配到逗号，在逗号处进行分词<br>第三步：不查询停用词</p>
+</blockquote>
+<br>
+# 三、检索
+
+<h2 id="3-1-Field的配置"><a href="#3-1-Field的配置" class="headerlink" title="3.1 Field的配置"></a>3.1 Field的配置</h2><p>定义一个字段的时候，可以选择如下属性进行配置。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>  </span><br><span class="line">         <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span>  <span class="string">&quot;text&quot;</span><span class="punctuation">,</span> <span class="comment">//文本类型  ，指定类型</span></span><br><span class="line">      </span><br><span class="line">         <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="string">&quot;analyzed&quot;</span><span class="punctuation">,</span> <span class="comment">//该属性共有三个有效值：analyzed、no和not_analyzed，默认是analyzed；analyzed：表示该字段被分析，编入索引，产生的token能被搜索到；not_analyzed：表示该字段不会被分析，使用原始值编入索引，在索引中作为单个词；no：不编入索引，无法搜索该字段；</span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span><span class="string">&quot;ik&quot;</span><span class="comment">//指定分词器  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;boost&quot;</span><span class="punctuation">:</span><span class="number">1.23</span><span class="comment">//字段级别的分数加权  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;doc_values&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">false</span></span><span class="comment">//对not_analyzed字段，默认都是开启，analyzed字段不能使用，对排序和聚合能提升较大性能，节约内存,如果您确定不需要对字段进行排序或聚合，或者从script访问字段值，则可以禁用doc值以节省磁盘空间：</span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;fielddata&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;loading&quot;</span> <span class="punctuation">:</span> <span class="string">&quot;eager&quot;</span> <span class="punctuation">&#125;</span><span class="comment">//Elasticsearch 加载内存 fielddata 的默认行为是 延迟 加载 。 当 Elasticsearch 第一次查询某个字段时，它将会完整加载这个字段所有 Segment 中的倒排索引到内存中，以便于以后的查询能够获取更好的性能。</span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span><span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span><span class="punctuation">&#125;</span><span class="punctuation">&#125;</span> <span class="comment">//可以对一个字段提供多种索引模式，同一个字段的值，一个分词，一个不分词  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span><span class="number">100</span> <span class="comment">//超过100个字符的文本，将会被忽略，不被索引</span></span><br><span class="line">           </span><br><span class="line">         <span class="attr">&quot;include_in_all&quot;</span><span class="punctuation">:</span>ture<span class="comment">//设置是否此字段包含在_all字段中，默认是true，除非index设置成no选项  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;index_options&quot;</span><span class="punctuation">:</span><span class="string">&quot;docs&quot;</span><span class="comment">//4个可选参数docs（索引文档号） ,freqs（文档号+词频），positions（文档号+词频+位置，通常用来距离查询），offsets（文档号+词频+位置+偏移量，通常被使用在高亮字段）分词字段默认是position，其他的默认是docs  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;norms&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;enable&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;loading&quot;</span><span class="punctuation">:</span><span class="string">&quot;lazy&quot;</span><span class="punctuation">&#125;</span><span class="comment">//分词字段默认配置，不分词字段：默认&#123;&quot;enable&quot;:false&#125;，存储长度因子和索引时boost，建议对需要参与评分字段使用 ，会额外增加内存消耗量  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;null_value&quot;</span><span class="punctuation">:</span><span class="string">&quot;NULL&quot;</span><span class="comment">//设置一些缺失字段的初始化值，只有string可以使用，分词字段的null值也会被分词  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;position_increament_gap&quot;</span><span class="punctuation">:</span><span class="number">0</span><span class="comment">//影响距离查询或近似查询，可以设置在多值字段的数据上火分词字段上，查询时可指定slop间隔，默认值是100  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;store&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">false</span></span><span class="comment">//是否单独设置此字段的是否存储而从_source字段中分离，默认是false，只能搜索，不能获取值  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span><span class="string">&quot;ik&quot;</span><span class="comment">//设置搜索时的分词器，默认跟ananlyzer是一致的，比如index时用standard+ngram，搜索时用standard用来完成自动提示功能  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;similarity&quot;</span><span class="punctuation">:</span><span class="string">&quot;BM25&quot;</span><span class="comment">//默认是TF/IDF算法，指定一个字段评分策略，仅仅对字符串型和分词类型有效  </span></span><br><span class="line">         </span><br><span class="line">         <span class="attr">&quot;term_vector&quot;</span><span class="punctuation">:</span><span class="string">&quot;no&quot;</span><span class="comment">//默认不存储向量信息，支持参数yes（term存储），with_positions（term+位置）,with_offsets（term+偏移量），with_positions_offsets(term+位置+偏移量) 对快速高亮fast vector highlighter能提升性能，但开启又会加大索引体积，不适合大数据量用  </span></span><br><span class="line"><span class="punctuation">&#125;</span> </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-2-检索"><a href="#3-2-检索" class="headerlink" title="3.2 检索"></a>3.2 检索</h2><h3 id="3-2-1-搜索词的分词"><a href="#3-2-1-搜索词的分词" class="headerlink" title="3.2.1 搜索词的分词"></a>3.2.1 搜索词的分词</h3><p>每当一个文档在被录入到 Elasticsearch中 时，需要一个叫做 index 的过程。在 index 的过程中，它会为该字符串进行分词，并最终形成一个一个的 token，并存于数据库。但是，每当我们搜索一个字符串时，在搜索时，我们同样也要对该字符串进行分词，也会建立token，但不会存于数据库。</p>
+<p>①当你查询一个 全文 域时(match)， 会对查询字符串应用相同的分析器(或使用指定的分析器<code>search_analyzer</code>)，以产生正确的搜索词条列表。<br>②当你查询一个 精确值 域时(term)，不会分析查询字符串，而是搜索你指定的精确值。</p>
+<p><strong>示例：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT http://chenjie.asia:9200/test1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;content&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">        &quot;analyzer&quot;: &quot;standard&quot;,</span><br><span class="line">        &quot;search_analyzer&quot;: &quot;english&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET http://chenjie.asia:9200/test1/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;content&quot;: &quot;Happy a birthday&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>对于这个搜索来说，我们在默认的情况下，会把 “Happy a birthday” 使用同样的 <code>standard analyzer</code> 进行分词。如果我们指定<code>search_analyzer</code>为<code>english analyzer</code> 过滤器，它就会把字母 “a” 过滤掉，那么直剩下 “happy” 及 “birthday” 这两个词，而 “a” 将不进入搜索之中。</p>
+</blockquote>
+<h3 id="3-2-2-单字段检索"><a href="#3-2-2-单字段检索" class="headerlink" title="3.2.2 单字段检索"></a>3.2.2 单字段检索</h3><p>如上所示，使用match进行检索。</p>
+<h3 id="3-2-3-多字段检索"><a href="#3-2-3-多字段检索" class="headerlink" title="3.2.3 多字段检索"></a>3.2.3 多字段检索</h3><h4 id="检索多个field"><a href="#检索多个field" class="headerlink" title="检索多个field"></a>检索多个field</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">PUT http://chenjie.asia:9200/test2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">	  &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;content&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_smart&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;author&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 插入数据</span><br><span class="line">POST http://chenjie.asia:9200/test2/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">	&quot;content&quot;: &quot;I am good!&quot;,</span><br><span class="line">	&quot;author&quot;: &quot;cj&quot;</span><br><span class="line">&#125;</span><br><span class="line">POST http://chenjie.asia:9200/test2/_doc/2</span><br><span class="line">&#123;</span><br><span class="line">	&quot;content&quot;: &quot;CJ is good!&quot;,</span><br><span class="line">	&quot;author&quot;: &quot;zs&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 进行检索，以上两条都可以检索到，因为字段中有匹配的分词</span><br><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;: &#123;</span><br><span class="line">		&quot;multi_match&quot;: &#123;</span><br><span class="line">			&quot;query&quot;: &quot;cj&quot;,</span><br><span class="line">			&quot;fields&quot;: [&quot;content&quot;,&quot;author&quot;]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="检索一个字段的多种索引模式"><a href="#检索一个字段的多种索引模式" class="headerlink" title="检索一个字段的多种索引模式"></a>检索一个字段的多种索引模式</h4><p>当我们需要对某个字段进行多种方式的分词，使用多个不同的 anaylzer 来提高我们的搜索，就可以使用fields定义多种分析方式，使用不同的分析器来分析同样的一个字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">PUT http://chenjie.asia:9200/test3</span><br><span class="line">&#123;</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;properties&quot;: &#123;</span><br><span class="line">			&quot;content&quot;: &#123;</span><br><span class="line">				&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">				&quot;analyzer&quot;: &quot;ik_smart&quot;,</span><br><span class="line">				&quot;fields&quot;: &#123;</span><br><span class="line">					&quot;py&quot;: &#123;</span><br><span class="line">						&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">						&quot;analyzer&quot;: &quot;pinyin&quot;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 插入数据</span><br><span class="line">POST http://chenjie.asia:9200/test3/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">	&quot;content&quot;: &quot;我胡汉三又回来了&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 使用拼音和中文都可以检索到这条文档</span><br><span class="line">GET http://chenjie.asia:9200/test3/_search</span><br><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;: &#123;</span><br><span class="line">		&quot;multi_match&quot;: &#123;</span><br><span class="line">			&quot;query&quot;: &quot;huhansan&quot;,</span><br><span class="line">			&quot;fields&quot;: [&quot;content&quot;,&quot;content.py&quot;]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET http://chenjie.asia:9200/test3/_search</span><br><span class="line">&#123;</span><br><span class="line">	&quot;query&quot;: &#123;</span><br><span class="line">		&quot;multi_match&quot;: &#123;</span><br><span class="line">			&quot;query&quot;: &quot;胡汉三&quot;,</span><br><span class="line">			&quot;fields&quot;: [&quot;content&quot;,&quot;content.py&quot;]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="五种类型的multi-match-query"><a href="#五种类型的multi-match-query" class="headerlink" title="五种类型的multi match query"></a>五种类型的multi match query</h4><ol>
+<li>best_fields: (default) Finds documents which match any field, but uses the _score from the best field.</li>
+<li>most_fields: Finds documents which match any field and combines the _score from each field.(与best_fields不同之处在于相关性评分，best_fields取最大匹配得分（max计算），而most_fields取所有匹配之和（sum计算）)</li>
+<li>cross_fields: Treats fields with the same analyzer as though they were one big field. Looks for each word in any field.(所有输入的Token必须在同一组的字段上全部匹配,)</li>
+<li>phrase: Runs a match_phrase query on each field and combines the _score from each field.</li>
+<li>phrase_prefix: Runs a match_phrase_prefix query on each field and combines the _score from each field.</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET http://chenjie.asia:9200/article/_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;multi_match&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;hxr&quot;,</span><br><span class="line">            &quot;fields&quot;: [</span><br><span class="line">                &quot;name^5&quot;,</span><br><span class="line">                &quot;name.FPY&quot;,</span><br><span class="line">                &quot;name.SPY&quot;,</span><br><span class="line">                &quot;name.IKS^0.8&quot;</span><br><span class="line">            ],</span><br><span class="line">            &quot;type&quot;: &quot;best_fields&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+<br>
+`文章字数受限，下篇请看` [Elasticsearch自定义分析器（下）](https://www.jianshu.com/writer#/notebooks/44681488/notes/88245198)
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/ELK/Elasticsearch%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%B8%8A%EF%BC%89/">http://example.com/2023/05/06/ELK/Elasticsearch%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%B8%8A%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/ELK/Elasticsearch-%E5%9F%BA%E7%A1%80/" title="Elasticsearch-基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Elasticsearch-基础</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/ELK/Elasticsearch%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%B8%8B%EF%BC%89/" title="Elasticsearch自定义分析器（下）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Elasticsearch自定义分析器（下）</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E6%9E%90%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">一、分析器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 概念：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0%E4%BD%BF%E7%94%A8html-strip%E5%AD%97%E7%AC%A6%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.1.0.1.</span> <span class="toc-text">①使用html_strip字符过滤器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1%E4%BD%BF%E7%94%A8mapping-%E5%AD%97%E7%AC%A6%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.1.0.2.</span> <span class="toc-text">②使用mapping 字符过滤器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2%E4%BD%BF%E7%94%A8pattern-replace-%E5%AD%97%E7%AC%A6%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-number">1.1.0.3.</span> <span class="toc-text">③使用pattern_replace 字符过滤器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0-Standard"><span class="toc-number">1.1.0.4.</span> <span class="toc-text">① Standard</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1Letter"><span class="toc-number">1.1.0.5.</span> <span class="toc-text">②Letter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2Lowercase"><span class="toc-number">1.1.0.6.</span> <span class="toc-text">③Lowercase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3Whitespace"><span class="toc-number">1.1.0.7.</span> <span class="toc-text">④Whitespace</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4UAX-Email-URL"><span class="toc-number">1.1.0.8.</span> <span class="toc-text">⑤UAX Email URL</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5Classic"><span class="toc-number">1.1.0.9.</span> <span class="toc-text">⑥Classic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A6Thai"><span class="toc-number">1.1.0.10.</span> <span class="toc-text">⑦Thai</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-Partial-Word-Tokenizers"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.3.2 Partial Word Tokenizers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0Ngram"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">①Ngram</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1Edge-NGram"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">②Edge NGram</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-Structured-Text-Tokenizers"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.3.3 Structured Text Tokenizers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0Simple-Pattern"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">①Simple Pattern</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1Simple-Pattern-Split"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">②Simple Pattern Split</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2Pattern"><span class="toc-number">1.1.2.3.</span> <span class="toc-text">③Pattern</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3Keyword"><span class="toc-number">1.1.2.4.</span> <span class="toc-text">④Keyword</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4Path-Hierarchy"><span class="toc-number">1.1.2.5.</span> <span class="toc-text">⑤Path Hierarchy</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5Character-group"><span class="toc-number">1.1.2.6.</span> <span class="toc-text">⑥Character group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0Edge-n-gram"><span class="toc-number">1.1.2.7.</span> <span class="toc-text">①Edge n-gram</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1N-gram"><span class="toc-number">1.1.2.8.</span> <span class="toc-text">②N-gram</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2Stop"><span class="toc-number">1.1.2.9.</span> <span class="toc-text">③Stop</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3Stemmer"><span class="toc-number">1.1.2.10.</span> <span class="toc-text">④Stemmer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4Keyword-repeat"><span class="toc-number">1.1.2.11.</span> <span class="toc-text">⑤Keyword repeat</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5Remove-duplicates"><span class="toc-number">1.1.2.12.</span> <span class="toc-text">⑥Remove duplicates</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A6Uppercase"><span class="toc-number">1.1.2.13.</span> <span class="toc-text">⑦Uppercase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A7Lowercase"><span class="toc-number">1.1.2.14.</span> <span class="toc-text">⑧Lowercase</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A8ASCII-folding"><span class="toc-number">1.1.2.15.</span> <span class="toc-text">⑨ASCII folding</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A9Fingerprint"><span class="toc-number">1.1.2.16.</span> <span class="toc-text">⑩Fingerprint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%AATrim"><span class="toc-number">1.1.2.17.</span> <span class="toc-text">⑪Trim</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%ABUnique"><span class="toc-number">1.1.2.18.</span> <span class="toc-text">⑫Unique</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%ACSynonym"><span class="toc-number">1.1.2.19.</span> <span class="toc-text">⑬Synonym</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%ADReverse"><span class="toc-number">1.1.2.20.</span> <span class="toc-text">⑭Reverse</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0Standard-Analyzer"><span class="toc-number">1.1.2.21.</span> <span class="toc-text">①Standard Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1Simple-Analyzer"><span class="toc-number">1.1.2.22.</span> <span class="toc-text">②Simple Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2Whitespace-Analyzer"><span class="toc-number">1.1.2.23.</span> <span class="toc-text">③Whitespace Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3Stop-Analyzer"><span class="toc-number">1.1.2.24.</span> <span class="toc-text">④Stop Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4Keyword-Analyzer"><span class="toc-number">1.1.2.25.</span> <span class="toc-text">⑤Keyword Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5Language-Analyzer"><span class="toc-number">1.1.2.26.</span> <span class="toc-text">⑥Language Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A6Pattern-Analyzer"><span class="toc-number">1.1.2.27.</span> <span class="toc-text">⑦Pattern Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A7Fingerprint-Analyzer"><span class="toc-number">1.1.2.28.</span> <span class="toc-text">⑧Fingerprint Analyzer</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%E4%BA%8C"><span class="toc-number">1.1.2.29.</span> <span class="toc-text">示例二</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-%E5%90%8C%E4%B9%89%E8%AF%8D%EF%BC%88TODO%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">2.2.2 同义词（TODO）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-%E5%81%9C%E7%94%A8%E8%AF%8D"><span class="toc-number">1.1.4.</span> <span class="toc-text">2.2.3 停用词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.1.5.</span> <span class="toc-text">2.3.2 使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8pinyin%E5%88%86%E8%AF%8D%E5%99%A8"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">使用pinyin分词器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8pinyin-tokenFilter"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">使用pinyin-tokenFilter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E7%B4%A2%E5%BC%95%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E5%88%86%E8%AF%8D%E5%99%A8"><span class="toc-number">1.1.5.3.</span> <span class="toc-text">为索引添加自定义分词器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-Field%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.</span> <span class="toc-text">3.1 Field的配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E6%A3%80%E7%B4%A2"><span class="toc-number">1.3.</span> <span class="toc-text">3.2 检索</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-%E6%90%9C%E7%B4%A2%E8%AF%8D%E7%9A%84%E5%88%86%E8%AF%8D"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.2.1 搜索词的分词</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E5%8D%95%E5%AD%97%E6%AE%B5%E6%A3%80%E7%B4%A2"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2.2 单字段检索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-%E5%A4%9A%E5%AD%97%E6%AE%B5%E6%A3%80%E7%B4%A2"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.2.3 多字段检索</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2%E5%A4%9A%E4%B8%AAfield"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">检索多个field</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A3%80%E7%B4%A2%E4%B8%80%E4%B8%AA%E5%AD%97%E6%AE%B5%E7%9A%84%E5%A4%9A%E7%A7%8D%E7%B4%A2%E5%BC%95%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">检索一个字段的多种索引模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E7%A7%8D%E7%B1%BB%E5%9E%8B%E7%9A%84multi-match-query"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">五种类型的multi match query</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

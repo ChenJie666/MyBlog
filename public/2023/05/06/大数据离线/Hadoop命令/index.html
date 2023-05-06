@@ -1,0 +1,371 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Hadoop命令 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="进程命令对hadoop集群的操作start-dfs.sh  stop-dfs.sh   打开和关闭dfsstart-yarn.sh  stop-yarn.sh   打开和关闭yarn hadoop单进程操作旧版本命令hadoop-daemon.sh  start&#x2F;stop  namenode&#x2F;datanode&#x2F;secondarynamenodeyarn-daemon.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop命令">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="进程命令对hadoop集群的操作start-dfs.sh  stop-dfs.sh   打开和关闭dfsstart-yarn.sh  stop-yarn.sh   打开和关闭yarn hadoop单进程操作旧版本命令hadoop-daemon.sh  start&#x2F;stop  namenode&#x2F;datanode&#x2F;secondarynamenodeyarn-daemon.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.059Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.059Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop%E5%91%BD%E4%BB%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Hadoop命令',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Hadoop命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.059Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.059Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/">大数据离线</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Hadoop命令"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="进程命令"><a href="#进程命令" class="headerlink" title="进程命令"></a>进程命令</h2><h4 id="对hadoop集群的操作"><a href="#对hadoop集群的操作" class="headerlink" title="对hadoop集群的操作"></a>对hadoop集群的操作</h4><p>start-dfs.sh  stop-dfs.sh   打开和关闭dfs<br>start-yarn.sh  stop-yarn.sh   打开和关闭yarn</p>
+<h4 id="hadoop单进程操作"><a href="#hadoop单进程操作" class="headerlink" title="hadoop单进程操作"></a>hadoop单进程操作</h4><p><strong>旧版本命令</strong><br>hadoop-daemon.sh  start&#x2F;stop  namenode&#x2F;datanode&#x2F;secondarynamenode<br>yarn-daemon.sh  start&#x2F;stop  resourcemanager&#x2F;nodemanager<br>mr-jobhistory-daemon.sh start&#x2F;stop historyserver </p>
+<blockquote>
+<p><strong>注：</strong>修改hadoop-daemon.sh和yarn-daemon.sh的启动文件，可以修改pid和log的存储位置。</p>
+</blockquote>
+<br>
+**新版本命令**
+hdfs --daemon start/stop namenode/datanode/secondarynamenode
+yarn --daemon start/stop nodemanger/resourcemanager
+mapred --daemon start/stop historyserver
+
+<br>
+## 基础命令
+hadoop  fs  -help  rm   输出rm指令的详细信息
+hadoop  fs  -usage  rm   输出rm的标准格式
+hadoop fs -find / -name tmp  查找tmp文件
+
+<p>hadoop  fs  -setrep  10  &#x2F;input.txt  设置HDFS中文件的replication(副本)数量（setrep指令记录在NameNode中，实际副本数还是看最大节点数。）<br>hadoop fs -checksum &#x2F;a&#x2F;b&#x2F;c&#x2F;xsync   每次写入读出都会自动进行一次校验判断文件的完整性；checksum是手动判断文件的完整型命令，如果和crc文件比对不同，则抛出错误。</p>
+<table>
+<thead>
+<tr>
+<th>选项名称</th>
+<th>使用格式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-ls</td>
+<td>-ls &lt;路径&gt;</td>
+<td>查看指定路径的当前目录结构</td>
+</tr>
+<tr>
+<td>-lsr</td>
+<td>-lsr &lt;路径&gt;</td>
+<td>递归查看指定路径的目录结构</td>
+</tr>
+<tr>
+<td>-du</td>
+<td>-du &lt;路径&gt;</td>
+<td>统计目录下个文件大小</td>
+</tr>
+<tr>
+<td>-dus</td>
+<td>-dus &lt;路径&gt;</td>
+<td>汇总统计目录下文件(夹)大小</td>
+</tr>
+<tr>
+<td>-count</td>
+<td>-count [-q] &lt;路径&gt;</td>
+<td>统计文件(夹)数量</td>
+</tr>
+<tr>
+<td>-mv</td>
+<td>-mv &lt;源路径&gt; &lt;目的路径&gt;</td>
+<td>移动</td>
+</tr>
+<tr>
+<td>-cp</td>
+<td>-cp &lt;源路径&gt; &lt;目的路径&gt;</td>
+<td>复制</td>
+</tr>
+<tr>
+<td>-rm</td>
+<td>-rm [-skipTrash] &lt;路径&gt;</td>
+<td>删除文件&#x2F;空白文件夹</td>
+</tr>
+<tr>
+<td>-rmr</td>
+<td>-rmr [-skipTrash] &lt;路径&gt;</td>
+<td>递归删除</td>
+</tr>
+<tr>
+<td>-put</td>
+<td>-put &lt;多个linux上的文件&gt; &lt;hdfs路径&gt;</td>
+<td>上传文件</td>
+</tr>
+<tr>
+<td>-copyFromLocal</td>
+<td>-copyFromLocal &lt;多个linux上的文件&gt; &lt;hdfs路径&gt;</td>
+<td>从本地复制</td>
+</tr>
+<tr>
+<td>-moveFromLocal</td>
+<td>-moveFromLocal &lt;多个linux上的文件&gt; &lt;hdfs路径&gt;</td>
+<td>从本地移动</td>
+</tr>
+<tr>
+<td>-getmerge</td>
+<td>-getmerge &lt;源路径&gt; &lt;linux路径&gt;</td>
+<td>合并到本地</td>
+</tr>
+<tr>
+<td>-cat</td>
+<td>-cat &lt;hdfs路径&gt;</td>
+<td>查看文件内容</td>
+</tr>
+<tr>
+<td>-text</td>
+<td>-text &lt;hdfs路径&gt;</td>
+<td>查看文件内容</td>
+</tr>
+<tr>
+<td>-copyToLocal</td>
+<td>-copyToLocal [-ignoreCrc] [-crc] [hdfs源路径] [linux目的路径]</td>
+<td>复制到本地</td>
+</tr>
+<tr>
+<td>-moveToLocal</td>
+<td>-moveToLocal [-crc] &lt;hdfs源路径&gt; &lt;linux目的路径&gt;</td>
+<td>移动到本地</td>
+</tr>
+<tr>
+<td>-mkdir</td>
+<td>-mkdir &lt;hdfs路径&gt;</td>
+<td>创建空白文件夹</td>
+</tr>
+<tr>
+<td>-setrep</td>
+<td>-setrep [-R] [-w] &lt;副本数&gt; &lt;路径&gt;</td>
+<td>修改副本数量</td>
+</tr>
+<tr>
+<td>-touchz</td>
+<td>-touchz &lt;文件路径&gt;</td>
+<td>创建空白文件</td>
+</tr>
+<tr>
+<td>-stat</td>
+<td>-stat [format] &lt;路径&gt;</td>
+<td>显示文件统计信息</td>
+</tr>
+<tr>
+<td>-tail</td>
+<td>-tail [-f] &lt;文件&gt;</td>
+<td>查看文件尾部信息</td>
+</tr>
+<tr>
+<td>-chmod</td>
+<td>-chmod [-R] &lt;权限模式&gt; [路径]</td>
+<td>修改权限</td>
+</tr>
+<tr>
+<td>-chown</td>
+<td>-chown [-R] <a href="#">属主</a>] 路径</td>
+<td>修改属主</td>
+</tr>
+<tr>
+<td>-chgrp</td>
+<td>-chgrp [-R] 属组名称 路径</td>
+<td>修改属组</td>
+</tr>
+<tr>
+<td>-help</td>
+<td>-help [命令选项]</td>
+<td>帮助</td>
+</tr>
+</tbody></table>
+<br>
+## 管理命令
+hadoop dfsadmin -report  查看各个datenode节点的状态
+hadoop dfsadmin -safemode get   命令是用来查看当前hadoop安全模式的开关状态
+hadoop dfsadmin -safemode enter  命令是打开安全模式
+hadoop dfsadmin -safemode leave 命令是离开安全模式
+
+<p>hdfs dfsadmin -fetchImage &#x2F;data 获取fsimage信息并存储到目标地址</p>
+<p>hadoop checknative -a 查看hadoop支持的压缩格式</p>
+<br>
+## 节点间数据均衡
+开启数据均衡命令：
+start-balancer.sh -threshold 10
+>对于参数10，代表的是集群中各个节点的磁盘空间利用率相差不超过10%，可根据实际情况进行调整。
+
+<p>停止数据均衡命令：<br>stop-balancer.sh</p>
+<blockquote>
+<p>注意：于HDFS需要启动单独的Rebalance Server来执行Rebalance操作，[所以尽量不要在NameNode上执行start-balancer.sh，而是找一台比较空闲的机器。</p>
+</blockquote>
+<h2 id="磁盘间数据均衡"><a href="#磁盘间数据均衡" class="headerlink" title="磁盘间数据均衡"></a>磁盘间数据均衡</h2><p>（1）生成均衡计划（我们只有一块磁盘，不会生成计划）<br>hdfs diskbalancer -plan hadoop103<br>（2）执行均衡计划<br>hdfs diskbalancer -execute hadoop103.plan.json<br>（3）查看当前均衡任务的执行情况<br>hdfs diskbalancer -query hadoop103<br>（4）取消均衡任务<br>hdfs diskbalancer -cancel hadoop103.plan.json</p>
+<br>
+## Hadoop中的umask
+**计算规则**
+Hadoop中umask的值使用的是十进制，与Linux中的umask值使用的是八进制是不同的。
+但是计算规则是相同的，且默认文件夹权限为777，文件权限为666，umask为022，因此用户创建文件夹后权限为755，创建文件权限为644。
+`可以先通过八进制将需要的umask的值计算出来后，再转为十进制进行设置。`
+
+<p>如希望让文件的属性为644，那么在linux中应该设置umask为022，而设置dfs.mask的值时，将其转为十进制就是0018。</p>
+<p><strong>修改umask</strong><br>在配置文件中修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;fs.permissions.umask-mode&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;002&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+## Hadoop中占用空间过大
+通过命令`hadoop fs -du -h /`查看根目录下磁盘占用过大的文件。
+第一列标示该目录下总文件大小
+第二列标示该目录下所有文件在集群上的总存储大小和你的副本数相关，我的副本数是3 ，所以第二列的是第一列的三倍 （第二列内容=文件大小*副本数）。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@cos-bigdata-hadoop-01 hadoop]# hadoop fs -du -h /</span><br><span class="line">668.5 G  2.0 T    /HBase</span><br><span class="line">7.4 G    26.3 G   /origin_data</span><br><span class="line">36.5 G   109.4 G  /spark</span><br><span class="line">27.9 K   83.6 K   /system</span><br><span class="line">68.0 M   203.9 M  /tez</span><br><span class="line">657.4 G  1.9 T    /tmp</span><br><span class="line">115.5 G  346.4 G  /user</span><br><span class="line">209.5 G  630.7 G  /warehouse</span><br></pre></td></tr></table></figure>
+最后发现 /tmp文件和/HBase/oldWALs文件占用过大，删除即可。删除时需要注意使用命令`hdfs dfs -rm -r -skipTrash`，因为hdfs有回收站机制，如果不添加-skipTrash，不会释放磁盘空间，而是在`fs.trash.interval`配置的时候后才会完全删除并释放磁盘空间。也可以使用`hadoop fs -expunge`命令，在后台启动程序慢慢删除过期的文件。
+>**NOTE:**
+>1. /tmp目录: 主要用作mapreduce操作期间的临时存储.Mapreduce工件,中间数据等将保存在此目录下.mapreduce作业执行完成后,这些文件将自动清除.如果删除此临时文件,则会影响当前运行的mapreduce作业。临时文件由pig创建.临时文件删除最后发生.如果脚本执行失败或被杀死,Pig不会处理临时文件删除.然后你必须处理这种情况.您最好在脚本本身处理此临时文件清理活动。
+>2. /HBase/oldWALs目录: 当/hbase/WALs中的HLog文件被持久化到存储文件中，且这些Hlog日志文件不再被需要时，就会被转移到{hbase.rootdir}/oldWALs目录下，该目录由HMaster上的定时任务负责定期清理。
+
+
+<br>
+## 数据迁移
+**集群间迁移**
+`hadoop distcp hdfs://bigdata1:8020/data hdfs://bigdata2:8020/`
+**集群迁移到本地**
+`hadoop distcp file:///logs hdfs://172.16.218.29:8020/data/hadoop`
+**本地迁移集群**
+`hadoop distcp hdfs://172.16.218.29:8020/data/hadoop file:///logs`
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop%E5%91%BD%E4%BB%A4/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop-JAVA-API/" title="Hadoop-JAVA-API"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Hadoop-JAVA-API</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/Hadoop%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/" title="Hadoop数据迁移"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hadoop数据迁移</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">进程命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9hadoop%E9%9B%86%E7%BE%A4%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">1.0.1.</span> <span class="toc-text">对hadoop集群的操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hadoop%E5%8D%95%E8%BF%9B%E7%A8%8B%E6%93%8D%E4%BD%9C"><span class="toc-number">1.0.2.</span> <span class="toc-text">hadoop单进程操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E9%97%B4%E6%95%B0%E6%8D%AE%E5%9D%87%E8%A1%A1"><span class="toc-number">2.</span> <span class="toc-text">磁盘间数据均衡</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

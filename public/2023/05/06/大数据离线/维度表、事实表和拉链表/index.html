@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>维度表、事实表和拉链表 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="###维度表维度表：一般是对事实的描述信息。每一张维表对应现实世界中的一个对象或者概念。    例如：用户、商品、日期、地区等。维表的特征：维表的范围很宽（具有多个属性、列比较多）跟事实表相比，行数相对较小：通常&lt; 10万条内容相对固定：编码表时间维度表： 123456日期ID	day of week	day of year	季度	节假日2020-01-01	2	        1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="维度表、事实表和拉链表">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E7%BB%B4%E5%BA%A6%E8%A1%A8%E3%80%81%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%92%8C%E6%8B%89%E9%93%BE%E8%A1%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="###维度表维度表：一般是对事实的描述信息。每一张维表对应现实世界中的一个对象或者概念。    例如：用户、商品、日期、地区等。维表的特征：维表的范围很宽（具有多个属性、列比较多）跟事实表相比，行数相对较小：通常&lt; 10万条内容相对固定：编码表时间维度表： 123456日期ID	day of week	day of year	季度	节假日2020-01-01	2	        1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.063Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.063Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E7%BB%B4%E5%BA%A6%E8%A1%A8%E3%80%81%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%92%8C%E6%8B%89%E9%93%BE%E8%A1%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '维度表、事实表和拉链表',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">维度表、事实表和拉链表</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.063Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.063Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/">大数据离线</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="维度表、事实表和拉链表"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>###维度表<br>维度表：一般是对事实的描述信息。每一张维表对应现实世界中的一个对象或者概念。    例如：用户、商品、日期、地区等。<br>维表的特征：<br>维表的范围很宽（具有多个属性、列比较多）<br>跟事实表相比，行数相对较小：通常&lt; 10万条<br>内容相对固定：编码表<br>时间维度表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">日期ID	day of week	day of year	季度	节假日</span><br><span class="line">2020-01-01	2	        1	      1    元旦</span><br><span class="line">2020-01-02	3	        2	      1    无</span><br><span class="line">2020-01-03	4	        3	      1    无</span><br><span class="line">2020-01-04	5	        4	      1    无 </span><br><span class="line">2020-01-05	6	        5	      1    无</span><br></pre></td></tr></table></figure>
+
+<p>###事实表<br>事实表中的每行数据代表一个业务事件（下单、支付、退款、评价等）。“事实”这个术语表示的是业务事件的度量值（可统计次数、个数、金额等），例如，订单事件中的下单金额。<br>每一个事实表的行包括：具有可加性的数值型的度量值、与维表相连接的外键、通常具有两个和两个以上的外键、外键之间表示维表之间多对多的关系。<br>事实表的特征：<br>非常的大<br>内容相对的窄：列数较少<br>经常发生变化，每天会新增加很多。<br>1）事务型事实表<br>以每个事务或事件为单位，例如一个销售订单记录，一笔支付记录等，作为事实表里的一行数据。一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新。<br>2）周期型快照事实表<br>周期型快照事实表中不会保留所有数据，只保留固定时间间隔的数据，例如每天或者每月的销售额，或每月的账户余额等。<br>3）累积型快照事实表<br>累计快照事实表用于跟踪业务事实的变化。例如，数据仓库中可能需要累积或者存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">订单id	用户id	下单时间	打包时间	发货时间	签收时间	订单金额</span><br><span class="line">		            3-8	      3-8	      3-9	      3-10	</span><br></pre></td></tr></table></figure>
+
+
+<p>###拉链表<br><strong>使用场景</strong><br>在数据仓库的数据模型设计过程中，经常会遇到下面这种表的设计：<br>有一些表的数据量很大，比如一张用户表，大约10亿条记录，50个字段，这种表，即使使用ORC压缩，单张表的存储也会超过100G，在HDFS使用双备份或者三备份的话就更大一些。<br>表中的部分字段会被update更新操作，如用户联系方式，产品的描述信息，订单的状态等等。<br>需要查看某一个时间点或者时间段的历史快照信息，比如，查看某一个订单在历史某一个时间点的状态。<br>表中的记录变化的比例和频率不是很大，比如，总共有10亿的用户，每天新增和发生变化的有200万左右，变化的比例占的很小。</p>
+<p>那么对于这种表我该如何设计呢?下面有几种方案可选：<br>方案一：每天只留最新的一份，比如我们每天用Sqoop抽取最新的一份全量数据到Hive中。<br>方案二：每天保留一份全量的切片数据。<br>方案三：使用拉链表。</p>
+<p>各方案分析：<br>方案一：操作简单节省空间，但是不能记录历史数据。<br>方案二：操作简单且能查找历史记录，但是每天一份全量数据，占用空间太大太大，其中大部分数据是重复的。<br>方案三：拉链表在使用上基本兼顾了我们的需求。记录每日增量，占用空间不会太大，而且可以追溯历史数据。</p>
+<p><strong>制作</strong><br>      拉链表不按日期进行分区，记录每条信息的生命周期，一旦一条记录的生命周期结束，就重新开始一条新纪录，并把当前日期放入生效开始日期。如果当前信息至今有效，在生效结束日期中填入一个极大值（如9999-99-99）。<br>      用户表中的数据每日即有可能新增，也有可能修改，但修改频率不高，属于<code>缓慢变化维度</code>，此处采用拉链表存储用户的维度数据。<br>      订单表也可以使用拉链表记录每日变化数据，但是此处我们使用累积型事实表对同一条订单的所有状态进行记录。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>）建立临时表</span><br><span class="line">hive (gmall)<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">drop</span> <span class="keyword">table</span> if <span class="keyword">exists</span> dwd_dim_user_info_his_tmp;</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">external</span> <span class="keyword">table</span> dwd_dim_user_info_his_tmp(</span><br><span class="line">    `id` string COMMENT <span class="string">&#x27;用户id&#x27;</span>,</span><br><span class="line">    `name` string COMMENT <span class="string">&#x27;姓名&#x27;</span>, </span><br><span class="line">    `birthday` string COMMENT <span class="string">&#x27;生日&#x27;</span>,</span><br><span class="line">    `gender` string COMMENT <span class="string">&#x27;性别&#x27;</span>,</span><br><span class="line">    `email` string COMMENT <span class="string">&#x27;邮箱&#x27;</span>,</span><br><span class="line">    `user_level` string COMMENT <span class="string">&#x27;用户等级&#x27;</span>,</span><br><span class="line">    `create_time` string COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">    `operate_time` string COMMENT <span class="string">&#x27;操作时间&#x27;</span>,</span><br><span class="line">    `start_date`  string COMMENT <span class="string">&#x27;有效开始日期&#x27;</span>,</span><br><span class="line">    `end_date`  string COMMENT <span class="string">&#x27;有效结束日期&#x27;</span></span><br><span class="line">) COMMENT <span class="string">&#x27;订单拉链临时表&#x27;</span></span><br><span class="line">stored <span class="keyword">as</span> parquet</span><br><span class="line">location <span class="string">&#x27;/warehouse/gmall/dwd/dwd_dim_user_info_his_tmp/&#x27;</span></span><br><span class="line">tblproperties (&quot;parquet.compression&quot;<span class="operator">=</span>&quot;lzo&quot;);</span><br><span class="line"><span class="number">2</span>）导入脚本</span><br><span class="line">hive (gmall)<span class="operator">&gt;</span></span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> dwd_dim_user_info_his_tmp</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> </span><br><span class="line">(</span><br><span class="line">    <span class="keyword">select</span> </span><br><span class="line">        id,</span><br><span class="line">        name,</span><br><span class="line">        birthday,</span><br><span class="line">        gender,</span><br><span class="line">        email,</span><br><span class="line">        user_level,</span><br><span class="line">        create_time,</span><br><span class="line">        operate_time,</span><br><span class="line">        <span class="string">&#x27;2020-03-11&#x27;</span> start_date,</span><br><span class="line">        <span class="string">&#x27;9999-99-99&#x27;</span> end_date</span><br><span class="line">    <span class="keyword">from</span> ods_user_info <span class="keyword">where</span> dt<span class="operator">=</span><span class="string">&#x27;2020-03-11&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">union</span> <span class="keyword">all</span> </span><br><span class="line">    <span class="keyword">select</span> </span><br><span class="line">        uh.id,</span><br><span class="line">        uh.name,</span><br><span class="line">        uh.birthday,</span><br><span class="line">        uh.gender,</span><br><span class="line">        uh.email,</span><br><span class="line">        uh.user_level,</span><br><span class="line">        uh.create_time,</span><br><span class="line">        uh.operate_time,</span><br><span class="line">        uh.start_date,</span><br><span class="line">        if(ui.id <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">null</span>  <span class="keyword">and</span> uh.end_date<span class="operator">=</span><span class="string">&#x27;9999-99-99&#x27;</span>, date_add(ui.dt,<span class="number">-1</span>), uh.end_date) end_date</span><br><span class="line">    <span class="keyword">from</span> dwd_dim_user_info_his uh <span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">select</span></span><br><span class="line">            <span class="operator">*</span></span><br><span class="line">        <span class="keyword">from</span> ods_user_info</span><br><span class="line">        <span class="keyword">where</span> dt<span class="operator">=</span><span class="string">&#x27;2020-03-11&#x27;</span></span><br><span class="line">    ) ui <span class="keyword">on</span> uh.id<span class="operator">=</span>ui.id</span><br><span class="line">)his </span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> his.id, start_date;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E7%BB%B4%E5%BA%A6%E8%A1%A8%E3%80%81%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%92%8C%E6%8B%89%E9%93%BE%E8%A1%A8/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E7%BB%B4%E5%BA%A6%E8%A1%A8%E3%80%81%E4%BA%8B%E5%AE%9E%E8%A1%A8%E5%92%8C%E6%8B%89%E9%93%BE%E8%A1%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E6%A1%86%E6%9E%B6%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E9%85%8D%E7%BD%AE/" title="框架开机自启配置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">框架开机自启配置</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E9%80%9A%E7%94%A8%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90/" title="通用需求分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">通用需求分析</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

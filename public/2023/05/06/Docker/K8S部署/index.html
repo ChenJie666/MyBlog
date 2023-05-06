@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>K8S部署 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。 这个工具能通过两条指令完成一个kubernetes集群的部署： 12345# 创建一个 Master 节点$ kubeadm init# 将一个 Node 节点加入到当前集群中$ kubeadm join &lt;Master节点的IP和端口 &gt;  1. 安装要求在开始之前，部署Kubernetes集群机器需要满">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K8S部署">
+<meta property="og:url" content="http://example.com/2023/05/06/Docker/K8S%E9%83%A8%E7%BD%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。 这个工具能通过两条指令完成一个kubernetes集群的部署： 12345# 创建一个 Master 节点$ kubeadm init# 将一个 Node 节点加入到当前集群中$ kubeadm join &lt;Master节点的IP和端口 &gt;  1. 安装要求在开始之前，部署Kubernetes集群机器需要满">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.015Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.015Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/Docker/K8S%E9%83%A8%E7%BD%B2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'K8S部署',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">K8S部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.015Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.015Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="K8S部署"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>kubeadm是官方社区推出的一个用于快速部署kubernetes集群的工具。</p>
+<p>这个工具能通过两条指令完成一个kubernetes集群的部署：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个 Master 节点</span><br><span class="line">$ kubeadm init</span><br><span class="line"></span><br><span class="line"># 将一个 Node 节点加入到当前集群中</span><br><span class="line">$ kubeadm join &lt;Master节点的IP和端口 &gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-安装要求"><a href="#1-安装要求" class="headerlink" title="1. 安装要求"></a>1. 安装要求</h2><p>在开始之前，部署Kubernetes集群机器需要满足以下几个条件：</p>
+<ul>
+<li>一台或多台机器，操作系统 CentOS7.x-86_x64</li>
+<li>硬件配置：2GB或更多RAM，2个CPU或更多CPU，硬盘30GB或更多</li>
+<li>集群中所有机器之间网络互通</li>
+<li>可以访问外网，需要拉取镜像</li>
+<li>禁止swap分区</li>
+</ul>
+<h2 id="2-学习目标"><a href="#2-学习目标" class="headerlink" title="2. 学习目标"></a>2. 学习目标</h2><ol>
+<li>在所有节点上安装Docker和kubeadm</li>
+<li>部署Kubernetes Master</li>
+<li>部署容器网络插件</li>
+<li>部署 Kubernetes Node，将节点加入Kubernetes集群中</li>
+<li>部署Dashboard Web页面，可视化查看Kubernetes资源</li>
+</ol>
+<h2 id="3-准备环境"><a href="#3-准备环境" class="headerlink" title="3. 准备环境"></a>3. 准备环境</h2><p><img src="/K8S%E9%83%A8%E7%BD%B2.assets%5C176244622d384f5ab1733441e99e5733.png" alt="架构图"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">关闭防火墙：</span><br><span class="line">$ systemctl stop firewalld</span><br><span class="line">$ systemctl disable firewalld</span><br><span class="line"></span><br><span class="line">关闭selinux：</span><br><span class="line">$ sed -i &#x27;s/enforcing/disabled/&#x27; /etc/selinux/config </span><br><span class="line">$ setenforce 0</span><br><span class="line"></span><br><span class="line">关闭swap：</span><br><span class="line">$ swapoff -a  $ 临时</span><br><span class="line">$ vim /etc/fstab  $ 永久</span><br><span class="line"></span><br><span class="line">添加主机名与IP对应关系（记得设置主机名）：</span><br><span class="line">$ cat /etc/hosts</span><br><span class="line">192.168.31.62 k8s-master</span><br><span class="line">192.168.31.64 k8s-node1</span><br><span class="line">192.168.31.66 k8s-node2</span><br><span class="line"></span><br><span class="line">将桥接的IPv4流量传递到iptables的链：</span><br><span class="line">$ cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF</span><br><span class="line">net.bridge.bridge-nf-call-ip6tables = 1</span><br><span class="line">net.bridge.bridge-nf-call-iptables = 1</span><br><span class="line">EOF</span><br><span class="line">$ sysctl --system</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-所有节点安装Docker-x2F-kubeadm-x2F-kubelet"><a href="#4-所有节点安装Docker-x2F-kubeadm-x2F-kubelet" class="headerlink" title="4. 所有节点安装Docker&#x2F;kubeadm&#x2F;kubelet"></a>4. 所有节点安装Docker&#x2F;kubeadm&#x2F;kubelet</h2><p>Kubernetes默认CRI（容器运行时）为Docker，因此先安装Docker。</p>
+<p>kubelet:运行在cluster所有节点上,负责启动POD和容器.<br>kubeadm:用于初始化cluster.<br>kubectl:kubectl是kubenetes命令行工具，通过kubectl可以部署和管理应用，查看各种资源，创建，删除和更新组件.</p>
+<h3 id="4-1-安装Docker"><a href="#4-1-安装Docker" class="headerlink" title="4.1 安装Docker"></a>4.1 安装Docker</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo -O /etc/yum.repos.d/docker-ce.repo	//下载并以指定的文件名保存</span><br><span class="line">$ yum -y install docker-ce-18.06.1.ce-3.el7</span><br><span class="line">$ systemctl enable docker &amp;&amp; systemctl start docker	//设置开机启动服务并启动docker服务</span><br><span class="line">$ docker --version</span><br><span class="line">Docker version 18.06.1-ce, build e68fc7a</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-添加阿里云YUM软件源"><a href="#4-2-添加阿里云YUM软件源" class="headerlink" title="4.2 添加阿里云YUM软件源"></a>4.2 添加阿里云YUM软件源</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ cat &gt; /etc/yum.repos.d/kubernetes.repo &lt;&lt; EOF</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br><span class="line">//这是yum的配置文件，根据该配置的参数进行下载</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-安装kubeadm，kubelet和kubectl"><a href="#4-3-安装kubeadm，kubelet和kubectl" class="headerlink" title="4.3 安装kubeadm，kubelet和kubectl"></a>4.3 安装kubeadm，kubelet和kubectl</h3><p>由于版本更新频繁，这里指定版本号部署：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ yum install -y kubelet-1.13.3 kubeadm-1.13.3 kubectl-1.13.3 //阿里云把依赖改了，所以会报错，可以用下面这句。</span><br><span class="line">$ yum makecache fast &amp;&amp; yum install -y kubelet-1.13.3  kubeadm-1.13.3 kubectl-1.13.3 kubernetes-cni-0.6.0</span><br><span class="line">$ systemctl enable kubelet	//设置开机启动</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-部署Kubernetes-Master"><a href="#5-部署Kubernetes-Master" class="headerlink" title="5. 部署Kubernetes Master"></a>5. 部署Kubernetes Master</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ kubeadm init \</span><br><span class="line">  --apiserver-advertise-address=192.168.31.62 \	//master启动api组件监听的地址，与其他组件通讯的地址</span><br><span class="line">  --image-repository registry.aliyuncs.com/google_containers \  //设置master拉取的镜像都是国内的</span><br><span class="line">  --kubernetes-version v1.13.3 \	//指定下载的image的版本与k8s的一致</span><br><span class="line">  --service-cidr=10.1.0.0/16 \	//指定service网络的ip地址段，负载均衡的虚拟ip</span><br><span class="line">  --pod-network-cidr=10.244.0.0/16	//容器使用的ip地址</span><br><span class="line">  </span><br><span class="line">  preflight：首先会检查当前平台是否适合安装k8s，然后下载组件所需的镜像；</span><br><span class="line">  kubelet-start：配置环境文件和配置文件，启动kubeadm。</span><br><span class="line">  certs：生成证书存放在/etc/kubernetes/pki路径下。</span><br><span class="line">  kubeconfig：配置文件放在/etc/kubernetes文件夹下。</span><br><span class="line">  control-plane：使用静态pod（生命周期和kubelet相同）下载镜像，pod启动的yaml配置文件在/etc/kubernetes/manifests路径下。</span><br><span class="line">  kubelet：将kubeadm的配置文件保存到k8s中的ConfigMap中存储，用于其他Node加入集群时从中拉取配置。</span><br><span class="line">  patchnode：向k8s的master上报本地使用的docker接口和docker自身的信息。</span><br><span class="line">  bootstraptoken：用于在node加入集群时为node颁发证书和给与授权（RBAC）。</span><br><span class="line">  addons：部署两个插件，CoreDNS和Kube-proxy。CoreDNS为k8s集群中内部提供定向解析的，Kube-proxy为容器之间提供服务发现。</span><br><span class="line">  当输出Kubeadm join时表示环境搭建完成。</span><br></pre></td></tr></table></figure>
+
+<p>由于默认拉取镜像地址k8s.gcr.io国内无法访问，这里指定阿里云镜像仓库地址。</p>
+<p>使用kubectl工具：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo <span class="built_in">cp</span> -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config  //将k8s生成的文件复制到默认读取的路径下</span><br><span class="line">sudo <span class="built_in">chown</span> $(<span class="built_in">id</span> -u):$(<span class="built_in">id</span> -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">$ kubectl get nodes</span><br><span class="line">NAME        STATUS     ROLES    AGE   VERSION</span><br><span class="line">hadoop101   NotReady   master   74m   v1.13.3</span><br><span class="line">NotReady是因为没有安装容器网络</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-安装Pod网络插件（CNI）"><a href="#6-安装Pod网络插件（CNI）" class="headerlink" title="6. 安装Pod网络插件（CNI）"></a>6. 安装Pod网络插件（CNI）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml</span><br><span class="line"></span><br><span class="line">内部会下载quay.io/coreos/flannel:v0.11.0-amd64镜像，可以通过docker pull quay.io/coreos/flannel:v0.11.0-amd64进行下载</span><br><span class="line"></span><br><span class="line">组件用于不同容器间的网络通讯。通过kubectl get pods -n kube-system指令查看状态</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">coredns-78d4cf999f-28gm6            1/1     Running   0          113m</span><br><span class="line">coredns-78d4cf999f-54hxl            1/1     Running   0          113m</span><br><span class="line">etcd-hadoop101                      1/1     Running   0          112m</span><br><span class="line">kube-apiserver-hadoop101            1/1     Running   0          112m</span><br><span class="line">kube-controller-manager-hadoop101   1/1     Running   0          112m</span><br><span class="line">kube-flannel-ds-amd64-7bk8l         1/1     Running   0          13s</span><br><span class="line">kube-proxy-kq2nb                    1/1     Running   0          113m</span><br><span class="line">kube-scheduler-hadoop101            1/1     Running   0          113m</span><br></pre></td></tr></table></figure>
+
+<p>确保能够访问到quay.io这个registery。</p>
+<h2 id="7-加入Kubernetes-Node"><a href="#7-加入Kubernetes-Node" class="headerlink" title="7. 加入Kubernetes Node"></a>7. 加入Kubernetes Node</h2><p>Master是全局的调度者，Node是任务的执行者。</p>
+<p>向集群添加新节点，执行在kubeadm init输出的kubeadm join命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$  kubeadm join 192.168.5.101:6443 --token 1u0a2u.3g111z3lh5hkzt9b --discovery-token-ca-cert-hash sha256:d88240269fd3c6ab18ce89b5567d2f989bc857d0eeda04314d2c8685d9777e9f</span><br><span class="line"></span><br><span class="line">内部会下载quay.io/coreos/flannel:v0.11.0-amd64镜像，可以通过docker pull quay.io/coreos/flannel:v0.11.0-amd64进行下载。</span><br><span class="line"></span><br><span class="line">加入集群的内部流程：Node携带Master生成的token向Master申请一个证书，访问API server获取相应的配置应用到本地，再启动pod和kubelet，上报本地docker的信息到master。</span><br><span class="line"></span><br><span class="line">kubectl get pods -n kube-system</span><br><span class="line">NAME                                READY   STATUS    RESTARTS   AGE</span><br><span class="line">coredns-78d4cf999f-28gm6            1/1     Running   0          141m</span><br><span class="line">coredns-78d4cf999f-54hxl            1/1     Running   0          141m</span><br><span class="line">etcd-hadoop101                      1/1     Running   0          140m</span><br><span class="line">kube-apiserver-hadoop101            1/1     Running   0          140m</span><br><span class="line">kube-controller-manager-hadoop101   1/1     Running   0          140m</span><br><span class="line">kube-flannel-ds-amd64-7bk8l         1/1     Running   0          27m</span><br><span class="line">kube-flannel-ds-amd64-l9cc2         1/1     Running   0          22m</span><br><span class="line">kube-flannel-ds-amd64-zmdsv         1/1     Running   0          17m</span><br><span class="line">kube-proxy-2vc72                    1/1     Running   0          22m</span><br><span class="line">kube-proxy-gz6lk                    1/1     Running   0          17m</span><br><span class="line">kube-proxy-kq2nb                    1/1     Running   0          141m</span><br><span class="line">kube-scheduler-hadoop101            1/1     Running   0          140m</span><br><span class="line">多了两个flannel节点</span><br><span class="line"></span><br><span class="line">如果一直Init，可以kubectl delete pods kube-flannel-ds-amd64-xxx -n kube-system进行删除，系统会自动再生成一个pod。</span><br></pre></td></tr></table></figure>
+
+<h2 id="8-测试kubernetes集群"><a href="#8-测试kubernetes集群" class="headerlink" title="8. 测试kubernetes集群"></a>8. 测试kubernetes集群</h2><p>在Kubernetes集群中创建一个pod，验证是否正常运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl create deployment nginx --image=nginx	//创建pod，会先拉取镜像</span><br><span class="line">$ kubectl expose deployment nginx --port=80 --type=NodePort//暴露应用，让外部访问</span><br><span class="line">$ kubectl get pod,svc</span><br></pre></td></tr></table></figure>
+
+<p>访问地址：<a href="http://NodeIP:Port">http://NodeIP:Port</a>  </p>
+<h2 id="9-部署-Dashboard"><a href="#9-部署-Dashboard" class="headerlink" title="9. 部署 Dashboard"></a>9. 部署 Dashboard</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ wget https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml</span><br><span class="line">将配置文件下载到本地，然后修改配置。</span><br><span class="line">①默认镜像国内无法访问，修改镜像地址为： lizhenliang/kubernetes-dashboard-amd64:v1.10.1</span><br><span class="line">②Dashboard Service启动的type设置为type:NodePort</span><br><span class="line">③还可以设置dashboard的映射端口</span><br><span class="line"></span><br><span class="line">通过kubectl apply -f kubernetes-dashboard.yaml将配置文件应用</span><br><span class="line"></span><br><span class="line">$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml</span><br></pre></td></tr></table></figure>
+
+
+
+<p>默认Dashboard只能集群内部访问，修改Service为NodePort类型，暴露到外部：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">kind: Service</span><br><span class="line">apiVersion: v1</span><br><span class="line">metadata:</span><br><span class="line">  labels:</span><br><span class="line">    k8s-app: kubernetes-dashboard</span><br><span class="line">  name: kubernetes-dashboard</span><br><span class="line">  namespace: kube-system</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  ports:</span><br><span class="line">    - port: 443</span><br><span class="line">      targetPort: 8443</span><br><span class="line">      nodePort: 30001</span><br><span class="line">  selector:</span><br><span class="line">    k8s-app: kubernetes-dashboard</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl apply -f kubernetes-dashboard.yaml</span><br></pre></td></tr></table></figure>
+
+<p>访问地址：<a target="_blank" rel="noopener" href="http://nodeip:30001/">http://NodeIP:30001</a></p>
+<p>创建service account并绑定默认cluster-admin管理员集群角色：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//在kube-system命名空间下创建serviceaccount，名为为dashboard-admin</span><br><span class="line">$ kubectl create serviceaccount dashboard-admin -n kube-system</span><br><span class="line"></span><br><span class="line">//将cluster-admin(超级管理员)权限绑定到dashboard-admin</span><br><span class="line">$ kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin</span><br><span class="line"></span><br><span class="line">//查看该dashboard-admin，查找到的token名为dashboard-admin-token-6vhb6</span><br><span class="line">$ kubectl get secret -n kube-system</span><br><span class="line"></span><br><span class="line">//查看具体的token内容并复制到令牌登陆的密钥输入处</span><br><span class="line">$ kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk &#x27;/dashboard-admin/&#123;print $1&#125;&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>使用输出的token登录Dashboard。</p>
+<p>![登录.jpg](K8S部署.assetsf4d8b9544f54419a1ae7ced54b072ca.png)</p>
+<p>![界面.jpg](K8S部署.assets6f78256bb994eeba926fd1794e952e1.png)</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/Docker/K8S%E9%83%A8%E7%BD%B2/">http://example.com/2023/05/06/Docker/K8S%E9%83%A8%E7%BD%B2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/Docker/K8S/" title="K8S"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">K8S</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/Docker/%E4%BD%BF%E7%94%A8Docker-Swarm%E5%AE%9E%E7%8E%B0%E8%B7%A8%E5%AE%BF%E4%B8%BB%E6%9C%BA%E5%AE%B9%E5%99%A8%E9%97%B4%E8%AE%BF%E9%97%AE/" title="使用Docker-Swarm实现跨宿主机容器间访问"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">使用Docker-Swarm实现跨宿主机容器间访问</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E8%A6%81%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">1. 安装要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87"><span class="toc-number">2.</span> <span class="toc-text">2. 学习目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%87%86%E5%A4%87%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">3. 准备环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%89%80%E6%9C%89%E8%8A%82%E7%82%B9%E5%AE%89%E8%A3%85Docker-x2F-kubeadm-x2F-kubelet"><span class="toc-number">4.</span> <span class="toc-text">4. 所有节点安装Docker&#x2F;kubeadm&#x2F;kubelet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%AE%89%E8%A3%85Docker"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 安装Docker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%B7%BB%E5%8A%A0%E9%98%BF%E9%87%8C%E4%BA%91YUM%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 添加阿里云YUM软件源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%AE%89%E8%A3%85kubeadm%EF%BC%8Ckubelet%E5%92%8Ckubectl"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 安装kubeadm，kubelet和kubectl</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%83%A8%E7%BD%B2Kubernetes-Master"><span class="toc-number">5.</span> <span class="toc-text">5. 部署Kubernetes Master</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%89%E8%A3%85Pod%E7%BD%91%E7%BB%9C%E6%8F%92%E4%BB%B6%EF%BC%88CNI%EF%BC%89"><span class="toc-number">6.</span> <span class="toc-text">6. 安装Pod网络插件（CNI）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%8A%A0%E5%85%A5Kubernetes-Node"><span class="toc-number">7.</span> <span class="toc-text">7. 加入Kubernetes Node</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%B5%8B%E8%AF%95kubernetes%E9%9B%86%E7%BE%A4"><span class="toc-number">8.</span> <span class="toc-text">8. 测试kubernetes集群</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E9%83%A8%E7%BD%B2-Dashboard"><span class="toc-number">9.</span> <span class="toc-text">9. 部署 Dashboard</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

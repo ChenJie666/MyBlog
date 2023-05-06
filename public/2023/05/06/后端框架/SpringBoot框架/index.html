@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SpringBoot框架 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#二、自动配置###06集@AutoConfigurtionPackage  自动配置包@Import(AutoConfigurationPackages.Register.class)：Spring的底层注解@Import(AutoConfigurationImportSelector.class)导入自动配置类，给容器汇总导入自动配置类，就是给容器中导入的这个场景需要的所有组件，并配置好这些组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot框架">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/SpringBoot%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#二、自动配置###06集@AutoConfigurtionPackage  自动配置包@Import(AutoConfigurationPackages.Register.class)：Spring的底层注解@Import(AutoConfigurationImportSelector.class)导入自动配置类，给容器汇总导入自动配置类，就是给容器中导入的这个场景需要的所有组件，并配置好这些组">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.047Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.047Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/SpringBoot%E6%A1%86%E6%9E%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SpringBoot框架',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SpringBoot框架</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.047Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.047Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/">后端框架</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SpringBoot框架"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>#二、自动配置<br>###06集<br>@AutoConfigurtionPackage  自动配置包<br>@Import(AutoConfigurationPackages.Register.class)：Spring的底层注解@Import(AutoConfigurationImportSelector.class)导入自动配置类，给容器汇总导入自动配置类，就是给容器中导入的这个场景需要的所有组件，并配置好这些组件。<br><code>将主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件扫描到Spring容器中。</code></p>
+<p>###12.13集<br>@PropertySource(value &#x3D; {“classpath:person.yml”})   加载指定的yml&#x2F;properties文件中的内容并绑定到类对象中。这样可以将配置信息放在另一个文件中而非Springboot的配置文件。</p>
+<p>@ImportResource(locations &#x3D; {“classpath:beans.xml”})   标注在配置类上，可以导入Spring的xml配置文件，让配置文件中的内容生效。<br>通过xml文件想容器中注入helloService对象</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">.....</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;helloService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.atguigu.service.HelloService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断容器中是否有helloSrevice</span></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">ApplicationContext  ioc;   <span class="comment">// 获取容器</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testHelloService</span><span class="params">()</span>&#123;</span><br><span class="line">  ioc.containsBean(<span class="string">&quot;helloService&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>###14<br><strong>yml中的占位符：</strong><br>获取随机值<br>${random.uuid}<br>${random.int}<br>获取之前配置的值，可以指定缺省值<br>${server.port}   获取前面定义的属性，如果不存在则不进行占位，值为该表达式<br>${server.port:9999}   可以指定默认值，如果不存在，则值为默认值</p>
+<p>###多profile文件<br>application.yml<br>application-{profile}.yml<br>默认使用application.yml文件。可以在application.yml文件中添加spring.profiles.active&#x3D;dev来激活对应环境下的配置文件，激活的配置参数会覆盖原参数形成互补。</p>
+<p><strong>多文档块</strong><br>可以使用 — 将一个配置文件分成多个文档块，添加spring.profiles: dev 指定该文档块的环境。<br>如下配置文件，分为了三个文档块，默认读取第一个文档块。可以为每个文档块设置环境然后在第一个文档块中进行激活。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8081</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profile:</span> <span class="string">dev</span></span><br><span class="line"></span><br><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8082</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profile:</span> <span class="string">prod</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以在启动时添加启动命令，在VM options中添加-Dspring.profiles.active&#x3D;dev或program arguments参数框中添加 –spring.profiles.active&#x3D;dev来激活dev环境。会使配置文件中的激活配置失效。</p>
+<p><strong>springboot配置文件的加载位置</strong><br>springboot启动会扫描一下位置 的application.properties或者application.yml文件作为Springboot的默认配置文件。优先级由高到低，高优先级会覆盖低优先级形成互补配置。</p>
+<ul>
+<li>file:.&#x2F;config&#x2F;</li>
+<li>file:.&#x2F;</li>
+<li>classpath:&#x2F;config&#x2F;</li>
+<li>classpath:&#x2F;</li>
+</ul>
+<p>配置项目的访问路径：<br>server.context-path&#x3D;&#x2F;path</p>
+<p>也可以指定配置文件的位置，该配置文件优先级高于默认配置，会与默认的访问路径中的配置文件形成互补。<br>spring.config.location&#x3D;G:&#x2F;application.properties</p>
+<p>###自动配置原理@@@<br>1.springboot启动时加载主配置类，开启了@SpringBootApplication的@EnableAutoConfiguration注解中的自动配置功能。在@EnableAutoConfiguration注解的作用是导入了选择器@Import(AutoConfigurationImportSelector.class)，利用AutoConfigurationImportSelector的selectImports()方法给容器中导入一些组件。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 通过</span></span><br><span class="line">	<span class="type">AutoConfigurationMetadata</span> <span class="variable">autoConfigurationMetadata</span> <span class="operator">=</span> AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(<span class="built_in">this</span>.beanClassLoader);</span><br><span class="line">	<span class="type">AutoConfigurationEntry</span> <span class="variable">autoConfigurationEntry</span> <span class="operator">=</span> getAutoConfigurationEntry(autoConfigurationMetadata,</span><br><span class="line">			annotationMetadata);</span><br><span class="line">	<span class="keyword">return</span> StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">PATH</span> <span class="operator">=</span> <span class="string">&quot;META-INF/spring-autoconfigure-metadata.properties&quot;</span>;</span><br><span class="line"><span class="comment">//扫描该路径下的所有的资源</span></span><br><span class="line"><span class="keyword">static</span> AutoConfigurationMetadata <span class="title function_">loadMetadata</span><span class="params">(ClassLoader classLoader)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> loadMetadata(classLoader, PATH);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> AutoConfigurationMetadata <span class="title function_">loadMetadata</span><span class="params">(ClassLoader classLoader, String path)</span> &#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		Enumeration&lt;URL&gt; urls = (classLoader != <span class="literal">null</span>) ? classLoader.getResources(path)</span><br><span class="line">				: ClassLoader.getSystemResources(path);</span><br><span class="line">		<span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">		<span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">			properties.putAll(PropertiesLoaderUtils.loadProperties(<span class="keyword">new</span> <span class="title class_">UrlResource</span>(urls.nextElement())));</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> loadMetadata(properties);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Unable to load @ConditionalOnClass location [&quot;</span> + path + <span class="string">&quot;]&quot;</span>, ex);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2.将类路径下的META-INF的spring-autoconfigure-metadata.properties中的所有的url加载到容器中。每一个这样的xxxAutoConfiguration类都是容器中的一个组件，都加入到容器中，用他们来做自动配置。</p>
+<p>![image.png](SpringBoot框架.assets411cc5617f24d6fadc2fc2cd08151f6.png)</p>
+<p>3.每一个自动配置类进行自动配置功能，以HttpEncodingAutoConfiguration为例解释自动配置原理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span>  </span><br><span class="line"><span class="meta">@EnableConfigurationProperties(HttpProperties.class)</span> <span class="comment">// 启用指定类的ConfigurationProperties功能，将配置文件中对应的值和HttpProperties绑定起来</span></span><br><span class="line"><span class="meta">@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)</span> <span class="comment">//Spring底层@Conditional注解，根据不同的条件，如果满足指定的条件，整个配置类里面的配置就会生效。 判断当前应用是否是web应用，如果是，当前配置生效。</span></span><br><span class="line"><span class="meta">@ConditionalOnClass(CharacterEncodingFilter.class)</span> <span class="comment">//判断当前项目有没有CharacterEncodingFilter这个类(这个类是SpringMVC中进行乱码解决的过滤器)</span></span><br><span class="line"><span class="meta">@ConditionalOnProperty(prefix = &quot;spring.http.encoding&quot;, value = &quot;enabled&quot;, matchIfMissing = true)</span> <span class="comment">//判断配置文件中是否存在某个配置 spring.http.encoding.enabled；如果不存在，判断也是成立的</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HttpEncodingAutoConfiguration</span> &#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>根据当前不同的条件判断，决定这个配置类是否生效？如上述的@ConditionalOnClass判断容器中是否存储在CharacterEncodingFilter类，如果存在则该配置类生效。我们可以通过debug: true 属性来让控制台打印自动配置报告。</p>
+<p>4.所有在配置文件中能配置的属性都是在xxxProperties类中封装着，配置文件能配置什么就可以参照某个功能对应的这个属性类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;spring.http&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HttpProperties</span> &#123;</span><br></pre></td></tr></table></figure>
+
+<br>
+#三、日志
+###1. 日志原理
+日志
+![蓝色的是接口层，墨绿的是适配层，蓝色的是实现层](SpringBoot框架.assets1e893d49e3241249a0a5884916c7380.png)
+
+
+<p>![image.png](SpringBoot框架.assets8d2aa05fd3f49279c3b72df52df9413.png)<br>Springboot框架中的Spring-boot-starter-logging会自动引入各个框架（jul、jcl、log4j）的slf4j的适配层，最终用logback实现，所以如果其他框架有引入不同的日志框架，需要进行排除，否则会有冲突。</p>
+<p>###2. 其他日志框架的适配<br>每个日志的实现框架都有自己的配置文件，使用SLF4j之后，配置文件还是做成日志实现框架自己本身的配置文件。<br>如何使其他日志框架也能统一使用SLF4j+logback的日志框架？<br>![日志框架诗配图](SpringBoot框架.assets7059817b278471190579756048c3ce7.png)</p>
+<ol>
+<li>可以先<strong>排除框架中的原日志接口层</strong>的包<br>2.然后使用SLF4j提供的对应的<strong>替换包来替换原有的包</strong>。这样原接口没有消失，但是会调用SLF4j的方法进行统一的输出。（spring-boot-starter中默认已经导入）</li>
+<li>再导入SLF4j其他的实现。</li>
+</ol>
+<p><img src="/SpringBoot%E6%A1%86%E6%9E%B6.assets%5C4e074295adfe4ed38be615ec1f4e0de8.png" alt="image.png"></p>
+<p><strong>总结</strong></p>
+<ol>
+<li>Springboot底层也是使用SLF4j+logback的方式进行日志记录。</li>
+<li>Springboot也把其他日志都替换成了SLF4j</li>
+<li>如果我们引入其他框架，需要将这个框架的默认的日志依赖移除掉。如Springboot依赖了spring-core框架，但是将spirng-core框架中的common-logging日志框架直接移除掉。</li>
+</ol>
+<p><strong>也可以将springboot的默认的spring-boot-starter-logging包替换为spring-boot-starter-log4j2包，来实现对log4j2的支持。</strong></p>
+<p>###3. slf4j的使用<br><strong>日志的级别</strong><br>从低到高分别为<br>logger.trace();<br>logger.debug();<br>logger.info();<br>logger.warn();<br>logger.error();<br>可以进行设置后让控制台打印指定级别的高级别的日志（Springboot默认使用的是info级别）。</p>
+<p><strong>调整指定包下的类的打印级别</strong><br>logging.level.com.hxr: warn</p>
+<p><strong>将日志输出到指定的目录中</strong><br>指定日志输出的目录，生成的文件名为默认的spring.log<br>logging.path: &#x2F;spring&#x2F;log</p>
+<p><strong>将日志输出到指定目录的指定文件中</strong><br>不指定目录在当前文件夹下生成，指定路径则生成到对应路径下。会覆盖logging.path设置。<br>logging.file: G:&#x2F;springboot.log</p>
+<p><strong>在控制台输出的日志的格式</strong><br>logging.pattern.console: %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</p>
+<p><strong>在文件中输出的日志的格式</strong><br>logging.pattern.console: %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</p>
+<p>注：<br>%d表示日期时间<br>%thread表示线程名<br>%-5level  级别从左显示5个字符宽度<br>%logger{50} 表示logger名字最长50个字符，否则按照句点分割<br>%msg  日志消息<br>%n 换行符</p>
+<p><img src="/SpringBoot%E6%A1%86%E6%9E%B6.assets%5C4a108941195d409c8a26e2274eea0e09.png" alt="logback的默认配置文件"></p>
+<br>
+**如何覆盖框架默认的配置文件**
+![image.png](SpringBoot框架.assets</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/SpringBoot%E6%A1%86%E6%9E%B6/">http://example.com/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/SpringBoot%E6%A1%86%E6%9E%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/Reactor%E6%A1%86%E6%9E%B6/" title="Reactor框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Reactor框架</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/SpringMVC%E6%A1%86%E6%9E%B6/" title="SpringMVC框架"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SpringMVC框架</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

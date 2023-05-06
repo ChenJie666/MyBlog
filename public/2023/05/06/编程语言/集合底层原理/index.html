@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>集合底层原理 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#集合（ArrayList线程不安全Vector安全）要求：向Collection添加对象时必须重写equals方法。Collection（）的方法:1.add（Object obj）将元素加入到当前集合中，返回boolean值2.add（Collection coll）将集合中的元素加入到当前集合中，返回boolean值3.size（Collection coll）获取集合中元素个数4.isEm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集合底层原理">
+<meta property="og:url" content="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#集合（ArrayList线程不安全Vector安全）要求：向Collection添加对象时必须重写equals方法。Collection（）的方法:1.add（Object obj）将元素加入到当前集合中，返回boolean值2.add（Collection coll）将集合中的元素加入到当前集合中，返回boolean值3.size（Collection coll）获取集合中元素个数4.isEm">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '集合底层原理',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">集合底层原理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.079Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="集合底层原理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>#集合<br>（ArrayList线程不安全Vector安全）要求：向Collection添加对象时必须重写equals方法。<br>Collection（）的方法:<br>1.add（Object obj）将元素加入到当前集合中，返回boolean值<br>2.add（Collection coll）将集合中的元素加入到当前集合中，返回boolean值<br>3.size（Collection coll）获取集合中元素个数<br>4.isEmpty（Collection coll）判断集合是否为空，返回boolean数<br>5.clear(Collection coll):清空当前集合<br>6.remove（Object obj）移除并返回boolean数。找到并删除第一个就停止。remove是按照equals方法是否返回true来判断是否相等并删除。<br>7.removeAll（Collection coll）coll中的每个元素都会调用equals方法判断是否删除。返回boolean值</p>
+<p>8.contains（Object obj）判断当前集合中是否包含obj元素，返回boolean值<br>9.containsAll（Collection coll）：判断当前集合中是否包含coll集合中的所有元素，返回boolean值<br>10.retainAll（Collection coll）：或取当前集合和coll集合的交集，并返回给当前集合。<br>11.equals（Collection coll）判断当前集合和obj是否相同，需要保证顺序相同。<br>12.hashCode（）获取当前集合的哈希值。<br>13.Object array &#x3D; coll.toArray（） 将当前集合转化为数组。<br>List list &#x3D; Arrays.asList(123,456,789）；&#x2F;&#x2F;将数组转化为List集合<br>asList（）只能识别类中的元素，如果是int型的数组名，只识别一个，输出为类名@哈希值<br>14.iterator用于遍历集合元素。<br>Iterator iterator &#x3D; coll.iterator；(Iterator是接口，collection和List实现了iterator)<br>遍历方式：while(iterator.hasNext()){<br>              System.out.println(iterator.next());}<br>hasNext（）方法，判断是否有下一个元素。<br>next（）方法1.指针下移（最开始在-1处）2.读取元素<br>增强for循环遍历集合会调用迭代器。</p>
+<p>Interator实现：Iterator是ArrayList类中的内部类，调用iterator（工厂方法）创建内部类对象，对象调用hasNext方法时，判断指针是否等于size，等于则false。调用next方法时，将外部类中的元素数组复制然后遍历。调用remove时，将指针作为参数，直接调用外部类的remove方法删除指针所指的元素。（不能进行连续的remove方法，应该穿插next（）方法）</p>
+<p>remove()参数是int型时会有remove(int index)和remove(Object obj)方法歧义，优先调用remove(int index)</p>
+<p>##List在Collection之外的方法<br>1.void add(int index, Object ele):在index位置插入ele元素<br>2.boolean addAll(int index, Collection eles):从index位置开始将eles中的所有元素添加进来<br>3.Object get(int index):获取指定index位置的元素<br>4.int indexOf(Object obj):返回obj在集合中首次出现的位置<br>5.int lastIndexOf(Object obj):返回obj在当前集合中末次出现的位置<br>6.Object remove(int index):移除指定index位置的元素，并返回此元素<br>7.Object set(int index, Object ele):设置指定index位置的元素为ele<br>8.List subList(int fromIndex, int toIndex):返回从fromIndex到toIndex位置的左闭右开区间的子集合<br>9.List subList(int fromIndex,int length);</p>
+<p>List<String> list &#x3D; Arrays.asList(new String[]{“AA”,“BB”,“CC”}<br>System.out.println(list);&#x2F;&#x2F;输出[AA,BB,CC]</p>
+<p>List&lt;int[]&gt; arr1 &#x3D; Arrays.asList(new int[]{123,456});<br>System.out.println(arr1);&#x2F;&#x2F;输出数组引用的类名@哈希值，只能识别int[]类对象。int[]型数组存<br>System.out.println(arr1.size());&#x2F;&#x2F;输出size为1        &#x2F;&#x2F;储的基本类型变量不是类，无法识别</p>
+<p>List arr2 &#x3D; Arrays.asList(new Integer[]{123,456});<br>System.out.println(arr2);&#x2F;&#x2F;输出[123,456],包装类能识别为俩元素<br>System.out.println(arr2.size());输出size为2</p>
+<p>List arr3 &#x3D; Arrays.asList(123,456);<br>System.out.println(arr3);&#x2F;&#x2F;输出[123,456]<br>System.out.println(arr3.size());输出size为2</p>
+<ul>
+<li>总结：</li>
+<li>增：add(Object obj)</li>
+<li>删：remove(Object obj) &#x2F; remove(int index)</li>
+<li>改：set(int index, Object ele)</li>
+<li>查：get(int index)</li>
+<li>插：add(int index, Object ele)</li>
+<li>长度：size()</li>
+<li>遍历：iterator() &#x2F; 增强for &#x2F; 普通for</li>
+</ul>
+<p>ArrayList（）在java7.0中会构造对象，若不传参，会直接构造大小为10的Objection数组，饿汉式。在8.0中是懒汉式，不传参构造长度为零的数组，传参才扩容为10（不够大则直接扩容为需要的大小）。之后每次扩容为1.5倍（不够大则直接扩容为需要的大小）。<br>LinkedList（）是双向链表结构。<br>Vector（）若不传参，会直接构造大小为10的Objection数组。每次扩容为原长度两倍（不够大则直接扩容为需要的大小）。</p>
+<p>LinkedList底层实现原理：调用addFirst或addLast时，会调用linkFirst和linkLast方法，将传入的对象作为的元素新建节点对象，并将前后指针指向前后节点。</p>
+<p>HashSet底层实现原理：<br>Set set &#x3D; new HashSet（）会构造一个大小16的数组，会在数组利用率到达75%时扩容。添加元素a时，先计算a的哈希值1，此哈希值经过某种算法后的得到哈希值2，此哈希值2经过某种算法后得到在数组中的索引位置i，（1）如果此索引位置i上没有元素，元素a添加成功。（2）此位置上有元素b，此时比较元素a和元素b的哈希值2，如果哈希值不同，此时元素a添加成功。如果哈希值相同，此时调用元素a所在类的equals方法，返回值true，则元素添加失败。返回值false，则元素添加成功。（以链表形式添加，java7中新加的在前，java8中新的在后。）<br>HashSet没有额外添加方法，用的Collection中的方法。<br>HashSet无序不同于随机，遍历有固定顺序，但和添加顺序无关。但是LinkHashSet遍历顺序和添加顺序一致。无序指的是内存上排序无序。<br>HashSet添加数据会涉及到HashCode和equals方法判断是否重复。需要重写这两个方法，重写的hashCode和equals方法要保证一致性。而List中添加对象重写equals就行了。<br>如果两个对象重复，则其hashCode一致，则放到链表中通过equals判断。如果两对象不重复，则其hashCode可能相同，放到链表中通过equals判断。所以HashSet中的数一定不会重复，且比较效率高。hashCode和equals一致性就是尽量使equals不同时hashCode值也不同，使元素在散列表上均匀分布。</p>
+<p>TreeSet（）加入对象必须要同类型的，不然会报ClassCastException。底层是红黑树实现，<br>排序方式1.自然排序：要求元素所在类实现Comparable接口，并实现compareTo（Object obj）。添加对象会调用对象的CompareTo方法比较大小，如果比较元素一样大（compareTo返回值为0），则添加失败。可以不用重写hashCode（）和equals（）方法。</p>
+<p>3.定制排序：要求提供Comparable接口实现类，并实现compare（Object obj1，Object obj2）；</p>
+<p>如果在使用Arrays.sort(数组)或Collections.sort(Collection集合)方法时，TreeSet和TreeMap时元素默认按照Comparable比较规则排序；也可以单独为Arrays.sort(数组)或Collections.sort(Collection集合)方法时，TreeSet和TreeMap指定Comparator定制比较器对象。</p>
+<p>###Map<br>存储特点：<br>键值对构成一个Map.Entry，不可重复无序，set存储；<br>键是无序不可重复的，使用Set存储—-key所在类重写hashCode（）和equals（）方法<br>值是无序可重复的，使用Collection存储—value所在类equals重写<br>框架：<br>HashMap：Map的主要实现类：线程不安全，效率高；可以存储null的key和value<br>LinkedHashMap：HashMap的子类，可以按照添加的元素的先后顺序实现遍历。（使用了双向链表记录）<br>TreeMap：可以按照添加的元素的指定属性进行排序。<br>Hashtable：Map的古老实现类；线程安全，效率低；不可以存储null的key和value<br>Properties：是Hashtable的子类，key和value都是String类型的，常用来处理<br>HashMap的底层实现原理：<br>（jdk7）数组+链表：向HsahMap中添加key1-value1.首先调用key1所在类（只比较key的哈希值）的hashCode方法计算哈希值1，使用某种算法得到哈希值2，哈希值2通过某种算法得到其key1-value1在底层table[]中的索引位置：i；（1）如果table[i] &#x3D;&#x3D; null；则此entry（key1-value1）添加成功。（2）table[i]中存在其他entry，则比较key1和key2的哈希值2，如果哈希值2彼此不同：则entry添加成功（链表形式）；如果和链表上的某一个entry的哈希值2相同，则继续比较二者的equals方法，若equals返回true：使用value1替换相同的哈希值的key的value。如果返回false，继续与该链表上的entry比较。如果都不相同，添加成功。<br>情况一：将entry添加到数组中<br>情况二和三：将entry与以后的entry以链表的形式进行存储。<br>扩容问题：<br>默认情况下：（new HashMap（））长度为16<br>当达到临界值（&#x3D;数组长度*加载因子（默认的加载因子：0.75）时，就考虑扩容，元素个数超过临界就扩容，为原长度两倍。<br>查询：用key查询value，计算key的哈希值找到数组位置，然后用哈希值对比链表中的entry的key的哈希值，若相同则比较equals，若equals返回ture，则查询方法返回value，若equals返回false，则查询方法返回null；</p>
+<p>用put添加entry（key，value）</p>
+<p>（jdk8）数组+链表+红黑树（与7的不同点）：<br>1.new HashMap（）：底层没有创建长度为16的数组<br>2.当首次调用put（）方法时添加元素时，才在底层创建长度为16的数组。<br>3.新添加的元素与已有元素以链表形式存储，则旧元素指向新元素。<br>4.当某索引i的位置上的链表的长度&gt;8且数组长度大于64时，此索引的链表改为红黑树形式存储。</p>
+<p>LinkedHashMap：new LinkedHashMap时会调用父类构造器（即HashMap），添加对象put方法也是继承与HashMap，put方法添加对象时会调用newNode方法产生Node类的对象给数组，LinkedHashMap重写了该方法，调用newNode方法会产生Entry类（继承了Node类，新增了before和after属性）的对象给数组，before和after 属性记录了前一个和后一个添加的对象。因此遍历LinkedHashMap会按添加顺序输出。<br>HashSet底层实现：new HashSet实际new了一个HashMap，当add（e）时，会调用HashMap中的put（K key，V value）方法，key就是加入的对象e，value的值是静态方法中的属性（用new Object（）赋值），即所有e对应一个相同的Object对象。</p>
+<p>LinkedHashSet继承自HashMap，构造LinkedHashSet时会调用父类构造器，即new了一个HashMap，添加对象add方法也是继承于父类，调用add方法就会调用HashMap的put方法，调用newNode时会产生Node类对象给数组，但是LinkedHashSet也重写了该方法，调用newNode方法时会产生带首尾指针的节点指向加入的前后对象，因此遍历LinkedHashSet时也可以按添加顺序输出。</p>
+<p>当HashMap中的其中一个链的对象个数如果达到了8个，此时如果capacity没有达到64，那么HashMap会先扩容解决，如果已经达到了64，那么这个链会变成树，结点类型由Node变成TreeNode类型。当然，如果当映射关系被移除后，下次resize方法（resize方法用于扩容）时判断树的结点个数低于6个，也会把树再转为链表。</p>
+<p>遍历方法1.迭代器2.foreach3.普通for4.直接输出集合引用。底层都要用到迭代器，数组或集合不能是null，会报空指针异常（null.iterator（））。</p>
+<p>Map和List重点掌握，Set主要用来过滤数据。</p>
+<p>实现排序的方法1.自然排序Comparable  2.定制排序Comparator  3.Arrays.sort;<br>Arrays.sort(pers,comparator)比较大小不会像TreeSet一样相同的元素（返回值为0）会添加失败，sort排序会保留相同的元素。要排序可重复元素用sort而不是用TreeSet。</p>
+<p>增：put（Object obj,Object value）<br>删：Object remove(Object key)<br>改：put（Object key,Object value）必须添加if判断id是否存在，防止没有id而添加了此键值对！<br>     replace（Object key,Object value）<br>查:Object get(Object key)<br>长度：size()<br>遍历：keySet()&#x2F;values&#x2F;entrySet()</p>
+<p>Set keys &#x3D; map.keySet();<br>Collection values &#x3D; map.values();<br>Set mappings &#x3D; map.entrySet();<br>value v &#x3D; map.get(key);<br>Key k &#x3D; entry.getKey()<br>value v &#x3D; entry.getValue()	</p>
+<p>Set keys &#x3D; map.keySet();<br>Collection values &#x3D; map.values();<br>Set mappings &#x3D; map.entrySet();<br>value v &#x3D; map.get(key);<br>Key k &#x3D; entry.getKey()<br>value v &#x3D; entry.getValue()</p>
+<p>Map中获得的value对象是HashMap的内部类的对象(无序可重复)，继承自AbstractCollection，所以不属于List的实现类。</p>
+<p>SynchronizedList用法：List synchronizedList &#x3D; Collections.synchronizedList(list)<br>synchronizedList方法返回了new synchronizedList对象，内部关联了List，并将参数list赋值，对synchronized操作会调用其类中方法，方法会调用list的方法，但是外部用synchronized包裹实现线程的同步安全。简而言之将返回的synchronizedList对象的方法是将List的方法包裹了synchronized，实现线程安全。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E9%9B%86%E5%90%88%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/" title="泛型擦除"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">泛型擦除</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E7%AE%97%E6%B3%95/JVM%E8%99%9A%E6%8B%9F%E6%9C%BA/" title="JVM虚拟机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JVM虚拟机</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

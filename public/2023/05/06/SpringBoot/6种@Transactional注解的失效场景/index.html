@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>6种@Transactional注解的失效场景 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="#一、事务事务管理在系统开发中是不可缺少的一部分，Spring提供了很好事务管理机制，主要分为编程式事务和声明式事务两种。编程式事务：是指在代码中手动的管理事务的提交、回滚等操作，代码侵入性比较强，如下示例：try { &#x2F;&#x2F;TODO something transactionManager.commit(status); } catch (Exception e) { tran">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6种@Transactional注解的失效场景">
+<meta property="og:url" content="http://example.com/2023/05/06/SpringBoot/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#一、事务事务管理在系统开发中是不可缺少的一部分，Spring提供了很好事务管理机制，主要分为编程式事务和声明式事务两种。编程式事务：是指在代码中手动的管理事务的提交、回滚等操作，代码侵入性比较强，如下示例：try { &#x2F;&#x2F;TODO something transactionManager.commit(status); } catch (Exception e) { tran">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.031Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/SpringBoot/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '6种@Transactional注解的失效场景',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">6种@Transactional注解的失效场景</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.031Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.031Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/SpringBoot/">SpringBoot</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="6种@Transactional注解的失效场景"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>#一、事务<br>事务管理在系统开发中是不可缺少的一部分，<code>Spring</code>提供了很好事务管理机制，主要分为<code>编程式事务</code>和<code>声明式事务</code>两种。<br><strong>编程式事务</strong>：是指在代码中手动的管理事务的提交、回滚等操作，代码侵入性比较强，如下示例：<br>try { &#x2F;&#x2F;TODO something transactionManager.commit(status); } catch (Exception e) { transactionManager.rollback(status); throw new InvoiceApplyException(“异常失败”); } <br><strong>声明式事务</strong>：基于<code>AOP</code>面向切面的，它将具体业务与事务处理部分解耦，代码侵入性很低，所以在实际开发中声明式事务用的比较多。声明式事务也有两种实现方式，一是基于<code>TX</code>和<code>AOP</code>的xml配置文件方式，二种就是基于@Transactional注解了。<br>@Transactional @GetMapping(“&#x2F;test”) public String test() { int insert &#x3D; cityInfoDictMapper.insert(cityInfoDict); } </p>
+<br>
+#二、@Transactional介绍
+###1、@Transactional注解可以作用于哪些地方？
+@Transactional 可以作用在`接口`、`类`、`类方法`。
+
+<ul>
+<li><strong>作用于类</strong>：当把@Transactional 注解放在类上时，表示所有该类的<code>public</code>方法都配置相同的事务属性信息。</li>
+<li><strong>作用于方法</strong>：当类配置了@Transactional，方法也配置了@Transactional，方法的事务会覆盖类的事务配置信息。</li>
+<li><strong>作用于接口</strong>：不推荐这种使用方法，因为一旦标注在Interface上并且配置了Spring AOP 使用CGLib动态代理，将会导致@Transactional注解失效<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Transactional </span><br><span class="line">@RestController </span><br><span class="line">@RequestMapping </span><br><span class="line">public class MybatisPlusController &#123; </span><br><span class="line">  @Autowired </span><br><span class="line">  private CityInfoDictMapper cityInfoDictMapper; </span><br><span class="line"></span><br><span class="line">  @Transactional(rollbackFor = Exception.class) </span><br><span class="line">  @GetMapping(&quot;/test&quot;) </span><br><span class="line">  public String test() throws Exception &#123; </span><br><span class="line">    CityInfoDict cityInfoDict = new CityInfoDict(); </span><br><span class="line">    cityInfoDict.setParentCityId(2); cityInfoDict.setCityName(&quot;2&quot;); </span><br><span class="line">    cityInfoDict.setCityLevel(&quot;2&quot;); cityInfoDict.setCityCode(&quot;2&quot;); </span><br><span class="line">    int insert = cityInfoDictMapper.insert(cityInfoDict); return insert + &quot;&quot;; </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>###2、@Transactional注有哪些属性？<br><strong>propagation属性</strong><br><code>propagation</code> 代表事务的传播行为，默认值为 <code>Propagation.REQUIRED</code>，其他的属性信息如下：</p>
+<ul>
+<li><p><code>Propagation.REQUIRED</code>：如果当前存在事务，则加入该事务，如果当前不存在事务，则创建一个新的事务。**(** 也就是说如果A方法和B方法都添加了注解，在默认传播模式下，A方法内部调用B方法，会把两个方法的事务合并为一个事务 <strong>）</strong></p>
+</li>
+<li><p><code>Propagation.SUPPORTS</code>：如果当前存在事务，则加入该事务；如果当前不存在事务，则以非事务的方式继续运行。</p>
+</li>
+<li><p><code>Propagation.MANDATORY</code>：如果当前存在事务，则加入该事务；如果当前不存在事务，则抛出异常。</p>
+</li>
+<li><p><code>Propagation.REQUIRES_NEW</code>：重新创建一个新的事务，如果当前存在事务，暂停当前的事务。**(**当类A中的 a 方法用默认<code>Propagation.REQUIRED</code>模式，类B中的 b方法加上采用 <code>Propagation.REQUIRES_NEW</code>模式，然后在 a 方法中调用 b方法操作数据库，然而 a方法抛出异常后，b方法并没有进行回滚，因为<code>Propagation.REQUIRES_NEW</code>会暂停 a方法的事务 <strong>)</strong></p>
+</li>
+<li><p><code>Propagation.NOT_SUPPORTED</code>：以非事务的方式运行，如果当前存在事务，暂停当前的事务。</p>
+</li>
+<li><p><code>Propagation.NEVER</code>：以非事务的方式运行，如果当前存在事务，则抛出异常。</p>
+</li>
+<li><p><code>Propagation.NESTED</code> ：和 Propagation.REQUIRED 效果一样。</p>
+</li>
+</ul>
+<p><strong>isolation 属性</strong><br><code>isolation</code> ：事务的隔离级别，默认值为 <code>Isolation.DEFAULT</code>。</p>
+<ul>
+<li>Isolation.DEFAULT：使用底层数据库默认的隔离级别。</li>
+<li>Isolation.READ_UNCOMMITTED</li>
+<li>Isolation.READ_COMMITTED</li>
+<li>Isolation.REPEATABLE_READ</li>
+<li>Isolation.SERIALIZABLE</li>
+</ul>
+<p><strong>timeout 属性</strong><br><code>timeout</code> ：事务的超时时间，默认值为 -1。如果超过该时间限制但事务还没有完成，则自动回滚事务。<br><strong>readOnly 属性</strong><br><code>readOnly</code> ：指定事务是否为只读事务，默认值为 false；为了忽略那些不需要事务的方法，比如读取数据，可以设置 read-only 为 true。<br><strong>rollbackFor 属性</strong><br><code>rollbackFor</code> ：用于指定能够触发事务回滚的异常类型，可以指定多个异常类型。<br><strong>noRollbackFor 属性</strong><br><code>noRollbackFor</code>：抛出指定的异常类型，不回滚事务，也可以指定多个异常类型。</p>
+<br>
+#三、@Transactional失效场景
+接下来我们结合具体的代码分析一下哪些场景下，@Transactional 注解会失效。
+#####1、@Transactional 应用在非 public 修饰的方法上
+如果`Transactional`注解应用在非`public` 修饰的方法上，Transactional将会失效。
+
+<p><img src="/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF.assets%5C98b75639057c4d9996031cebe70a4a1c.png" alt="image"></p>
+<p>之所以会失效是因为在Spring AOP 代理时，如上图所示 <code>TransactionInterceptor</code> （事务拦截器）在目标方法执行前后进行拦截，<code>DynamicAdvisedInterceptor</code>（CglibAopProxy 的内部类）的 intercept 方法或 <code>JdkDynamicAopProxy</code> 的 invoke 方法会间接调用 <code>AbstractFallbackTransactionAttributeSource</code>的 <code>computeTransactionAttribute</code> 方法，获取Transactional 注解的事务配置信息。<br>protected TransactionAttribute computeTransactionAttribute(Method method, Class&lt;?&gt; targetClass) { &#x2F;&#x2F; Don’t allow no-public methods as required. if (allowPublicMethodsOnly() &amp;&amp; !Modifier.isPublic(method.getModifiers())) { return null; } <br>此方法会检查目标方法的修饰符是否为 public，不是 public则不会获取@Transactional 的属性配置信息。<br><strong>注意：<code>protected</code>、<code>private</code> 修饰的方法上使用 <code>@Transactional</code> 注解，虽然事务无效，但不会有任何报错，这是我们很容犯错的一点。</strong><br>#####2、@Transactional 注解属性 propagation 设置错误<br>这种失效是由于配置错误，若是错误的配置以下三种 propagation，事务将不会发生回滚。<br><code>TransactionDefinition.PROPAGATION_SUPPORTS</code>：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。 <code>TransactionDefinition.PROPAGATION_NOT_SUPPORTED</code>：以非事务方式运行，如果当前存在事务，则把当前事务挂起。 <code>TransactionDefinition.PROPAGATION_NEVER</code>：以非事务方式运行，如果当前存在事务，则抛出异常。<br>#####3、@Transactional 注解属性 rollbackFor 设置错误<br><code>rollbackFor</code> 可以指定能够触发事务回滚的异常类型。Spring默认抛出了未检查<code>unchecked</code>异常（继承自 <code>RuntimeException</code> 的异常）或者 <code>Error</code>才回滚事务；其他异常不会触发回滚事务。如果在事务中抛出其他类型的异常，但却期望 Spring 能够回滚事务，就需要指定 <strong>rollbackFor</strong>属性。</p>
+<p><img src="/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF.assets%5C734a8b3a671e4f40bf0195b544f65204.png" alt="image"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 希望自定义的异常可以进行回滚 @Transactional(propagation= Propagation.REQUIRED,rollbackFor= MyException.class </span><br><span class="line">//若在目标方法中抛出的异常是 `rollbackFor` 指定的异常的子类，事务同样会回滚。Spring源码如下：</span><br><span class="line">private int getDepth(Class&lt;?&gt; exceptionClass, int depth) &#123; </span><br><span class="line">  if (exceptionClass.getName().contains(this.exceptionName)) &#123; </span><br><span class="line">    // Found it! return depth; </span><br><span class="line">  &#125; </span><br><span class="line">  // If we&#x27;ve gone as far as we can go and haven&#x27;t found it... </span><br><span class="line">  if (exceptionClass == Throwable.class) &#123; </span><br><span class="line">    return -1; </span><br><span class="line">  &#125; </span><br><span class="line">  return getDepth(exceptionClass.getSuperclass(), depth + 1); </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>#####4、同一个类中方法调用，导致@Transactional失效<br>开发中避免不了会对同一个类里面的方法调用，比如有一个类Test，它的一个方法A，A再调用本类的方法B（不论方法B是用public还是private修饰），但方法A没有声明注解事务，而B方法有。则外部调用方法A之后，方法B的事务是不会起作用的。这也是经常犯错误的一个地方。<br>那为啥会出现这种情况？其实这还是由于使用<code>Spring AOP</code>代理造成的，<strong>因为只有当事务方法被当前类以外的代码调用时，才会由<code>Spring</code>生成的代理对象来管理。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">@Transactional</span><br><span class="line">@GetMapping(&quot;/test&quot;)</span><br><span class="line">private Integer A() throws Exception &#123;</span><br><span class="line">    CityInfoDict cityInfoDict = new CityInfoDict();</span><br><span class="line">    cityInfoDict.setCityName(&quot;2&quot;); </span><br><span class="line">    /** </span><br><span class="line">    * B 插入字段为 3的数据 </span><br><span class="line">    */</span><br><span class="line">    this.insertB(); </span><br><span class="line">    /** </span><br><span class="line">    * A 插入字段为 2的数据 </span><br><span class="line">    */</span><br><span class="line">    int insert = cityInfoDictMapper.insert(cityInfoDict);</span><br><span class="line">    return insert;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Transactional()</span><br><span class="line">public Integer insertB() throws Exception &#123;</span><br><span class="line">    CityInfoDict cityInfoDict = new CityInfoDict();</span><br><span class="line">    cityInfoDict.setCityName(&quot;3&quot;);</span><br><span class="line">    cityInfoDict.setParentCityId(3);</span><br><span class="line">    return cityInfoDictMapper.insert(cityInfoDict);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>踩过一次坑，将@Transactional加载类上或者方法A中都能生效，但是加在方法B上却失效。<strong>引以为戒。</strong></p>
+</blockquote>
+<p>#####5、异常被你的 catch“吃了”导致@Transactional失效<br>这种情况是最常见的一种@Transactional注解失效场景，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Transactional</span><br><span class="line">private Integer A() throws Exception &#123;</span><br><span class="line">    int insert = 0;</span><br><span class="line">    try &#123;</span><br><span class="line">        CityInfoDict cityInfoDict = new CityInfoDict();</span><br><span class="line">        cityInfoDict.setCityName(&quot;2&quot;);</span><br><span class="line">        cityInfoDict.setParentCityId(2); /** * A 插入字段为 2的数据 */</span><br><span class="line">        insert = cityInfoDictMapper.insert(cityInfoDict); /** * B 插入字段为 3的数据 */b.insertB();</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>如果B方法内部抛了异常，而A方法此时try catch了B方法的异常，那这个事务还能正常回滚吗？<br>答案：不能！<br>会抛出异常：<br><code>org.springframework.transaction.UnexpectedRollbackException: Transaction rolled back because it has been marked as rollback-only</code><br> <br>因为当<code>ServiceB</code>中抛出了一个异常以后，<code>ServiceB</code>标识当前事务需要<code>rollback</code>。但是<code>ServiceA</code>中由于你手动的捕获这个异常并进行处理，<code>ServiceA</code>认为当前事务应该正常<code>commit</code>。此时就出现了前后不一致，也就是因为这样，抛出了前面的<code>UnexpectedRollbackException</code>异常。<br><code>spring</code>的事务是在调用业务方法之前开始的，业务方法执行完毕之后才执行<code>commit</code> or <code>rollback</code>，事务是否执行取决于是否抛出<code>runtime异常</code>。如果抛出<code>runtime exception</code> 并在你的业务方法中没有catch到的话，事务会回滚。<br>在业务方法中一般不需要catch异常，如果非要catch一定要抛出<code>throw new RuntimeException()</code>，或者注解中指定抛异常类型<code>@Transactional(rollbackFor=Exception.class)</code>，否则会导致事务失效，数据commit造成数据不一致，所以有些时候try catch反倒会画蛇添足。</p>
+<h5 id="6、数据库引擎不支持事务"><a href="#6、数据库引擎不支持事务" class="headerlink" title="6、数据库引擎不支持事务"></a>6、数据库引擎不支持事务</h5><p>这种情况出现的概率并不高，事务能否生效数据库引擎是否支持事务是关键。常用的MySQL数据库默认使用支持事务的<code>innodb</code>引擎。一旦数据库引擎切换成不支持事务的<code>myisam</code>，那事务就从根本上失效了。<br>总结<br>@Transactional 注解的看似简单易用，但如果对它的用法一知半解，还是会踩到很多坑的。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/SpringBoot/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF/">http://example.com/2023/05/06/SpringBoot/6%E7%A7%8D@Transactional%E6%B3%A8%E8%A7%A3%E7%9A%84%E5%A4%B1%E6%95%88%E5%9C%BA%E6%99%AF/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/PaddlePaddle/" title="PaddlePaddle"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">PaddlePaddle</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/SpringBoot/Java%E8%A7%84%E8%8C%83-%E9%94%99%E8%AF%AF%E7%A0%81/" title="Java规范-错误码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java规范-错误码</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#6%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%95%E6%93%8E%E4%B8%8D%E6%94%AF%E6%8C%81%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.</span> <span class="toc-text">6、数据库引擎不支持事务</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

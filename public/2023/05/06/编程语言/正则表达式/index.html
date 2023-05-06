@@ -1,0 +1,532 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>正则表达式 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、正则表达式介绍一个正则表达式是一种从左到右匹配主体字符串的模式。“Regular expression”这个词比较拗口，我们常使用缩写的术语“regex”或“regexp”。正则表达式可以从一个基础字符串中根据一定的匹配模式替换文本中的字符串、验证表单、提取字符串等等。 二、基本语法2.1 匹配符号   符号 说明     匹配边界，即字与空格间的位置。（所在位置的左右两个字符有一个是\W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式">
+<meta property="og:url" content="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、正则表达式介绍一个正则表达式是一种从左到右匹配主体字符串的模式。“Regular expression”这个词比较拗口，我们常使用缩写的术语“regex”或“regexp”。正则表达式可以从一个基础字符串中根据一定的匹配模式替换文本中的字符串、验证表单、提取字符串等等。 二、基本语法2.1 匹配符号   符号 说明     匹配边界，即字与空格间的位置。（所在位置的左右两个字符有一个是\W">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.079Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '正则表达式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">正则表达式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.079Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.079Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="正则表达式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、正则表达式介绍"><a href="#一、正则表达式介绍" class="headerlink" title="一、正则表达式介绍"></a>一、正则表达式介绍</h1><p>一个正则表达式是一种从左到右匹配主体字符串的模式。<br>“Regular expression”这个词比较拗口，我们常使用缩写的术语“regex”或“regexp”。<br>正则表达式可以从一个基础字符串中根据一定的匹配模式替换文本中的字符串、验证表单、提取字符串等等。</p>
+<h1 id="二、基本语法"><a href="#二、基本语法" class="headerlink" title="二、基本语法"></a>二、基本语法</h1><h2 id="2-1-匹配符号"><a href="#2-1-匹配符号" class="headerlink" title="2.1 匹配符号"></a>2.1 匹配符号</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>匹配边界，即字与空格间的位置。（所在位置的左右两个字符有一个是\W,即不是A-Z,a-z,0-9,_）</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>非单词边界匹配。</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配0-9中任意一个数字字符</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配除0-9外的非数字字符，等同于<code>[^\d]</code></td>
+</tr>
+<tr>
+<td></td>
+<td>匹配一个换页符</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>匹配一个换行符</td>
+<td></td>
+</tr>
+<tr>
+<td>\p</td>
+<td>匹配 CR&#x2F;LF（等同于 &#96;</td>
+</tr>
+<tr>
+<td>&#96;），用来匹配 DOS 行终止符</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>匹配一个回车符</td>
+<td></td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配空格、制表符、换行符等空白字符</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配非空白字符</td>
+</tr>
+<tr>
+<td></td>
+<td>匹配一个制表符</td>
+</tr>
+<tr>
+<td></td>
+<td>匹配一个垂直制表符</td>
+</tr>
+<tr>
+<td>\w</td>
+<td>匹配A-Z,a-z,0-9和_中任意一个</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>非单词字符，等同于： <code>[^\w]</code></td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配一个任意的字符，不匹配换行符。如 .*  匹配任意字符串</td>
+</tr>
+<tr>
+<td>\p{L}</td>
+<td>表示Unicode字母</td>
+</tr>
+<tr>
+<td>\p{N}</td>
+<td>表示Unicode数字</td>
+</tr>
+</tbody></table>
+<h2 id="2-2-特殊含义符号"><a href="#2-2-特殊含义符号" class="headerlink" title="2.2 特殊含义符号"></a>2.2 特殊含义符号</h2><table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\</td>
+<td>转义，用于指定 { } [ ] &#x2F; \ + * . $ ^|？这些特殊字符。如果想要匹配这些特殊字符则要在其前面加上反斜线 \。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>表示一行的开头，而在[]内表示取反</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配一行的结束，如 R$ 表示以R结尾的行</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>表示匹配某个范围内的字符，正则表达式特殊字符被放到中括号中，失去特殊含义，除了”^”和”-“ 。如[a-z]表示匹配一个小写字母；[^a-z]表示匹配一个非小写字母。</td>
+</tr>
+<tr>
+<td>()</td>
+<td>作为一个整体进行匹配，如(ab)+表示匹配ab一次或多次，如 (cat|dog)+ 表达匹配一次或多次cat或dog</td>
+</tr>
+<tr>
+<td>|</td>
+<td>或运算符就表示或，用作判断条件。</td>
+</tr>
+</tbody></table>
+<h2 id="2-3-量词"><a href="#2-3-量词" class="headerlink" title="2.3 量词"></a>2.3 量词</h2><p>通过量词可以设置一个内容出现的次数 ，量词只对它前边的一个内容起作。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>{3}</td>
+<td>匹配三个</td>
+</tr>
+<tr>
+<td>{3,6}</td>
+<td>匹配3到6个（默认贪婪模式，往多的匹配）</td>
+</tr>
+<tr>
+<td>{3,6}?</td>
+<td>匹配3到6个，?表示非贪婪模式，即匹配最少个数。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面元字符0次或1次，相当于{0,1}；也会被用来表示懒惰匹配，如<code>&lt;.+?&gt;</code>可以匹配html标签</td>
+</tr>
+<tr>
+<td>+</td>
+<td>一个或多个，相当于{1,}</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配任意个（贪心匹配），相当于{0,}</td>
+</tr>
+</tbody></table>
+<h2 id="2-4-零宽断言"><a href="#2-4-零宽断言" class="headerlink" title="2.4 零宽断言"></a>2.4 零宽断言</h2><p>先行断言和后发断言都属于<strong>非捕获簇</strong>（不捕获文本 ，也不针对组合计进行计数）。<br>先行断言用于判断所匹配的格式是否在另一个确定的格式之前，匹配结果不包含该确定格式（仅作为约束）。</p>
+<p>例如，我们想要获得所有跟在 <code>$</code> 符号后的数字，我们可以使用正后发断言 <code>(?&lt;=\$)[0-9\.]*</code>。<br>这个表达式匹配 <code>$</code> 开头，之后跟着 <code>0,1,2,3,4,5,6,7,8,9,.</code> 这些字符可以出现大于等于 0 次。</p>
+<p>零宽度断言如下：</p>
+<table>
+<thead>
+<tr>
+<th align="center">符号</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">?&#x3D;</td>
+<td>正先行断言-存在</td>
+</tr>
+<tr>
+<td align="center">?!</td>
+<td>负先行断言-排除</td>
+</tr>
+<tr>
+<td align="center">?&lt;&#x3D;</td>
+<td>正后发断言-存在</td>
+</tr>
+<tr>
+<td align="center">?&lt;!</td>
+<td>负后发断言-排除</td>
+</tr>
+</tbody></table>
+<h3 id="2-4-1-正先行断言"><a href="#2-4-1-正先行断言" class="headerlink" title="2.4.1 ?=... 正先行断言"></a>2.4.1 <code>?=...</code> 正先行断言</h3><p><code>?=...</code> 正先行断言，表示第一部分表达式之后必须跟着 <code>?=...</code>定义的表达式。</p>
+<p>返回结果只包含满足匹配条件的第一部分表达式。<br>定义一个正先行断言要使用  <code>(?=...)</code>。</p>
+<ul>
+<li><p>如果将正先行断言式放在匹配式的后面，则表示匹配式后需要满足正先行断言式。</p>
+</li>
+<li><p>如果将正先行断言式放在匹配式的前面，则表示使用正先行断言式对匹配到的结果进行筛选。</p>
+</li>
+</ul>
+<p><strong>例：</strong></p>
+<p>现在有文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The fat cat sat on the mat.</span><br></pre></td></tr></table></figure>
+
+<p>使用正先行断言<code>(T|t)he(?=\sfat)</code>进行正则匹配，即 <code>The</code> 和 <code>the</code> 后面紧跟着 <code>(空格)fat</code>。也可以使用表达式<code>(?=The\sfat)The</code>进行匹配。</p>
+<p>最终得到匹配的文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>例：</strong></p>
+<p>至少一个大写字母和一个小写字母，可以使用表达式  <code>(?=.*?[a-z])(?=.*?[A-Z]).+</code></p>
+<h3 id="2-4-2-负先行断言"><a href="#2-4-2-负先行断言" class="headerlink" title="2.4.2 ?!... 负先行断言"></a>2.4.2 <code>?!...</code> 负先行断言</h3><p>负先行断言 <code>?!</code> 用于筛选所有匹配结果，筛选条件为 其后不跟随着断言中定义的格式。<br><code>正先行断言</code>  定义和 <code>负先行断言</code> 一样，区别就是 <code>=</code> 替换成 <code>!</code> 也就是 <code>(?!...)</code>。</p>
+<p><strong>例：</strong><br>有文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The fat cat sat on the mat.</span><br></pre></td></tr></table></figure>
+
+<p>使用负先行断言<code>(T|t)he(?!\sfat)</code>进行正则匹配，即 <code>The</code> 和 <code>the</code> 后面没有 <code>(空格)fat</code>文本。</p>
+<p>最终得到匹配的文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">the</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-4-3-lt-正后发断言"><a href="#2-4-3-lt-正后发断言" class="headerlink" title="2.4.3 ?&lt;= ... 正后发断言"></a>2.4.3 <code>?&lt;= ...</code> 正后发断言</h3><p>正后发断言 记作<code>(?&lt;=...)</code> 用于筛选所有匹配结果，筛选条件为 其前跟随着断言中定义的格式。</p>
+<ul>
+<li><p>如果将正后发断言式放在匹配式的前面，则表示匹配式前需要满足正后发断言式。</p>
+</li>
+<li><p>如果将正后发断言式放在匹配式的后面，则表示使用正后发断言式对匹配到的结果进行筛选。</p>
+</li>
+</ul>
+<p><strong>例：</strong></p>
+<p>表达式 &#96;&#96; 匹配 <code>fat</code> 和 <code>mat</code>，且其前跟着 <code>The</code> 或 <code>the</code>。</p>
+<p>有文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The fat cat sat on the mat.</span><br></pre></td></tr></table></figure>
+
+<p>使用正后发断言<code>(?&lt;=The\s)(fat|mat)</code>进行正则匹配，即 <code>fat</code> 或 <code>mat</code>前跟随着 The文本。也可以使用匹配式<code>(fat|mat)(?&lt;=The\sfat)</code>进行匹配。</p>
+<p>最终得到匹配的文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fat</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>例：</strong></p>
+<p>匹配文本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我喜欢你</span><br></pre></td></tr></table></figure>
+
+<p>使用匹配式<code>(?&lt;=我)喜欢(?=你)</code></p>
+<h3 id="2-4-4-lt-负后发断言"><a href="#2-4-4-lt-负后发断言" class="headerlink" title="2.4.4 ?&lt;!... 负后发断言"></a>2.4.4 <code>?&lt;!...</code> 负后发断言</h3><p>负后发断言 记作 <code>(?&lt;!...)</code> 用于筛选所有匹配结果，筛选条件为 其前不跟随着断言中定义的格式。</p>
+<p><strong>例：</strong></p>
+<p>有文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The fat cat sat on the mat.</span><br></pre></td></tr></table></figure>
+
+<p>使用正后发断言<code>(?&lt;！The\s)(fat|mat)</code>进行正则匹配，即 <code>fat</code> 或 <code>mat</code>前不跟随着 The文本。</p>
+<p>最终得到匹配的文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mat</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-5-标志"><a href="#2-5-标志" class="headerlink" title="2.5 标志"></a>2.5 标志</h2><p>标志也叫模式修正符，因为它可以用来修改表达式的搜索结果。<br>这些标志可以任意的组合使用，它也是整个正则表达式的一部分。</p>
+<table>
+<thead>
+<tr>
+<th align="center">标志</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">i</td>
+<td>忽略大小写。</td>
+</tr>
+<tr>
+<td align="center">g</td>
+<td>全局搜索。</td>
+</tr>
+<tr>
+<td align="center">m</td>
+<td>多行修饰符：锚点元字符 <code>^</code> <code>$</code> 工作范围在每行的起始。</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td>dotall</td>
+</tr>
+<tr>
+<td align="center">u</td>
+<td>Unicode</td>
+</tr>
+<tr>
+<td align="center">y</td>
+<td>粘性(stucky)</td>
+</tr>
+</tbody></table>
+<h3 id="2-5-1-全局搜索-Global-search"><a href="#2-5-1-全局搜索-Global-search" class="headerlink" title="2.5.1 全局搜索 (Global search)"></a>2.5.1 全局搜索 (Global search)</h3><p>修饰符 <code>g</code> 常用于执行一个全局搜索匹配，即（不仅仅返回第一个匹配的，而是返回全部）。</p>
+<p><strong>例：</strong></p>
+<p>表达式 <code>/.(at)/g</code> 表示搜索 任意字符（除了换行）+ <code>at</code>，并返回全部结果。</p>
+<h3 id="2-5-2-忽略大小写-Case-Insensitive"><a href="#2-5-2-忽略大小写-Case-Insensitive" class="headerlink" title="2.5.2 忽略大小写 (Case Insensitive)"></a>2.5.2 忽略大小写 (Case Insensitive)</h3><p>修饰语 <code>i</code> 用于忽略大小写。</p>
+<p><strong>例：</strong></p>
+<p>如，表达式 <code>/The/gi</code> 表示在全局搜索 <code>The</code>，在后面的 <code>i</code> 将其条件修改为忽略大小写，则变成搜索 <code>the</code> 和 <code>The</code>。</p>
+<h3 id="2-5-3-多行修饰符-Multiline"><a href="#2-5-3-多行修饰符-Multiline" class="headerlink" title="2.5.3 多行修饰符 (Multiline)"></a>2.5.3 多行修饰符 (Multiline)</h3><p>多行修饰符 <code>m</code> 常用于执行一个多行匹配。</p>
+<p>像之前介绍的 <code>^和$</code> 用于检查格式是否是在待检测字符串的开头或结尾。但我们如果想要它在每行的开头和结尾生效，我们需要用到多行修饰符 <code>m</code>。</p>
+<p>例如，表达式 <code>/at(.)?$/gm</code> 表示小写字符 <code>a</code> 后跟小写字符 <code>t</code> ，末尾可选除换行符外任意字符。根据 <code>m</code> 修饰符，现在表达式匹配每行的结尾。</p>
+<h2 id="2-6-捕获组"><a href="#2-6-捕获组" class="headerlink" title="2.6 捕获组"></a>2.6 捕获组</h2><h3 id="2-6-1-捕获分组"><a href="#2-6-1-捕获分组" class="headerlink" title="2.6.1 捕获分组"></a>2.6.1 捕获分组</h3><p>在正则表达式中还提供了一种将表达式分组的机制，当使用分组时，除了获得整个匹配。还能在匹配中选择每一个分组。</p>
+<p>要实现分组，使用()即可。</p>
+<p><strong>例：</strong></p>
+<p>文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">张三：0571-88551166</span><br></pre></td></tr></table></figure>
+
+<p>使用表达式<code>/(\d&#123;4&#125;)-(\d&#123;8&#125;)/g</code>，匹配得到文本 0571-8855116.</p>
+<p>那么这个文本实际分为了两组，第一组为0571，第二组为8855116.</p>
+<h3 id="2-6-2-非捕获分组"><a href="#2-6-2-非捕获分组" class="headerlink" title="2.6.2 非捕获分组"></a>2.6.2 非捕获分组</h3><p>有时候，我们并不需要捕获某个分组的内容，但是又想使用分组的特性。</p>
+<p>这时候就可以使用非捕获分组<code>(?:表达式)</code>，从而不捕获数据，还能使用分组的功能。</p>
+<h3 id="2-6-3-分组回溯引用"><a href="#2-6-3-分组回溯引用" class="headerlink" title="2.6.3 分组回溯引用"></a>2.6.3 分组回溯引用</h3><p>正则表达式提供了一种引用之前匹配分组的机制，有些时候，我们或许会寻找到一个子匹配，该匹配接下来会再次出现。</p>
+<p><strong>例：</strong></p>
+<p>文本如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;font&gt;提示&lt;/font&gt;</span><br><span class="line">&lt;font&gt;提示&lt;/bar&gt;</span><br></pre></td></tr></table></figure>
+
+<p>希望匹配正确的标签，可以使用 <code>&lt;(\w+?)&gt;(.*?)&lt;\/\1&gt;</code>这里\1表示第一个括号中的内容，这样就可以使用回溯分组调用，调用第一个括号的内容。</p>
+<p>最终匹配到了正确的文本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;font&gt;提示&lt;/font&gt;</span><br></pre></td></tr></table></figure>
+
+<br>
+>注：在java程序中，可以使用 \$n 来使用捕获的第n个内容，如 `string.replaceAll("<(.*)>", "$1 ");`  
+
+
+
+
+<br>
+# 三、经典正则表达式
+
+<ul>
+<li><p>由26个字母和数字组成的字符串：<code>^[A-Za-z0-9]+\$</code></p>
+</li>
+<li><p>匹配中文字符：<code>[一-龥]</code></p>
+</li>
+<li><p>没有空字符的且以tmp结尾的文件(^在中括号中表示取反，在中括号外表示开头)：<code>[^ ]*.tmp</code></p>
+</li>
+<li><p>匹配html标签：<code>&lt;.+?&gt;</code> 只需要添加懒惰匹配符号？，让&lt;&gt;来匹配每个标签</p>
+</li>
+<li><p>匹配颜色标签符，如#ffffff：<code>#[a-fA-F0-9]&#123;6&#125;</code>，添加是为了防止#ffffffff这种被识别为颜色标签符</p>
+</li>
+<li><p>正整数*： <code>^\d+$</code></p>
+</li>
+<li><p><em>负整数</em>： <code>^-\d+$</code></p>
+</li>
+<li><p>国内电话号码：<code>\d&#123;3&#125;-\d&#123;8&#125;|\d&#123;4&#125;-\d&#123;7&#125;</code></p>
+</li>
+<li><p><em>手机国家号</em>： <code>^+?[\d\s]&#123;3,&#125;$</code></p>
+</li>
+<li><p><em>手机号</em>： <code>^+?[\d\s]+(?[\d\s]&#123;10,&#125;$</code></p>
+</li>
+<li><p><em>整数</em>： <code>^-?\d+$</code></p>
+</li>
+<li><p><em>用户名</em>： <code>^[\w\d_.]&#123;4,16&#125;$</code></p>
+</li>
+<li><p><em>数字和英文字母</em>： <code>^[a-zA-Z0-9]*$</code></p>
+</li>
+<li><p><em>数字和应为字母和空格</em>： <code>^[a-zA-Z0-9 ]*$</code></p>
+</li>
+<li><p>密码(至少一个大写字母、至少一个小写字母、至少一个数字、至少8个字符)：<code>/(?=.*?[a-z])(?=.*?[A-Z])(?=.*?(\d)).&#123;8,&#125;/g</code></p>
+</li>
+<li><p><em>密码</em>： <code>^(?=^.&#123;6,&#125;$)((?=.*[A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z]))^.*$</code></p>
+</li>
+<li><p><em>邮箱</em>： <code>^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]&#123;2,4&#125;)*$</code></p>
+</li>
+<li><p><em>IP4 地址</em>： <code>^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)&#123;3&#125;(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$</code> </p>
+</li>
+<li><p><em>纯小写字母</em>： <code>^([a-z])*$</code></p>
+</li>
+<li><p><em>纯大写字母</em>： <code>^([A-Z])*$</code></p>
+</li>
+<li><p><em>URL</em>： <code>^(((http|https|ftp):\/\/)?([[a-zA-Z0-9]\-\.])+(\.)([[a-zA-Z0-9]])&#123;2,4&#125;([[a-zA-Z0-9]\/+=%&amp;_\.~?\-]*))*$</code></p>
+</li>
+<li><p><em>VISA 信用卡号</em>： <code>^(4[0-9]&#123;12&#125;(?:[0-9]&#123;3&#125;)?)*$</code></p>
+</li>
+<li><p>*日期 (MM&#x2F;DD&#x2F;YYYY)*： <code>^(0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]&#123;2&#125;$</code></p>
+</li>
+<li><p>*日期 (YYYY&#x2F;MM&#x2F;DD)*： <code>^(19|20)?[0-9]&#123;2&#125;[- /.](0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])$</code></p>
+</li>
+<li><p><em>MasterCard 信用卡号</em>： <code>^(5[1-5][0-9]&#123;14&#125;)*$</code></p>
+</li>
+</ul>
+<p><strong>IP地址(需要分为四段):</strong><br>0-99:[1-9]?\d<br>100-199:1\d{2}<br>200-249:2[0-4]\d<br>250-256:25[0-5]<br>(([1-9]?\d|1\d{2}|2[0-4]\d|25[0-5]).){3}([1-9]?\d|1\d{2}|2[0-4]\d|25[0-5])</p>
+<h1 id="四、测试"><a href="#四、测试" class="headerlink" title="四、测试"></a>四、测试</h1><p><a target="_blank" rel="noopener" href="https://regexr-cn.com/">正则在线测试工具</a><br><a target="_blank" rel="noopener" href="https://codejiaonang.com/">正则练习网站</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">http://example.com/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E5%B0%86List%E8%BD%AC%E4%B8%BA%E6%A0%91%E7%8A%B6%E7%BB%93%E6%9E%84/" title="将List转为树状结构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">将List转为树状结构</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4/" title="泛型擦除"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">泛型擦除</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">一、正则表达式介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">二、基本语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%8C%B9%E9%85%8D%E7%AC%A6%E5%8F%B7"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 匹配符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E7%89%B9%E6%AE%8A%E5%90%AB%E4%B9%89%E7%AC%A6%E5%8F%B7"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 特殊含义符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E9%87%8F%E8%AF%8D"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 量词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E9%9B%B6%E5%AE%BD%E6%96%AD%E8%A8%80"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 零宽断言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-1-%E6%AD%A3%E5%85%88%E8%A1%8C%E6%96%AD%E8%A8%80"><span class="toc-number">2.4.1.</span> <span class="toc-text">2.4.1 ?&#x3D;... 正先行断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-2-%E8%B4%9F%E5%85%88%E8%A1%8C%E6%96%AD%E8%A8%80"><span class="toc-number">2.4.2.</span> <span class="toc-text">2.4.2 ?!... 负先行断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-3-lt-%E6%AD%A3%E5%90%8E%E5%8F%91%E6%96%AD%E8%A8%80"><span class="toc-number">2.4.3.</span> <span class="toc-text">2.4.3 ?&lt;&#x3D; ... 正后发断言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-4-lt-%E8%B4%9F%E5%90%8E%E5%8F%91%E6%96%AD%E8%A8%80"><span class="toc-number">2.4.4.</span> <span class="toc-text">2.4.4 ?&lt;!... 负后发断言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E6%A0%87%E5%BF%97"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 标志</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-1-%E5%85%A8%E5%B1%80%E6%90%9C%E7%B4%A2-Global-search"><span class="toc-number">2.5.1.</span> <span class="toc-text">2.5.1 全局搜索 (Global search)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-2-%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99-Case-Insensitive"><span class="toc-number">2.5.2.</span> <span class="toc-text">2.5.2 忽略大小写 (Case Insensitive)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-3-%E5%A4%9A%E8%A1%8C%E4%BF%AE%E9%A5%B0%E7%AC%A6-Multiline"><span class="toc-number">2.5.3.</span> <span class="toc-text">2.5.3 多行修饰符 (Multiline)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-%E6%8D%95%E8%8E%B7%E7%BB%84"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 捕获组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-1-%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84"><span class="toc-number">2.6.1.</span> <span class="toc-text">2.6.1 捕获分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-2-%E9%9D%9E%E6%8D%95%E8%8E%B7%E5%88%86%E7%BB%84"><span class="toc-number">2.6.2.</span> <span class="toc-text">2.6.2 非捕获分组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-3-%E5%88%86%E7%BB%84%E5%9B%9E%E6%BA%AF%E5%BC%95%E7%94%A8"><span class="toc-number">2.6.3.</span> <span class="toc-text">2.6.3 分组回溯引用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">四、测试</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>实时数仓框架-1-13-0 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="第1章 ClickHouse的安装1.1准备工作1.1.1 确定防火墙处于关闭状态1.1.2 CentOS取消打开文件数限制1）在hadoop102的 &#x2F;etc&#x2F;security&#x2F;limits.conf文件的末尾加入以下内容    注意：以下操作会修改 Linux 系统配置，如果操作不当可能导致虚拟机无法启动，建议在执行以下操作之前给三台虚拟机分别打个快照。（快照拍摄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="实时数仓框架-1-13-0">
+<meta property="og:url" content="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="第1章 ClickHouse的安装1.1准备工作1.1.1 确定防火墙处于关闭状态1.1.2 CentOS取消打开文件数限制1）在hadoop102的 &#x2F;etc&#x2F;security&#x2F;limits.conf文件的末尾加入以下内容    注意：以下操作会修改 Linux 系统配置，如果操作不当可能导致虚拟机无法启动，建议在执行以下操作之前给三台虚拟机分别打个快照。（快照拍摄">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.051Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '实时数仓框架-1-13-0',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">实时数仓框架-1-13-0</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.051Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.051Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/">大数据实时</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="实时数仓框架-1-13-0"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="第1章-ClickHouse的安装"><a href="#第1章-ClickHouse的安装" class="headerlink" title="第1章 ClickHouse的安装"></a>第1章 ClickHouse的安装</h1><h2 id="1-1准备工作"><a href="#1-1准备工作" class="headerlink" title="1.1准备工作"></a>1.1准备工作</h2><h3 id="1-1-1-确定防火墙处于关闭状态"><a href="#1-1-1-确定防火墙处于关闭状态" class="headerlink" title="1.1.1 确定防火墙处于关闭状态"></a>1.1.1 确定防火墙处于关闭状态</h3><h3 id="1-1-2-CentOS取消打开文件数限制"><a href="#1-1-2-CentOS取消打开文件数限制" class="headerlink" title="1.1.2 CentOS取消打开文件数限制"></a>1.1.2 CentOS取消打开文件数限制</h3><p>1）在hadoop102的 &#x2F;etc&#x2F;security&#x2F;limits.conf文件的末尾加入以下内容<br>    注意：以下操作会修改 Linux 系统配置，如果操作不当可能导致虚拟机无法启动，建议在执行以下操作之前给三台虚拟机分别打个快照。（快照拍摄需要在关机状态下执行）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo vim /etc/security/limits.conf</span><br><span class="line">* soft nofile 65536 </span><br><span class="line">* hard nofile 65536 </span><br><span class="line">* soft nproc 131072 </span><br><span class="line">* hard nproc 131072</span><br></pre></td></tr></table></figure>
+<p>2）在hadoop102的&#x2F;etc&#x2F;security&#x2F;limits.d&#x2F;20-nproc.conf文件的末尾加入以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo vim /etc/security/limits.d/20-nproc.conf</span><br><span class="line">* soft nofile 65536 </span><br><span class="line">* hard nofile 65536 </span><br><span class="line">* soft nproc 131072 </span><br><span class="line">* hard nproc 131072</span><br></pre></td></tr></table></figure>
+<p>3）执行同步操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo /home/atguigu/bin/xsync /etc/security/limits.conf</span><br><span class="line">[atguigu@hadoop102 ~]$ sudo /home/atguigu/bin/xsync /etc/security/limits.d/20-nproc.conf</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-1-3-安装依赖"><a href="#1-1-3-安装依赖" class="headerlink" title="1.1.3 安装依赖"></a>1.1.3 安装依赖</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo yum install -y libtool</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 ~]$ sudo yum install -y *unixODBC*	</span><br></pre></td></tr></table></figure>
+<p>在hadoop103、hadoop104上执行以上操作</p>
+<h3 id="1-1-4-CentOS取消SELINUX"><a href="#1-1-4-CentOS取消SELINUX" class="headerlink" title="1.1.4 CentOS取消SELINUX"></a>1.1.4 CentOS取消SELINUX</h3><p>1）修改&#x2F;etc&#x2F;selinux&#x2F;config中的SELINUX&#x3D;disabled </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo vim /etc/selinux/config </span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
+
+<p>2）执行同步操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo /home/atguigu/bin/xsync /etc/selinux/config</span><br></pre></td></tr></table></figure>
+<p>3）重启三台服务器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo reboot</span><br></pre></td></tr></table></figure>
+
+<br>
+## 1.2单机安装
+官网：https://clickhouse.yandex/ 
+下载地址：https://repo.clickhouse.tech/rpm/stable/x86_64/  
+
+<h3 id="1-2-1-在hadoop102的-x2F-opt-x2F-software下创建clickhouse目录"><a href="#1-2-1-在hadoop102的-x2F-opt-x2F-software下创建clickhouse目录" class="headerlink" title="1.2.1 在hadoop102的&#x2F;opt&#x2F;software下创建clickhouse目录"></a>1.2.1 在hadoop102的&#x2F;opt&#x2F;software下创建clickhouse目录</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ cd /opt/software/</span><br><span class="line">[atguigu@hadoop102 software]$ mkdir clickhouse</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-2-将课前提供的资料包中4个文件上传到hadoop102的-x2F-opt-x2F-software-x2F-clickhouse目录下"><a href="#1-2-2-将课前提供的资料包中4个文件上传到hadoop102的-x2F-opt-x2F-software-x2F-clickhouse目录下" class="headerlink" title="1.2.2 将课前提供的资料包中4个文件上传到hadoop102的&#x2F;opt&#x2F;software&#x2F;clickhouse目录下"></a>1.2.2 将课前提供的资料包中4个文件上传到hadoop102的&#x2F;opt&#x2F;software&#x2F;clickhouse目录下</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ ll</span><br><span class="line">总用量 1262276</span><br><span class="line">-rw-rw-r-- 1 atguigu atguigu      56708 4月   7 12:42 clickhouse-client-20.4.5.36-2.noarch.rpm</span><br><span class="line">-rw-rw-r-- 1 atguigu atguigu  117222435 4月   7 12:42 clickhouse-common-static-20.4.5.36-2.x86_64.rpm</span><br><span class="line">-rw-rw-r-- 1 atguigu atguigu 1175204526 4月   7 12:42 clickhouse-common-static-dbg-20.4.5.36-2.x86_64.rpm</span><br><span class="line">-rw-rw-r-- 1 atguigu atguigu      78318 4月   7 12:42 clickhouse-server-20.4.5.36-2.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-3-将安装文件同步到hadoop103、hadoop104"><a href="#1-2-3-将安装文件同步到hadoop103、hadoop104" class="headerlink" title="1.2.3 将安装文件同步到hadoop103、hadoop104"></a>1.2.3 将安装文件同步到hadoop103、hadoop104</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 software]$ xsync clickhouse/</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-4-分别在三台机子上安装这4个rpm文件"><a href="#1-2-4-分别在三台机子上安装这4个rpm文件" class="headerlink" title="1.2.4 分别在三台机子上安装这4个rpm文件"></a>1.2.4 分别在三台机子上安装这4个rpm文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo rpm -ivh *.rpm</span><br><span class="line">警告：clickhouse-client-20.4.5.36-2.noarch.rpm: 头V4 RSA/SHA1 Signature, 密钥 ID e0c56bd4: NOKEY</span><br><span class="line">准备中...                          ################################# [100%]</span><br><span class="line">正在升级/安装...</span><br><span class="line">   1:clickhouse-common-static-20.4.5.3################################# [ 25%]</span><br><span class="line">   2:clickhouse-client-20.4.5.36-2    ################################# [ 50%]</span><br><span class="line">   3:clickhouse-server-20.4.5.36-2    ################################# [ 75%]</span><br><span class="line">Created symlink from /etc/systemd/system/multi-user.target.wants/clickhouse-server.service to /etc/systemd/system/clickhouse-server.service.</span><br><span class="line">Path to data directory in /etc/clickhouse-server/config.xml: /var/lib/clickhouse/</span><br><span class="line">   4:clickhouse-common-static-dbg-20.4################################# [100%]</span><br></pre></td></tr></table></figure>
+<p>查看安装情况</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo rpm -qa|grep clickhouse</span><br><span class="line">clickhouse-client-20.4.5.36-2.noarch</span><br><span class="line">clickhouse-common-static-20.4.5.36-2.x86_64</span><br><span class="line">clickhouse-server-20.4.5.36-2.noarch</span><br><span class="line">clickhouse-common-static-dbg-20.4.5.36-2.x86_64</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-5-修改配置文件"><a href="#1-2-5-修改配置文件" class="headerlink" title="1.2.5 修改配置文件"></a>1.2.5 修改配置文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo vim /etc/clickhouse-server/config.xml</span><br></pre></td></tr></table></figure>
+<p>1）配置允许被外部节点访问<br>把 <code>&lt;listen_host&gt;::&lt;/listen_host&gt;</code> 的注释打开，这样的话才能让ClickHouse被除本机以外的服务器访问</p>
+<p>2）分发配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo /home/atguigu/bin/xsync /etc/clickhouse-server/config.xml</span><br></pre></td></tr></table></figure>
+<p>在这个文件中，有ClickHouse的一些默认路径配置，比较重要的</p>
+<ul>
+<li>数据文件路径：<path>&#x2F;var&#x2F;lib&#x2F;clickhouse&#x2F;</path></li>
+<li>日志文件路径：<log>&#x2F;var&#x2F;log&#x2F;clickhouse-server&#x2F;clickhouse-server.log</log></li>
+</ul>
+<h3 id="1-2-6-启动ClickServer"><a href="#1-2-6-启动ClickServer" class="headerlink" title="1.2.6 启动ClickServer"></a>1.2.6 启动ClickServer</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo systemctl start clickhouse-server</span><br></pre></td></tr></table></figure>
+<p>注意：如果安装过zabbix，需要禁用一些服务的开机自启</p>
+<h3 id="1-2-7-三台机器上关闭开机自启"><a href="#1-2-7-三台机器上关闭开机自启" class="headerlink" title="1.2.7 三台机器上关闭开机自启"></a>1.2.7 三台机器上关闭开机自启</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ sudo systemctl disable clickhouse-server </span><br></pre></td></tr></table></figure>
+<h3 id="1-2-8-使用client连接server"><a href="#1-2-8-使用client连接server" class="headerlink" title="1.2.8 使用client连接server"></a>1.2.8 使用client连接server</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 clickhouse]$ clickhouse-client -m</span><br></pre></td></tr></table></figure>
+<p>-m :可以在命令窗口输入多行命令</p>
+<br>
+<br>
+# 第2章 HBase快速入门
+## 2.1 HBase安装部署
+### 2.1.1 Zookeeper正常部署
+首先保证Zookeeper集群的正常部署，并启动之：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 zookeeper-3.5.7]$ bin/zkServer.sh start</span><br><span class="line">[atguigu@hadoop103 zookeeper-3.5.7]$ bin/zkServer.sh start</span><br><span class="line">[atguigu@hadoop104 zookeeper-3.5.7]$ bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+### 2.1.2 Hadoop正常部署
+Hadoop集群的正常部署并启动：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hadoop-3.1.3]$ sbin/start-dfs.sh</span><br><span class="line">[atguigu@hadoop103 hadoop-3.1.3]$ sbin/start-yarn.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-3-HBase的解压"><a href="#2-1-3-HBase的解压" class="headerlink" title="2.1.3 HBase的解压"></a>2.1.3 HBase的解压</h3><p>解压Hbase到指定目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 software]$ tar -zxvf hbase-2.0.5-bin.tar.gz -C /opt/module</span><br><span class="line">[atguigu@hadoop102 software]$ mv /opt/module/hbase-2.0.5 /opt/module/hbase</span><br></pre></td></tr></table></figure>
+<p>配置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ sudo vim /etc/profile.d/my_env.sh</span><br></pre></td></tr></table></figure>
+<p>添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#HBASE_HOME</span><br><span class="line">export HBASE_HOME=/opt/module/hbase</span><br><span class="line">export PATH=$PATH:$HBASE_HOME/bin</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-4-HBase的配置文件"><a href="#2-1-4-HBase的配置文件" class="headerlink" title="2.1.4 HBase的配置文件"></a>2.1.4 HBase的配置文件</h3><p>修改HBase对应的配置文件。<br>1.hbase-env.sh修改内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export HBASE_MANAGES_ZK=false</span><br></pre></td></tr></table></figure>
+<p>2.hbase-site.xml修改内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://hadoop102:8020/hbase&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop102,hadoop103,hadoop104&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>3.regionservers：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hadoop102</span><br><span class="line">hadoop103</span><br><span class="line">hadoop104</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-5-HBase远程发送到其他集群"><a href="#2-1-5-HBase远程发送到其他集群" class="headerlink" title="2.1.5 HBase远程发送到其他集群"></a>2.1.5 HBase远程发送到其他集群</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 module]$ xsync hbase/</span><br></pre></td></tr></table></figure>
+<h3 id="2-1-6-HBase服务的启动"><a href="#2-1-6-HBase服务的启动" class="headerlink" title="2.1.6 HBase服务的启动"></a>2.1.6 HBase服务的启动</h3><p>1.单点启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ bin/hbase-daemon.sh start master</span><br><span class="line">[atguigu@hadoop102 hbase]$ bin/hbase-daemon.sh start regionserver</span><br></pre></td></tr></table></figure>
+<p>提示：如果集群之间的节点时间不同步，会导致regionserver无法启动，抛出ClockOutOfSyncException异常。</p>
+<p>修复提示：<br>a、同步时间服务<br>请参看帮助文档：《尚硅谷大数据技术之Hadoop入门》<br>b、属性：hbase.master.maxclockskew设置更大的值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">        &lt;name&gt;hbase.master.maxclockskew&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;180000&lt;/value&gt;</span><br><span class="line">        &lt;description&gt;Time difference of regionserver from master&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>2.群启</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ bin/start-hbase.sh</span><br></pre></td></tr></table></figure>
+<p>对应的停止服务：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ bin/stop-hbase.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-7-查看HBase页面"><a href="#2-1-7-查看HBase页面" class="headerlink" title="2.1.7 查看HBase页面"></a>2.1.7 查看HBase页面</h3><p>启动成功后，可以通过“host:port”的方式来访问HBase管理页面，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hadoop102:16010 </span><br></pre></td></tr></table></figure>
+
+<h3 id="2-1-8-高可用-可选"><a href="#2-1-8-高可用-可选" class="headerlink" title="2.1.8 高可用(可选)"></a>2.1.8 高可用(可选)</h3><p>在HBase中HMaster负责监控HRegionServer的生命周期，均衡RegionServer的负载，如果HMaster挂掉了，那么整个HBase集群将陷入不健康的状态，并且此时的工作状态并不会维持太久。所以HBase支持对HMaster的高可用配置。<br>1.关闭HBase集群（如果没有开启则跳过此步）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ bin/stop-hbase.sh</span><br></pre></td></tr></table></figure>
+<p>2.在conf目录下创建backup-masters文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ touch conf/backup-masters</span><br></pre></td></tr></table></figure>
+<p>3.在backup-masters文件中配置高可用HMaster节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ echo hadoop103 &gt; conf/backup-masters</span><br></pre></td></tr></table></figure>
+<p>4.将整个conf目录scp到其他节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 hbase]$ scp -r conf/ hadoop103:/opt/module/hbase/</span><br><span class="line">[atguigu@hadoop102 hbase]$ scp -r conf/ hadoop104:/opt/module/hbase/</span><br></pre></td></tr></table></figure>
+<p>5.打开页面测试查看<br><a target="_blank" rel="noopener" href="http://hadooo102:16010/">http://hadooo102:16010</a> </p>
+<br>
+## 2.2 整合Phoenix
+**安装**
+1.官网地址
+http://phoenix.apache.org/
+
+<p>2.Phoenix部署<br>1）上传并解压tar包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 software]$ tar -zxvf apache-phoenix-5.0.0-HBase-2.0-bin.tar.gz -C /opt/module/</span><br><span class="line">[atguigu@hadoop102 software]$ cd /opt/module/</span><br><span class="line">[atguigu@hadoop102 module]$ mv apache-phoenix-5.0.0-HBase-2.0-bin phoenix</span><br></pre></td></tr></table></figure>
+<p>2）复制server包并拷贝到各个节点的hbase&#x2F;lib</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 module]$ cd /opt/module/phoenix/</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 phoenix]$ cp /opt/module/phoenix/phoenix-5.0.0-HBase-2.0-server.jar /opt/module/hbase/lib/</span><br><span class="line"></span><br><span class="line">[atguigu@hadoop102 phoenix]$ xsync /opt/module/hbase/lib/phoenix-5.0.0-HBase-2.0-server.jar</span><br></pre></td></tr></table></figure>
+<p>3）配置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># PHOENIX_HOME</span><br><span class="line">export PHOENIX_HOME=/opt/module/phoenix</span><br><span class="line">export PHOENIX_CLASSPATH=$PHOENIX_HOME</span><br><span class="line">export PATH=$PATH:$PHOENIX_HOME/bin</span><br></pre></td></tr></table></figure>
+<p>4）在 Hbase 家目录下的 conf&#x2F;hbase-site.xml 文件中添加配置，分发配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 phoenix]$ vim /opt/module/hbase/conf/hbase-site.xml</span><br><span class="line">[atguigu@hadoop102 phoenix]$ xsync /opt/module/hbase/conf/hbase-site.xml</span><br></pre></td></tr></table></figure>
+<p>配置如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;phoenix.schema.isNamespaceMappingEnabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;phoenix.schema.mapSystemTablesToNamespace&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>5）在 Phoenix 家目录下的 bin&#x2F;hbase-site.xml 文件中添加配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 phoenix]$ vim bin/hbase-site.xml</span><br></pre></td></tr></table></figure>
+<p>配置如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;phoenix.schema.isNamespaceMappingEnabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;phoenix.schema.mapSystemTablesToNamespace&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p>6）重启HBase</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ stop-hbase.sh</span><br><span class="line">[atguigu@hadoop102 ~]$ start-hbase.sh</span><br></pre></td></tr></table></figure>
+<p>7）连接Phoenix</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop101 phoenix]$ /opt/module/phoenix/bin/sqlline.py hadoop102,hadoop103,hadoop104:2181</span><br></pre></td></tr></table></figure>
+
+<br>
+<br>
+# 第3章 Flink 1.13.0部署
+Flink提交作业和执行任务，需要几个关键组件：客户端（Client）、作业管理器（JobManager）和任务管理器（TaskManager）。我们的代码由客户端获取并做转换，之后提交给JobManger。所以JobManager就是Flink集群里的“管事人”，对作业进行中央调度管理；而它获取到要执行的作业后，会进一步处理转换，然后分发任务给众多的TaskManager。这里的TaskManager，就是真正“干活的人”，数据的处理操作都是它们来做的。
+
+<p><img src="/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0.assets%5C38998b71ef394d5ab1eacae30b2c53d8.png" alt="Flink集群中的主要组件"></p>
+<p>Flink是一个非常灵活的处理框架，它支持多种不同的部署场景，还可以和不同的资源管理平台方便地集成。所以接下来我们会先做一个简单的介绍，让大家有一个初步的认识，之后再展开讲述不同情形下的Flink部署。</p>
+<h2 id="3-1-快速启动一个Flink集群"><a href="#3-1-快速启动一个Flink集群" class="headerlink" title="3.1 快速启动一个Flink集群"></a>3.1 快速启动一个Flink集群</h2><h3 id="3-1-1-环境配置"><a href="#3-1-1-环境配置" class="headerlink" title="3.1.1 环境配置"></a>3.1.1 环境配置</h3><p>Flink是一个分布式的流处理框架，所以实际应用一般都需要搭建集群环境。我们在进行Flink安装部署的学习时，需要准备3台Linux机器。具体要求如下：</p>
+<ul>
+<li>系统环境为CentOS 7.5版本。</li>
+<li>安装Java 8。</li>
+<li>安装Hadoop集群，Hadoop建议选择Hadoop 2.7.5以上版本。</li>
+<li>配置集群节点服务器间时间同步以及免密登录，关闭防火墙。</li>
+</ul>
+<p>本书中三台服务器的具体设置如下：</p>
+<ul>
+<li>节点服务器1，IP地址为192.168.10.102，主机名为hadoop102。</li>
+<li>节点服务器2，IP地址为192.168.10.103，主机名为hadoop103。</li>
+<li>节点服务器3，IP地址为192.168.10.104，主机名为hadoop104。</li>
+</ul>
+<h3 id="3-1-2-本地启动"><a href="#3-1-2-本地启动" class="headerlink" title="3.1.2 本地启动"></a>3.1.2 本地启动</h3><p>最简单的启动方式，其实是不搭建集群，直接本地启动。本地部署非常简单，直接解压安装包就可以使用，不用进行任何配置；一般用来做一些简单的测试。</p>
+<p><strong>具体安装步骤如下：</strong></p>
+<ol>
+<li><p>下载安装包<br>进入Flink官网，下载1.13.0版本安装包flink-1.13.0-bin-scala_2.12.tgz，注意此处选用对应scala版本为scala 2.12的安装包。</p>
+</li>
+<li><p>解压<br>在hadoop102节点服务器上创建安装目录&#x2F;opt&#x2F;module，将flink安装包放在该目录下，并执行解压命令，解压至当前目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf flink-1.13.0-bin-scala_2.12.tgz -C /opt/module/</span><br><span class="line">flink-1.13.0/</span><br><span class="line">flink-1.13.0/log/</span><br><span class="line">flink-1.13.0/LICENSE</span><br><span class="line">flink-1.13.0/lib/</span><br><span class="line">……</span><br></pre></td></tr></table></figure></li>
+<li><p>启动<br>进入解压后的目录，执行启动命令，并查看进程。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ cd flink-1.13.0/</span><br><span class="line">$ bin/start-cluster.sh </span><br><span class="line">Starting cluster.</span><br><span class="line">Starting standalonesession daemon on host hadoop102.</span><br><span class="line">Starting taskexecutor daemon on host hadoop102.</span><br><span class="line">$ jps</span><br><span class="line">10369 StandaloneSessionClusterEntrypoint</span><br><span class="line">10680 TaskManagerRunner</span><br><span class="line">10717 Jps</span><br></pre></td></tr></table></figure></li>
+<li><p>访问Web UI<br>启动成功后，访问<a href="http://hadoop102:8081，可以对flink集群和任务进行监控管理。">http://hadoop102:8081，可以对flink集群和任务进行监控管理。</a></p>
+</li>
+<li><p>关闭集群<br>如果想要让Flink集群停止运行，可以执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ bin/stop-cluster.sh </span><br><span class="line">Stopping taskexecutor daemon (pid: 10680) on host hadoop102.</span><br><span class="line">Stopping standalonesession daemon (pid: 10369) on host hadoop102.</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="3-1-3-集群启动"><a href="#3-1-3-集群启动" class="headerlink" title="3.1.3 集群启动"></a>3.1.3 集群启动</h3><p>可以看到，Flink本地启动非常简单，直接执行start-cluster.sh就可以了。如果我们想要扩展成集群，其实启动命令是不变的，主要是需要指定节点之间的主从关系。<br>Flink是典型的Master-Slave架构的分布式数据处理框架，其中Master角色对应着JobManager，Slave角色则对应TaskManager。我们对三台节点服务器的角色分配如表3-1所示。</p>
+<table>
+<thead>
+<tr>
+<th>节点服务器</th>
+<th>hadoop102</th>
+<th>hadoop103</th>
+<th>hadoop104</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>角色</td>
+<td>JobManager</td>
+<td>TaskManager</td>
+<td>TaskManager</td>
+</tr>
+</tbody></table>
+<p><strong>具体安装部署步骤如下：</strong></p>
+<ol>
+<li>下载并解压安装包<br>具体操作与上节相同。</li>
+<li>修改集群配置<br>（1）进入conf目录下，修改flink-conf.yaml文件，修改jobmanager.rpc.address参数为hadoop102，如下所示：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cd conf/</span><br><span class="line">$ vim flink-conf.yaml</span><br><span class="line"># JobManager节点地址.</span><br><span class="line">jobmanager.rpc.address: hadoop102</span><br></pre></td></tr></table></figure>
+这就指定了hadoop102节点服务器为JobManager节点。<br>（2）修改workers文件，将另外两台节点服务器添加为本Flink集群的TaskManager节点，具体修改如下：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ vim workers </span><br><span class="line">hadoop103</span><br><span class="line">hadoop104</span><br></pre></td></tr></table></figure>
+这样就指定了hadoop103和hadoop104为TaskManager节点。<br>（3）另外，在flink-conf.yaml文件中还可以对集群中的JobManager和TaskManager组件进行优化配置，主要配置项如下：</li>
+</ol>
+<ul>
+<li>jobmanager.memory.process.size：对JobManager进程可使用到的全部内存进行配置，包括JVM元空间和其他开销，默认为1600M，可以根据集群规模进行适当调整。</li>
+<li>taskmanager.memory.process.size：对TaskManager进程可使用到的全部内存进行配置，包括JVM元空间和其他开销，默认为1600M，可以根据集群规模进行适当调整。</li>
+<li>taskmanager.numberOfTaskSlots：对每个TaskManager能够分配的Slot数量进行配置，默认为1，可根据TaskManager所在的机器能够提供给Flink的CPU数量决定。所谓Slot就是TaskManager中具体运行一个任务所分配的计算资源。</li>
+<li>parallelism.default：Flink任务执行的默认并行度，优先级低于代码中进行的并行度配置和任务提交时使用参数指定的并行度数量。<br>关于Slot和并行度的概念，我们会在下一章做详细讲解。</li>
+</ul>
+<ol start="3">
+<li><p>分发安装目录<br>配置修改完毕后，将Flink安装目录发给另外两个节点服务器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ scp -r ./flink-1.13.0 atguigu@hadoop103:/opt/module</span><br><span class="line">$ scp -r ./flink-1.13.0 atguigu@hadoop104:/opt/module</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动集群<br>（1）在hadoop102节点服务器上执行start-cluster.sh启动Flink集群：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ bin/start-cluster.sh </span><br><span class="line">Starting cluster.</span><br><span class="line">Starting standalonesession daemon on host hadoop102.</span><br><span class="line">Starting taskexecutor daemon on host hadoop103.</span><br><span class="line">Starting taskexecutor daemon on host hadoop104.</span><br></pre></td></tr></table></figure>
+<p>（2）查看进程情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-1.13.0]$ jps</span><br><span class="line">13859 Jps</span><br><span class="line">13782 StandaloneSessionClusterEntrypoint</span><br><span class="line">[atguigu@hadoop103 flink-1.13.0]$ jps</span><br><span class="line">12215 Jps</span><br><span class="line">12124 TaskManagerRunner</span><br><span class="line">[atguigu@hadoop104 flink-1.13.0]$ jps</span><br><span class="line">11602 TaskManagerRunner</span><br><span class="line">11694 Jps</span><br></pre></td></tr></table></figure></li>
+<li><p>访问Web UI<br>启动成功后，同样可以访问<a href="http://hadoop102:8081对flink集群和任务进行监控管理。">http://hadoop102:8081对flink集群和任务进行监控管理。</a></p>
+<blockquote>
+<p>当前集群的TaskManager数量为2；由于默认每个TaskManager的Slot数量为1，所以总Slot数和可用Slot数都为2。</p>
+</blockquote>
+</li>
+</ol>
+<br>
+### 3.1.4 向集群提交作业
+在上一章中，我们已经编写了词频统计的批处理和流处理的示例程序，并在开发环境的模拟集群上做了运行测试。现在既然已经有了真正的集群环境，那接下来我们就要把作业提交上去执行了。
+本节我们将以流处理的程序为例，演示如何将任务提交到集群中进行执行。具体步骤如下。
+1. 程序打包
+（1）在我们编写的Flink入门程序的pom.xml文件中添加打包插件的配置，具体如下： 
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">     &lt;plugins&gt;</span><br><span class="line">            &lt;plugin&gt;</span><br><span class="line">                &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">                &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</span><br><span class="line">                &lt;version&gt;3.0.0&lt;/version&gt;</span><br><span class="line">                &lt;configuration&gt;</span><br><span class="line">                    &lt;descriptorRefs&gt;</span><br><span class="line">                        &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span><br><span class="line">                    &lt;/descriptorRefs&gt;</span><br><span class="line">                &lt;/configuration&gt;</span><br><span class="line">                &lt;executions&gt;</span><br><span class="line">                    &lt;execution&gt;</span><br><span class="line">                        &lt;id&gt;make-assembly&lt;/id&gt;</span><br><span class="line">                        &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">                        &lt;goals&gt;</span><br><span class="line">                            &lt;goal&gt;single&lt;/goal&gt;</span><br><span class="line">                        &lt;/goals&gt;</span><br><span class="line">                    &lt;/execution&gt;</span><br><span class="line">                &lt;/executions&gt;</span><br><span class="line">            &lt;/plugin&gt;</span><br><span class="line">        &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure>
+（2）插件配置完毕后，可以使用IDEA的Maven工具执行package命令，出现如下提示即表示打包成功。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[INFO] -------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] -------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 21.665 s</span><br><span class="line">[INFO] Finished at: 2021-06-01T17:21:26+08:00</span><br><span class="line">[INFO] Final Memory: 141M/770M</span><br><span class="line">[INFO] -------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+打包完成后，在target目录下即可找到所需JAR包，JAR包会有两个，FlinkTutorial-1.0-SNAPSHOT.jar和FlinkTutorial-1.0-SNAPSHOT-jar-with-dependencies.jar，因为集群中已经具备任务运行所需的所有依赖，所以建议使用FlinkTutorial-1.0-SNAPSHOT.jar。
+
+<ol start="2">
+<li><p>在Web UI上提交作业<br>（1）任务打包完成后，我们打开Flink的WEB UI页面，在右侧导航栏点击“Submit New Job”，然后点击按钮“+ Add New”，选择要上传运行的JAR包。<br>（2）点击该JAR包，出现任务配置页面，进行相应配置。<br>主要配置程序入口主类的全类名，任务运行的并行度，任务运行所需的配置参数和保存点路径等，如图3-6所示，配置完成后，即可点击按钮“Submit”，将任务提交到集群运行。<br>（3）任务提交成功之后，可点击左侧导航栏的“Running Jobs”查看程序运行列表情况，如图3-7所示。<br>（4）点击该任务，可以查看任务运行的具体情况，也可以通过点击“Cancel Job”结束任务运行，如图3-8所示。</p>
+</li>
+<li><p>命令行提交作业<br>除了通过WEB UI界面提交任务之外，也可以直接通过命令行来提交任务。这里为方便起见，我们可以先把jar包直接上传到目录flink-1.13.0下<br>（1）首先需要启动集群。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/start-cluster.sh</span><br></pre></td></tr></table></figure>
+<p>（2）在hadoop102中执行以下命令启动netcat。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nc -lk 7777</span><br></pre></td></tr></table></figure>
+<p>（3）进入到Flink的安装路径下，在命令行使用flink run命令提交作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/flink run -m hadoop102:8081 -c com.atguigu.wc.StreamWordCount ./FlinkTutorial-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+<p>这里的参数 –m指定了提交到的JobManager，-c指定了入口类。<br>（4）在浏览器中打开Web UI，<a href="http://hadoop102:8081查看应用执行情况。">http://hadoop102:8081查看应用执行情况。</a><br>用netcat输入数据，可以在TaskManager的标准输出（Stdout）看到对应的统计结果。<br>（5）在log日志中，也可以查看执行结果，需要找到执行该数据任务的TaskManager节点查看日志。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ cat flink-atguigu-taskexecutor-0-hadoop102.out</span><br><span class="line">SLF4J: Class path contains multiple SLF4J bindings.</span><br><span class="line">SLF4J: Found binding in [jar:file:/opt/module/flink-1.13.0/lib/log4j-slf4j-impl-2.12.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: Found binding in [jar:file:/opt/module/hadoop-3.1.3/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]</span><br><span class="line">SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.</span><br><span class="line">SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]</span><br><span class="line">(hello,1)</span><br><span class="line">(hello,2)</span><br><span class="line">(flink,1)</span><br><span class="line">(hello,3)</span><br><span class="line">(scala,1)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<br>
+## 3.2 部署模式
+在一些应用场景中，对于集群资源分配和占用的方式，可能会有特定的需求。Flink为各种场景提供了不同的部署模式，主要有以下三种：
+- 会话模式（Session Mode）
+- 单作业模式（Per-Job Mode）
+- 应用模式（Application Mode）
+
+<p>它们的区别主要在于：集群的生命周期以及资源的分配方式；以及应用的main方法到底在哪里执行——客户端（Client）还是JobManager。</p>
+<h3 id="3-2-1-会话模式（Session-Mode）"><a href="#3-2-1-会话模式（Session-Mode）" class="headerlink" title="3.2.1 会话模式（Session Mode）"></a>3.2.1 会话模式（Session Mode）</h3><p>会话模式其实最符合常规思维。我们需要先启动一个集群，保持一个会话，在这个会话中通过客户端提交作业，如图3-10所示。集群启动时所有资源就都已经确定，所以所有提交的作业会竞争集群中的资源。</p>
+<p>![会话模式](实时数仓框架-1-13-0.assets4a781d207f14c45b4b8f308fc2b6874.png)</p>
+<p>会话模式比较适合于单个规模小、执行时间短的大量作业。</p>
+<h3 id="3-2-2-单作业模式（Per-Job-Mode）"><a href="#3-2-2-单作业模式（Per-Job-Mode）" class="headerlink" title="3.2.2 单作业模式（Per-Job Mode）"></a>3.2.2 单作业模式（Per-Job Mode）</h3><p>会话模式因为资源共享会导致很多问题，所以为了更好地隔离资源，我们可以考虑为每个提交的作业启动一个集群，这就是所谓的单作业（Per-Job）模式</p>
+<p><img src="/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0.assets%5C348a9767b35f4c4e84e39bbf433d2051.png" alt="单作业模式"></p>
+<p>单作业模式也很好理解，就是严格的一对一，集群只为这个作业而生。同样由客户端运行应用程序，然后启动集群，作业被提交给JobManager，进而分发给TaskManager执行。作业作业完成后，集群就会关闭，所有资源也会释放。<br>这些特性使得单作业模式在生产环境运行更加稳定，所以是实际应用的首选模式。<br>需要注意的是，Flink本身无法直接这样运行，所以单作业模式一般需要借助一些资源管理框架来启动集群，比如YARN、Kubernetes。</p>
+<h3 id="3-2-3-应用模式（Application-Mode）"><a href="#3-2-3-应用模式（Application-Mode）" class="headerlink" title="3.2.3 应用模式（Application Mode）"></a>3.2.3 应用模式（Application Mode）</h3><p>前面提到的两种模式下，应用代码都是在客户端上执行，然后由客户端提交给JobManager的。但是这种方式客户端需要占用大量网络带宽，去下载依赖和把二进制数据发送给JobManager；加上很多情况下我们提交作业用的是同一个客户端，就会加重客户端所在节点的资源消耗。<br>所以解决办法就是，我们不要客户端了，直接把应用提交到JobManger上运行。而这也就代表着，我们需要为每一个提交的应用单独启动一个JobManager，也就是创建一个集群。这个JobManager只为执行这一个应用而存在，执行结束之后JobManager也就关闭了，这就是所谓的应用模式。</p>
+<p>![应用模式](实时数仓框架-1-13-0.assets 858dd744f8140db897209b660c10833.png)</p>
+<p>应用模式与单作业模式，都是提交作业之后才创建集群；单作业模式是通过客户端来提交的，客户端解析出的每一个作业对应一个集群；而应用模式下，是直接由JobManager执行应用程序的，并且即使应用包含了多个作业，也只创建一个集群。<br>这里我们所讲到的部署模式，相对是比较抽象的概念。实际应用时，一般需要和资源管理平台结合起来，选择特定的模式来分配资源、部署应用。接下来，我们就针对不同的资源提供者（Resource Provider）的场景，具体介绍Flink的部署方式。</p>
+<br>
+## 3.3 独立模式（Standalone）
+独立模式（Standalone）是部署Flink最基本也是最简单的方式：所需要的所有Flink组件，都只是操作系统上运行的一个JVM进程。
+独立模式是独立运行的，不依赖任何外部的资源管理平台；当然独立也是有代价的：如果资源不足，或者出现故障，没有自动扩展或重分配资源的保证，必须手动处理。所以独立模式一般只用在开发测试或作业非常少的场景下。
+
+<h3 id="3-3-1-会话模式部署"><a href="#3-3-1-会话模式部署" class="headerlink" title="3.3.1 会话模式部署"></a>3.3.1 会话模式部署</h3><p>我们在第3.1节用的就是独立（Standalone）集群的会话模式部署。</p>
+<h3 id="3-3-2-单作业模式部署"><a href="#3-3-2-单作业模式部署" class="headerlink" title="3.3.2 单作业模式部署"></a>3.3.2 单作业模式部署</h3><p>在3.2.2节中我们提到，Flink本身无法直接以单作业方式启动集群，一般需要借助一些资源管理平台。所以Flink的独立（Standalone）集群并不支持单作业模式部署。</p>
+<h3 id="3-3-3-应用模式部署"><a href="#3-3-3-应用模式部署" class="headerlink" title="3.3.3 应用模式部署"></a>3.3.3 应用模式部署</h3><p>应用模式下不会提前创建集群，所以不能调用start-cluster.sh脚本。我们可以使用同样在bin目录下的standalone-job.sh来创建一个JobManager。<br>具体步骤如下：<br>（1）进入到Flink的安装路径下，将应用程序的jar包放到lib&#x2F;目录下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp ./FlinkTutorial-1.0-SNAPSHOT.jar lib/</span><br></pre></td></tr></table></figure>
+<p>（2）执行以下命令，启动JobManager。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/standalone-job.sh start --job-classname com.atguigu.wc.StreamWordCount</span><br></pre></td></tr></table></figure>
+<p>这里我们直接指定作业入口类，脚本会到lib目录扫描所有的jar包。<br>（3）同样是使用bin目录下的脚本，启动TaskManager。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/taskmanager.sh start</span><br></pre></td></tr></table></figure>
+<p>（4）如果希望停掉集群，同样可以使用脚本，命令如下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/standalone-job.sh stop</span><br><span class="line">$ ./bin/taskmanager.sh stop</span><br></pre></td></tr></table></figure>
+
+<br>
+## 3.4 YARN模式
+YARN上部署的过程是：客户端把Flink应用提交给Yarn的ResourceManager, Yarn的ResourceManager会向Yarn的NodeManager申请容器。在这些容器上，Flink会部署JobManager和TaskManager的实例，从而启动集群。Flink会根据运行在JobManger上的作业所需要的Slot数量动态分配TaskManager资源。
+
+<h3 id="3-4-1-相关准备和配置"><a href="#3-4-1-相关准备和配置" class="headerlink" title="3.4.1 相关准备和配置"></a>3.4.1 相关准备和配置</h3><p>在将Flink任务部署至YARN集群之前，需要确认集群是否安装有Hadoop，保证Hadoop版本至少在2.2以上，并且集群中安装有HDFS服务。<br>具体配置步骤如下：<br>（1）按照3.1节所述，下载并解压安装包，并将解压后的安装包重命名为flink-1.13.0-yarn，本节的相关操作都将默认在此安装路径下执行。<br>（2）配置环境变量，增加环境变量配置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ sudo vim /etc/profile.d/my_env.sh</span><br><span class="line">HADOOP_HOME=/opt/module/hadoop-2.7.5</span><br><span class="line">export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin</span><br><span class="line">export HADOOP_CONF_DIR=$&#123;HADOOP_HOME&#125;/etc/hadoop</span><br><span class="line">export HADOOP_CLASSPATH=`hadoop classpath`</span><br></pre></td></tr></table></figure>
+<p>（3）启动Hadoop集群，包括HDFS和YARN。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 ~]$ start-dfs.sh</span><br><span class="line">[atguigu@hadoop103 ~]$ start-yarn.sh</span><br></pre></td></tr></table></figure>
+<p>（4）解压Flink安装包，并进入conf目录，修改flink-conf.yaml文件，修改配置。</p>
+<h3 id="3-4-2-会话模式部署"><a href="#3-4-2-会话模式部署" class="headerlink" title="3.4.2 会话模式部署"></a>3.4.2 会话模式部署</h3><p>YARN的会话模式与独立集群略有不同，需要首先申请一个YARN会话（YARN session）来启动Flink集群。具体步骤如下：</p>
+<ol>
+<li>启动集群<br>（1）启动hadoop集群(HDFS, YARN)。<br>（2）执行脚本命令向YARN集群申请资源，开启一个YARN会话，启动Flink集群。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/yarn-session.sh -nm test</span><br></pre></td></tr></table></figure>
+可用参数解读：</li>
+</ol>
+<ul>
+<li>-d：分离模式，如果你不想让Flink YARN客户端一直前台运行，可以使用这个参数，即使关掉当前对话窗口，YARN session也可以后台运行。</li>
+<li>-jm(–jobManagerMemory)：配置JobManager所需内存，默认单位MB。</li>
+<li>-nm(–name)：配置在YARN UI界面上显示的任务名。</li>
+<li>-qu(–queue)：指定YARN队列名。</li>
+<li>-tm(–taskManager)：配置每个TaskManager所使用内存。</li>
+</ul>
+<p>注意：Flink1.11.0版本不再使用-n参数和-s参数分别指定TaskManager数量和slot数量，YARN会按照需求动态分配TaskManager和slot。所以从这个意义上讲，YARN的会话模式也不会把集群资源固定，同样是动态分配的。<br>YARN Session启动之后会给出一个web UI地址以及一个YARN application ID，如下所示，用户可以通过web UI或者命令行两种方式提交作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2021-06-03 15:54:27,069 INFO  org.apache.flink.yarn.YarnClusterDescriptor                  [] - YARN application has been deployed successfully.</span><br><span class="line">2021-06-03 15:54:27,070 INFO  org.apache.flink.yarn.YarnClusterDescriptor                  [] - Found Web Interface hadoop104:39735 of application &#x27;application_1622535605178_0003&#x27;.</span><br><span class="line">JobManager Web Interface: http://hadoop104:39735</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>提交作业<br>（1）通过Web UI提交作业<br>这种方式比较简单，与上文所述Standalone部署模式基本相同。<br>（2）通过命令行提交作业<br>① 将Standalone模式讲解中打包好的任务运行JAR包上传至集群<br>② 执行以下命令将该任务提交到已经开启的Yarn-Session中运行。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/flink run -c com.atguigu.wc.StreamWordCount FlinkTutorial-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+客户端可以自行确定JobManager的地址，也可以通过-m或者-jobmanager参数指定JobManager的地址，JobManager的地址在YARN Session的启动页面中可以找到。<br>③ 任务提交成功后，可在YARN的Web UI界面查看运行情况。<br>可以看到我们创建的Yarn-Session实际上是一个Yarn的Application，并且有唯一的Application ID。<br>④也可以通过Flink的Web UI页面查看提交任务的运行情况</li>
+</ol>
+<h3 id="3-4-3-单作业模式部署"><a href="#3-4-3-单作业模式部署" class="headerlink" title="3.4.3 单作业模式部署"></a>3.4.3 单作业模式部署</h3><p>在YARN环境中，由于有了外部平台做资源调度，所以我们也可以直接向YARN提交一个单独的作业，从而启动一个Flink集群。<br>（1）执行命令提交作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/flink run -d -t yarn-per-job -c com.atguigu.wc.StreamWordCount FlinkTutorial-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+<p>早期版本也有另一种写法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/flink run -m yarn-cluster -c com.atguigu.wc.StreamWordCount FlinkTutorial-1.0-SNAPSHOT.jar</span><br></pre></td></tr></table></figure>
+<p>注意这里是通过参数-m yarn-cluster指定向YARN集群提交任务。<br>（2）在YARN的ResourceManager界面查看执行情况。<br>点击可以打开Flink Web UI页面进行监控。<br>（3）可以使用命令行查看或取消作业，命令如下。<br>   <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/flink list -t yarn-per-job -Dyarn.application.id=application_XXXX_YY</span><br><span class="line">$ ./bin/flink cancel -t yarn-per-job -Dyarn.application.id=application_XXXX_YY &lt;jobId&gt;</span><br></pre></td></tr></table></figure><br>   这里的application_XXXX_YY是当前应用的ID，<jobId>是作业的ID。注意如果取消作业，整个Flink集群也会停掉。</p>
+<h3 id="3-4-4-应用模式部署"><a href="#3-4-4-应用模式部署" class="headerlink" title="3.4.4 应用模式部署"></a>3.4.4 应用模式部署</h3><p>应用模式同样非常简单，与单作业模式类似，直接执行flink run-application命令即可。<br>（1）执行命令提交作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/flink run-application -t yarn-application -c com.atguigu.wc.StreamWordCount FlinkTutorial-1.0-SNAPSHOT.jar </span><br></pre></td></tr></table></figure>
+<p>（2）在命令行中查看或取消作业。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/flink list -t yarn-application -Dyarn.application.id=application_XXXX_YY</span><br><span class="line">$ ./bin/flink cancel -t yarn-application -Dyarn.application.id=application_XXXX_YY &lt;jobId&gt;</span><br></pre></td></tr></table></figure>
+<p>（3）也可以通过yarn.provided.lib.dirs配置选项指定位置，将jar上传到远程。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/flink run-application -t yarn-application	-Dyarn.provided.lib.dirs=&quot;hdfs://myhdfs/my-remote-flink-dist-dir&quot;	hdfs://myhdfs/jars/my-application.jar</span><br></pre></td></tr></table></figure>
+<p>这种方式下jar可以预先上传到HDFS，而不需要单独发送到集群，这就使得作业提交更加轻量了。</p>
+<br>
+## 3.5 K8S 模式
+容器化部署是如今业界流行的一项技术，基于Docker镜像运行能够让用户更加方便地对应用进行管理和运维。容器管理工具中最为流行的就是Kubernetes（k8s），而Flink也在最近的版本中支持了k8s部署模式。基本原理与YARN是类似的，具体配置可以参见官网说明，这里我们就不做过多讲解了。
+
+<br>
+<br>
+# 第4章 FlinkCDC
+## 4.1 什么是CDC
+CDC是Change Data Capture(变更数据获取)的简称。核心思想是，监测并捕获数据库的变动（包括数据或数据表的插入、更新以及删除等），将这些变更按发生的顺序完整记录下来，写入到消息中间件中以供其他服务进行订阅及消费。
+
+<h2 id="4-2-CDC的种类"><a href="#4-2-CDC的种类" class="headerlink" title="4.2 CDC的种类"></a>4.2 CDC的种类</h2><p>CDC主要分为基于查询和基于Binlog两种方式，我们主要了解一下这两种之间的区别：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>基于查询的CDC</th>
+<th>基于Binlog的CDC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开源产品</td>
+<td>Sqoop、Kafka JDBC Source</td>
+<td>Canal、Maxwell、Debezium</td>
+</tr>
+<tr>
+<td>执行模式</td>
+<td>Batch</td>
+<td>Streaming</td>
+</tr>
+<tr>
+<td>是否可以捕获所有数据变化</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>延迟性</td>
+<td>高延迟</td>
+<td>低延迟</td>
+</tr>
+<tr>
+<td>是否增加数据库压力</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<h2 id="4-3-Flink-CDC"><a href="#4-3-Flink-CDC" class="headerlink" title="4.3 Flink-CDC"></a>4.3 Flink-CDC</h2><p>Flink社区开发了 flink-cdc-connectors 组件，这是一个可以直接从 MySQL、PostgreSQL 等数据库直接读取全量数据和增量变更数据的 source 组件。目前也已开源，<br><a target="_blank" rel="noopener" href="http://www.dreamwu.com/post-1594.html">http://www.dreamwu.com/post-1594.html</a><br>开源地址：<a target="_blank" rel="noopener" href="https://github.com/ververica/flink-cdc-connectors">https://github.com/ververica/flink-cdc-connectors</a></p>
+<h2 id="4-4-FlinkCDC监听MySQL实操"><a href="#4-4-FlinkCDC监听MySQL实操" class="headerlink" title="4.4 FlinkCDC监听MySQL实操"></a>4.4 FlinkCDC监听MySQL实操</h2><p>需要开启MySQL Binlog并重启MySQL</p>
+<h3 id="4-4-1-DataStream方式的应用"><a href="#4-4-1-DataStream方式的应用" class="headerlink" title="4.4.1 DataStream方式的应用"></a>4.4.1 DataStream方式的应用</h3><h4 id="导入依赖"><a href="#导入依赖" class="headerlink" title="导入依赖"></a>导入依赖</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;flink-java&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.13.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;flink-streaming-java_2.12&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.13.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;flink-clients_2.12&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.13.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.apache.hadoop&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;hadoop-client&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;3.1.3&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;8.0.16&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;com.ververica&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;flink-connector-mysql-cdc&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.1.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 如果不引入 flink-table 相关依赖，则会报错：</span><br><span class="line">Caused by: java.lang.ClassNotFoundException: </span><br><span class="line">org.apache.flink.connector.base.source.reader.RecordEmitter</span><br><span class="line">引入如下依赖可以解决这个问题（引入某些其它的 flink-table 相关依赖也可）</span><br><span class="line">--&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">&lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;flink-table-api-java-bridge_2.12&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.13.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;com.alibaba&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;fastjson&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;1.2.68&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">        &lt;plugin&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;3.0.0&lt;/version&gt;</span><br><span class="line">            &lt;configuration&gt;</span><br><span class="line">                &lt;descriptorRefs&gt;</span><br><span class="line">                    &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;</span><br><span class="line">                &lt;/descriptorRefs&gt;</span><br><span class="line">            &lt;/configuration&gt;</span><br><span class="line">            &lt;executions&gt;</span><br><span class="line">                &lt;execution&gt;</span><br><span class="line">                    &lt;id&gt;make-assembly&lt;/id&gt;</span><br><span class="line">                    &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">                    &lt;goals&gt;</span><br><span class="line">                        &lt;goal&gt;single&lt;/goal&gt;</span><br><span class="line">                    &lt;/goals&gt;</span><br><span class="line">                &lt;/execution&gt;</span><br><span class="line">            &lt;/executions&gt;</span><br><span class="line">        &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="编写代码"><a href="#编写代码" class="headerlink" title="编写代码"></a>编写代码</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">import com.ververica.cdc.connectors.mysql.source.MySqlSource;</span><br><span class="line">import com.ververica.cdc.connectors.mysql.table.StartupOptions;</span><br><span class="line">import com.ververica.cdc.debezium.JsonDebeziumDeserializationSchema;</span><br><span class="line">import org.apache.flink.api.common.eventtime.WatermarkStrategy;</span><br><span class="line">import org.apache.flink.api.common.restartstrategy.RestartStrategies;</span><br><span class="line">import org.apache.flink.api.common.time.Time;</span><br><span class="line">import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;</span><br><span class="line">import org.apache.flink.streaming.api.CheckpointingMode;</span><br><span class="line">import org.apache.flink.streaming.api.datastream.DataStreamSource;</span><br><span class="line">import org.apache.flink.streaming.api.environment.CheckpointConfig;</span><br><span class="line">import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;</span><br><span class="line"></span><br><span class="line">import java.util.Properties;</span><br><span class="line"></span><br><span class="line">public class FlinkCDC_01_DS &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // TODO 1. 准备流处理环境</span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(1);</span><br><span class="line"></span><br><span class="line">        // TODO 2. 开启检查点   Flink-CDC将读取binlog的位置信息以状态的方式保存在CK,如果想要做到断点续传,</span><br><span class="line">        // 需要从Checkpoint或者Savepoint启动程序</span><br><span class="line">        // 2.1 开启Checkpoint,每隔5秒钟做一次CK  ,并指定CK的一致性语义</span><br><span class="line">        env.enableCheckpointing(3000L, CheckpointingMode.EXACTLY_ONCE);</span><br><span class="line">        // 2.2 设置超时时间为 1 分钟</span><br><span class="line">        env.getCheckpointConfig().setCheckpointTimeout(60 * 1000L);</span><br><span class="line">        // 2.3 设置两次重启的最小时间间隔</span><br><span class="line">        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(3000L);</span><br><span class="line">        // 2.4 设置任务关闭的时候保留最后一次 CK 数据</span><br><span class="line">        env.getCheckpointConfig().enableExternalizedCheckpoints(</span><br><span class="line">                CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);</span><br><span class="line">        // 2.5 指定从 CK 自动重启策略</span><br><span class="line">        env.setRestartStrategy(RestartStrategies.failureRateRestart(</span><br><span class="line">                3, Time.days(1L), Time.minutes(1L)</span><br><span class="line">        ));</span><br><span class="line">        // 2.6 设置状态后端</span><br><span class="line">        env.setStateBackend(new HashMapStateBackend());</span><br><span class="line">        env.getCheckpointConfig().setCheckpointStorage(</span><br><span class="line">                &quot;hdfs://hadoop102:8020/flinkCDC&quot;</span><br><span class="line">        );</span><br><span class="line">        // 2.7 设置访问HDFS的用户名</span><br><span class="line">        System.setProperty(&quot;HADOOP_USER_NAME&quot;, &quot;atguigu&quot;);</span><br><span class="line"></span><br><span class="line">        // TODO 3. 创建 Flink-MySQL-CDC 的 Source</span><br><span class="line">		// initial:Performs an initial snapshot on the monitored database tables upon first startup, and continue to read the latest binlog.</span><br><span class="line">// earliest:Never to perform snapshot on the monitored database tables upon first startup, just read from the beginning of the binlog. This should be used with care, as it is only valid when the binlog is guaranteed to contain the entire history of the database.</span><br><span class="line">// latest:Never to perform snapshot on the monitored database tables upon first startup, just read from the end of the binlog which means only have the changes since the connector was started.</span><br><span class="line">// specificOffset:Never to perform snapshot on the monitored database tables upon first startup, and directly read binlog from the specified offset.</span><br><span class="line">// timestamp:Never to perform snapshot on the monitored database tables upon first startup, and directly read binlog from the specified timestamp.The consumer will traverse the binlog from the beginning and ignore change events whose timestamp is smaller than the specified timestamp.</span><br><span class="line">        MySqlSource&lt;String&gt; mySqlSource = MySqlSource.&lt;String&gt;builder()</span><br><span class="line">                .hostname(&quot;hadoop102&quot;)</span><br><span class="line">                .port(3306)</span><br><span class="line">                .databaseList(&quot;gmall_config&quot;) // set captured database</span><br><span class="line">                .tableList(&quot;gmall_config.t_user&quot;) // set captured table</span><br><span class="line">                .username(&quot;root&quot;)</span><br><span class="line">                .password(&quot;000000&quot;)</span><br><span class="line">                .deserializer(new JsonDebeziumDeserializationSchema()) // converts SourceRecord to JSON String</span><br><span class="line">                .startupOptions(StartupOptions.initial())</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        // TODO 4.使用CDC Source从MySQL读取数据</span><br><span class="line">        DataStreamSource&lt;String&gt; mysqlDS =</span><br><span class="line">                env.fromSource(</span><br><span class="line">                        mySqlSource,</span><br><span class="line">                        WatermarkStrategy.noWatermarks(),</span><br><span class="line">                        &quot;MysqlSource&quot;);</span><br><span class="line"></span><br><span class="line">        // TODO 5.打印输出</span><br><span class="line">        mysqlDS.print();</span><br><span class="line"></span><br><span class="line">        // TODO 6.执行任务</span><br><span class="line">        env.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="案例测试"><a href="#案例测试" class="headerlink" title="案例测试"></a>案例测试</h4><p>1）打包并上传至Linux</p>
+<p>2）启动HDFS集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-local]$ start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p>3）启动Flink集群</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-local]$ bin/start-cluster.sh</span><br></pre></td></tr></table></figure>
+<p>4）启动程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-local]$ bin/flink run -m hadoop102:8081 -c com.atguigu.cdc.FlinkCDC_01_DS ./gmall-flink-cdc.jar</span><br></pre></td></tr></table></figure>
+<p>5）观察taskManager日志，会从头读取表数据<br>6）给当前的Flink程序创建Savepoint </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-local]$ bin/flink savepoint JobId hdfs://hadoop102:8020/flinkCDC/save</span><br></pre></td></tr></table></figure>
+<p>在WebUI中cancelJob<br>在MySQL的gmall_config.t_user表中添加、修改或者删除数据<br>从Savepoint重启程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[atguigu@hadoop102 flink-standalone]$ bin/flink run -s hdfs://hadoop102:8020/flink/save/... -c com.atguigu.cdc.FlinkCDC_01_DS ./gmall-flink-cdc.jar</span><br></pre></td></tr></table></figure>
+<p>观察taskManager日志，会从检查点读取表数据</p>
+<h3 id="4-4-2-FlinkSQL方式的应用"><a href="#4-4-2-FlinkSQL方式的应用" class="headerlink" title="4.4.2 FlinkSQL方式的应用"></a>4.4.2 FlinkSQL方式的应用</h3><h4 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.flink&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;flink-table-planner-blink_2.12&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.13.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;</span><br><span class="line">import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;</span><br><span class="line"></span><br><span class="line">public class FlinkCDC_02_SQL &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        // TODO 1. 准备环境</span><br><span class="line">        // 1.1 流处理环境</span><br><span class="line">        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();</span><br><span class="line">        env.setParallelism(1);</span><br><span class="line">        // 1.2 表执行环境</span><br><span class="line">        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);</span><br><span class="line"></span><br><span class="line">        // TODO 2. 创建动态表</span><br><span class="line">        tableEnv.executeSql(&quot;CREATE TABLE user_info (</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;id INT,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;name STRING,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;age INT,</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;primary key(id) not enforced</span><br><span class="line">&quot; +</span><br><span class="line">                &quot;) WITH (&quot; +</span><br><span class="line">                &quot;&#x27;connector&#x27; = &#x27;mysql-cdc&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;hostname&#x27; = &#x27;hadoop102&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;port&#x27; = &#x27;3306&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;username&#x27; = &#x27;root&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;password&#x27; = &#x27;000000&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;database-name&#x27; = &#x27;gmall_config&#x27;,&quot; +</span><br><span class="line">                &quot;&#x27;table-name&#x27; = &#x27;t_user&#x27;&quot; +</span><br><span class="line">                &quot;)&quot;);</span><br><span class="line"></span><br><span class="line">        tableEnv.executeSql(&quot;select * from user_info&quot;).print();</span><br><span class="line"></span><br><span class="line">        // TODO 3. 执行任务</span><br><span class="line">        env.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-6-FlinkCDC监听Sqlserver实操"><a href="#4-6-FlinkCDC监听Sqlserver实操" class="headerlink" title="4.6 FlinkCDC监听Sqlserver实操"></a>4.6 FlinkCDC监听Sqlserver实操</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0/">http://example.com/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/%E5%AE%9E%E6%97%B6%E6%95%B0%E4%BB%93%E6%A1%86%E6%9E%B6-1-13-0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%AE%9E%E6%97%B6/Spark%E5%AE%9E%E6%97%B6%E9%A1%B9%E7%9B%AE/" title="Spark实时项目"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Spark实时项目</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%BB%BA%E6%A8%A1/Spark-Tez%E8%B0%83%E4%BC%98/" title="Spark-Tez调优"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Spark-Tez调优</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC1%E7%AB%A0-ClickHouse%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">第1章 ClickHouse的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">1.1准备工作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-%E7%A1%AE%E5%AE%9A%E9%98%B2%E7%81%AB%E5%A2%99%E5%A4%84%E4%BA%8E%E5%85%B3%E9%97%AD%E7%8A%B6%E6%80%81"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 确定防火墙处于关闭状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-CentOS%E5%8F%96%E6%B6%88%E6%89%93%E5%BC%80%E6%96%87%E4%BB%B6%E6%95%B0%E9%99%90%E5%88%B6"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.1.2 CentOS取消打开文件数限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.1.3 安装依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-4-CentOS%E5%8F%96%E6%B6%88SELINUX"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.1.4 CentOS取消SELINUX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-%E5%9C%A8hadoop102%E7%9A%84-x2F-opt-x2F-software%E4%B8%8B%E5%88%9B%E5%BB%BAclickhouse%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.2.1 在hadoop102的&#x2F;opt&#x2F;software下创建clickhouse目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-%E5%B0%86%E8%AF%BE%E5%89%8D%E6%8F%90%E4%BE%9B%E7%9A%84%E8%B5%84%E6%96%99%E5%8C%85%E4%B8%AD4%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E5%88%B0hadoop102%E7%9A%84-x2F-opt-x2F-software-x2F-clickhouse%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="toc-number">1.1.6.</span> <span class="toc-text">1.2.2 将课前提供的资料包中4个文件上传到hadoop102的&#x2F;opt&#x2F;software&#x2F;clickhouse目录下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-%E5%B0%86%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6%E5%90%8C%E6%AD%A5%E5%88%B0hadoop103%E3%80%81hadoop104"><span class="toc-number">1.1.7.</span> <span class="toc-text">1.2.3 将安装文件同步到hadoop103、hadoop104</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4-%E5%88%86%E5%88%AB%E5%9C%A8%E4%B8%89%E5%8F%B0%E6%9C%BA%E5%AD%90%E4%B8%8A%E5%AE%89%E8%A3%85%E8%BF%994%E4%B8%AArpm%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.8.</span> <span class="toc-text">1.2.4 分别在三台机子上安装这4个rpm文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.9.</span> <span class="toc-text">1.2.5 修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-6-%E5%90%AF%E5%8A%A8ClickServer"><span class="toc-number">1.1.10.</span> <span class="toc-text">1.2.6 启动ClickServer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-7-%E4%B8%89%E5%8F%B0%E6%9C%BA%E5%99%A8%E4%B8%8A%E5%85%B3%E9%97%AD%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF"><span class="toc-number">1.1.11.</span> <span class="toc-text">1.2.7 三台机器上关闭开机自启</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-8-%E4%BD%BF%E7%94%A8client%E8%BF%9E%E6%8E%A5server"><span class="toc-number">1.1.12.</span> <span class="toc-text">1.2.8 使用client连接server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-HBase%E7%9A%84%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.1.13.</span> <span class="toc-text">2.1.3 HBase的解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-HBase%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.14.</span> <span class="toc-text">2.1.4 HBase的配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-5-HBase%E8%BF%9C%E7%A8%8B%E5%8F%91%E9%80%81%E5%88%B0%E5%85%B6%E4%BB%96%E9%9B%86%E7%BE%A4"><span class="toc-number">1.1.15.</span> <span class="toc-text">2.1.5 HBase远程发送到其他集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-6-HBase%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="toc-number">1.1.16.</span> <span class="toc-text">2.1.6 HBase服务的启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-7-%E6%9F%A5%E7%9C%8BHBase%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.17.</span> <span class="toc-text">2.1.7 查看HBase页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-8-%E9%AB%98%E5%8F%AF%E7%94%A8-%E5%8F%AF%E9%80%89"><span class="toc-number">1.1.18.</span> <span class="toc-text">2.1.8 高可用(可选)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%BF%AB%E9%80%9F%E5%90%AF%E5%8A%A8%E4%B8%80%E4%B8%AAFlink%E9%9B%86%E7%BE%A4"><span class="toc-number">1.2.</span> <span class="toc-text">3.1 快速启动一个Flink集群</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-1-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">3.1.1 环境配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-2-%E6%9C%AC%E5%9C%B0%E5%90%AF%E5%8A%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">3.1.2 本地启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-3-%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.1.3 集群启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-%E4%BC%9A%E8%AF%9D%E6%A8%A1%E5%BC%8F%EF%BC%88Session-Mode%EF%BC%89"><span class="toc-number">1.2.4.</span> <span class="toc-text">3.2.1 会话模式（Session Mode）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E5%8D%95%E4%BD%9C%E4%B8%9A%E6%A8%A1%E5%BC%8F%EF%BC%88Per-Job-Mode%EF%BC%89"><span class="toc-number">1.2.5.</span> <span class="toc-text">3.2.2 单作业模式（Per-Job Mode）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-%E5%BA%94%E7%94%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Application-Mode%EF%BC%89"><span class="toc-number">1.2.6.</span> <span class="toc-text">3.2.3 应用模式（Application Mode）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-%E4%BC%9A%E8%AF%9D%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.7.</span> <span class="toc-text">3.3.1 会话模式部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-%E5%8D%95%E4%BD%9C%E4%B8%9A%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.8.</span> <span class="toc-text">3.3.2 单作业模式部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-%E5%BA%94%E7%94%A8%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.9.</span> <span class="toc-text">3.3.3 应用模式部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E7%9B%B8%E5%85%B3%E5%87%86%E5%A4%87%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">1.2.10.</span> <span class="toc-text">3.4.1 相关准备和配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-%E4%BC%9A%E8%AF%9D%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.11.</span> <span class="toc-text">3.4.2 会话模式部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-%E5%8D%95%E4%BD%9C%E4%B8%9A%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.12.</span> <span class="toc-text">3.4.3 单作业模式部署</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-4-%E5%BA%94%E7%94%A8%E6%A8%A1%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-number">1.2.13.</span> <span class="toc-text">3.4.4 应用模式部署</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-CDC%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">4.2 CDC的种类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-Flink-CDC"><span class="toc-number">1.4.</span> <span class="toc-text">4.3 Flink-CDC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-FlinkCDC%E7%9B%91%E5%90%ACMySQL%E5%AE%9E%E6%93%8D"><span class="toc-number">1.5.</span> <span class="toc-text">4.4 FlinkCDC监听MySQL实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-1-DataStream%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.4.1 DataStream方式的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">导入依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">编写代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E6%B5%8B%E8%AF%95"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">案例测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-2-FlinkSQL%E6%96%B9%E5%BC%8F%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.4.2 FlinkSQL方式的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">添加依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-FlinkCDC%E7%9B%91%E5%90%ACSqlserver%E5%AE%9E%E6%93%8D"><span class="toc-number">1.6.</span> <span class="toc-text">4.6 FlinkCDC监听Sqlserver实操</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

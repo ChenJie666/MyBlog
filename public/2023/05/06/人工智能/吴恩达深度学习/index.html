@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>吴恩达深度学习 | Hexo</title><meta name="author" content="CJ"><meta name="copyright" content="CJ"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="符号解释m表示训练样本的个数；nx表示特征向量的维度；y^(^在y的正上方)读作Y估计，根据回归方程代入X得出的值。 ###二分分类（判断场景是否符合要求）数据集构成：一张图片可以由三个矩阵表示，分别表示RGB的值。如一张像素为6464的图片由三个6464的矩阵构成，可以将三个矩阵合成一个36464个元素的列向量，可以用nx&#x3D;12288来表示输入的特征向量x的维度。一个训练集X可以由一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴恩达深度学习">
+<meta property="og:url" content="http://example.com/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="符号解释m表示训练样本的个数；nx表示特征向量的维度；y^(^在y的正上方)读作Y估计，根据回归方程代入X得出的值。 ###二分分类（判断场景是否符合要求）数据集构成：一张图片可以由三个矩阵表示，分别表示RGB的值。如一张像素为6464的图片由三个6464的矩阵构成，可以将三个矩阵合成一个36464个元素的列向量，可以用nx&#x3D;12288来表示输入的特征向量x的维度。一个训练集X可以由一个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:modified_time" content="2023-05-06T05:31:21.035Z">
+<meta property="article:author" content="CJ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '吴恩达深度学习',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-05-06 13:31:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">吴恩达深度学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-06T05:31:21.035Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-06T05:31:21.035Z" title="更新于 2023-05-06 13:31:21">2023-05-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="吴恩达深度学习"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>符号解释<br>m表示训练样本的个数；<br>nx表示特征向量的维度；<br>y^(^在y的正上方)读作Y估计，根据回归方程代入X得出的值。</p>
+<p>###二分分类（判断场景是否符合要求）<br><strong>数据集构成：</strong>一张图片可以由三个矩阵表示，分别表示RGB的值。如一张像素为64<em>64的图片由三个64</em>64的矩阵构成，可以将三个矩阵合成一个3<em>64</em>64个元素的列向量，可以用nx&#x3D;12288来表示输入的特征向量x的维度。一个训练集X可以由一个nx<em>m的矩阵来表示。结果集Y可以由一个1</em>m的矩阵来表示。</p>
+<p>![训练集X](吴恩达深度学习.assets b0b082deb084153925f9cfe14b04311.png)</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C8559738c7b784e1183bb68242882dc4f.png" alt="结果集Y"></p>
+<p><strong>线性回归：</strong>给定输入值x（x为nx维度的列向量），我们希望得到该输入值对应的概率。公式为<code>y = wTx + b</code>。因为我们希望得到的概率在0和1之间，所以在线性回归中使用Sigmoid(z)来处理,<code>y^=Sigmoid(z)=1/(1+e^-z)</code>。如果z无穷大，结果趋近1，如果z无穷小，结果趋近0。    </p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C9d8f0c867c8e4137a2afadb08212b4fa.png" alt="image.png"></p>
+<p><strong>损失函数和成本函数：</strong><br>损失函数又称误差函数，在单个训练样本中定义的衡量了单个训练样本上的表现，用于衡量预测输出值y^和实际值有多接近。<br>如果将损失函数定义为L(y^,y)&#x3D;1&#x2F;2(y^-y)，实际使用中会导致损失函数变为非凸的，导致有多个极值，梯度下降法可能找不到全局最优值。实际使用中将损失函数定义为<code>L(y^,y)=-(y*log(y^)+(1-y)*log(1-y^))</code>。</p>
+<p>![损失函数](吴恩达深度学习.assets93a9b43594254a02377a57bbbd26a.png)</p>
+<p>成本函数衡量的是在全体训练样本上的表现。J(w,b)&#x3D;1&#x2F;m∑(i&#x3D;1,m)L(y^(i),y(i))，我们需要找到合适的w和b使得成本函数尽可能小。</p>
+<p>![成本函数](吴恩达深度学习.assets2369fd35b8d44ee8af925f49a2d2a5a.png)</p>
+<p><strong>梯度下降法：</strong><br>成本函数衡量了参数w和b在训练集上的效果，为了使得成本函数尽可能小，需要找到合适的w和b。</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5Cd9f0130343064e54bea914fac515248a.png" alt="image.png"></p>
+<p>将w和b简化为是个实数，图像上的值就是成本函数。我们要做的就是找到最低点的w和b的值。<br>梯度下降法所做的就是，从初始点开始，朝最陡的下坡方向走一步，直到找到极值点。</p>
+<p>下面以J(w,b)在w方向上的偏导数(一维模型)来解释步长：<br>如图α表示学习速率，控制梯度下降的步长(即w的步长)。当w在极值点左边时斜率为负，所以步长向右移动；当w在极值点右边时斜率为负，所以步长向左移动。</p>
+<p>![image.png](吴恩达深度学习.assets 9c3911aa70241028b6e5d2b46d34199.png)</p>
+<p>J(w,b)在w方向和b方向上的偏导数分别为：</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C9766b6bb3a244761ae66a7cf9671f4d8.png" alt="image.png"></p>
+<p>###单训练样本下计算成本函数相对于变量z的导数<br>计算出成本函数L相对于变量z的导数。使用求导传递，先计算dL&#x2F;da&#x3D;(1-y)&#x2F;(1-a)-y&#x2F;a，再计算da&#x2F;dz&#x3D;a(1-a)，最后得到<code>dL/dz=dL/da * da/dz=a-y</code></p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C18dd37004c9c4ff7811adc8bbecd5cf0.png" alt="image.png"></p>
+<p>###训练集下计算成本函数相对于变量z的导数<br>计算损失函数L相对于变量w1、w2和b的偏导数，将每个样本的微分累加后除以样本数得到平均值。最终得到全局成本函数对变量w1、w2和b的导数。此次计算时单次梯度下降得到的结果，需要沿着梯度方向根据指定的步长得到新的点，进行重复计算。（dz、dw1、dw2、db是python中定义的变量，分别代表dL&#x2F;dz、dL&#x2F;dw1,、dL&#x2F;dw2、dL&#x2F;db。）</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C7339a9795fcd44b880a10b7a3ab4bcdf.png" alt="image.png"></p>
+<p>此计算过程的缺点：需要编写两个for循环，第一个for循环遍历m个训练样本，第二个for遍历所有的特征的for循环。这个例子中我们只有两个特征，所以n等于2，nx等于2。当数据集和特征值很多时，需要采用向量化技术。</p>
+<p>###向量化<br><strong>for循环和向量化的比较</strong></p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">a = np.random.randn(<span class="number">100000</span>)</span><br><span class="line">b = np.random.randn(<span class="number">100000</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">sum</span> = <span class="number">0</span>;</span><br><span class="line">tic = time.time()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">100000</span>):</span><br><span class="line">    <span class="built_in">sum</span> += a[i] * b[i]</span><br><span class="line">toc = time.time()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;for循环计算耗时：&#123;&#125;ms&quot;</span>.<span class="built_in">format</span>((toc - tic)*<span class="number">1000</span>))  <span class="comment"># for循环计算耗时：45.999765396118164ms</span></span><br><span class="line"></span><br><span class="line">tic = time.time()</span><br><span class="line">a.dot(b)</span><br><span class="line">toc = time.time()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;向量化计算耗时：&#123;&#125;ms&quot;</span>.<span class="built_in">format</span>((toc - tic)*<span class="number">1000</span>))  <span class="comment"># 向量化计算耗时：8.00013542175293ms</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用for对数组求指数</span></span><br><span class="line">tic = time.time()</span><br><span class="line">v = np.array(<span class="built_in">range</span>(<span class="number">100</span>))[:, np.newaxis]</span><br><span class="line">n = v.shape[<span class="number">0</span>]</span><br><span class="line">u = np.zeros((n, <span class="number">1</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">    u[i] = math.exp(v[i])</span><br><span class="line">toc = time.time()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;for循环计算耗时：&#123;&#125;ms&quot;</span>.<span class="built_in">format</span>((toc - tic) * <span class="number">1000</span>))  <span class="comment"># for循环计算耗时：3.0002593994140625ms</span></span><br><span class="line"><span class="comment"># 使用向量化求指数</span></span><br><span class="line">tic = time.time()</span><br><span class="line">u = np.exp(v)</span><br><span class="line"><span class="built_in">print</span>(u)</span><br><span class="line">toc = time.time()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;向量化计算耗时：&#123;&#125;ms&quot;</span>.<span class="built_in">format</span>((toc - tic) * <span class="number">1000</span>))  <span class="comment"># 向量化计算耗时：0.9999275207519531ms</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>对梯度下降法进行向量法优化</strong><br>①对特征值进行优化<br>不单独定于每个特征值，而是将特征值定义为矩阵，去掉对特征值的遍历<br>dw &#x3D; np.zeros((nx,1))<br>dw +&#x3D; x(i)*dz(i)<br>dw &#x2F;&#x3D; m</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C66904afd0edf405c826e567bf1807abb.png" alt="image.png"></p>
+<p>②对遍历训练集进行优化<br>Z &#x3D; [z(1),z(2)…z(m)] &#x3D; wTX + [b,b…b] &#x3D; [wTx(1) + b,wTx(2) + b…wTx(m) + b]</p>
+<p>py代码：<br>Z &#x3D; np.dot(wT,x) + b  # py会自动适应相加的矩阵，将b转化为对应的矩阵(此处为1*m的矩阵)，称为广播<br>A &#x3D; [a(1),a(2)…a(m)] &#x3D; σ(Z)  # 将Z向量作为参数进行Sigmoid计算<br>Y &#x3D; [y(1),y(2)…y(m)]<br>dz &#x3D; [dz(1),dz(2)…dz(m)] &#x3D; A - Y &#x3D; [a(1)-y(1),a(2)-y(2)…a(m)-y(m)]</p>
+<p>dw &#x3D; 1&#x2F;m*X*dzT &#x3D; 1&#x2F;m * [x(1)dz(1) + x(2)dz(2) + … + x(m)dz(m)]  # dw中包含了所有的特征值w1、w2 。。。<br>db &#x3D; 1&#x2F;m*∑(1,m)dz(i) &#x3D; 1&#x2F;m * np.sum(dz)</p>
+<p>w &#x3D; w - α*dw<br>b &#x3D; b - α*db</p>
+<p><img src="/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.assets%5C98378199c89046d6bd33a0e775e58dfd.png" alt="image.png"></p>
+<p>注：如果需要计算1000次梯度下降法，仍然需要使用for循环，无法优化。</p>
+<p>###损失函数和成本函数的推导<br>y^ 是样本中y&#x3D;0的概率，1-y^ 是样本中y&#x3D;1的概率<br>$$<br>P( y&#x3D;1 | x ) &#x3D; \hat{y}<br>$$<br>$$<br>P( y&#x3D;0 | x ) &#x3D; 1 - \hat{y}<br>$$<br>可以使用<br>$$<br>P( y | x ) &#x3D; \hat{y}<em>{}^{y} (1-\hat{y})</em>{}^{(1-y)}<br>$$<br>来统一上面的两个式子，当y&#x3D;1时结果为y^， 当y&#x3D;0时结果为1-y^。<br>由于log是严格单调递增的函数，所以为了后续计算成本函数方便可以使用<br>$$<br>logP( y | x ) &#x3D; log(\hat{y}<em>{}^{y} (1-\hat{y})</em>{}^{(1-y)}) &#x3D; ylog\hat{y} + (1-y)log(1-\hat{y}) &#x3D; -L(\hat{y},y)<br>$$</p>
+<p>这就是前面提到的成本函数的负值，前面有一个负号的原因是当训练学习算法时，我们希望算法输出值的概率是最大的，而在线性回归中我们需要最小化损失函数。因此最小化损失函数就是最大化log(P(y|x))。</p>
+<p><strong>以上就是单个训练样本的损失函数表达式，下面求解成本函数表达式</strong></p>
+<p>整个训练集中标签的概率，假设所有的训练样本独立同分布，如果想做极大似然估计，需要寻找一组参数，使得给定样本的观测值概率最大。<br>可以通过极大似然估计可以求出一组参数，使这个式子取最大值<br>$$<br>P(label in training set) &#x3D; \prod_{i&#x3D;1}^{m}{P(y^{(i)}|x^{(i)})}<br>$$<br>为了求导方便对两边取对数log<br>$$<br>logP(label in training set) &#x3D; log\prod_{i&#x3D;1}^{m}{P(y^{(i)}|x^{(i)})} &#x3D; \sum_{i&#x3D;1}^{m}{logP(y^{(i)}|x^{(i)})} &#x3D; -\sum_{i&#x3D;1}^{m}L(\hat{y}^{(i)},y^{(i)})<br>$$<br>这样我们就得到了成本函数。由于训练模型时，目标是让成本函数最小化，所以我们不是直接使用极大似然估计，需要去掉上式中的负号。最后为了方便，对成本函数进行适当缩放，添加常数因子1&#x2F;m<br>$$<br>J(w,b) &#x3D; rac{1}{m} \sum_{i&#x3D;1}^{m}L(\hat{y}^{(i)},y^{(i)})<br>$$</p>
+<p>总结：为了最小化成本函数J(w,b)，假设训练集中的样本都是独立同分布的条件下，我们从线性回归模型的极大似然估计角度出发进行求解。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">CJ</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">http://example.com/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%90%B4%E6%81%A9%E8%BE%BE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Hexo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/05/06/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/%E5%86%99%E5%AD%97%E6%9C%BA%E5%99%A8%E4%BA%BA/" title="写字机器人"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">写字机器人</div></div></a></div><div class="next-post pull-right"><a href="/2023/05/06/SpringCloud/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" title="分布式事务"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">分布式事务</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CJ</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">419</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">38</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/MySQL/%E6%B3%A8%E8%A7%A3@Select%E5%92%8C@Insert/" title="注解@Select和@Insert">注解@Select和@Insert</a><time datetime="2023-05-06T05:48:28.906Z" title="发表于 2023-05-06 13:48:28">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%90%8E%E7%AB%AF%E6%A1%86%E6%9E%B6/%E6%B3%A8%E8%A7%A3@EnableAutoConfiguration/" title="注解@EnableAutoConfiguration">注解@EnableAutoConfiguration</a><time datetime="2023-05-06T05:48:06.027Z" title="发表于 2023-05-06 13:48:06">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%A6%BB%E7%BA%BF/%E5%A4%A7%E6%95%B0%E6%8D%AE%E9%9B%86%E7%BE%A4%E7%9B%91%E6%8E%A7%E6%A1%86%E6%9E%B6/" title="大数据集群监控框架">大数据集群监控框架</a><time datetime="2023-05-06T05:42:56.298Z" title="发表于 2023-05-06 13:42:56">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/HashMap%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E5%8F%8AConcurrentHashMap%E5%8E%9F%E7%90%86/" title="HashMap并发问题及ConcurrentHashMap原理">HashMap并发问题及ConcurrentHashMap原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/06/%E9%AB%98%E5%B9%B6%E5%8F%91/Stream%E5%8E%9F%E7%90%86/" title="Stream原理">Stream原理</a><time datetime="2023-05-06T05:31:21.103Z" title="发表于 2023-05-06 13:31:21">2023-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By CJ</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
